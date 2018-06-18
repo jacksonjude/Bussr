@@ -1,4 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14270.9" systemVersion="" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Agency" representedClassName="Agency" syncable="YES" codeGenerationType="class">
+        <attribute name="agencyName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="routes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Route" inverseName="agency" inverseEntity="Route" syncable="YES"/>
+    </entity>
+    <entity name="Direction" representedClassName="Direction" syncable="YES" codeGenerationType="class">
+        <attribute name="directionName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="directionTag" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="directionTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="route" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Route" inverseName="directions" inverseEntity="Route" syncable="YES"/>
+        <relationship name="stops" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Stop" inverseName="direction" inverseEntity="Stop" syncable="YES"/>
+    </entity>
+    <entity name="MapState" representedClassName="MapState" syncable="YES" codeGenerationType="class">
+        <attribute name="routeInfoType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="selectedDirection" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="selectedRoute" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="selectedStop" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <entity name="Route" representedClassName="Route" syncable="YES" codeGenerationType="class">
+        <attribute name="routeTag" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="routeTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="agency" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Agency" inverseName="routes" inverseEntity="Agency" syncable="YES"/>
+        <relationship name="directions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Direction" inverseName="route" inverseEntity="Direction" syncable="YES"/>
+    </entity>
+    <entity name="Stop" representedClassName="Stop" syncable="YES" codeGenerationType="class">
+        <attribute name="stopID" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="stopLatitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="stopLongitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="stopShortTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="stopTag" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="stopTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="direction" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Direction" inverseName="stops" inverseEntity="Direction" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="MapState" positionX="-63" positionY="-18" width="128" height="105"/>
+        <element name="Route" positionX="-54" positionY="18" width="128" height="105"/>
+        <element name="Stop" positionX="-36" positionY="27" width="128" height="150"/>
+        <element name="Direction" positionX="-45" positionY="63" width="128" height="120"/>
+        <element name="Agency" positionX="-36" positionY="81" width="128" height="75"/>
+    </elements>
 </model>

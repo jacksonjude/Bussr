@@ -7,23 +7,36 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		435DC186D6AD8B2957B5E261 /* Pods_MuniTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D6C11870C9016B764B79D1 /* Pods_MuniTracker.framework */; };
+		7A4930C420D788EA008208D1 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A4930C320D788EA008208D1 /* MapKit.framework */; };
+		7A61EF8420D77BE100481037 /* RouteInfoPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */; };
+		7A71722B20D70943002144D5 /* RoutesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A71722A20D70943002144D5 /* RoutesTableViewController.swift */; };
 		7AD81E0A20D6E60C004BAB1E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E0920D6E60C004BAB1E /* AppDelegate.swift */; };
-		7AD81E0C20D6E60C004BAB1E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E0B20D6E60C004BAB1E /* ViewController.swift */; };
+		7AD81E0C20D6E60C004BAB1E /* MainMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E0B20D6E60C004BAB1E /* MainMapViewController.swift */; };
 		7AD81E0F20D6E60C004BAB1E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AD81E0D20D6E60C004BAB1E /* Main.storyboard */; };
 		7AD81E1220D6E60C004BAB1E /* MuniTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1020D6E60C004BAB1E /* MuniTracker.xcdatamodeld */; };
 		7AD81E1420D6E60D004BAB1E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7AD81E1320D6E60D004BAB1E /* Assets.xcassets */; };
 		7AD81E1720D6E60D004BAB1E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AD81E1520D6E60D004BAB1E /* LaunchScreen.storyboard */; };
+		7AD81E1F20D6EEDB004BAB1E /* RouteDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5A38DAEA35C5177D4880DE8B /* Pods-MuniTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MuniTracker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MuniTracker/Pods-MuniTracker.debug.xcconfig"; sourceTree = "<group>"; };
+		7A4930C220D788BB008208D1 /* MuniTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MuniTracker.entitlements; sourceTree = "<group>"; };
+		7A4930C320D788EA008208D1 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoPickerViewController.swift; sourceTree = "<group>"; };
+		7A71722A20D70943002144D5 /* RoutesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutesTableViewController.swift; sourceTree = "<group>"; };
 		7AD81E0620D6E60C004BAB1E /* MuniTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MuniTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AD81E0920D6E60C004BAB1E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		7AD81E0B20D6E60C004BAB1E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		7AD81E0B20D6E60C004BAB1E /* MainMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapViewController.swift; sourceTree = "<group>"; };
 		7AD81E0E20D6E60C004BAB1E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7AD81E1120D6E60C004BAB1E /* MuniTracker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MuniTracker.xcdatamodel; sourceTree = "<group>"; };
 		7AD81E1320D6E60D004BAB1E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7AD81E1620D6E60D004BAB1E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7AD81E1820D6E60D004BAB1E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteDataManager.swift; sourceTree = "<group>"; };
+		86D6C11870C9016B764B79D1 /* Pods_MuniTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MuniTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D077087D7D618904FC9606AF /* Pods-MuniTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MuniTracker.release.xcconfig"; path = "Pods/Target Support Files/Pods-MuniTracker/Pods-MuniTracker.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,17 +44,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A4930C420D788EA008208D1 /* MapKit.framework in Frameworks */,
+				435DC186D6AD8B2957B5E261 /* Pods_MuniTracker.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2D1563052C1F31D0CA460FF3 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5A38DAEA35C5177D4880DE8B /* Pods-MuniTracker.debug.xcconfig */,
+				D077087D7D618904FC9606AF /* Pods-MuniTracker.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		7AD81DFD20D6E60C004BAB1E = {
 			isa = PBXGroup;
 			children = (
 				7AD81E0820D6E60C004BAB1E /* MuniTracker */,
 				7AD81E0720D6E60C004BAB1E /* Products */,
+				2D1563052C1F31D0CA460FF3 /* Pods */,
+				BF88086283A00694C5C2DF7F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -56,8 +82,12 @@
 		7AD81E0820D6E60C004BAB1E /* MuniTracker */ = {
 			isa = PBXGroup;
 			children = (
+				7A4930C220D788BB008208D1 /* MuniTracker.entitlements */,
 				7AD81E0920D6E60C004BAB1E /* AppDelegate.swift */,
-				7AD81E0B20D6E60C004BAB1E /* ViewController.swift */,
+				7AD81E0B20D6E60C004BAB1E /* MainMapViewController.swift */,
+				7A71722A20D70943002144D5 /* RoutesTableViewController.swift */,
+				7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */,
+				7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */,
 				7AD81E0D20D6E60C004BAB1E /* Main.storyboard */,
 				7AD81E1320D6E60D004BAB1E /* Assets.xcassets */,
 				7AD81E1520D6E60D004BAB1E /* LaunchScreen.storyboard */,
@@ -67,6 +97,15 @@
 			path = MuniTracker;
 			sourceTree = "<group>";
 		};
+		BF88086283A00694C5C2DF7F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7A4930C320D788EA008208D1 /* MapKit.framework */,
+				86D6C11870C9016B764B79D1 /* Pods_MuniTracker.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -74,9 +113,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7AD81E1B20D6E60D004BAB1E /* Build configuration list for PBXNativeTarget "MuniTracker" */;
 			buildPhases = (
+				BA32452EC8EAA602401106F4 /* [CP] Check Pods Manifest.lock */,
 				7AD81E0220D6E60C004BAB1E /* Sources */,
 				7AD81E0320D6E60C004BAB1E /* Frameworks */,
 				7AD81E0420D6E60C004BAB1E /* Resources */,
+				5C85132DEB3B340646665543 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -99,6 +140,23 @@
 				TargetAttributes = {
 					7AD81E0520D6E60C004BAB1E = {
 						CreatedOnToolsVersion = 10.0;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+							com.apple.Siri = {
+								enabled = 1;
+							};
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -133,14 +191,58 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		5C85132DEB3B340646665543 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-MuniTracker/Pods-MuniTracker-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/SWXMLHash/SWXMLHash.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SWXMLHash.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MuniTracker/Pods-MuniTracker-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BA32452EC8EAA602401106F4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MuniTracker-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		7AD81E0220D6E60C004BAB1E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				7AD81E1220D6E60C004BAB1E /* MuniTracker.xcdatamodeld in Sources */,
-				7AD81E0C20D6E60C004BAB1E /* ViewController.swift in Sources */,
+				7AD81E1F20D6EEDB004BAB1E /* RouteDataManager.swift in Sources */,
+				7A61EF8420D77BE100481037 /* RouteInfoPickerViewController.swift in Sources */,
+				7AD81E0C20D6E60C004BAB1E /* MainMapViewController.swift in Sources */,
 				7AD81E0A20D6E60C004BAB1E /* AppDelegate.swift in Sources */,
+				7A71722B20D70943002144D5 /* RoutesTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,11 +384,14 @@
 		};
 		7AD81E1C20D6E60D004BAB1E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A38DAEA35C5177D4880DE8B /* Pods-MuniTracker.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MuniTracker/MuniTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTracker/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -300,11 +405,14 @@
 		};
 		7AD81E1D20D6E60D004BAB1E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D077087D7D618904FC9606AF /* Pods-MuniTracker.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MuniTracker/MuniTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTracker/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
