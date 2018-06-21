@@ -25,7 +25,7 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
 {
     @IBOutlet weak var routesTableView: UITableView!
     
-    var routeDictionary: Dictionary<String,String>?
+    var routeTitleDictionary = Dictionary<String,String>()
     var sortedRouteDictionary = Dictionary<Int,Array<String>>()
     let sectionTitles = ["01", "10", "20", "30", "40", "50", "60", "70", "80", "90", "A"]
     
@@ -69,68 +69,86 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let returnUUID = UUID().uuidString
-        NotificationCenter.default.addObserver(self, selector: #selector(receiveRouteDictionary(_:)), name: NSNotification.Name("ParsedXML:" + returnUUID), object: nil)
-        RouteDataManager.addToQueue(returnUUID: returnUUID, fetchType: .routeList, fetchInfo: [])
+        convertRouteObjectsToRouteTitleDictionary()
+        convertRouteDictionaryToRouteTitles()
     }
     
     @objc func receiveRouteDictionary(_ notification: Notification)
     {
         if notification.userInfo != nil && notification.userInfo!.count > 0
         {
-            routeDictionary = notification.userInfo!["xmlDictionary"] as? Dictionary<String,String>
+            routeTitleDictionary = notification.userInfo!["xmlDictionary"] as! Dictionary<String,String>
             
             convertRouteDictionaryToRouteTitles()
         }
     }
     
-    func convertRouteDictionaryToRouteTitles()
+    func convertRouteObjectsToRouteTitleDictionary()
     {
-        if routeDictionary != nil
+        let agency = RouteDataManager.fetchOrCreateObject(type: "Agency", predicate: NSPredicate(format: "agencyName == %@", "sf-muni")) as! Agency
+        let agencyRoutes = (agency.routes?.allObjects) as! [Route]
+        
+        for route in agencyRoutes
         {
-            for routeInfo in routeDictionary!
+            if route.routeTag != nil
             {
-                let routeTitle = routeInfo.key + " - " + routeInfo.value
-                
-                if (routeInfo.key.count == 1 && CharacterSet.decimalDigits.contains(routeInfo.key.getUnicodeScalarCharacter(0))) || (routeInfo.key.count > 1 && CharacterSet.decimalDigits.contains(routeInfo.key.getUnicodeScalarCharacter(0)) && CharacterSet.letters.contains(routeInfo.key.getUnicodeScalarCharacter(1)))
-                {
-                    if sortedRouteDictionary[0] == nil
-                    {
-                        sortedRouteDictionary[0] = Array<String>()
-                    }
-                    
-                    sortedRouteDictionary[0]!.append(routeTitle)
-                }
-                else if CharacterSet.decimalDigits.contains(routeInfo.key.getUnicodeScalarCharacter(0))
-                {
-                    let sectionNumber = Int(String(routeInfo.key[0]))
-                    
-                    if sortedRouteDictionary[sectionNumber!] == nil
-                    {
-                        sortedRouteDictionary[sectionNumber!] = Array<String>()
-                    }
-                    
-                    sortedRouteDictionary[sectionNumber!]!.append(routeTitle)
-                }
-                else
-                {
-                    if sortedRouteDictionary[10] == nil
-                    {
-                        sortedRouteDictionary[10] = Array<String>()
-                    }
-                    
-                    sortedRouteDictionary[10]!.append(routeTitle)
-                }
-            }
-            
-            for sectionArray in sortedRouteDictionary
-            {
-                sortedRouteDictionary[sectionArray.key]!.sort {$0.localizedStandardCompare($1) == .orderedAscending}
-            }
-            
-            OperationQueue.main.addOperation {
-                self.routesTableView.reloadData()
+                routeTitleDictionary[route.routeTag!] = route.routeTitle!
             }
         }
+    }
+    
+    func convertRouteDictionaryToRouteTitles()
+    {
+        for routeInfo in routeTitleDictionary
+        {
+            let routeTitle = routeInfo.key + " - " + routeInfo.value
+            
+            if (routeInfo.key.count == 1 && CharacterSet.decimalDigits.contains(routeInfo.key.getUnicodeScalarCharacter(0))) || (routeInfo.key.count > 1 && CharacterSet.decimalDigits.contains(routeInfo.key.getUnicodeScalarCharacter(0)) && CharacterSet.letters.contains(routeInfo.key.getUnicodeScalarCharacter(1)))
+            {
+                if sortedRouteDictionary[0] == nil
+                {
+                    sortedRouteDictionary[0] = Array<String>()
+                }
+                
+                sortedRouteDictionary[0]!.append(routeTitle)
+            }
+            else if CharacterSet.decimalDigits.contains(routeInfo.key.getUnicodeScalarCharacter(0))
+            {
+                let sectionNumber = Int(String(routeInfo.key[0]))
+                
+                if sortedRouteDictionary[sectionNumber!] == nil
+                {
+                    sortedRouteDictionary[sectionNumber!] = Array<String>()
+                }
+                
+                sortedRouteDictionary[sectionNumber!]!.append(routeTitle)
+            }
+            else
+            {
+                if sortedRouteDictionary[10] == nil
+                {
+                    sortedRouteDictionary[10] = Array<String>()
+                }
+                
+                sortedRouteDictionary[10]!.append(routeTitle)
+            }
+        }
+        
+        for sectionArray in sortedRouteDictionary
+        {
+            sortedRouteDictionary[sectionArray.key]!.sort {$0.localizedStandardCompare($1) == .orderedAscending}
+        }
+        
+        OperationQueue.main.addOperation {
+            self.routesTableView.reloadData()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let routeFullTitle = sortedRouteDictionary[indexPath.section]![indexPath.row].split(separator: "-")
+        
+        let selectedRouteTag = String(routeFullTitle[0].dropLast())
+        
+        let selectedRouteObject = RouteDataManager.fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "routeTag == %@", selectedRouteTag)) as! Route
     }
 }

@@ -10,6 +10,5 @@ target 'MuniTracker' do
   # Pods for MuniTracker
 
   pod 'SWXMLHash', '~> 4.0.0'
-  pod 'Alamofire', '~> 4.7'
 
 end
