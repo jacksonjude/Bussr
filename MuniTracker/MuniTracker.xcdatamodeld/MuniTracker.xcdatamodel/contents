@@ -11,12 +11,6 @@
         <relationship name="route" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Route" inverseName="directions" inverseEntity="Route" syncable="YES"/>
         <relationship name="stops" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Stop" inverseName="direction" inverseEntity="Stop" syncable="YES"/>
     </entity>
-    <entity name="MapState" representedClassName="MapState" syncable="YES" codeGenerationType="class">
-        <attribute name="routeInfoType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="selectedDirection" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="selectedRoute" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="selectedStop" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-    </entity>
     <entity name="Route" representedClassName="Route" syncable="YES" codeGenerationType="class">
         <attribute name="routeColor" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="routeOppositeColor" optional="YES" attributeType="String" syncable="YES"/>
@@ -37,7 +31,6 @@
     <elements>
         <element name="Agency" positionX="-36" positionY="81" width="128" height="75"/>
         <element name="Direction" positionX="-45" positionY="63" width="128" height="120"/>
-        <element name="MapState" positionX="-63" positionY="-18" width="128" height="105"/>
         <element name="Route" positionX="-54" positionY="18" width="128" height="135"/>
         <element name="Stop" positionX="-36" positionY="27" width="128" height="150"/>
     </elements>

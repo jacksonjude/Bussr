@@ -36,7 +36,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        progressAlertView = UIAlertController(title: "Updating", message: "Updating route data...", preferredStyle: .alert)
+        super.viewDidAppear(animated)
+        
+        /*progressAlertView = UIAlertController(title: "Updating", message: "Updating route data...", preferredStyle: .alert)
         progressAlertView!.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
         var progressView: UIProgressView?
@@ -56,7 +58,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 {
                     RouteDataManager.updateAllData(progressView!)
             }
-        })
+        })*/
         
         
     }
@@ -91,6 +93,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         annotationView.image = UIImage(named: "RedDot")
         
         return annotationView
+    }
+    
+    @IBAction func unwindFromRouteTableView(_ segue: UIStoryboardSegue)
+    {
+        
     }
 }
 

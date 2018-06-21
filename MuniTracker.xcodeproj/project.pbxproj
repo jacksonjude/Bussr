@@ -11,6 +11,7 @@
 		7A4930C420D788EA008208D1 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A4930C320D788EA008208D1 /* MapKit.framework */; };
 		7A61EF8420D77BE100481037 /* RouteInfoPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */; };
 		7A71722B20D70943002144D5 /* RoutesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A71722A20D70943002144D5 /* RoutesTableViewController.swift */; };
+		7A7FE2B520DB4761005B654C /* MapState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7FE2B420DB4761005B654C /* MapState.swift */; };
 		7AD81E0A20D6E60C004BAB1E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E0920D6E60C004BAB1E /* AppDelegate.swift */; };
 		7AD81E0C20D6E60C004BAB1E /* MainMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E0B20D6E60C004BAB1E /* MainMapViewController.swift */; };
 		7AD81E0F20D6E60C004BAB1E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AD81E0D20D6E60C004BAB1E /* Main.storyboard */; };
@@ -26,6 +27,7 @@
 		7A4930C320D788EA008208D1 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoPickerViewController.swift; sourceTree = "<group>"; };
 		7A71722A20D70943002144D5 /* RoutesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutesTableViewController.swift; sourceTree = "<group>"; };
+		7A7FE2B420DB4761005B654C /* MapState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapState.swift; sourceTree = "<group>"; };
 		7AD81E0620D6E60C004BAB1E /* MuniTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MuniTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AD81E0920D6E60C004BAB1E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7AD81E0B20D6E60C004BAB1E /* MainMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapViewController.swift; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 				7A71722A20D70943002144D5 /* RoutesTableViewController.swift */,
 				7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */,
 				7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */,
+				7A7FE2B420DB4761005B654C /* MapState.swift */,
 				7AD81E0D20D6E60C004BAB1E /* Main.storyboard */,
 				7AD81E1320D6E60D004BAB1E /* Assets.xcassets */,
 				7AD81E1520D6E60D004BAB1E /* LaunchScreen.storyboard */,
@@ -241,6 +244,7 @@
 				7AD81E0C20D6E60C004BAB1E /* MainMapViewController.swift in Sources */,
 				7AD81E0A20D6E60C004BAB1E /* AppDelegate.swift in Sources */,
 				7A71722B20D70943002144D5 /* RoutesTableViewController.swift in Sources */,
+				7A7FE2B520DB4761005B654C /* MapState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,7 +394,10 @@
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
@@ -408,7 +415,10 @@
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;

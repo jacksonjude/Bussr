@@ -122,36 +122,82 @@
                     </view>
                     <connections>
                         <outlet property="routesTableView" destination="zEF-xc-V9T" id="aOn-of-8og"/>
+                        <segue destination="ELz-Dl-Ldx" kind="unwind" identifier="DismissRoutesTable" unwindAction="unwindFromRouteTableView:" id="e8v-gF-wF8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="c39-1h-1nz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="ELz-Dl-Ldx" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="948" y="33.733133433283363"/>
         </scene>
-        <!--View Controller-->
+        <!--Route Info Picker View Controller-->
         <scene sceneID="lOd-el-8BS">
             <objects>
-                <viewController id="4Mg-kq-ULL" sceneMemberID="viewController">
+                <viewController id="4Mg-kq-ULL" customClass="RouteInfoPickerViewController" customModule="MuniTracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5Ew-Yb-9GC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="162"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ltc-3h-TBo">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="162"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="4Mg-kq-ULL" id="aV3-g6-w0t"/>
+                                    <outlet property="delegate" destination="4Mg-kq-ULL" id="UND-UU-i1M"/>
+                                </connections>
                             </pickerView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BOi-xL-bko">
+                                <rect key="frame" x="335" y="5" width="35" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="35" id="Io0-mI-Nm3"/>
+                                    <constraint firstAttribute="height" constant="35" id="Xvd-FR-f9c"/>
+                                </constraints>
+                                <state key="normal" image="CurrentLocationIcon"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kk3-pr-5iQ">
+                                <rect key="frame" x="292" y="4" width="35" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="35" id="NV8-m9-6i9"/>
+                                    <constraint firstAttribute="height" constant="35" id="WvX-dc-bfr"/>
+                                </constraints>
+                                <state key="normal" image="FavoriteIcon"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ze-eL-qKp">
+                                <rect key="frame" x="5" y="5" width="35" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="35" id="JN7-xv-LEE"/>
+                                    <constraint firstAttribute="height" constant="35" id="ph1-ku-uhT"/>
+                                </constraints>
+                                <state key="normal" image="DirectionIcon"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="BOi-xL-bko" firstAttribute="top" secondItem="gV6-YZ-kOr" secondAttribute="top" constant="5" id="3Pk-wq-AvP"/>
+                            <constraint firstItem="kk3-pr-5iQ" firstAttribute="top" secondItem="gV6-YZ-kOr" secondAttribute="top" constant="4" id="Aqj-RF-IBO"/>
                             <constraint firstItem="Ltc-3h-TBo" firstAttribute="top" secondItem="5Ew-Yb-9GC" secondAttribute="top" id="G2Z-St-PxX"/>
                             <constraint firstAttribute="bottom" secondItem="Ltc-3h-TBo" secondAttribute="bottom" id="Kbz-kz-fAq"/>
                             <constraint firstAttribute="trailing" secondItem="Ltc-3h-TBo" secondAttribute="trailing" id="U0q-pU-BXn"/>
+                            <constraint firstItem="gV6-YZ-kOr" firstAttribute="trailing" secondItem="BOi-xL-bko" secondAttribute="trailing" constant="5" id="X6u-aF-s9A"/>
                             <constraint firstItem="Ltc-3h-TBo" firstAttribute="leading" secondItem="5Ew-Yb-9GC" secondAttribute="leading" id="cg0-xa-M52"/>
+                            <constraint firstItem="BOi-xL-bko" firstAttribute="leading" secondItem="kk3-pr-5iQ" secondAttribute="trailing" constant="8" id="di1-4Q-rgW"/>
+                            <constraint firstItem="7ze-eL-qKp" firstAttribute="leading" secondItem="gV6-YZ-kOr" secondAttribute="leading" constant="5" id="iVI-qj-qre"/>
+                            <constraint firstItem="BOi-xL-bko" firstAttribute="leading" secondItem="kk3-pr-5iQ" secondAttribute="trailing" constant="8" id="nKJ-ll-VxB"/>
+                            <constraint firstItem="7ze-eL-qKp" firstAttribute="top" secondItem="gV6-YZ-kOr" secondAttribute="top" constant="5" id="yX1-Aa-HXO"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="gV6-YZ-kOr"/>
                     </view>
+                    <connections>
+                        <outlet property="routeInfoPicker" destination="Ltc-3h-TBo" id="yHy-in-jYX"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G6y-H5-O0s" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="31" y="560"/>
+            <point key="canvasLocation" x="29.600000000000001" y="559.52023988005999"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="CurrentLocationIcon" width="64" height="64"/>
+        <image name="DirectionIcon" width="64" height="64"/>
+        <image name="FavoriteIcon" width="64" height="64"/>
+    </resources>
 </document>

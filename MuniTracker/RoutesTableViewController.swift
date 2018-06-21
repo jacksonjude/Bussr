@@ -25,6 +25,8 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
 {
     @IBOutlet weak var routesTableView: UITableView!
     
+    var selectedRouteObject: Route?
+    
     var routeTitleDictionary = Dictionary<String,String>()
     var sortedRouteDictionary = Dictionary<Int,Array<String>>()
     let sectionTitles = ["01", "10", "20", "30", "40", "50", "60", "70", "80", "90", "A"]
@@ -85,7 +87,7 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     func convertRouteObjectsToRouteTitleDictionary()
     {
-        let agency = RouteDataManager.fetchOrCreateObject(type: "Agency", predicate: NSPredicate(format: "agencyName == %@", "sf-muni")) as! Agency
+        let agency = RouteDataManager.fetchOrCreateObject(type: "Agency", predicate: NSPredicate(format: "agencyName == %@", agencyTag)) as! Agency
         let agencyRoutes = (agency.routes?.allObjects) as! [Route]
         
         for route in agencyRoutes
@@ -149,6 +151,15 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
         
         let selectedRouteTag = String(routeFullTitle[0].dropLast())
         
-        let selectedRouteObject = RouteDataManager.fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "routeTag == %@", selectedRouteTag)) as! Route
+        selectedRouteObject = RouteDataManager.fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "routeTag == %@", selectedRouteTag)) as? Route
+        
+        performSegue(withIdentifier: "DismissRoutesTable", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        MapState.routeInfoObject = selectedRouteObject
+        MapState.routeInfoShowing = .direction
+        
+        NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
     }
 }

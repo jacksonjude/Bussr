@@ -11,22 +11,41 @@ import UIKit
 
 class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate
 {
-    enum RouteInfoType: Int
-    {
-        case none
-        case direction
-        case stop
-    }
-    
-    var routeInfoToChangeDictionary: Dictionary<Int,Array<String>>? = nil
+    var routeInfoToChange: Array<Array<String>>? = nil
+    @IBOutlet weak var routeInfoPicker: UIPickerView!
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return routeInfoToChangeDictionary?.keys.count ?? 0
+        return routeInfoToChange?.count ?? 0
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return routeInfoToChangeDictionary?[component]?.count ?? 0
+        return routeInfoToChange?[component].count ?? 0
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadRouteData), name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
+    }
     
+    @objc func reloadRouteData()
+    {
+        switch MapState.routeInfoShowing
+        {
+        case .none:
+            self.view.superview!.isHidden = true
+        case .direction,.stop:
+            self.view.superview!.isHidden = false
+        }
+        
+        switch MapState.routeInfoShowing
+        {
+        case .direction:
+            break
+        case .stop:
+            break
+        default:
+            break
+        }
+    }
 }
