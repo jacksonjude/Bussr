@@ -38,30 +38,33 @@ class RouteDataManager
         }).resume()
     }
     
-    static func updateAllData(_ progressBar: UIProgressView...)
+    static func updateAllData()
     {
         var routesFetched = 0
                 
         let routeDictionary = fetchRoutes()
         print("Received Routes")
         
-        let backgroundGroup = DispatchGroup()
+        //let backgroundGroup = DispatchGroup()
         
         appDelegate.persistentContainer.performBackgroundTask({ (backgroundMOC) in
-            let agency = fetchOrCreateObject(type: "Agency", predicate: NSPredicate(format: "agencyName == %@", agencyTag), moc: backgroundMOC) as! Agency
+            let agencyFetchCallback = fetchOrCreateObject(type: "Agency", predicate: NSPredicate(format: "agencyName == %@", agencyTag), moc: backgroundMOC)
+            let agency = agencyFetchCallback.object as! Agency
             agency.agencyName = agencyTag
         
             for routeTitle in routeDictionary
             {
-                    let route = fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "routeTag == %@", routeTitle.key), moc: backgroundMOC) as! Route
-                    route.routeTag = routeTitle.key
-                    route.routeTitle = routeTitle.value
+                let routeFetchCallback = fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "routeTag == %@", routeTitle.key), moc: backgroundMOC)
+                let route = routeFetchCallback.object as! Route
+                route.routeTag = routeTitle.key
+                route.routeTitle = routeTitle.value
                 
-                backgroundGroup.enter()
+                //backgroundGroup.enter()
                 
-                fetchRouteInfo(routeTag: routeTitle.key, callback: { (routeConfig) in
+                let routeConfig = fetchRouteInfo(routeTag: routeTitle.key)//, callback: { (routeConfig) in
                     
-                    let route = fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "routeTag == %@", routeTitle.key), moc: backgroundMOC) as! Route
+                    //let routeFetchCallback = fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "routeTag == %@", routeTitle.key), moc: backgroundMOC)
+                    //let route = routeFetchCallback[0] as! Route
                 
                     print(routeTitle.key)
                 
@@ -71,9 +74,10 @@ class RouteDataManager
                 
                     for directionInfo in routeConfig["directions"]!
                     {
-                        let direction = fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", directionInfo.key), moc: backgroundMOC) as! Direction
+                        let directionFetchCallback = fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", directionInfo.key), moc: backgroundMOC)
+                        let direction = directionFetchCallback.object as! Direction
                         
-                        direction.directionTag = directionInfo.value["tag"] as? String
+                        direction.directionTag = directionInfo.key
                         direction.directionName = directionInfo.value["name"] as? String
                         direction.directionTitle = directionInfo.value["title"] as? String
                         
@@ -81,7 +85,8 @@ class RouteDataManager
                         {
                             let stopConfig = routeConfig["stops"]![directionStopTag]
                             
-                            let stop = fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", directionStopTag), moc: backgroundMOC) as! Stop
+                            let stopFetchCallback = fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", directionStopTag), moc: backgroundMOC)
+                            let stop = stopFetchCallback.object as! Stop
                             stop.stopTag = directionStopTag
                             stop.stopLatitude = Double(stopConfig!["lat"] as! String)!
                             stop.stopLongitude = Double(stopConfig!["lon"] as! String)!
@@ -89,22 +94,26 @@ class RouteDataManager
                             stop.stopTitle = stopConfig!["title"] as? String
                             stop.stopShortTitle = stopConfig!["shortTitle"] as? String
                             
-                            direction.addToStops(stop)
+                            if stopFetchCallback.justCreated
+                            {
+                                direction.addToStops(stop)
+                            }
                         }
                         
-                        route.addToDirections(direction)
+                        if directionFetchCallback.justCreated
+                        {
+                            route.addToDirections(direction)
+                        }
                     }
-                
-                    agency.addToRoutes(route)
+                    
+                    if routeFetchCallback.justCreated
+                    {
+                        agency.addToRoutes(route)
+                    }
                 
                     routesFetched += 1
                 
-                    if progressBar.count > 0
-                    {
-                        OperationQueue.main.addOperation {
-                            progressBar[0].progress = Float(routesFetched)/Float(routeDictionary.keys.count)
-                        }
-                    }
+                    NotificationCenter.default.post(name: NSNotification.Name("CompletedRoute"), object: self, userInfo: ["progress":Float(routesFetched)/Float(routeDictionary.keys.count)])
                 
                     if routesFetched == routeDictionary.keys.count
                     {
@@ -124,10 +133,12 @@ class RouteDataManager
                         }
                     }
                 
-                    backgroundGroup.leave()
-                })
+                    try? backgroundMOC.save()
                 
-                backgroundGroup.wait()
+                    //backgroundGroup.leave()
+                //})
+                
+                //backgroundGroup.wait()
             }
         })
     }
@@ -159,9 +170,15 @@ class RouteDataManager
         return routeDictionary
     }
     
-    static func fetchRouteInfo(routeTag: String, callback: @escaping (_ routeInfoDictionary: Dictionary<String,Dictionary<String,Dictionary<String,Any>>>) -> Void)
+    static func fetchRouteInfo(routeTag: String) -> Dictionary<String,Dictionary<String,Dictionary<String,Any>>>
     {
-        getXMLFromSource("routeConfig", ["a":agencyTag,"r":routeTag]) { (xmlBody) in
+        var routeInfoDictionary: Dictionary<String,Dictionary<String,Dictionary<String,Any>>>?
+        
+        let backgroundGroup = DispatchGroup()
+        
+        backgroundGroup.enter()
+        
+        getXMLFromSource("routeConfig", ["a":agencyTag,"r":routeTag,"terse":"618"]) { (xmlBody) in
             var routeDirectionsArray = Dictionary<String,Dictionary<String,Any>>()
             var routeStopsArray = Dictionary<String,Dictionary<String,String>>()
             var routeGeneralConfig = Dictionary<String,Dictionary<String,String>>()
@@ -220,13 +237,17 @@ class RouteDataManager
                 }
             }
             
-            var routeInfoDictionary = Dictionary<String,Dictionary<String,Dictionary<String,Any>>>()
-            routeInfoDictionary["stops"] = routeStopsArray
-            routeInfoDictionary["directions"] = routeDirectionsArray
-            routeInfoDictionary["general"] = routeGeneralConfig
+            routeInfoDictionary = Dictionary<String,Dictionary<String,Dictionary<String,Any>>>()
+            routeInfoDictionary!["stops"] = routeStopsArray
+            routeInfoDictionary!["directions"] = routeDirectionsArray
+            routeInfoDictionary!["general"] = routeGeneralConfig
             
-            callback(routeInfoDictionary)
+            backgroundGroup.leave()
         }
+        
+        backgroundGroup.wait()
+        
+        return routeInfoDictionary!
     }
     
     static func fetchLocalObjects(type: String, predicate: NSPredicate, moc: NSManagedObjectContext) -> [AnyObject]?
@@ -250,20 +271,10 @@ class RouteDataManager
         return fetchResults
     }
     
-    static func fetchOrCreateObject(type: String, predicate: NSPredicate, moc: NSManagedObjectContext...) -> NSManagedObject
+    static func fetchOrCreateObject(type: String, predicate: NSPredicate, moc: NSManagedObjectContext) -> (object: NSManagedObject, justCreated: Bool)
     {
-        var mocToUse: NSManagedObjectContext?
-        
-        if moc.count > 0
-        {
-            mocToUse = moc[0]
-        }
-        else
-        {
-            mocToUse = appDelegate.persistentContainer.viewContext
-        }
-        
-        let objectFetchResults = fetchLocalObjects(type: type, predicate: predicate, moc: mocToUse!)
+        let objectFetchResults = fetchLocalObjects(type: type, predicate: predicate, moc: moc)
+        var justCreated = false
         
         var object: NSManagedObject? = nil
         if objectFetchResults != nil && objectFetchResults!.count > 0
@@ -272,9 +283,10 @@ class RouteDataManager
         }
         else
         {
-            object = NSEntityDescription.insertNewObject(forEntityName: type, into: mocToUse!)
+            object = NSEntityDescription.insertNewObject(forEntityName: type, into: moc)
+            justCreated = true
         }
         
-        return object!
+        return (object!, justCreated)
     }
 }

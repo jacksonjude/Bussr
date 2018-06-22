@@ -146,28 +146,31 @@
                                 </connections>
                             </pickerView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BOi-xL-bko">
-                                <rect key="frame" x="335" y="5" width="35" height="35"/>
+                                <rect key="frame" x="345" y="5" width="25" height="25"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="35" id="Io0-mI-Nm3"/>
-                                    <constraint firstAttribute="height" constant="35" id="Xvd-FR-f9c"/>
+                                    <constraint firstAttribute="width" constant="25" id="Io0-mI-Nm3"/>
+                                    <constraint firstAttribute="height" constant="25" id="Xvd-FR-f9c"/>
                                 </constraints>
                                 <state key="normal" image="CurrentLocationIcon"/>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kk3-pr-5iQ">
-                                <rect key="frame" x="292" y="4" width="35" height="35"/>
+                                <rect key="frame" x="312" y="4" width="25" height="25"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="35" id="NV8-m9-6i9"/>
-                                    <constraint firstAttribute="height" constant="35" id="WvX-dc-bfr"/>
+                                    <constraint firstAttribute="width" constant="25" id="NV8-m9-6i9"/>
+                                    <constraint firstAttribute="height" constant="25" id="WvX-dc-bfr"/>
                                 </constraints>
                                 <state key="normal" image="FavoriteIcon"/>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ze-eL-qKp">
-                                <rect key="frame" x="5" y="5" width="35" height="35"/>
+                                <rect key="frame" x="5" y="5" width="25" height="25"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="35" id="JN7-xv-LEE"/>
-                                    <constraint firstAttribute="height" constant="35" id="ph1-ku-uhT"/>
+                                    <constraint firstAttribute="width" constant="25" id="JN7-xv-LEE"/>
+                                    <constraint firstAttribute="height" constant="25" id="ph1-ku-uhT"/>
                                 </constraints>
                                 <state key="normal" image="DirectionIcon"/>
+                                <connections>
+                                    <action selector="directionButtonPressed:" destination="4Mg-kq-ULL" eventType="touchUpInside" id="Ye0-OM-ksd"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -187,6 +190,8 @@
                         <viewLayoutGuide key="safeArea" id="gV6-YZ-kOr"/>
                     </view>
                     <connections>
+                        <outlet property="favoriteButton" destination="kk3-pr-5iQ" id="byc-zT-Vn3"/>
+                        <outlet property="locationButton" destination="BOi-xL-bko" id="T33-6g-qar"/>
                         <outlet property="routeInfoPicker" destination="Ltc-3h-TBo" id="yHy-in-jYX"/>
                     </connections>
                 </viewController>

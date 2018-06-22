@@ -10,6 +10,9 @@
         <attribute name="directionTitle" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="route" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Route" inverseName="directions" inverseEntity="Route" syncable="YES"/>
         <relationship name="stops" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Stop" inverseName="direction" inverseEntity="Stop" syncable="YES"/>
+        <fetchIndex name="byDirectionTagIndex">
+            <fetchIndexElement property="directionTag" type="Binary" order="ascending"/>
+        </fetchIndex>
     </entity>
     <entity name="Route" representedClassName="Route" syncable="YES" codeGenerationType="class">
         <attribute name="routeColor" optional="YES" attributeType="String" syncable="YES"/>

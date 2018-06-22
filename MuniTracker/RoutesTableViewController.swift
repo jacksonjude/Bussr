@@ -87,7 +87,8 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     func convertRouteObjectsToRouteTitleDictionary()
     {
-        let agency = RouteDataManager.fetchOrCreateObject(type: "Agency", predicate: NSPredicate(format: "agencyName == %@", agencyTag)) as! Agency
+        let agencyFetchCallback = RouteDataManager.fetchOrCreateObject(type: "Agency", predicate: NSPredicate(format: "agencyName == %@", agencyTag), moc: appDelegate.persistentContainer.viewContext)
+        let agency = agencyFetchCallback.object as! Agency
         let agencyRoutes = (agency.routes?.allObjects) as! [Route]
         
         for route in agencyRoutes
@@ -151,7 +152,8 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
         
         let selectedRouteTag = String(routeFullTitle[0].dropLast())
         
-        selectedRouteObject = RouteDataManager.fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "routeTag == %@", selectedRouteTag)) as? Route
+        let routeFetchCallback = RouteDataManager.fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "routeTag == %@", selectedRouteTag), moc: appDelegate.persistentContainer.viewContext)
+        selectedRouteObject = routeFetchCallback.object as? Route
         
         performSegue(withIdentifier: "DismissRoutesTable", sender: self)
     }
@@ -159,7 +161,5 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         MapState.routeInfoObject = selectedRouteObject
         MapState.routeInfoShowing = .direction
-        
-        NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
     }
 }

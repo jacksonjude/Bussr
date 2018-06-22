@@ -19,7 +19,7 @@ class MapState: NSObject
     }
     
     static var routeInfoShowing: RouteInfoType = .none
-    static var routeInfoObject: Route? = nil
+    static var routeInfoObject: NSManagedObject? = nil
     
     static var selectedDirectionTag: String? = nil
     static var selectedStopTag: String? = nil
