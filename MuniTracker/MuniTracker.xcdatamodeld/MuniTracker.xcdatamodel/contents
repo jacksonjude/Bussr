@@ -20,9 +20,10 @@
         <attribute name="routeTag" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="routeTitle" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="agency" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Agency" inverseName="routes" inverseEntity="Agency" syncable="YES"/>
-        <relationship name="directions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Direction" inverseName="route" inverseEntity="Direction" syncable="YES"/>
+        <relationship name="directions" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Direction" inverseName="route" inverseEntity="Direction" syncable="YES"/>
     </entity>
     <entity name="Stop" representedClassName="Stop" syncable="YES" codeGenerationType="class">
+        <attribute name="favorite" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="stopID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="stopLatitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="stopLongitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
@@ -35,6 +36,6 @@
         <element name="Agency" positionX="-36" positionY="81" width="128" height="75"/>
         <element name="Direction" positionX="-45" positionY="63" width="128" height="120"/>
         <element name="Route" positionX="-54" positionY="18" width="128" height="135"/>
-        <element name="Stop" positionX="-36" positionY="27" width="128" height="150"/>
+        <element name="Stop" positionX="-36" positionY="27" width="128" height="165"/>
     </elements>
 </model>

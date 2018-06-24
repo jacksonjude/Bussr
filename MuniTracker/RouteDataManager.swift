@@ -44,9 +44,7 @@ class RouteDataManager
                 
         let routeDictionary = fetchRoutes()
         print("Received Routes")
-        
-        //let backgroundGroup = DispatchGroup()
-        
+                
         appDelegate.persistentContainer.performBackgroundTask({ (backgroundMOC) in
             let agencyFetchCallback = fetchOrCreateObject(type: "Agency", predicate: NSPredicate(format: "agencyName == %@", agencyTag), moc: backgroundMOC)
             let agency = agencyFetchCallback.object as! Agency
@@ -59,86 +57,76 @@ class RouteDataManager
                 route.routeTag = routeTitle.key
                 route.routeTitle = routeTitle.value
                 
-                //backgroundGroup.enter()
+                let routeConfig = fetchRouteInfo(routeTag: routeTitle.key)
                 
-                let routeConfig = fetchRouteInfo(routeTag: routeTitle.key)//, callback: { (routeConfig) in
+                print(routeTitle.key)
+            
+                let generalRouteConfig = routeConfig["general"]
+                route.routeColor = generalRouteConfig!["color"]!["color"] as? String
+                route.routeOppositeColor = generalRouteConfig!["color"]!["oppositeColor"] as? String
+            
+                for directionInfo in routeConfig["directions"]!
+                {
+                    let directionFetchCallback = fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", directionInfo.key), moc: backgroundMOC)
+                    let direction = directionFetchCallback.object as! Direction
                     
-                    //let routeFetchCallback = fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "routeTag == %@", routeTitle.key), moc: backgroundMOC)
-                    //let route = routeFetchCallback[0] as! Route
-                
-                    print(routeTitle.key)
-                
-                    let generalRouteConfig = routeConfig["general"]
-                    route.routeColor = generalRouteConfig!["color"]!["color"] as? String
-                    route.routeOppositeColor = generalRouteConfig!["color"]!["oppositeColor"] as? String
-                
-                    for directionInfo in routeConfig["directions"]!
+                    direction.directionTag = directionInfo.key
+                    direction.directionName = directionInfo.value["name"] as? String
+                    direction.directionTitle = directionInfo.value["title"] as? String
+                    
+                    for directionStopTag in directionInfo.value["stops"] as! Array<String>
                     {
-                        let directionFetchCallback = fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", directionInfo.key), moc: backgroundMOC)
-                        let direction = directionFetchCallback.object as! Direction
+                        let stopConfig = routeConfig["stops"]![directionStopTag]
                         
-                        direction.directionTag = directionInfo.key
-                        direction.directionName = directionInfo.value["name"] as? String
-                        direction.directionTitle = directionInfo.value["title"] as? String
+                        let stopFetchCallback = fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", directionStopTag), moc: backgroundMOC)
+                        let stop = stopFetchCallback.object as! Stop
+                        stop.stopTag = directionStopTag
+                        stop.stopLatitude = Double(stopConfig!["lat"] as! String)!
+                        stop.stopLongitude = Double(stopConfig!["lon"] as! String)!
+                        stop.stopID = stopConfig!["stopId"] as? String
+                        stop.stopTitle = stopConfig!["title"] as? String
+                        stop.stopShortTitle = stopConfig!["shortTitle"] as? String
                         
-                        for directionStopTag in directionInfo.value["stops"] as! Array<String>
+                        if stopFetchCallback.justCreated
                         {
-                            let stopConfig = routeConfig["stops"]![directionStopTag]
-                            
-                            let stopFetchCallback = fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", directionStopTag), moc: backgroundMOC)
-                            let stop = stopFetchCallback.object as! Stop
-                            stop.stopTag = directionStopTag
-                            stop.stopLatitude = Double(stopConfig!["lat"] as! String)!
-                            stop.stopLongitude = Double(stopConfig!["lon"] as! String)!
-                            stop.stopID = stopConfig!["stopId"] as? String
-                            stop.stopTitle = stopConfig!["title"] as? String
-                            stop.stopShortTitle = stopConfig!["shortTitle"] as? String
-                            
-                            if stopFetchCallback.justCreated
-                            {
-                                direction.addToStops(stop)
-                            }
-                        }
-                        
-                        if directionFetchCallback.justCreated
-                        {
-                            route.addToDirections(direction)
+                            direction.addToStops(stop)
                         }
                     }
                     
-                    if routeFetchCallback.justCreated
+                    if directionFetchCallback.justCreated
                     {
-                        agency.addToRoutes(route)
+                        route.addToDirections(direction)
                     }
+                }
                 
-                    routesFetched += 1
+                if routeFetchCallback.justCreated
+                {
+                    agency.addToRoutes(route)
+                }
+            
+                routesFetched += 1
                 
-                    NotificationCenter.default.post(name: NSNotification.Name("CompletedRoute"), object: self, userInfo: ["progress":Float(routesFetched)/Float(routeDictionary.keys.count)])
+                NotificationCenter.default.post(name: NSNotification.Name("CompletedRoute"), object: self, userInfo: ["progress":Float(routesFetched)/Float(routeDictionary.keys.count)])
                 
-                    if routesFetched == routeDictionary.keys.count
+                if routesFetched == routeDictionary.keys.count
+                {
+                    print("Complete")
+                    
+                    do
                     {
-                        print("Complete")
-                        
-                        do
-                        {
-                            try backgroundMOC.save()
-                        }
-                        catch
-                        {
-                            print(error)
-                        }
-                        
-                        OperationQueue.main.addOperation {
-                            NotificationCenter.default.post(name: NSNotification.Name("FinishedUpdatingRoutes"), object: self)
-                        }
+                        try backgroundMOC.save()
                     }
-                
-                    try? backgroundMOC.save()
-                
-                    //backgroundGroup.leave()
-                //})
-                
-                //backgroundGroup.wait()
+                    catch
+                    {
+                        print(error)
+                    }
+                    
+                    OperationQueue.main.addOperation {
+                        NotificationCenter.default.post(name: NSNotification.Name("FinishedUpdatingRoutes"), object: self)
+                    }
+                }
+            
+                try? backgroundMOC.save()
             }
         })
     }
