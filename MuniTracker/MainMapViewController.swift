@@ -52,12 +52,21 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         
         centerMapOnLocation(location: initialLocation, range: 15000)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(focusMapFromRouteObject(notification:)), name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(focusMapFromRouteObject(notification:)), name: NSNotification.Name("UpdateRouteMap"), object: nil)
+        setupRouteMapUpdateNotifications()
         
         //downloadAllData = true
-        
-        mainMapView.clearsContextBeforeDrawing = true
+    }
+    
+    func setupRouteMapUpdateNotifications()
+    {
+        NotificationCenter.default.addObserver(self, selector: #selector(focusMapFromRouteObject(notification:)), name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(focusMapFromRouteObject(notification:)), name: NSNotification.Name("UpdateRouteMap"), object: nil)
+    }
+    
+    func removeRouteMapUpdateNotifications()
+    {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("UpdateRouteMap"), object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -82,8 +91,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 NotificationCenter.default.addObserver(self, selector: #selector(self.dismissAlertView), name: NSNotification.Name("FinishedUpdatingRoutes"), object: nil)
                 
                 DispatchQueue.global(qos: .background).async
-                    {
-                        RouteDataManager.updateAllData()
+                {
+                    RouteDataManager.updateAllData()
                 }
             })
             
@@ -116,6 +125,10 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         progressAlertView?.dismiss(animated: true, completion: {
             
         })
+    }
+    @IBAction func routesButtonPressed(_ sender: Any) {
+        setupRouteMapUpdateNotifications()
+        self.performSegue(withIdentifier: "showRoutesTableView", sender: self)
     }
     
     @objc func focusMapFromRouteObject(notification: Notification)
@@ -203,8 +216,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         {
             mainMapView.removeOverlay(directionPolyline!)
         }
-        
-        
         
         if let direction = RouteDataManager.getCurrentDirection()
         {
@@ -323,6 +334,13 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 self.predictionTimesLabel.text = predictionsString
             }
         }
+    }
+    
+    @IBAction func doneButtonPressed(_ sender: Any) {
+        MapState.routeInfoShowing = .none
+        
+        removeRouteMapUpdateNotifications()
+        NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
     }
 }
 

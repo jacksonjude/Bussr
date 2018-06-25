@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import CoreLocation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,11 +16,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     var mainMapViewController: MainMapViewController?
+    
+    var currentLocationManager = CurrentLocationManager()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
         mainMapViewController = window?.rootViewController as? MainMapViewController
+        
+        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse
+        {
+            currentLocationManager.requestCurrentLocation()
+        }
         
         return true
     }

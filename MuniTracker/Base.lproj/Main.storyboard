@@ -19,33 +19,18 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="5DO-YH-hPg">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="559"/>
                             </mapView>
-                            <button opaque="NO" alpha="0.90000000000000002" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y4A-7Q-DBF">
-                                <rect key="frame" x="299" y="587" width="60" height="60"/>
-                                <color key="backgroundColor" red="0.86274509803921573" green="0.86274509803921573" blue="0.86274509803921573" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="nv9-3W-HuM"/>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="p2s-eW-fKM"/>
-                                </constraints>
-                                <state key="normal" title="Routes"/>
-                                <connections>
-                                    <segue destination="DD3-H0-RfC" kind="show" id="Ur8-Jt-nvf"/>
-                                </connections>
-                            </button>
-                            <containerView hidden="YES" opaque="NO" tag="618" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yev-Ge-C71">
-                                <rect key="frame" x="0.0" y="505" width="375" height="162"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="162" id="Vug-BW-GB8"/>
-                                </constraints>
-                                <connections>
-                                    <segue destination="4Mg-kq-ULL" kind="embed" id="R2f-5Y-fTt"/>
-                                </connections>
-                            </containerView>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NHQ-Gi-Nhr">
                                 <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                                 <items>
-                                    <navigationItem title="Map" id="QLn-ub-iwV"/>
+                                    <navigationItem title="Map" id="QLn-ub-iwV">
+                                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="uv4-FG-5D1">
+                                            <connections>
+                                                <action selector="doneButtonPressed:" destination="BYZ-38-t0r" id="2Dr-Xd-o8D"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
                                 </items>
                             </navigationBar>
                             <navigationBar hidden="YES" alpha="0.80000000000000004" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ea2-9E-S1F">
@@ -98,14 +83,47 @@
                                     <constraint firstAttribute="width" constant="20" id="W8t-l1-cp8"/>
                                 </constraints>
                             </activityIndicatorView>
+                            <button hidden="YES" opaque="NO" alpha="0.90000000000000002" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y4A-7Q-DBF">
+                                <rect key="frame" x="299" y="114" width="60" height="60"/>
+                                <color key="backgroundColor" red="0.86274509803921573" green="0.86274509803921573" blue="0.86274509803921573" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="nv9-3W-HuM"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="p2s-eW-fKM"/>
+                                </constraints>
+                                <state key="normal" title="Routes"/>
+                                <connections>
+                                    <action selector="routesButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qKD-Id-LbH"/>
+                                </connections>
+                            </button>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Gt-Fk-FGB">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <items>
+                                    <barButtonItem title="Routes" image="RouteListIcon" id="Mj2-Nd-wGo">
+                                        <connections>
+                                            <action selector="routesButtonPressed:" destination="BYZ-38-t0r" id="Pm0-DO-O6w"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                            <containerView hidden="YES" opaque="NO" tag="618" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yev-Ge-C71">
+                                <rect key="frame" x="0.0" y="461" width="375" height="162"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="162" id="Vug-BW-GB8"/>
+                                </constraints>
+                                <connections>
+                                    <segue destination="4Mg-kq-ULL" kind="embed" id="R2f-5Y-fTt"/>
+                                </connections>
+                            </containerView>
                         </subviews>
                         <color key="backgroundColor" red="0.97647064924240112" green="0.97647064924240112" blue="0.97647064924240112" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
+                            <constraint firstItem="1Gt-Fk-FGB" firstAttribute="top" secondItem="5DO-YH-hPg" secondAttribute="bottom" id="1ra-qJ-VDJ"/>
+                            <constraint firstItem="1Gt-Fk-FGB" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="3NM-hA-e0F"/>
                             <constraint firstItem="Ea2-9E-S1F" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="3XA-Ct-hSF"/>
                             <constraint firstItem="yev-Ge-C71" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="7PP-Im-Eqw"/>
-                            <constraint firstItem="5DO-YH-hPg" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="7iI-jk-QeV"/>
+                            <constraint firstItem="1Gt-Fk-FGB" firstAttribute="top" secondItem="yev-Ge-C71" secondAttribute="bottom" id="9Fz-cE-Kfx"/>
                             <constraint firstItem="Ea2-9E-S1F" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="B1R-tl-dJU"/>
-                            <constraint firstItem="yev-Ge-C71" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="Ecg-z5-4Ri"/>
+                            <constraint firstItem="1Gt-Fk-FGB" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="DVw-Kf-7kL"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="PSx-ff-C8w" secondAttribute="trailing" constant="5" id="FoU-d5-oSp"/>
                             <constraint firstItem="NHQ-Gi-Nhr" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="GgD-iC-bBp"/>
                             <constraint firstItem="qgo-qY-04b" firstAttribute="top" secondItem="Ea2-9E-S1F" secondAttribute="top" constant="13" id="McW-xc-rTe"/>
@@ -113,10 +131,11 @@
                             <constraint firstItem="NHQ-Gi-Nhr" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Q4X-Yo-Ibx"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="y4A-7Q-DBF" secondAttribute="trailing" constant="16" id="QsX-se-Sa7"/>
                             <constraint firstItem="NHQ-Gi-Nhr" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Sn5-g7-B6b"/>
+                            <constraint firstItem="y4A-7Q-DBF" firstAttribute="top" secondItem="NHQ-Gi-Nhr" secondAttribute="bottom" constant="50" id="TWC-1x-U1Q"/>
                             <constraint firstItem="NHQ-Gi-Nhr" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Tf0-aF-MO1"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="y4A-7Q-DBF" secondAttribute="bottom" constant="20" id="Tnt-4i-K9M"/>
                             <constraint firstItem="NHQ-Gi-Nhr" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="VI0-cQ-CJg"/>
                             <constraint firstItem="Ea2-9E-S1F" firstAttribute="top" secondItem="NHQ-Gi-Nhr" secondAttribute="bottom" id="awl-Bt-0Kg"/>
+                            <constraint firstItem="1Gt-Fk-FGB" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="bG5-dt-0BE"/>
                             <constraint firstItem="5DO-YH-hPg" firstAttribute="top" secondItem="NHQ-Gi-Nhr" secondAttribute="bottom" id="cRg-I2-uC8"/>
                             <constraint firstItem="y4A-7Q-DBF" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" symbolic="YES" id="g4J-5h-BEo"/>
                             <constraint firstItem="qgo-qY-04b" firstAttribute="leading" secondItem="Ea2-9E-S1F" secondAttribute="leading" constant="15" id="hxM-Nn-ZuQ"/>
@@ -135,6 +154,7 @@
                         <outlet property="predictionTimesLabel" destination="wQP-ec-opL" id="f3n-0n-1l2"/>
                         <outlet property="predictionTimesNavigationBar" destination="Ea2-9E-S1F" id="YNc-Ev-FqY"/>
                         <outlet property="refreshButton" destination="uL0-OW-vgM" id="INC-Kh-UNr"/>
+                        <segue destination="DD3-H0-RfC" kind="show" identifier="showRoutesTableView" id="qw7-kc-Skx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -277,5 +297,6 @@
         <image name="DirectionIcon" width="64" height="64"/>
         <image name="FavoriteAddIcon" width="60" height="60"/>
         <image name="FavoriteIcon" width="64" height="64"/>
+        <image name="RouteListIcon" width="25" height="31"/>
     </resources>
 </document>

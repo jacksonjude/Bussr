@@ -35,9 +35,12 @@ class RouteDataManager
         }
         
         _ = (URLSession.shared.dataTask(with: URL(string: xmlFeedSource + "?command=" + command + commandString)!) { data, response, error in
-            let xml = SWXMLHash.parse(data!)
-            let xmlBody = xml.children[0]
-            callback(xmlBody)
+            if data != nil
+            {
+                let xml = SWXMLHash.parse(data!)
+                let xmlBody = xml.children[0]
+                callback(xmlBody)
+            }
         }).resume()
     }
     
@@ -63,6 +66,16 @@ class RouteDataManager
                 let routeConfig = fetchRouteInfo(routeTag: routeTitle.key)
                 
                 print(routeTitle.key)
+                
+                if routeTitle.key == "5R"
+                {
+                    
+                }
+                
+                if routeTitle.key == "5"
+                {
+                    
+                }
             
                 let generalRouteConfig = routeConfig["general"]
                 route.routeColor = generalRouteConfig!["color"]!["color"] as? String
@@ -90,10 +103,10 @@ class RouteDataManager
                         stop.stopTitle = stopConfig!["title"] as? String
                         stop.stopShortTitle = stopConfig!["shortTitle"] as? String
                         
-                        if stopFetchCallback.justCreated
-                        {
+                        //if stopFetchCallback.justCreated
+                        //{
                             direction.addToStops(stop)
-                        }
+                        //}
                     }
                     
                     if directionFetchCallback.justCreated
@@ -350,7 +363,7 @@ class RouteDataManager
         }
     }
     
-    static func sortStopsByDistanceFromLocation(stops: Array<Stop>, locationToTest: CLLocation) -> Array<Stop>?
+    static func sortStopsByDistanceFromLocation(stops: Array<Stop>, locationToTest: CLLocation) -> Array<Stop>
     {
         var distanceDictionary = Dictionary<Stop,Double>()
         
@@ -360,12 +373,9 @@ class RouteDataManager
             distanceDictionary[stop] = locationToTest.distance(from: stopLocation)
         }
         
-        if let sortedStops = distanceDictionary.sortedKeysByValue()
-        {
-            return sortedStops
-        }
+        let sortedStops = Array(distanceDictionary.keys).sorted(by: {distanceDictionary[$0]! < distanceDictionary[$1]!})
         
-        return nil
+        return sortedStops
     }
 }
 

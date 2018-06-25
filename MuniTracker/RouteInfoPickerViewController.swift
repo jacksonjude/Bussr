@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import CoreData
+import CoreLocation
 
 class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate
 {
@@ -19,6 +20,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     
     var favoriteFilterEnabled = false
     var locationFilterEnabled = false
+    var waitingForLocation = false
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -41,6 +43,11 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        pickerSelectedRow()
+    }
+    
+    func pickerSelectedRow()
+    {
         updateSelectedObjectTags()
         NotificationCenter.default.post(name: NSNotification.Name("UpdateRouteMap"), object: nil, userInfo: ["ChangingRouteInfoShowing":false])
     }
@@ -126,6 +133,9 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         favoriteButton.isEnabled = false
         locationButton.isHidden = true
         locationButton.isEnabled = false
+        
+        favoriteFilterEnabled = false
+        locationFilterEnabled = false
     }
     
     @IBAction func favoriteFilterButtonPressed(_ sender: Any) {
@@ -147,10 +157,54 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         if locationFilterEnabled
         {
             locationButton.setImage(UIImage(named: "CurrentLocationFillIcon"), for: UIControl.State.normal)
+            
+            if appDelegate.currentLocationManager.lastLocation == nil
+            {
+                let locationReturnUUID = UUID().uuidString
+                NotificationCenter.default.addObserver(self, selector: #selector(foundCurrentLocation(_:)), name: NSNotification.Name("UpdatedCurrentLocation:" + locationReturnUUID), object: nil)
+                appDelegate.currentLocationManager.observersWaitingForUpdates.append(locationReturnUUID)
+                waitingForLocation = true
+                
+                appDelegate.currentLocationManager.requestCurrentLocation()
+            }
+            else
+            {
+                foundCurrentLocation()
+            }
         }
         else
         {
             locationButton.setImage(UIImage(named: "CurrentLocationIcon"), for: UIControl.State.normal)
+            
+            reloadRouteData()
+        }
+    }
+    
+    @objc func foundCurrentLocation(_ notification: Notification? = nil)
+    {
+        waitingForLocation = false
+        
+        if notification != nil
+        {
+            appDelegate.currentLocationManager.observersWaitingForUpdates.remove(at: appDelegate.currentLocationManager.observersWaitingForUpdates.firstIndex(of: String(notification!.name.rawValue.split(separator: ":")[1]))!)
+        }
+        
+        if let currentLocation = appDelegate.currentLocationManager.lastLocation
+        {
+            sortStopsByCurrentLocation(location: currentLocation)
+        }
+    }
+    
+    func sortStopsByCurrentLocation(location: CLLocation)
+    {
+        if let routeStops = routeInfoToChange as? Array<Stop>
+        {
+            let sortedStops = RouteDataManager.sortStopsByDistanceFromLocation(stops: routeStops, locationToTest: location)
+            routeInfoToChange = sortedStops
+            
+            routeInfoPicker.reloadAllComponents()
+            routeInfoPicker.selectRow(0, inComponent: 0, animated: true)
+            pickerSelectedRow()
         }
     }
 }
