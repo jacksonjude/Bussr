@@ -33,6 +33,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var addFavoriteButton: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var refreshButton: UIBarButtonItem!
+    @IBOutlet weak var mainNavigationItem: UINavigationItem!
+    @IBOutlet weak var showHidePickerButton: UIBarButtonItem!
+    
     //37.773972
     //37.738802
     let initialLocation = CLLocation(latitude: 37.773972, longitude: -122.438765)
@@ -43,6 +46,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     var directionPolyline: MKPolyline?
     
     var downloadAllData = false
+    
+    let showPickerViewButton = UIBarButtonItem(title: "Show", style: UIBarButtonItem.Style.done, target: self, action: #selector(showPickerView))
+    let hidePickerViewButton = UIBarButtonItem(title: "Hide", style: UIBarButtonItem.Style.done, target: self, action: #selector(hidePickerView))
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,18 +60,54 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         
         setupRouteMapUpdateNotifications()
         
+        setupHidePickerButton()
+        
         //downloadAllData = true
+    }
+    
+    @objc func showPickerView()
+    {
+        MapState.showingPickerView = true
+        
+        self.view.viewWithTag(618)?.isHidden = false
+        
+        setupHidePickerButton()
+    }
+    
+    
+    
+    @objc func hidePickerView()
+    {
+        MapState.showingPickerView = false
+        
+        self.view.viewWithTag(618)?.isHidden = true
+        
+        setupShowPickerButton()
+    }
+    
+    func setupHidePickerButton()
+    {
+        showHidePickerButton.title = "Hide"
+        showHidePickerButton.target = self
+        showHidePickerButton.action = #selector(hidePickerView)
+    }
+    
+    func setupShowPickerButton()
+    {
+        showHidePickerButton.title = "Show"
+        showHidePickerButton.target = self
+        showHidePickerButton.action = #selector(showPickerView)
     }
     
     func setupRouteMapUpdateNotifications()
     {
-        NotificationCenter.default.addObserver(self, selector: #selector(focusMapFromRouteObject(notification:)), name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
+        //NotificationCenter.default.addObserver(self, selector: #selector(focusMapFromRouteObject(notification:)), name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(focusMapFromRouteObject(notification:)), name: NSNotification.Name("UpdateRouteMap"), object: nil)
     }
     
     func removeRouteMapUpdateNotifications()
     {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
+        //NotificationCenter.default.removeObserver(self, name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("UpdateRouteMap"), object: nil)
     }
     
@@ -126,8 +168,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
         })
     }
+    
     @IBAction func routesButtonPressed(_ sender: Any) {
-        setupRouteMapUpdateNotifications()
         self.performSegue(withIdentifier: "showRoutesTableView", sender: self)
     }
     
@@ -139,6 +181,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             resetAnnotations()
             
             hidePredictionNavigationBar()
+            
+            showHidePickerButton.isEnabled = false
         case .direction:
             resetAnnotations()
             
@@ -156,13 +200,10 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             centerMapOnLocation(location: initialLocation, range: 15000)
             
             hidePredictionNavigationBar()
+            
+            showHidePickerButton.isEnabled = true
         case .stop:
             let changingRouteInfoShowing = notification.userInfo!["ChangingRouteInfoShowing"] as! Bool
-            
-            if changingRouteInfoShowing
-            {
-                reloadPolyline()
-            }
             
             if let stop = RouteDataManager.getCurrentStop()
             {
@@ -179,6 +220,13 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             showPredictionNavigationBar()
             
             refreshPredictionNavigationBar()
+            
+            if changingRouteInfoShowing
+            {
+                reloadPolyline()
+            }
+            
+            showHidePickerButton.isEnabled = true
         }
     }
     
@@ -208,6 +256,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     {
         mainMapView.removeAnnotations(mainMapView.annotations)
         annotations.removeAll()
+        
+        if directionPolyline != nil
+        {
+            mainMapView.removeOverlay(directionPolyline!)
+        }
     }
     
     func reloadPolyline()
@@ -334,13 +387,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 self.predictionTimesLabel.text = predictionsString
             }
         }
-    }
-    
-    @IBAction func doneButtonPressed(_ sender: Any) {
-        MapState.routeInfoShowing = .none
-        
-        removeRouteMapUpdateNotifications()
-        NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
     }
 }
 

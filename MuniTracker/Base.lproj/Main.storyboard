@@ -25,11 +25,7 @@
                                 <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                                 <items>
                                     <navigationItem title="Map" id="QLn-ub-iwV">
-                                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="uv4-FG-5D1">
-                                            <connections>
-                                                <action selector="doneButtonPressed:" destination="BYZ-38-t0r" id="2Dr-Xd-o8D"/>
-                                            </connections>
-                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" image="SettingsIcon" id="TGl-yd-Vf2"/>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -103,6 +99,8 @@
                                             <action selector="routesButtonPressed:" destination="BYZ-38-t0r" id="Pm0-DO-O6w"/>
                                         </connections>
                                     </barButtonItem>
+                                    <barButtonItem systemItem="flexibleSpace" id="cnm-e2-ces"/>
+                                    <barButtonItem enabled="NO" title="Hide" id="XQg-PL-EFo"/>
                                 </items>
                             </toolbar>
                             <containerView hidden="YES" opaque="NO" tag="618" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yev-Ge-C71">
@@ -151,9 +149,11 @@
                         <outlet property="activityIndicator" destination="qgo-qY-04b" id="9lK-9M-ccn"/>
                         <outlet property="addFavoriteButton" destination="PSx-ff-C8w" id="GCq-GV-f38"/>
                         <outlet property="mainMapView" destination="5DO-YH-hPg" id="0m6-8a-pgb"/>
+                        <outlet property="mainNavigationItem" destination="QLn-ub-iwV" id="hNJ-gC-s7c"/>
                         <outlet property="predictionTimesLabel" destination="wQP-ec-opL" id="f3n-0n-1l2"/>
                         <outlet property="predictionTimesNavigationBar" destination="Ea2-9E-S1F" id="YNc-Ev-FqY"/>
                         <outlet property="refreshButton" destination="uL0-OW-vgM" id="INC-Kh-UNr"/>
+                        <outlet property="showHidePickerButton" destination="XQg-PL-EFo" id="eAv-xz-wfT"/>
                         <segue destination="DD3-H0-RfC" kind="show" identifier="showRoutesTableView" id="qw7-kc-Skx"/>
                     </connections>
                 </viewController>
@@ -298,5 +298,6 @@
         <image name="FavoriteAddIcon" width="60" height="60"/>
         <image name="FavoriteIcon" width="64" height="64"/>
         <image name="RouteListIcon" width="25" height="31"/>
+        <image name="SettingsIcon" width="25" height="25"/>
     </resources>
 </document>

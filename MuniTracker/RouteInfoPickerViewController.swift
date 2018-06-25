@@ -56,14 +56,17 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     {
         let row = routeInfoPicker.selectedRow(inComponent: 0)
         
-        switch MapState.routeInfoShowing
+        if routeInfoToChange.count > row
         {
-        case .direction:
-            MapState.selectedDirectionTag = (routeInfoToChange[row] as! Direction).directionTag
-        case .stop:
-            MapState.selectedStopTag = (routeInfoToChange[row] as! Stop).stopTag
-        default:
-            break
+            switch MapState.routeInfoShowing
+            {
+            case .direction:
+                MapState.selectedDirectionTag = (routeInfoToChange[row] as! Direction).directionTag
+            case .stop:
+                MapState.selectedStopTag = (routeInfoToChange[row] as! Stop).stopTag
+            default:
+                break
+            }
         }
     }
     
@@ -75,28 +78,39 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     
     @objc func reloadRouteData()
     {
-        routeInfoToChange.removeAll()
-        
-        switch MapState.routeInfoShowing
+        if MapState.showingPickerView
         {
-        case .none:
-            self.view.superview!.isHidden = true
-        case .direction:
-            self.view.superview!.isHidden = false
+            routeInfoToChange.removeAll()
             
-            routeInfoToChange = (MapState.routeInfoObject as? Route)?.directions?.array as? Array<Direction> ?? Array<Direction>()
-        case .stop:
-            self.view.superview!.isHidden = false
+            switch MapState.routeInfoShowing
+            {
+            case .none:
+                self.view.superview!.isHidden = true
+            case .direction:
+                self.view.superview!.isHidden = false
+                
+                routeInfoToChange = (MapState.routeInfoObject as? Route)?.directions?.array as? Array<Direction> ?? Array<Direction>()
+                
+                disableFilterButtons()
+            case .stop:
+                self.view.superview!.isHidden = false
+                
+                routeInfoToChange = (MapState.routeInfoObject as? Direction)?.stops?.array as? Array<Stop> ?? Array<Stop>()
+                
+                enableFilterButtons()
+            }
             
-            routeInfoToChange = (MapState.routeInfoObject as? Direction)?.stops?.array as? Array<Stop> ?? Array<Stop>()
+            routeInfoPicker.reloadAllComponents()
+            
+            routeInfoPicker.selectRow(0, inComponent: 0, animated: true)
+            
+            updateSelectedObjectTags()
+            NotificationCenter.default.post(name: NSNotification.Name("UpdateRouteMap"), object: nil, userInfo: ["ChangingRouteInfoShowing":true])
         }
-        
-        routeInfoPicker.reloadAllComponents()
-        
-        routeInfoPicker.selectRow(0, inComponent: 0, animated: true)
-        
-        updateSelectedObjectTags()
-        NotificationCenter.default.post(name: NSNotification.Name("UpdateRouteMap"), object: nil, userInfo: ["ChangingRouteInfoShowing":true])
+        else
+        {
+            self.view.superview!.isHidden = true
+        }
     }
     
     @IBAction func directionButtonPressed(_ sender: Any) {
@@ -136,6 +150,9 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         
         favoriteFilterEnabled = false
         locationFilterEnabled = false
+        
+        favoriteButton.setImage(UIImage(named: "FavoriteIcon"), for: UIControl.State.normal)
+        locationButton.setImage(UIImage(named: "CurrentLocationIcon"), for: UIControl.State.normal)
     }
     
     @IBAction func favoriteFilterButtonPressed(_ sender: Any) {
@@ -200,10 +217,27 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         if let routeStops = routeInfoToChange as? Array<Stop>
         {
             let sortedStops = RouteDataManager.sortStopsByDistanceFromLocation(stops: routeStops, locationToTest: location)
-            routeInfoToChange = sortedStops
             
-            routeInfoPicker.reloadAllComponents()
-            routeInfoPicker.selectRow(0, inComponent: 0, animated: true)
+            enum LocationSortType
+            {
+                case fullSort
+                case selectClosest
+            }
+            
+            let locationSortType: LocationSortType = .selectClosest
+            
+            switch locationSortType
+            {
+            case .fullSort:
+                routeInfoToChange = sortedStops
+                
+                routeInfoPicker.reloadAllComponents()
+                routeInfoPicker.selectRow(0, inComponent: 0, animated: true)
+            case .selectClosest:
+                routeInfoPicker.selectRow(routeInfoToChange.firstIndex(of: sortedStops[0]) ?? 0, inComponent: 0, animated: true)
+            }
+            
+            
             pickerSelectedRow()
         }
     }
