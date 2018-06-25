@@ -48,7 +48,7 @@
                                     <navigationItem title="Map" id="QLn-ub-iwV"/>
                                 </items>
                             </navigationBar>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ea2-9E-S1F">
+                            <navigationBar hidden="YES" alpha="0.80000000000000004" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ea2-9E-S1F">
                                 <rect key="frame" x="0.0" y="64" width="375" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="8eT-xz-NqA"/>
@@ -56,12 +56,17 @@
                                 <items>
                                     <navigationItem id="3bn-yD-YCd">
                                         <nil key="title"/>
+                                        <barButtonItem key="leftBarButtonItem" systemItem="refresh" id="uL0-OW-vgM">
+                                            <connections>
+                                                <action selector="refreshPredictionNavigationBar" destination="BYZ-38-t0r" id="ZsO-fO-q5c"/>
+                                            </connections>
+                                        </barButtonItem>
                                         <view key="titleView" contentMode="scaleToFill" id="2Qa-3P-PlZ">
-                                            <rect key="frame" x="125.5" y="11.5" width="124" height="21"/>
+                                            <rect key="frame" x="57" y="11.5" width="261" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wQP-ec-opL">
-                                                    <rect key="frame" x="-29" y="-9" width="182" height="39"/>
+                                                    <rect key="frame" x="-29" y="-9" width="319" height="39"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -78,6 +83,21 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PSx-ff-C8w">
+                                <rect key="frame" x="338" y="70" width="32" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="32" id="R2a-WJ-4cz"/>
+                                    <constraint firstAttribute="height" constant="32" id="chU-qR-LiJ"/>
+                                </constraints>
+                                <state key="normal" image="FavoriteAddIcon"/>
+                            </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="qgo-qY-04b">
+                                <rect key="frame" x="15" y="77" width="20" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="4yI-4t-Vcc"/>
+                                    <constraint firstAttribute="width" constant="20" id="W8t-l1-cp8"/>
+                                </constraints>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.97647064924240112" green="0.97647064924240112" blue="0.97647064924240112" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
@@ -86,7 +106,10 @@
                             <constraint firstItem="5DO-YH-hPg" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="7iI-jk-QeV"/>
                             <constraint firstItem="Ea2-9E-S1F" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="B1R-tl-dJU"/>
                             <constraint firstItem="yev-Ge-C71" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="Ecg-z5-4Ri"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="PSx-ff-C8w" secondAttribute="trailing" constant="5" id="FoU-d5-oSp"/>
                             <constraint firstItem="NHQ-Gi-Nhr" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="GgD-iC-bBp"/>
+                            <constraint firstItem="qgo-qY-04b" firstAttribute="top" secondItem="Ea2-9E-S1F" secondAttribute="top" constant="13" id="McW-xc-rTe"/>
+                            <constraint firstItem="PSx-ff-C8w" firstAttribute="top" secondItem="Ea2-9E-S1F" secondAttribute="top" constant="6" id="NHD-76-lbd"/>
                             <constraint firstItem="NHQ-Gi-Nhr" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Q4X-Yo-Ibx"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="y4A-7Q-DBF" secondAttribute="trailing" constant="16" id="QsX-se-Sa7"/>
                             <constraint firstItem="NHQ-Gi-Nhr" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Sn5-g7-B6b"/>
@@ -96,15 +119,22 @@
                             <constraint firstItem="Ea2-9E-S1F" firstAttribute="top" secondItem="NHQ-Gi-Nhr" secondAttribute="bottom" id="awl-Bt-0Kg"/>
                             <constraint firstItem="5DO-YH-hPg" firstAttribute="top" secondItem="NHQ-Gi-Nhr" secondAttribute="bottom" id="cRg-I2-uC8"/>
                             <constraint firstItem="y4A-7Q-DBF" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" symbolic="YES" id="g4J-5h-BEo"/>
+                            <constraint firstItem="qgo-qY-04b" firstAttribute="leading" secondItem="Ea2-9E-S1F" secondAttribute="leading" constant="15" id="hxM-Nn-ZuQ"/>
                             <constraint firstItem="NHQ-Gi-Nhr" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="idi-En-4N2"/>
                             <constraint firstItem="5DO-YH-hPg" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="q6m-Os-HvH"/>
                             <constraint firstItem="5DO-YH-hPg" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="qIj-2A-rkB"/>
+                            <constraint firstItem="Ea2-9E-S1F" firstAttribute="bottom" secondItem="PSx-ff-C8w" secondAttribute="bottom" constant="6" id="sgY-QT-ASG"/>
                             <constraint firstItem="yev-Ge-C71" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="tQq-uS-KJS"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="qgo-qY-04b" id="9lK-9M-ccn"/>
+                        <outlet property="addFavoriteButton" destination="PSx-ff-C8w" id="GCq-GV-f38"/>
                         <outlet property="mainMapView" destination="5DO-YH-hPg" id="0m6-8a-pgb"/>
+                        <outlet property="predictionTimesLabel" destination="wQP-ec-opL" id="f3n-0n-1l2"/>
+                        <outlet property="predictionTimesNavigationBar" destination="Ea2-9E-S1F" id="YNc-Ev-FqY"/>
+                        <outlet property="refreshButton" destination="uL0-OW-vgM" id="INC-Kh-UNr"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -182,10 +212,10 @@
                                 </connections>
                             </pickerView>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BOi-xL-bko">
-                                <rect key="frame" x="345" y="5" width="25" height="25"/>
+                                <rect key="frame" x="335" y="5" width="35" height="35"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="25" id="Io0-mI-Nm3"/>
-                                    <constraint firstAttribute="height" constant="25" id="Xvd-FR-f9c"/>
+                                    <constraint firstAttribute="width" constant="35" id="Io0-mI-Nm3"/>
+                                    <constraint firstAttribute="height" constant="35" id="Xvd-FR-f9c"/>
                                 </constraints>
                                 <state key="normal" image="CurrentLocationIcon"/>
                                 <connections>
@@ -193,10 +223,10 @@
                                 </connections>
                             </button>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kk3-pr-5iQ">
-                                <rect key="frame" x="312" y="4" width="25" height="25"/>
+                                <rect key="frame" x="292" y="4" width="35" height="35"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="25" id="NV8-m9-6i9"/>
-                                    <constraint firstAttribute="height" constant="25" id="WvX-dc-bfr"/>
+                                    <constraint firstAttribute="width" constant="35" id="NV8-m9-6i9"/>
+                                    <constraint firstAttribute="height" constant="35" id="WvX-dc-bfr"/>
                                 </constraints>
                                 <state key="normal" image="FavoriteIcon"/>
                                 <connections>
@@ -204,10 +234,10 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ze-eL-qKp">
-                                <rect key="frame" x="5" y="5" width="25" height="25"/>
+                                <rect key="frame" x="5" y="5" width="35" height="35"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="25" id="JN7-xv-LEE"/>
-                                    <constraint firstAttribute="height" constant="25" id="ph1-ku-uhT"/>
+                                    <constraint firstAttribute="width" constant="35" id="JN7-xv-LEE"/>
+                                    <constraint firstAttribute="height" constant="35" id="ph1-ku-uhT"/>
                                 </constraints>
                                 <state key="normal" image="DirectionIcon"/>
                                 <connections>
@@ -245,6 +275,7 @@
     <resources>
         <image name="CurrentLocationIcon" width="64" height="64"/>
         <image name="DirectionIcon" width="64" height="64"/>
+        <image name="FavoriteAddIcon" width="60" height="60"/>
         <image name="FavoriteIcon" width="64" height="64"/>
     </resources>
 </document>

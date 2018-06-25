@@ -28,6 +28,11 @@ extension CLLocation
 class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var mainMapView: MKMapView!
+    @IBOutlet weak var predictionTimesNavigationBar: UINavigationBar!
+    @IBOutlet weak var predictionTimesLabel: UILabel!
+    @IBOutlet weak var addFavoriteButton: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var refreshButton: UIBarButtonItem!
     //37.773972
     //37.738802
     let initialLocation = CLLocation(latitude: 37.773972, longitude: -122.438765)
@@ -50,7 +55,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(focusMapFromRouteObject(notification:)), name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(focusMapFromRouteObject(notification:)), name: NSNotification.Name("UpdateRouteMap"), object: nil)
         
-        downloadAllData = true
+        //downloadAllData = true
+        
+        mainMapView.clearsContextBeforeDrawing = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -117,10 +124,12 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         {
         case .none:
             resetAnnotations()
+            
+            hidePredictionNavigationBar()
         case .direction:
             resetAnnotations()
             
-            if let direction = getCurrentDirection()
+            if let direction = RouteDataManager.getCurrentDirection()
             {
                 for stop in direction.stops!.array
                 {
@@ -132,6 +141,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             }
             
             centerMapOnLocation(location: initialLocation, range: 15000)
+            
+            hidePredictionNavigationBar()
         case .stop:
             let changingRouteInfoShowing = notification.userInfo!["ChangingRouteInfoShowing"] as! Bool
             
@@ -140,7 +151,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 reloadPolyline()
             }
             
-            if let stop = getCurrentStop()
+            if let stop = RouteDataManager.getCurrentStop()
             {
                 let stopLocation = CLLocation(latitude: stop.stopLatitude, longitude: stop.stopLongitude)
                 
@@ -151,42 +162,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 
                 selectedAnnotationLocation = stopLocation.convertToString()
             }
-        }
-    }
-    
-    func getCurrentDirection() -> Direction?
-    {
-        if let route = MapState.routeInfoObject as? Route
-        {
-            let direction: Direction?
-            if MapState.selectedDirectionTag != nil
-            {
-                direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", MapState.selectedDirectionTag!), moc: appDelegate.persistentContainer.viewContext).object as? Direction
-            }
-            else
-            {
-                direction = route.directions?.array[0] as? Direction
-            }
             
-            return direction
+            showPredictionNavigationBar()
+            
+            refreshPredictionNavigationBar()
         }
-        else if let direction = MapState.routeInfoObject as? Direction
-        {
-            return direction
-        }
-        
-        return nil
-    }
-    
-    func getCurrentStop() -> Stop?
-    {
-        if MapState.selectedStopTag != nil
-        {
-            let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", MapState.selectedStopTag!), moc: appDelegate.persistentContainer.viewContext).object as? Stop
-            return stop
-        }
-        
-        return nil
     }
     
     func addAnnotation(coordinate: CLLocationCoordinate2D, annotationType: AnnotationType = .red)
@@ -224,7 +204,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             mainMapView.removeOverlay(directionPolyline!)
         }
         
-        if let direction = getCurrentDirection()
+        
+        
+        if let direction = RouteDataManager.getCurrentDirection()
         {
             var coordinates = Array<CLLocationCoordinate2D>()
             
@@ -270,6 +252,77 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     @IBAction func unwindFromRouteTableView(_ segue: UIStoryboardSegue)
     {
         NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
+    }
+    
+    func showPredictionNavigationBar()
+    {
+        UIView.animate(withDuration: 1) {
+            self.predictionTimesNavigationBar.isHidden = false
+            self.addFavoriteButton.isEnabled = true
+            self.addFavoriteButton.isHidden = false
+        }
+    }
+    
+    func hidePredictionNavigationBar()
+    {
+        UIView.animate(withDuration: 1) {
+            self.predictionTimesNavigationBar.isHidden = true
+            self.addFavoriteButton.isEnabled = false
+            self.addFavoriteButton.isHidden = true
+        }
+    }
+    
+    @IBAction func refreshPredictionNavigationBar()
+    {
+        let predictionTimesReturnUUID = UUID().uuidString
+        NotificationCenter.default.addObserver(self, selector: #selector(receivePredictionTimes(_:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
+        RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID)
+        
+        OperationQueue.main.addOperation {
+            self.refreshButton.isEnabled = false
+            self.refreshButton.tintColor = .clear
+            self.activityIndicator.startAnimating()
+        }
+    }
+    
+    @objc func receivePredictionTimes(_ notification: Notification)
+    {
+        OperationQueue.main.addOperation {
+            self.refreshButton.isEnabled = true
+            self.refreshButton.tintColor = UIColor(red: 0, green: 0.4, blue: 1.0, alpha: 1)
+            self.activityIndicator.stopAnimating()
+        }
+        
+        if let predictions = notification.userInfo!["predictions"] as? Array<String>
+        {
+            var predictionsString = ""
+            var predictionOn = 0
+            
+            for prediction in predictions
+            {
+                if predictionOn != 0
+                {
+                    predictionsString += ", "
+                }
+                
+                if prediction == "0"
+                {
+                    predictionsString += "Now"
+                }
+                else
+                {
+                    predictionsString += prediction
+                }
+                
+                predictionOn += 1
+            }
+            
+            predictionsString += " mins"
+            
+            OperationQueue.main.addOperation {
+                self.predictionTimesLabel.text = predictionsString
+            }
+        }
     }
 }
 

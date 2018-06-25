@@ -9,11 +9,14 @@
 import Foundation
 import SWXMLHash
 import CoreData
+import MapKit
 
 let agencyTag = "sf-muni"
 
 class RouteDataManager
 {
+    static var mocSaveGroup = DispatchGroup()
+    
     enum RouteFetchType: Int {
         case routeList
         case routeConfig
@@ -108,27 +111,30 @@ class RouteDataManager
                 
                 NotificationCenter.default.post(name: NSNotification.Name("CompletedRoute"), object: self, userInfo: ["progress":Float(routesFetched)/Float(routeDictionary.keys.count)])
                 
+                mocSaveGroup.enter()
+                
+                NotificationCenter.default.addObserver(self, selector: #selector(savedBackgroundMOC), name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
+                
+                try? backgroundMOC.save()
+                
+                mocSaveGroup.wait()
+                
                 if routesFetched == routeDictionary.keys.count
                 {
                     print("Complete")
-                    
-                    do
-                    {
-                        try backgroundMOC.save()
-                    }
-                    catch
-                    {
-                        print(error)
-                    }
                     
                     OperationQueue.main.addOperation {
                         NotificationCenter.default.post(name: NSNotification.Name("FinishedUpdatingRoutes"), object: self)
                     }
                 }
-            
-                try? backgroundMOC.save()
             }
         })
+    }
+    
+    @objc static func savedBackgroundMOC()
+    {
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
+        mocSaveGroup.leave()
     }
     
     static func fetchRoutes() -> Dictionary<String,String>
@@ -276,5 +282,111 @@ class RouteDataManager
         }
         
         return (object!, justCreated)
+    }
+    
+    static func getCurrentDirection() -> Direction?
+    {
+        if let route = MapState.routeInfoObject as? Route
+        {
+            let direction: Direction?
+            if MapState.selectedDirectionTag != nil
+            {
+                direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", MapState.selectedDirectionTag!), moc: appDelegate.persistentContainer.viewContext).object as? Direction
+            }
+            else
+            {
+                direction = route.directions?.array[0] as? Direction
+            }
+            
+            return direction
+        }
+        else if let direction = MapState.routeInfoObject as? Direction
+        {
+            return direction
+        }
+        
+        return nil
+    }
+    
+    static func getCurrentStop() -> Stop?
+    {
+        if MapState.selectedStopTag != nil
+        {
+            let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", MapState.selectedStopTag!), moc: appDelegate.persistentContainer.viewContext).object as? Stop
+            return stop
+        }
+        
+        return nil
+    }
+    
+    static func fetchPredictionTimesForStop(returnUUID: String)
+    {
+        DispatchQueue.global(qos: .background).async {
+            if let direction = getCurrentDirection(), let stop = getCurrentStop(), let route = direction.route
+            {
+                getXMLFromSource("predictions", ["a":agencyTag,"s":stop.stopTag!,"r":route.routeTag!]) { (xmlBody) in
+                    for child in xmlBody.children
+                    {
+                        if child.element?.text != "\n" && child.element?.name == "predictions"
+                        {
+                            var predictions = Array<String>()
+                            
+                            for directionInfo in child.children
+                            {
+                                for prediction in directionInfo.children
+                                {
+                                    if prediction.element?.allAttributes["dirTag"]?.text == direction.directionTag
+                                    {
+                                        predictions.append(prediction.element?.allAttributes["minutes"]?.text ?? "nil")
+                                    }
+                                }
+                            }
+                            
+                            NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictions])
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    static func sortStopsByDistanceFromLocation(stops: Array<Stop>, locationToTest: CLLocation) -> Array<Stop>?
+    {
+        var distanceDictionary = Dictionary<Stop,Double>()
+        
+        for stop in stops
+        {
+            let stopLocation = CLLocation(latitude: stop.stopLatitude, longitude: stop.stopLongitude)
+            distanceDictionary[stop] = locationToTest.distance(from: stopLocation)
+        }
+        
+        if let sortedStops = distanceDictionary.sortedKeysByValue()
+        {
+            return sortedStops
+        }
+        
+        return nil
+    }
+}
+
+extension Dictionary
+{
+    func sortedKeysByValue() -> [Key]?
+    {
+        if let intDictionary = self as? [Key:Double]
+        {
+            var sortedArray = Array(intDictionary.keys)
+            sortedArray.sort { (objectKey0, objectKey1) -> Bool in
+                let obj1 = intDictionary[objectKey0] // get ob associated w/ key 1
+                let obj2 = intDictionary[objectKey1] // get ob associated w/ key 2
+                return obj1! > obj2!
+            }
+            
+            return sortedArray
+        }
+        else
+        {
+            return nil
+        }
     }
 }
