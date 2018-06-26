@@ -101,13 +101,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     func setupRouteMapUpdateNotifications()
     {
-        //NotificationCenter.default.addObserver(self, selector: #selector(focusMapFromRouteObject(notification:)), name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(focusMapFromRouteObject(notification:)), name: NSNotification.Name("UpdateRouteMap"), object: nil)
     }
     
     func removeRouteMapUpdateNotifications()
     {
-        //NotificationCenter.default.removeObserver(self, name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("UpdateRouteMap"), object: nil)
     }
     
@@ -165,7 +163,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     @objc func dismissAlertView()
     {
         progressAlertView?.dismiss(animated: true, completion: {
-            
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name("CompletedRoute"), object: nil)
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name("FinishedUpdatingRoutes"), object: nil)
         })
     }
     
@@ -313,9 +312,19 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         return annotationView
     }
     
-    @IBAction func unwindFromRouteTableView(_ segue: UIStoryboardSegue)
+    @IBAction func unwindFromRouteTableViewWithSelectedRoute(_ segue: UIStoryboardSegue)
     {
         NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
+    }
+    
+    @IBAction func unwindFromRouteTableView(_ segue: UIStoryboardSegue)
+    {
+        
+    }
+    
+    @IBAction func unwindFromSettingsView(_ segue: UIStoryboardSegue)
+    {
+        
     }
     
     func showPredictionNavigationBar()

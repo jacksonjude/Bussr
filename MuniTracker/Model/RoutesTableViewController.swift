@@ -155,7 +155,7 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
         let routeFetchCallback = RouteDataManager.fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "routeTag == %@", selectedRouteTag), moc: appDelegate.persistentContainer.viewContext)
         selectedRouteObject = routeFetchCallback.object as? Route
         
-        performSegue(withIdentifier: "DismissRoutesTable", sender: self)
+        performSegue(withIdentifier: "SelectedRouteUnwind", sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

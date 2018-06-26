@@ -21,6 +21,7 @@
 		7AD81E1420D6E60D004BAB1E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7AD81E1320D6E60D004BAB1E /* Assets.xcassets */; };
 		7AD81E1720D6E60D004BAB1E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AD81E1520D6E60D004BAB1E /* LaunchScreen.storyboard */; };
 		7AD81E1F20D6EEDB004BAB1E /* RouteDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */; };
+		7AF50BE220E1B71E00E4BFD1 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF50BE120E1B71E00E4BFD1 /* SettingsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		7AD81E1620D6E60D004BAB1E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7AD81E1820D6E60D004BAB1E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteDataManager.swift; sourceTree = "<group>"; };
+		7AF50BE120E1B71E00E4BFD1 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		86D6C11870C9016B764B79D1 /* Pods_MuniTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MuniTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D077087D7D618904FC9606AF /* Pods-MuniTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MuniTracker.release.xcconfig"; path = "Pods/Target Support Files/Pods-MuniTracker/Pods-MuniTracker.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -68,6 +70,35 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		7A1D113620E2003100C12DF5 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				7AF50BE120E1B71E00E4BFD1 /* SettingsViewController.swift */,
+				7AD81E0B20D6E60C004BAB1E /* MainMapViewController.swift */,
+				7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */,
+				7A7FE2B420DB4761005B654C /* MapState.swift */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
+		7A1D113820E2009700C12DF5 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				7A0E8C6720E0A14700C28465 /* CurrentLocationManager.swift */,
+				7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		7A1D113920E201F800C12DF5 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7A71722A20D70943002144D5 /* RoutesTableViewController.swift */,
+				7AD81E1020D6E60C004BAB1E /* MuniTracker.xcdatamodeld */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		7AD81DFD20D6E60C004BAB1E = {
 			isa = PBXGroup;
 			children = (
@@ -89,19 +120,15 @@
 		7AD81E0820D6E60C004BAB1E /* MuniTracker */ = {
 			isa = PBXGroup;
 			children = (
+				7A1D113920E201F800C12DF5 /* Model */,
+				7A1D113820E2009700C12DF5 /* Managers */,
+				7A1D113620E2003100C12DF5 /* Map */,
 				7A4930C220D788BB008208D1 /* MuniTracker.entitlements */,
 				7AD81E0920D6E60C004BAB1E /* AppDelegate.swift */,
-				7A0E8C6720E0A14700C28465 /* CurrentLocationManager.swift */,
-				7AD81E0B20D6E60C004BAB1E /* MainMapViewController.swift */,
-				7A71722A20D70943002144D5 /* RoutesTableViewController.swift */,
-				7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */,
-				7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */,
-				7A7FE2B420DB4761005B654C /* MapState.swift */,
 				7AD81E0D20D6E60C004BAB1E /* Main.storyboard */,
 				7AD81E1320D6E60D004BAB1E /* Assets.xcassets */,
 				7AD81E1520D6E60D004BAB1E /* LaunchScreen.storyboard */,
 				7AD81E1820D6E60D004BAB1E /* Info.plist */,
-				7AD81E1020D6E60C004BAB1E /* MuniTracker.xcdatamodeld */,
 			);
 			path = MuniTracker;
 			sourceTree = "<group>";
@@ -253,6 +280,7 @@
 				7A71722B20D70943002144D5 /* RoutesTableViewController.swift in Sources */,
 				7A7FE2B520DB4761005B654C /* MapState.swift in Sources */,
 				7A0E8C6820E0A14700C28465 /* CurrentLocationManager.swift in Sources */,
+				7AF50BE220E1B71E00E4BFD1 /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

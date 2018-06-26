@@ -218,13 +218,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         {
             let sortedStops = RouteDataManager.sortStopsByDistanceFromLocation(stops: routeStops, locationToTest: location)
             
-            enum LocationSortType
-            {
-                case fullSort
-                case selectClosest
-            }
-            
-            let locationSortType: LocationSortType = .selectClosest
+            let locationSortType: LocationSortType = (UserDefaults.standard.object(forKey: "LocationSortType") as? Int).map { LocationSortType(rawValue: $0)  ?? .selectClosest } ?? .selectClosest
             
             switch locationSortType
             {
@@ -236,7 +230,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             case .selectClosest:
                 routeInfoPicker.selectRow(routeInfoToChange.firstIndex(of: sortedStops[0]) ?? 0, inComponent: 0, animated: true)
             }
-            
             
             pickerSelectedRow()
         }
