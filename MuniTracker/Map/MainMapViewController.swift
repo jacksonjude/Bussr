@@ -62,7 +62,10 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         
         setupHidePickerButton()
         
-        //downloadAllData = true
+        if appDelegate.firstLaunch
+        {
+            downloadAllData = true
+        }
     }
     
     @objc func showPickerView()
@@ -114,8 +117,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         
         if downloadAllData
         {
-            progressAlertView = UIAlertController(title: "Updating", message: "Updating route data...", preferredStyle: .alert)
-            progressAlertView!.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            progressAlertView = UIAlertController(title: "Updating", message: "Updating route data...\n", preferredStyle: .alert)
             
             self.present(progressAlertView!, animated: true, completion: {
                 let margin: CGFloat = 8.0
@@ -123,8 +125,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 self.progressView = UIProgressView(frame: rect)
                 self.progressView!.tintColor = UIColor.blue
                 self.progressAlertView!.view.addSubview(self.progressView!)
-                
-                appDelegate.saveContext()
                 
                 NotificationCenter.default.addObserver(self, selector: #selector(self.addToProgress(notification:)), name: NSNotification.Name("CompletedRoute"), object: nil)
                 

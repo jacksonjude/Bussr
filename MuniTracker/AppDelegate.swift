@@ -16,8 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     var mainMapViewController: MainMapViewController?
-    
     var currentLocationManager = CurrentLocationManager()
+    
+    var firstLaunch = false
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -27,6 +28,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse
         {
             currentLocationManager.requestCurrentLocation()
+        }
+        
+        if UserDefaults.standard.object(forKey: "firstLaunch") == nil
+        {
+            firstLaunch = true
+            UserDefaults.standard.set(618, forKey: "firstLaunch")
         }
         
         return true
