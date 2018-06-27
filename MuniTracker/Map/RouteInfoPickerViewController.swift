@@ -74,6 +74,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         super.viewDidLoad()
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadRouteData), name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(toggleFavoriteForSelectedStop), name: NSNotification.Name("ToggleFavoriteForStop"), object: nil)
     }
     
     @objc func reloadRouteData()
@@ -105,6 +106,17 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             routeInfoPicker.selectRow(0, inComponent: 0, animated: true)
             
             updateSelectedObjectTags()
+            
+            if favoriteFilterEnabled
+            {
+                filterByFavorites()
+            }
+            
+            if locationFilterEnabled
+            {
+                foundCurrentLocation()
+            }
+            
             NotificationCenter.default.post(name: NSNotification.Name("UpdateRouteMap"), object: nil, userInfo: ["ChangingRouteInfoShowing":true])
         }
         else
@@ -161,10 +173,56 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         if favoriteFilterEnabled
         {
             favoriteButton.setImage(UIImage(named: "FavoriteFillIcon"), for: UIControl.State.normal)
+            
+            filterByFavorites()
         }
         else
         {
             favoriteButton.setImage(UIImage(named: "FavoriteIcon"), for: UIControl.State.normal)
+            
+            reloadRouteData()
+        }
+    }
+    
+    @objc func toggleFavoriteForSelectedStop()
+    {
+        if MapState.routeInfoShowing == .stop
+        {
+            if let selectedStop = routeInfoToChange[routeInfoPicker.selectedRow(inComponent: 0)] as? Stop
+            {
+                selectedStop.favorite = !selectedStop.favorite
+                appDelegate.saveContext()
+            }
+        }
+    }
+    
+    func filterByFavorites()
+    {
+        if let routeStops = routeInfoToChange as? Array<Stop>
+        {
+            var favoriteStops = Array<Stop>()
+            for stop in routeStops
+            {
+                if stop.favorite
+                {
+                    favoriteStops.append(stop)
+                }
+            }
+            
+            routeInfoToChange = favoriteStops
+            
+            routeInfoPicker.reloadAllComponents()
+            
+            if locationFilterEnabled && appDelegate.currentLocationManager.lastLocation != nil
+            {
+                foundCurrentLocation()
+            }
+            else
+            {
+                routeInfoPicker.selectRow(0, inComponent: 0, animated: true)
+            }
+            
+            pickerSelectedRow()
         }
     }
     
@@ -200,6 +258,10 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     @objc func foundCurrentLocation(_ notification: Notification? = nil)
     {
         waitingForLocation = false
+        if notification?.name != nil
+        {
+            NotificationCenter.default.removeObserver(self, name: notification?.name, object: nil)
+        }
         
         if notification != nil
         {

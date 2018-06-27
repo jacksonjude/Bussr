@@ -22,7 +22,7 @@ class CurrentLocationManager: NSObject, CLLocationManagerDelegate
         if CLLocationManager.locationServicesEnabled() {
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-            locationManager.requestLocation()
+            locationManager.startUpdatingLocation()
         }
     }
     

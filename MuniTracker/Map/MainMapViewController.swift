@@ -225,6 +225,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 reloadPolyline()
             }
             
+            setFavoriteButtonImage(inverse: false)
+            
             showHidePickerButton.isEnabled = true
         }
     }
@@ -394,6 +396,36 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             OperationQueue.main.addOperation {
                 self.predictionTimesLabel.text = predictionsString
+            }
+        }
+    }
+    
+    @IBAction func addFavoriteButtonPressed(_ sender: Any) {
+        setFavoriteButtonImage(inverse: true)
+        
+        NotificationCenter.default.post(name: NSNotification.Name("ToggleFavoriteForStop"), object: nil)
+    }
+    
+    func setFavoriteButtonImage(inverse: Bool)
+    {
+        if MapState.selectedStopTag != nil
+        {
+            if let stop = RouteDataManager.getCurrentStop()
+            {
+                var stopIsFavorite = stop.favorite
+                if inverse
+                {
+                    stopIsFavorite = !stopIsFavorite
+                }
+                
+                if stopIsFavorite
+                {
+                    addFavoriteButton.setImage(UIImage(named:  "FavoriteAddFillIcon"), for: UIControl.State.normal)
+                }
+                else
+                {
+                    addFavoriteButton.setImage(UIImage(named: "FavoriteAddIcon"), for: UIControl.State.normal)
+                }
             }
         }
     }

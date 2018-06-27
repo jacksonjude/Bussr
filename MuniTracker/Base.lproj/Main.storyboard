@@ -13,6 +13,7 @@
         <!--Main Map View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <viewController id="BYZ-38-t0r" customClass="MainMapViewController" customModule="MuniTracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -75,6 +76,9 @@
                                     <constraint firstAttribute="height" constant="32" id="chU-qR-LiJ"/>
                                 </constraints>
                                 <state key="normal" image="FavoriteAddIcon"/>
+                                <connections>
+                                    <action selector="addFavoriteButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7XN-hi-GUc"/>
+                                </connections>
                             </button>
                             <activityIndicatorView hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="qgo-qY-04b">
                                 <rect key="frame" x="15" y="77" width="20" height="20"/>
@@ -161,7 +165,6 @@
                         <segue destination="DD3-H0-RfC" kind="show" identifier="showRoutesTableView" id="qw7-kc-Skx"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="31.199999999999999" y="32.833583208395808"/>
         </scene>
@@ -396,6 +399,14 @@
                                     <action selector="directionButtonPressed:" destination="4Mg-kq-ULL" eventType="touchUpInside" id="Ye0-OM-ksd"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nba-YH-9qK">
+                                <rect key="frame" x="5" y="122" width="35" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="GGl-Oj-ufb"/>
+                                    <constraint firstAttribute="width" constant="35" id="di9-3X-5XT"/>
+                                </constraints>
+                                <state key="normal" image="BusStopIcon"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -403,7 +414,9 @@
                             <constraint firstItem="kk3-pr-5iQ" firstAttribute="top" secondItem="gV6-YZ-kOr" secondAttribute="top" constant="4" id="Aqj-RF-IBO"/>
                             <constraint firstItem="Ltc-3h-TBo" firstAttribute="top" secondItem="5Ew-Yb-9GC" secondAttribute="top" id="G2Z-St-PxX"/>
                             <constraint firstAttribute="bottom" secondItem="Ltc-3h-TBo" secondAttribute="bottom" id="Kbz-kz-fAq"/>
+                            <constraint firstItem="Nba-YH-9qK" firstAttribute="leading" secondItem="gV6-YZ-kOr" secondAttribute="leading" constant="5" id="OIE-fI-yea"/>
                             <constraint firstAttribute="trailing" secondItem="Ltc-3h-TBo" secondAttribute="trailing" id="U0q-pU-BXn"/>
+                            <constraint firstItem="gV6-YZ-kOr" firstAttribute="bottom" secondItem="Nba-YH-9qK" secondAttribute="bottom" constant="5" id="Vdn-7u-FPu"/>
                             <constraint firstItem="gV6-YZ-kOr" firstAttribute="trailing" secondItem="BOi-xL-bko" secondAttribute="trailing" constant="5" id="X6u-aF-s9A"/>
                             <constraint firstItem="Ltc-3h-TBo" firstAttribute="leading" secondItem="5Ew-Yb-9GC" secondAttribute="leading" id="cg0-xa-M52"/>
                             <constraint firstItem="BOi-xL-bko" firstAttribute="leading" secondItem="kk3-pr-5iQ" secondAttribute="trailing" constant="8" id="di1-4Q-rgW"/>
@@ -425,6 +438,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="BusStopIcon" width="64" height="64"/>
         <image name="CurrentLocationIcon" width="64" height="64"/>
         <image name="DirectionIcon" width="64" height="64"/>
         <image name="FavoriteAddIcon" width="60" height="60"/>
