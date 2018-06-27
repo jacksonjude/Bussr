@@ -61,9 +61,15 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             switch MapState.routeInfoShowing
             {
             case .direction:
-                MapState.selectedDirectionTag = (routeInfoToChange[row] as! Direction).directionTag
+                if let direction = routeInfoToChange[row] as? Direction
+                {
+                    MapState.selectedDirectionTag = direction.directionTag
+                }
             case .stop:
-                MapState.selectedStopTag = (routeInfoToChange[row] as! Stop).stopTag
+                if let stop = routeInfoToChange[row] as? Stop
+                {
+                    MapState.selectedStopTag = stop.stopTag
+                }
             default:
                 break
             }

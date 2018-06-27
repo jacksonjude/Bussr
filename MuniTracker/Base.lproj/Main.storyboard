@@ -107,6 +107,10 @@
                                             <action selector="routesButtonPressed:" destination="BYZ-38-t0r" id="Pm0-DO-O6w"/>
                                         </connections>
                                     </barButtonItem>
+                                    <barButtonItem width="11" style="plain" systemItem="fixedSpace" id="Yjc-mT-pJ8"/>
+                                    <barButtonItem enabled="NO" image="FavoriteSmallIcon" id="5kM-u0-fk3">
+                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </barButtonItem>
                                     <barButtonItem systemItem="flexibleSpace" id="cnm-e2-ces"/>
                                     <barButtonItem enabled="NO" title="Hide" id="XQg-PL-EFo"/>
                                 </items>
@@ -233,19 +237,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yIH-yr-zYm">
-                                <rect key="frame" x="0.0" y="290" width="375" height="50"/>
-                                <color key="backgroundColor" white="0.90225505669999995" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="5Gn-es-juI"/>
-                                </constraints>
-                                <state key="normal" title="Favorites Sorted By - Location"/>
-                                <connections>
-                                    <action selector="toggleFavoritesSortType:" destination="GPV-yC-TYY" eventType="touchUpInside" id="xpk-PA-H97"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8t1-xO-Kof">
-                                <rect key="frame" x="0.0" y="348" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="290" width="375" height="50"/>
                                 <color key="backgroundColor" white="0.90225505669999995" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="ee7-UR-hwl"/>
@@ -255,12 +248,23 @@
                                     <action selector="toggleLocationSortType:" destination="GPV-yC-TYY" eventType="touchUpInside" id="wtF-6y-MOz"/>
                                 </connections>
                             </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yIH-yr-zYm">
+                                <rect key="frame" x="0.0" y="348" width="375" height="50"/>
+                                <color key="backgroundColor" white="0.90225505669999995" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="5Gn-es-juI"/>
+                                </constraints>
+                                <state key="normal" title="Favorites Sorted By - Location"/>
+                                <connections>
+                                    <action selector="toggleFavoritesSortType:" destination="GPV-yC-TYY" eventType="touchUpInside" id="xpk-PA-H97"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.97647064924240112" green="0.97647064924240112" blue="0.97647064924240112" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
+                            <constraint firstItem="yIH-yr-zYm" firstAttribute="top" secondItem="8t1-xO-Kof" secondAttribute="bottom" constant="8" id="9gq-3d-K65"/>
                             <constraint firstItem="Zca-7o-oA7" firstAttribute="leading" secondItem="Geo-jd-vwe" secondAttribute="leading" id="BQz-Zc-vo4"/>
                             <constraint firstItem="06f-ly-ef9" firstAttribute="centerX" secondItem="xhN-MR-iBl" secondAttribute="centerX" id="D2n-XR-9nu"/>
-                            <constraint firstItem="yIH-yr-zYm" firstAttribute="top" secondItem="06f-ly-ef9" secondAttribute="bottom" constant="8" id="EEA-V1-lg1"/>
                             <constraint firstItem="pug-9z-DTI" firstAttribute="centerX" secondItem="xhN-MR-iBl" secondAttribute="centerX" id="KwT-Ai-p82"/>
                             <constraint firstItem="8t1-xO-Kof" firstAttribute="leading" secondItem="Geo-jd-vwe" secondAttribute="leading" id="N8q-Ct-VJP"/>
                             <constraint firstItem="Zca-7o-oA7" firstAttribute="trailing" secondItem="Geo-jd-vwe" secondAttribute="trailing" id="QWd-7e-YFF"/>
@@ -270,11 +274,11 @@
                             <constraint firstItem="yIH-yr-zYm" firstAttribute="leading" secondItem="Geo-jd-vwe" secondAttribute="leading" id="cbs-ai-Bdq"/>
                             <constraint firstItem="8t1-xO-Kof" firstAttribute="trailing" secondItem="Geo-jd-vwe" secondAttribute="trailing" id="dPZ-Zc-X17"/>
                             <constraint firstItem="pug-9z-DTI" firstAttribute="top" secondItem="cYB-N8-WJX" secondAttribute="bottom" constant="30" id="ivU-Am-AMn"/>
+                            <constraint firstItem="8t1-xO-Kof" firstAttribute="top" secondItem="06f-ly-ef9" secondAttribute="bottom" constant="8" id="qUn-ao-DqH"/>
                             <constraint firstItem="yIH-yr-zYm" firstAttribute="trailing" secondItem="Geo-jd-vwe" secondAttribute="trailing" id="qZa-JL-kX4"/>
                             <constraint firstItem="cYB-N8-WJX" firstAttribute="top" secondItem="Geo-jd-vwe" secondAttribute="top" id="rtb-PG-dBk"/>
                             <constraint firstItem="SJv-iR-MC2" firstAttribute="leading" secondItem="Geo-jd-vwe" secondAttribute="leading" id="sby-8H-dOM"/>
                             <constraint firstItem="06f-ly-ef9" firstAttribute="top" secondItem="Zca-7o-oA7" secondAttribute="bottom" constant="30" id="v65-SU-1CK"/>
-                            <constraint firstItem="8t1-xO-Kof" firstAttribute="top" secondItem="yIH-yr-zYm" secondAttribute="bottom" constant="8" id="wTb-Af-lUK"/>
                             <constraint firstItem="cYB-N8-WJX" firstAttribute="trailing" secondItem="Geo-jd-vwe" secondAttribute="trailing" id="xJB-Yy-4lM"/>
                             <constraint firstItem="SJv-iR-MC2" firstAttribute="top" secondItem="pug-9z-DTI" secondAttribute="bottom" constant="8" id="xuT-DZ-xNv"/>
                         </constraints>
@@ -349,7 +353,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="c39-1h-1nz" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="ELz-Dl-Ldx" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="948" y="33.733133433283363"/>
+            <point key="canvasLocation" x="948" y="33"/>
         </scene>
         <!--Route Info Picker View Controller-->
         <scene sceneID="lOd-el-8BS">
@@ -399,7 +403,7 @@
                                     <action selector="directionButtonPressed:" destination="4Mg-kq-ULL" eventType="touchUpInside" id="Ye0-OM-ksd"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nba-YH-9qK">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nba-YH-9qK">
                                 <rect key="frame" x="5" y="122" width="35" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="GGl-Oj-ufb"/>
@@ -443,6 +447,7 @@
         <image name="DirectionIcon" width="64" height="64"/>
         <image name="FavoriteAddIcon" width="60" height="60"/>
         <image name="FavoriteIcon" width="64" height="64"/>
+        <image name="FavoriteSmallIcon" width="30" height="30"/>
         <image name="RouteListIcon" width="27" height="30"/>
         <image name="SettingsIcon" width="25" height="25"/>
     </resources>
