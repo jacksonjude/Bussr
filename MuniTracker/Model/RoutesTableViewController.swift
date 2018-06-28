@@ -77,6 +77,8 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     @objc func receiveRouteDictionary(_ notification: Notification)
     {
+        NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
+        
         if notification.userInfo != nil && notification.userInfo!.count > 0
         {
             routeTitleDictionary = notification.userInfo!["xmlDictionary"] as! Dictionary<String,String>

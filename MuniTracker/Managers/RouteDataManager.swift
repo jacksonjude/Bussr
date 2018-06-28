@@ -26,7 +26,7 @@ class RouteDataManager
     
     static let xmlFeedSource = "http://webservices.nextbus.com/service/publicXMLFeed"
     
-    static func getXMLFromSource(_ command: String, _ arguments: Dictionary<String,String>, _ callback: @escaping (_ xmlBody: XMLIndexer) -> Void)
+    static func getXMLFromSource(_ command: String, _ arguments: Dictionary<String,String>, _ callback: @escaping (_ xmlBody: XMLIndexer?) -> Void)
     {
         var commandString = ""
         for commandArgument in arguments
@@ -35,12 +35,13 @@ class RouteDataManager
         }
         
         _ = (URLSession.shared.dataTask(with: URL(string: xmlFeedSource + "?command=" + command + commandString)!) { data, response, error in
+            var xmlBody: XMLIndexer?
             if data != nil
             {
                 let xml = SWXMLHash.parse(data!)
-                let xmlBody = xml.children[0]
-                callback(xmlBody)
+                xmlBody = xml.children[0]
             }
+            callback(xmlBody)
         }).resume()
     }
     
@@ -159,13 +160,16 @@ class RouteDataManager
         backgroundGroup.enter()
         
         getXMLFromSource("routeList", ["a":agencyTag]) { (xmlBody) in
-            routeDictionary = Dictionary<String,String>()
-            
-            for bodyChild in xmlBody.children
+            if xmlBody != nil
             {
-                if bodyChild.element?.text != "\n"
+                routeDictionary = Dictionary<String,String>()
+                
+                for bodyChild in xmlBody!.children
                 {
-                    routeDictionary[(bodyChild.element?.allAttributes["tag"]?.text)!] = (bodyChild.element?.allAttributes["title"]?.text)!
+                    if bodyChild.element?.text != "\n"
+                    {
+                        routeDictionary[(bodyChild.element?.allAttributes["tag"]?.text)!] = (bodyChild.element?.allAttributes["title"]?.text)!
+                    }
                 }
             }
             
@@ -190,64 +194,67 @@ class RouteDataManager
             var routeStopsArray = Dictionary<String,Dictionary<String,String>>()
             var routeGeneralConfig = Dictionary<String,Dictionary<String,String>>()
             
-            for bodyChild in xmlBody.children
+            if xmlBody != nil
             {
-                if bodyChild.element?.text != "\n" && bodyChild.element?.name == "route"
+                for bodyChild in xmlBody!.children
                 {
-                    routeGeneralConfig["color"] = Dictionary<String,String>()
-                    routeGeneralConfig["color"]!["color"] = bodyChild.element!.allAttributes["color"]!.text
-                    routeGeneralConfig["color"]!["oppositeColor"] = bodyChild.element!.allAttributes["oppositeColor"]!.text
-                    routeGeneralConfig["general"] = Dictionary<String,String>()
-                    routeGeneralConfig["general"]!["shortTitle"] = bodyChild.element!.allAttributes["shortTitle"]?.text ?? bodyChild.element!.allAttributes["title"]!.text
-                    
-                    for routePart in bodyChild.children
+                    if bodyChild.element?.text != "\n" && bodyChild.element?.name == "route"
                     {
-                        if routePart.element?.text != "\n" && routePart.element?.name == "stop"
+                        routeGeneralConfig["color"] = Dictionary<String,String>()
+                        routeGeneralConfig["color"]!["color"] = bodyChild.element!.allAttributes["color"]!.text
+                        routeGeneralConfig["color"]!["oppositeColor"] = bodyChild.element!.allAttributes["oppositeColor"]!.text
+                        routeGeneralConfig["general"] = Dictionary<String,String>()
+                        routeGeneralConfig["general"]!["shortTitle"] = bodyChild.element!.allAttributes["shortTitle"]?.text ?? bodyChild.element!.allAttributes["title"]!.text
+                        
+                        for routePart in bodyChild.children
                         {
-                            var routeStopDictionary = Dictionary<String,String>()
-                            
-                            let attributesToSet = ["title", "shortTitle", "lon", "lat", "stopId"]
-                            
-                            for attribute in attributesToSet
+                            if routePart.element?.text != "\n" && routePart.element?.name == "stop"
                             {
-                                routeStopDictionary[attribute] = routePart.element?.allAttributes[attribute]?.text
-                            }
-                            
-                            routeStopsArray[routePart.element!.allAttributes["tag"]!.text] = routeStopDictionary
-                        }
-                        else if routePart.element?.text != "\n" && routePart.element?.name == "direction"
-                        {
-                            var routeDirectionDictionary = Dictionary<String,Any>()
-                            
-                            let attributesToSet = ["title", "name"]
-                            
-                            for attribute in attributesToSet
-                            {
-                                routeDirectionDictionary[attribute] = routePart.element?.allAttributes[attribute]?.text
-                            }
-                            
-                            var directionStops = Array<String>()
-                            
-                            for directionStop in routePart.children
-                            {
-                                if directionStop.element?.text != "\n" && directionStop.element?.name == "stop"
+                                var routeStopDictionary = Dictionary<String,String>()
+                                
+                                let attributesToSet = ["title", "shortTitle", "lon", "lat", "stopId"]
+                                
+                                for attribute in attributesToSet
                                 {
-                                    directionStops.append(directionStop.element!.allAttributes["tag"]!.text)
+                                    routeStopDictionary[attribute] = routePart.element?.allAttributes[attribute]?.text
                                 }
+                                
+                                routeStopsArray[routePart.element!.allAttributes["tag"]!.text] = routeStopDictionary
                             }
-                            
-                            routeDirectionDictionary["stops"] = directionStops
-                            
-                            routeDirectionsArray[routePart.element!.allAttributes["tag"]!.text] = routeDirectionDictionary
+                            else if routePart.element?.text != "\n" && routePart.element?.name == "direction"
+                            {
+                                var routeDirectionDictionary = Dictionary<String,Any>()
+                                
+                                let attributesToSet = ["title", "name"]
+                                
+                                for attribute in attributesToSet
+                                {
+                                    routeDirectionDictionary[attribute] = routePart.element?.allAttributes[attribute]?.text
+                                }
+                                
+                                var directionStops = Array<String>()
+                                
+                                for directionStop in routePart.children
+                                {
+                                    if directionStop.element?.text != "\n" && directionStop.element?.name == "stop"
+                                    {
+                                        directionStops.append(directionStop.element!.allAttributes["tag"]!.text)
+                                    }
+                                }
+                                
+                                routeDirectionDictionary["stops"] = directionStops
+                                
+                                routeDirectionsArray[routePart.element!.allAttributes["tag"]!.text] = routeDirectionDictionary
+                            }
                         }
                     }
                 }
+                
+                routeInfoDictionary = Dictionary<String,Dictionary<String,Dictionary<String,Any>>>()
+                routeInfoDictionary!["stops"] = routeStopsArray
+                routeInfoDictionary!["directions"] = routeDirectionsArray
+                routeInfoDictionary!["general"] = routeGeneralConfig
             }
-            
-            routeInfoDictionary = Dictionary<String,Dictionary<String,Dictionary<String,Any>>>()
-            routeInfoDictionary!["stops"] = routeStopsArray
-            routeInfoDictionary!["directions"] = routeDirectionsArray
-            routeInfoDictionary!["general"] = routeGeneralConfig
             
             backgroundGroup.leave()
         }
@@ -338,25 +345,32 @@ class RouteDataManager
             if let direction = getCurrentDirection(), let stop = getCurrentStop(), let route = direction.route
             {
                 getXMLFromSource("predictions", ["a":agencyTag,"s":stop.stopTag!,"r":route.routeTag!]) { (xmlBody) in
-                    for child in xmlBody.children
+                    if xmlBody != nil
                     {
-                        if child.element?.text != "\n" && child.element?.name == "predictions"
+                        for child in xmlBody!.children
                         {
-                            var predictions = Array<String>()
-                            
-                            for directionInfo in child.children
+                            if child.element?.text != "\n" && child.element?.name == "predictions"
                             {
-                                for prediction in directionInfo.children
+                                var predictions = Array<String>()
+                                
+                                for directionInfo in child.children
                                 {
-                                    if prediction.element?.allAttributes["dirTag"]?.text == direction.directionTag
+                                    for prediction in directionInfo.children
                                     {
-                                        predictions.append(prediction.element?.allAttributes["minutes"]?.text ?? "nil")
+                                        if prediction.element?.allAttributes["dirTag"]?.text == direction.directionTag
+                                        {
+                                            predictions.append(prediction.element?.allAttributes["minutes"]?.text ?? "nil")
+                                        }
                                     }
                                 }
+                                
+                                NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictions])
                             }
-                            
-                            NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictions])
                         }
+                    }
+                    else
+                    {
+                        NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["error":"Connection Error"])
                     }
                 }
             }
@@ -376,6 +390,45 @@ class RouteDataManager
         let sortedStops = Array(distanceDictionary.keys).sorted(by: {distanceDictionary[$0]! < distanceDictionary[$1]!})
         
         return sortedStops
+    }
+    
+    static var lastVehicleTime: String?
+    
+    static func fetchVehicleLocations(returnUUID: String)
+    {
+        DispatchQueue.global(qos: .background).async {
+            if let direction = getCurrentDirection(), let route = direction.route
+            {
+                getXMLFromSource("vehicleLocations", ["a":agencyTag,"r":route.routeTag!,"t":lastVehicleTime ?? "0"]) { (xmlBody) in
+                    if xmlBody != nil
+                    {
+                        var vehiclesInDirection = Array<(id: String, location: CLLocation, heading: Int)>()
+                        for child in xmlBody!.children
+                        {
+                            if child.element?.text != "\n" && child.element?.name == "vehicle"
+                            {
+                                if child.element?.allAttributes["dirTag"]?.text == direction.directionTag
+                                {
+                                    let id = child.element!.allAttributes["id"]!.text
+                                    let lat = Double(child.element!.allAttributes["lat"]!.text) ?? 0
+                                    let lon = Double(child.element!.allAttributes["lon"]!.text) ?? 0
+                                    let location = CLLocation(latitude: lat, longitude: lon)
+                                    let heading = Int(child.element!.allAttributes["heading"]!.text) ?? 0
+                                    
+                                    vehiclesInDirection.append((id: id, location: location, heading: heading))
+                                }
+                            }
+                            else if child.element?.text != "\n" && child.element?.name == "lastTime"
+                            {
+                                lastVehicleTime = child.element?.allAttributes["time"]?.text
+                            }
+                        }
+                        
+                        NotificationCenter.default.post(name: NSNotification.Name("FoundVehicleLocations:" + returnUUID), object: nil, userInfo: ["vehicleLocations":vehiclesInDirection])
+                    }
+                }
+            }
+        }
     }
 }
 

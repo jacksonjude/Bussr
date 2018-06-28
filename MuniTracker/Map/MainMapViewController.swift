@@ -42,8 +42,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     var progressAlertView: UIAlertController?
     var progressView: UIProgressView?
     var selectedAnnotationLocation: String?
-    var annotations = Dictionary<String,StopAnnotation>()
+    var stopAnnotations = Dictionary<String,StopAnnotation>()
     var directionPolyline: MKPolyline?
+    var busAnnotations = Dictionary<String,BusAnnotation>()
     
     var downloadAllData = false
     
@@ -76,8 +77,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         
         setupHidePickerButton()
     }
-    
-    
     
     @objc func hidePickerView()
     {
@@ -194,6 +193,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 }
                 
                 reloadPolyline()
+                
+                addBusAnnotations()
             }
             
             centerMapOnLocation(location: initialLocation, range: 15000)
@@ -236,15 +237,14 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         let annotation = StopAnnotation(coordinate: coordinate, annotationType: annotationType)
         
         mainMapView.addAnnotation(annotation)
-        annotations[CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude).convertToString()] = annotation
+        stopAnnotations[CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude).convertToString()] = annotation
     }
     
     func setAnnotationType(coordinate: String?, annotationType: AnnotationType)
     {
-        //let annotation = StopAnnotation(coordinate: coordinate, annotationType: annotationType)//mainMapView.annotations[mainMapView.annotations.count-1]
         if coordinate != nil
         {
-            if let annotation = annotations[coordinate!]
+            if let annotation = stopAnnotations[coordinate!]
             {
                 mainMapView.removeAnnotation(annotation)
                 annotation.type = annotationType
@@ -256,7 +256,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     func resetAnnotations()
     {
         mainMapView.removeAnnotations(mainMapView.annotations)
-        annotations.removeAll()
+        stopAnnotations.removeAll()
+        busAnnotations.removeAll()
         
         if directionPolyline != nil
         {
@@ -288,6 +289,14 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
+    func addBusAnnotations()
+    {
+        for annotation in busAnnotations
+        {
+            mainMapView.addAnnotation(annotation.value)
+        }
+    }
+    
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let polylineRenderer = MKPolylineRenderer(overlay: overlay)
         polylineRenderer.strokeColor = UIColor(red: 0.972, green: 0.611, blue: 0.266, alpha: 1)
@@ -309,6 +318,10 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 annotationView.image = UIImage(named: "OrangeDot")
             }
             
+        }
+        else if annotation is BusAnnotation
+        {
+            annotationView.image = UIImage(named: "BusAnnotation")
         }
         
         return annotationView
@@ -358,10 +371,16 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             self.refreshButton.tintColor = .clear
             self.activityIndicator.startAnimating()
         }
+        
+        let vehicleLocationsReturnUUID = UUID().uuidString
+        NotificationCenter.default.addObserver(self, selector: #selector(receiveVehicleLocations(_:)), name: NSNotification.Name("FoundVehicleLocations:" + vehicleLocationsReturnUUID), object: nil)
+        RouteDataManager.fetchVehicleLocations(returnUUID: vehicleLocationsReturnUUID)
     }
     
     @objc func receivePredictionTimes(_ notification: Notification)
     {
+        NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
+        
         OperationQueue.main.addOperation {
             self.refreshButton.isEnabled = true
             self.refreshButton.tintColor = UIColor(red: 0, green: 0.4, blue: 1.0, alpha: 1)
@@ -392,12 +411,43 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 predictionOn += 1
             }
             
-            predictionsString += " mins"
+            if predictions.count > 0
+            {
+                predictionsString += " mins"
+            }
+            else
+            {
+                predictionsString = "No Predictions"
+            }
+            
             
             OperationQueue.main.addOperation {
                 self.predictionTimesLabel.text = predictionsString
             }
         }
+        else if let error = notification.userInfo!["error"] as? String
+        {
+            OperationQueue.main.addOperation {
+                self.predictionTimesLabel.text = error
+            }
+        }
+    }
+    
+    @objc func receiveVehicleLocations(_ notification: Notification)
+    {
+        NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
+        
+        let vehicleLocations = notification.userInfo!["vehicleLocations"] as! Array<(id: String, location: CLLocation, heading: Int)>
+        for vehicleLocation in vehicleLocations
+        {
+            if let annotation = busAnnotations[vehicleLocation.id]
+            {
+                mainMapView.removeAnnotation(annotation)
+            }
+            busAnnotations[vehicleLocation.id] = BusAnnotation(coordinate: vehicleLocation.location.coordinate, heading: vehicleLocation.heading, id: vehicleLocation.id)
+        }
+        
+        addBusAnnotations()
     }
     
     @IBAction func addFavoriteButtonPressed(_ sender: Any) {
@@ -438,17 +488,33 @@ class StopAnnotation: NSObject, MKAnnotation
     var subtitle: String?
     var type: AnnotationType = .red
     
-    init(coordinate: CLLocationCoordinate2D!, annotationType: AnnotationType = .red)
+    init(coordinate: CLLocationCoordinate2D, annotationType: AnnotationType = .red)
     {
         self.coordinate = coordinate
         self.type = annotationType
     }
     
-    init(coordinate: CLLocationCoordinate2D!, title: String?, subtitle: String?, annotationType: AnnotationType = .red)
+    init(coordinate: CLLocationCoordinate2D, title: String?, subtitle: String?, annotationType: AnnotationType = .red)
     {
         self.coordinate = coordinate
         self.title = title
         self.subtitle = subtitle
         self.type = annotationType
+    }
+}
+
+class BusAnnotation: NSObject, MKAnnotation
+{
+    var coordinate: CLLocationCoordinate2D
+    var heading: Int
+    var id: String
+    var title: String?
+    var subtitle: String?
+    
+    init(coordinate: CLLocationCoordinate2D, heading: Int, id: String)
+    {
+        self.coordinate = coordinate
+        self.heading = heading
+        self.id = id
     }
 }
