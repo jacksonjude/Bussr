@@ -126,7 +126,10 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             
             if locationFilterEnabled
             {
-                foundCurrentLocation()
+                if let currentLocation = appDelegate.mainMapViewController?.mainMapView.userLocation.location
+                {
+                    sortStopsByCurrentLocation(location: currentLocation)
+                }
             }
             
             NotificationCenter.default.post(name: NSNotification.Name("UpdateRouteMap"), object: nil, userInfo: ["ChangingRouteInfoShowing":true])
@@ -225,9 +228,12 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             
             routeInfoPicker.reloadAllComponents()
             
-            if locationFilterEnabled && appDelegate.currentLocationManager.lastLocation != nil
+            if locationFilterEnabled
             {
-                foundCurrentLocation()
+                if let currentLocation = appDelegate.mainMapViewController?.mainMapView.userLocation.location
+                {
+                    sortStopsByCurrentLocation(location: currentLocation)
+                }
             }
             else
             {
@@ -245,20 +251,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         {
             locationButton.setImage(UIImage(named: "CurrentLocationFillIcon"), for: UIControl.State.normal)
             
-            /*if appDelegate.currentLocationManager.lastLocation == nil
-            {
-                let locationReturnUUID = UUID().uuidString
-                NotificationCenter.default.addObserver(self, selector: #selector(foundCurrentLocation(_:)), name: NSNotification.Name("UpdatedCurrentLocation:" + locationReturnUUID), object: nil)
-                appDelegate.currentLocationManager.observersWaitingForUpdates.append(locationReturnUUID)
-                waitingForLocation = true
-                
-                appDelegate.currentLocationManager.requestCurrentLocation()
-            }
-            else
-            {
-                foundCurrentLocation()
-            }*/
-            
             if let currentLocation = appDelegate.mainMapViewController?.mainMapView.userLocation.location
             {
                 sortStopsByCurrentLocation(location: currentLocation)
@@ -270,25 +262,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             locationButton.setImage(UIImage(named: "CurrentLocationIcon"), for: UIControl.State.normal)
             
             reloadRouteData()
-        }
-    }
-    
-    @objc func foundCurrentLocation(_ notification: Notification? = nil)
-    {
-        waitingForLocation = false
-        if notification?.name != nil
-        {
-            NotificationCenter.default.removeObserver(self, name: notification?.name, object: nil)
-        }
-        
-        if notification != nil
-        {
-            appDelegate.currentLocationManager.observersWaitingForUpdates.remove(at: appDelegate.currentLocationManager.observersWaitingForUpdates.firstIndex(of: String(notification!.name.rawValue.split(separator: ":")[1]))!)
-        }
-        
-        if let currentLocation = appDelegate.currentLocationManager.lastLocation
-        {
-            sortStopsByCurrentLocation(location: currentLocation)
         }
     }
     

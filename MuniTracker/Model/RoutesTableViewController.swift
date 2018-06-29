@@ -163,6 +163,5 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         MapState.routeInfoObject = selectedRouteObject
         MapState.routeInfoShowing = .direction
-        MapState.showingPickerView = true
     }
 }

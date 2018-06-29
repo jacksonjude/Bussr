@@ -48,8 +48,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     var downloadAllData = false
     
-    let showPickerViewButton = UIBarButtonItem(title: "Show", style: UIBarButtonItem.Style.done, target: self, action: #selector(showPickerView))
-    let hidePickerViewButton = UIBarButtonItem(title: "Hide", style: UIBarButtonItem.Style.done, target: self, action: #selector(hidePickerView))
+    var locationManager = CLLocationManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -164,6 +163,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         progressAlertView?.dismiss(animated: true, completion: {
             NotificationCenter.default.removeObserver(self, name: NSNotification.Name("CompletedRoute"), object: nil)
             NotificationCenter.default.removeObserver(self, name: NSNotification.Name("FinishedUpdatingRoutes"), object: nil)
+            
+            if appDelegate.firstLaunch && CLLocationManager.authorizationStatus() != .denied
+            {
+                self.locationManager.requestWhenInUseAuthorization()
+            }
         })
     }
     
@@ -298,7 +302,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        //let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "annotationView")
+        if annotation is MKUserLocation
+        {
+            return nil
+        }
+        
         let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: nil)
         
         if let stopAnnotation = annotation as? StopAnnotation
@@ -323,6 +331,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     @IBAction func unwindFromRouteTableViewWithSelectedRoute(_ segue: UIStoryboardSegue)
     {
+        MapState.showingPickerView = true
+        setupHidePickerButton()
         NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
     }
     
@@ -450,10 +460,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             OperationQueue.main.addOperation {
                 if let annotation = self.busAnnotations[vehicleLocation.id]
                 {
-                    /*UIView.animate(withDuration: 0.5, animations: {
-                        annotation.coordinate = vehicleLocation.location.coordinate
-                        print("Moving!")
-                    })*/
                     self.mainMapView.removeAnnotation(annotation)
                 }
                 
