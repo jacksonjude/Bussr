@@ -44,6 +44,12 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         pickerSelectedRow()
+        
+        if locationFilterEnabled
+        {
+            locationFilterEnabled = false
+            locationButton.setImage(UIImage(named: "CurrentLocationIcon"), for: UIControl.State.normal)
+        }
     }
     
     func pickerSelectedRow()
@@ -239,7 +245,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         {
             locationButton.setImage(UIImage(named: "CurrentLocationFillIcon"), for: UIControl.State.normal)
             
-            if appDelegate.currentLocationManager.lastLocation == nil
+            /*if appDelegate.currentLocationManager.lastLocation == nil
             {
                 let locationReturnUUID = UUID().uuidString
                 NotificationCenter.default.addObserver(self, selector: #selector(foundCurrentLocation(_:)), name: NSNotification.Name("UpdatedCurrentLocation:" + locationReturnUUID), object: nil)
@@ -251,7 +257,13 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             else
             {
                 foundCurrentLocation()
+            }*/
+            
+            if let currentLocation = appDelegate.mainMapViewController?.mainMapView.userLocation.location
+            {
+                sortStopsByCurrentLocation(location: currentLocation)
             }
+            
         }
         else
         {
@@ -296,7 +308,10 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 routeInfoPicker.reloadAllComponents()
                 routeInfoPicker.selectRow(0, inComponent: 0, animated: true)
             case .selectClosest:
-                routeInfoPicker.selectRow(routeInfoToChange.firstIndex(of: sortedStops[0]) ?? 0, inComponent: 0, animated: true)
+                if sortedStops.count > 0
+                {
+                    routeInfoPicker.selectRow(routeInfoToChange.firstIndex(of: sortedStops[0]) ?? 0, inComponent: 0, animated: true)
+                }
             }
             
             pickerSelectedRow()

@@ -56,7 +56,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         // Do any additional setup after loading the view, typically from a nib.
         
         mainMapView.delegate = self
-        
+        mainMapView.showsUserLocation = true
         centerMapOnLocation(location: initialLocation, range: 15000)
         
         setupRouteMapUpdateNotifications()
@@ -194,7 +194,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 
                 reloadPolyline()
                 
-                addBusAnnotations()
+                fetchVehicleLocations()
             }
             
             centerMapOnLocation(location: initialLocation, range: 15000)
@@ -258,6 +258,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         mainMapView.removeAnnotations(mainMapView.annotations)
         stopAnnotations.removeAll()
         busAnnotations.removeAll()
+        RouteDataManager.lastVehicleTime = nil
         
         if directionPolyline != nil
         {
@@ -289,14 +290,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    func addBusAnnotations()
-    {
-        for annotation in busAnnotations
-        {
-            mainMapView.addAnnotation(annotation.value)
-        }
-    }
-    
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let polylineRenderer = MKPolylineRenderer(overlay: overlay)
         polylineRenderer.strokeColor = UIColor(red: 0.972, green: 0.611, blue: 0.266, alpha: 1)
@@ -306,7 +299,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         //let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "annotationView")
-        let annotationView = MKAnnotationView()
+        let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: nil)
         
         if let stopAnnotation = annotation as? StopAnnotation
         {
@@ -317,11 +310,12 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             case .orange:
                 annotationView.image = UIImage(named: "OrangeDot")
             }
-            
         }
         else if annotation is BusAnnotation
         {
             annotationView.image = UIImage(named: "BusAnnotation")
+            
+            annotationView.centerOffset = CGPoint(x: 0, y: -annotationView.image!.size.height/2)
         }
         
         return annotationView
@@ -362,6 +356,13 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     @IBAction func refreshPredictionNavigationBar()
     {
+        fetchPredictionTimes()
+        
+        fetchVehicleLocations()
+    }
+    
+    func fetchPredictionTimes()
+    {
         let predictionTimesReturnUUID = UUID().uuidString
         NotificationCenter.default.addObserver(self, selector: #selector(receivePredictionTimes(_:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
         RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID)
@@ -371,7 +372,10 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             self.refreshButton.tintColor = .clear
             self.activityIndicator.startAnimating()
         }
-        
+    }
+    
+    func fetchVehicleLocations()
+    {
         let vehicleLocationsReturnUUID = UUID().uuidString
         NotificationCenter.default.addObserver(self, selector: #selector(receiveVehicleLocations(_:)), name: NSNotification.Name("FoundVehicleLocations:" + vehicleLocationsReturnUUID), object: nil)
         RouteDataManager.fetchVehicleLocations(returnUUID: vehicleLocationsReturnUUID)
@@ -413,7 +417,10 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             if predictions.count > 0
             {
-                predictionsString += " mins"
+                if predictions.count > 1 || predictions[0] != "0"
+                {
+                    predictionsString += " mins"
+                }
             }
             else
             {
@@ -440,14 +447,20 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         let vehicleLocations = notification.userInfo!["vehicleLocations"] as! Array<(id: String, location: CLLocation, heading: Int)>
         for vehicleLocation in vehicleLocations
         {
-            if let annotation = busAnnotations[vehicleLocation.id]
-            {
-                mainMapView.removeAnnotation(annotation)
+            OperationQueue.main.addOperation {
+                if let annotation = self.busAnnotations[vehicleLocation.id]
+                {
+                    /*UIView.animate(withDuration: 0.5, animations: {
+                        annotation.coordinate = vehicleLocation.location.coordinate
+                        print("Moving!")
+                    })*/
+                    self.mainMapView.removeAnnotation(annotation)
+                }
+                
+                self.busAnnotations[vehicleLocation.id] = BusAnnotation(coordinate: vehicleLocation.location.coordinate, heading: vehicleLocation.heading, id: vehicleLocation.id)
+                self.mainMapView.addAnnotation(self.busAnnotations[vehicleLocation.id]!)
             }
-            busAnnotations[vehicleLocation.id] = BusAnnotation(coordinate: vehicleLocation.location.coordinate, heading: vehicleLocation.heading, id: vehicleLocation.id)
         }
-        
-        addBusAnnotations()
     }
     
     @IBAction func addFavoriteButtonPressed(_ sender: Any) {

@@ -13,7 +13,6 @@
         <!--Main Map View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <viewController id="BYZ-38-t0r" customClass="MainMapViewController" customModule="MuniTracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -108,9 +107,7 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem width="11" style="plain" systemItem="fixedSpace" id="Yjc-mT-pJ8"/>
-                                    <barButtonItem enabled="NO" image="FavoriteSmallIcon" id="5kM-u0-fk3">
-                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </barButtonItem>
+                                    <barButtonItem image="FavoriteMenuIcon" id="5kM-u0-fk3"/>
                                     <barButtonItem systemItem="flexibleSpace" id="cnm-e2-ces"/>
                                     <barButtonItem enabled="NO" title="Hide" id="XQg-PL-EFo"/>
                                 </items>
@@ -169,6 +166,7 @@
                         <segue destination="DD3-H0-RfC" kind="show" identifier="showRoutesTableView" id="qw7-kc-Skx"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="31.199999999999999" y="32.833583208395808"/>
         </scene>
@@ -447,7 +445,7 @@
         <image name="DirectionIcon" width="64" height="64"/>
         <image name="FavoriteAddIcon" width="60" height="60"/>
         <image name="FavoriteIcon" width="64" height="64"/>
-        <image name="FavoriteSmallIcon" width="30" height="30"/>
+        <image name="FavoriteMenuIcon" width="28" height="35"/>
         <image name="RouteListIcon" width="27" height="30"/>
         <image name="SettingsIcon" width="25" height="25"/>
     </resources>
