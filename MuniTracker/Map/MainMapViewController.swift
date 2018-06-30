@@ -44,11 +44,13 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     var selectedAnnotationLocation: String?
     var stopAnnotations = Dictionary<String,StopAnnotation>()
     var directionPolyline: MKPolyline?
-    var busAnnotations = Dictionary<String,BusAnnotation>()
+    var busAnnotations = Dictionary<String,(annotation: BusAnnotation, annotationView: MKAnnotationView?)>()
     
     var downloadAllData = false
     
     var locationManager = CLLocationManager()
+    
+    var vehicleIDs = Array<String>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -302,15 +304,10 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        if annotation is MKUserLocation
-        {
-            return nil
-        }
-        
-        let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: nil)
-        
         if let stopAnnotation = annotation as? StopAnnotation
         {
+            let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: nil)
+            
             switch stopAnnotation.type
             {
             case .red:
@@ -318,15 +315,35 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             case .orange:
                 annotationView.image = UIImage(named: "OrangeDot")
             }
+            
+            return annotationView
         }
         else if annotation is BusAnnotation
         {
-            annotationView.image = UIImage(named: "BusAnnotation")
+            if let annotationView = busAnnotations[(annotation as! BusAnnotation).id]?.annotationView
+            {
+                UIView.animate(withDuration: 1) {
+                    annotationView.annotation = annotation
+                }
+                
+                return annotationView
+            }
             
+            let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: nil)
+            
+            annotationView.image = UIImage(named: "BusAnnotation")
             annotationView.centerOffset = CGPoint(x: 0, y: -annotationView.image!.size.height/2)
+            
+            busAnnotations[(annotation as! BusAnnotation).id]?.annotationView = annotationView
+            
+            return annotationView
+        }
+        else if annotation is MKUserLocation
+        {
+            return nil
         }
         
-        return annotationView
+        return nil
     }
     
     @IBAction func unwindFromRouteTableViewWithSelectedRoute(_ segue: UIStoryboardSegue)
@@ -368,7 +385,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     {
         fetchPredictionTimes()
         
-        fetchVehicleLocations()
+        //fetchVehicleLocations()
     }
     
     func fetchPredictionTimes()
@@ -388,7 +405,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     {
         let vehicleLocationsReturnUUID = UUID().uuidString
         NotificationCenter.default.addObserver(self, selector: #selector(receiveVehicleLocations(_:)), name: NSNotification.Name("FoundVehicleLocations:" + vehicleLocationsReturnUUID), object: nil)
-        RouteDataManager.fetchVehicleLocations(returnUUID: vehicleLocationsReturnUUID)
+        RouteDataManager.fetchVehicleLocations(returnUUID: vehicleLocationsReturnUUID, vehicleIDs: vehicleIDs)
     }
     
     @objc func receivePredictionTimes(_ notification: Notification)
@@ -437,7 +454,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 predictionsString = "No Predictions"
             }
             
-            
             OperationQueue.main.addOperation {
                 self.predictionTimesLabel.text = predictionsString
             }
@@ -448,25 +464,72 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 self.predictionTimesLabel.text = error
             }
         }
+        
+        if let vehicleIDs = notification.userInfo!["vehicleIDs"] as? Array<String>
+        {
+            self.vehicleIDs = vehicleIDs
+            
+            fetchVehicleLocations()
+        }
     }
     
     @objc func receiveVehicleLocations(_ notification: Notification)
     {
         NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
         
-        let vehicleLocations = notification.userInfo!["vehicleLocations"] as! Array<(id: String, location: CLLocation, heading: Int)>
-        for vehicleLocation in vehicleLocations
-        {
-            OperationQueue.main.addOperation {
-                if let annotation = self.busAnnotations[vehicleLocation.id]
+        OperationQueue.main.addOperation {
+            
+        }
+        
+        OperationQueue.main.addOperation {
+            var annotationsToSave = Dictionary<String,(annotation: BusAnnotation, annotationView: MKAnnotationView?)>()
+            
+            let vehicleLocations = notification.userInfo!["vehicleLocations"] as! Array<(id: String, location: CLLocation, heading: Int)>
+            for vehicleLocation in vehicleLocations
+            {
+                /*if let annotation = self.busAnnotations[vehicleLocation.id]
+                 {
+                 self.mainMapView.removeAnnotation(annotation)
+                 }*/
+                
+                if let busAnnotationTuple = self.busAnnotations[vehicleLocation.id]
                 {
-                    self.mainMapView.removeAnnotation(annotation)
+                    busAnnotationTuple.annotation.coordinate = vehicleLocation.location.coordinate
+                    busAnnotationTuple.annotation.heading = vehicleLocation.heading
+                }
+                else
+                {
+                    self.busAnnotations[vehicleLocation.id] = (annotation: BusAnnotation(coordinate: vehicleLocation.location.coordinate, heading: vehicleLocation.heading, id: vehicleLocation.id), annotationView: nil)
                 }
                 
-                self.busAnnotations[vehicleLocation.id] = BusAnnotation(coordinate: vehicleLocation.location.coordinate, heading: vehicleLocation.heading, id: vehicleLocation.id)
-                self.mainMapView.addAnnotation(self.busAnnotations[vehicleLocation.id]!)
+                if let annotationView = self.busAnnotations[vehicleLocation.id]?.annotationView
+                {
+                    UIView.animate(withDuration: 1) {
+                        annotationView.annotation = self.busAnnotations[vehicleLocation.id]!.annotation
+                    }
+                }
+                else
+                {
+                    self.mainMapView.addAnnotation(self.busAnnotations[vehicleLocation.id]!.annotation)
+                }
+                
+                annotationsToSave[vehicleLocation.id] = self.busAnnotations[vehicleLocation.id]
             }
+            
+            for annotation in annotationsToSave
+            {
+                self.busAnnotations.removeValue(forKey: annotation.key)
+            }
+            
+            for annotation in self.busAnnotations
+            {
+                self.mainMapView.removeAnnotation(annotation.value.annotation)
+            }
+            
+            self.busAnnotations = annotationsToSave
         }
+        
+        
     }
     
     @IBAction func addFavoriteButtonPressed(_ sender: Any) {
@@ -524,7 +587,7 @@ class StopAnnotation: NSObject, MKAnnotation
 
 class BusAnnotation: NSObject, MKAnnotation
 {
-    var coordinate: CLLocationCoordinate2D
+    dynamic var coordinate: CLLocationCoordinate2D
     var heading: Int
     var id: String
     var title: String?
