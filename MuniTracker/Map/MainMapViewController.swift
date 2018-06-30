@@ -25,6 +25,18 @@ extension CLLocation
     }
 }
 
+extension UIImage {
+    class func radiansToDegrees(radians: CGFloat) -> CGFloat
+    {
+        return radians * (180.0 / CGFloat(Double.pi))
+    }
+    
+    class func degreesToRadians(degrees: CGFloat) -> CGFloat
+    {
+        return degrees / 180.0 * CGFloat(Double.pi)
+    }
+}
+
 class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var mainMapView: MKMapView!
@@ -334,7 +346,28 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             annotationView.image = UIImage(named: "BusAnnotation")
             annotationView.centerOffset = CGPoint(x: 0, y: -annotationView.image!.size.height/2)
             
+            (annotation as! BusAnnotation).headingAnnotation?.busAnnotationViewImageSize = annotationView.image?.size
+            
             busAnnotations[(annotation as! BusAnnotation).id]?.annotationView = annotationView
+            
+            return annotationView
+        }
+        else if let headingAnnotation = annotation as? HeadingAnnotation
+        {
+            let headingImage = UIImage(named: "HeadingIndicator")!//?.imageRotatedByDegrees(deg: CGFloat(headingAnnotation.headingValue))
+            
+            let busImageSize = headingAnnotation.busAnnotationViewImageSize ?? UIImage(named: "BusAnnotation")!.size
+            
+            let xOffset = (busImageSize.width/2+(headingImage.size.height/2)*1.5) * cos(UIImage.degreesToRadians(degrees: CGFloat(headingAnnotation.headingValue - 90)))
+            let yOffset = (busImageSize.width/2+(headingImage.size.height/2)*1.5) * sin(UIImage.degreesToRadians(degrees: CGFloat(headingAnnotation.headingValue - 90)))
+            
+            let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: nil)
+            annotationView.centerOffset = CGPoint(x: xOffset, y: yOffset - busImageSize.height/2)
+            annotationView.image = headingImage
+            
+            //annotationView.displayPriority = MKFeatureDisplayPriority.defaultHigh
+            let t: CGAffineTransform = CGAffineTransform(rotationAngle: CGFloat(headingAnnotation.headingValue) * CGFloat.pi / 180)
+            annotationView.transform = t
             
             return annotationView
         }
@@ -513,6 +546,16 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                     self.mainMapView.addAnnotation(self.busAnnotations[vehicleLocation.id]!.annotation)
                 }
                 
+                if let headingAnnotation = self.busAnnotations[vehicleLocation.id]!.annotation.headingAnnotation
+                {
+                    self.mainMapView.removeAnnotation(headingAnnotation)
+                }
+                
+                let headingAnnotation = HeadingAnnotation(coordinate: vehicleLocation.location.coordinate, heading: vehicleLocation.heading)
+                self.mainMapView.addAnnotation(headingAnnotation)
+                
+                self.busAnnotations[vehicleLocation.id]?.annotation.headingAnnotation = headingAnnotation
+                
                 annotationsToSave[vehicleLocation.id] = self.busAnnotations[vehicleLocation.id]
             }
             
@@ -524,6 +567,10 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             for annotation in self.busAnnotations
             {
                 self.mainMapView.removeAnnotation(annotation.value.annotation)
+                if let headingAnnotation = annotation.value.annotation.headingAnnotation
+                {
+                    self.mainMapView.removeAnnotation(headingAnnotation)
+                }
             }
             
             self.busAnnotations = annotationsToSave
@@ -592,11 +639,27 @@ class BusAnnotation: NSObject, MKAnnotation
     var id: String
     var title: String?
     var subtitle: String?
+    var headingAnnotation: HeadingAnnotation?
     
     init(coordinate: CLLocationCoordinate2D, heading: Int, id: String)
     {
         self.coordinate = coordinate
         self.heading = heading
         self.id = id
+    }
+}
+
+class HeadingAnnotation: NSObject, MKAnnotation
+{
+    dynamic var coordinate: CLLocationCoordinate2D
+    var headingValue: Int
+    var title: String?
+    var subtitle: String?
+    var busAnnotationViewImageSize: CGSize?
+    
+    init(coordinate: CLLocationCoordinate2D, heading: Int)
+    {
+        self.coordinate = coordinate
+        self.headingValue = heading
     }
 }

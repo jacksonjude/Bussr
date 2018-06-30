@@ -443,7 +443,6 @@ class RouteDataManager
                             {
                                 //if child.element?.allAttributes["dirTag"]?.text == direction.directionTag
                                 if vehicleIDs.contains(child.element!.allAttributes["id"]!.text)
-                                //if true
                                 {
                                     let id = child.element!.allAttributes["id"]!.text
                                     let lat = Double(child.element!.allAttributes["lat"]!.text) ?? 0
