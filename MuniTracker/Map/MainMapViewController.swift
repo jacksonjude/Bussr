@@ -479,9 +479,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     {
         if MapState.selectedStopTag != nil
         {
-            if let stop = RouteDataManager.getCurrentStop()
+            if let stop = RouteDataManager.getCurrentStop(), let direction = RouteDataManager.getCurrentDirection()
             {
-                var stopIsFavorite = stop.favorite
+                var stopIsFavorite = RouteDataManager.favoriteStopExists(stopTag: stop.stopTag!, directionTag: direction.directionTag!)
                 if inverse
                 {
                     stopIsFavorite = !stopIsFavorite

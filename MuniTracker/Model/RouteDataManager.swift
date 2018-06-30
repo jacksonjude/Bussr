@@ -31,7 +31,7 @@ class RouteDataManager
         var commandString = ""
         for commandArgument in arguments
         {
-            commandString += "&" + commandArgument.key + "=" + commandArgument.value + "&"
+            commandString += "&" + commandArgument.key + "=" + commandArgument.value
         }
         
         _ = (URLSession.shared.dataTask(with: URL(string: xmlFeedSource + "?command=" + command + commandString)!) { data, response, error in
@@ -429,6 +429,37 @@ class RouteDataManager
                 }
             }
         }
+    }
+    
+    static func fetchFavoriteStops(directionTag: String, stopTag: String? = nil) -> [FavoriteStop]
+    {
+        let predicate: NSPredicate?
+        if stopTag != nil
+        {
+            predicate = NSPredicate(format: "stopTag == %@ && directionTag == %@", stopTag!, directionTag)
+        }
+        else
+        {
+            predicate = NSPredicate(format: "directionTag == %@", directionTag)
+        }
+        
+        if let favoriteStopCallback = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: predicate!, moc: appDelegate.persistentContainer.viewContext)
+        {
+            return favoriteStopCallback as! [FavoriteStop]
+        }
+        
+        return []
+    }
+    
+    static func favoriteStopExists(stopTag: String, directionTag: String) -> Bool
+    {
+        let favoriteStopCallback = fetchFavoriteStops(directionTag: directionTag, stopTag: stopTag)
+        if favoriteStopCallback.count > 0
+        {
+            return true
+        }
+        
+        return false
     }
 }
 

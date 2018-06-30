@@ -203,9 +203,20 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     {
         if MapState.routeInfoShowing == .stop
         {
-            if let selectedStop = routeInfoToChange[routeInfoPicker.selectedRow(inComponent: 0)] as? Stop
+            if let selectedStop = RouteDataManager.getCurrentStop(), let selectedDirection = RouteDataManager.getCurrentDirection()//routeInfoToChange[routeInfoPicker.selectedRow(inComponent: 0)] as? Stop
             {
-                selectedStop.favorite = !selectedStop.favorite
+                let favoriteStopCallback = RouteDataManager.fetchFavoriteStops(directionTag: selectedDirection.directionTag!, stopTag: selectedStop.stopTag)
+                if favoriteStopCallback.count > 0
+                {
+                    appDelegate.persistentContainer.viewContext.delete(favoriteStopCallback[0])
+                }
+                else
+                {
+                    let newFavoriteStop = FavoriteStop(context: appDelegate.persistentContainer.viewContext)
+                    newFavoriteStop.directionTag = selectedDirection.directionTag
+                    newFavoriteStop.stopTag = selectedStop.stopTag
+                }
+                
                 appDelegate.saveContext()
             }
         }
@@ -213,15 +224,14 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     
     func filterByFavorites()
     {
-        if let routeStops = routeInfoToChange as? Array<Stop>
+        if let selectedDirection = RouteDataManager.getCurrentDirection()
         {
             var favoriteStops = Array<Stop>()
-            for stop in routeStops
+            let favoriteStopCallback = RouteDataManager.fetchFavoriteStops(directionTag: selectedDirection.directionTag!)
+            for favoriteStop in favoriteStopCallback
             {
-                if stop.favorite
-                {
-                    favoriteStops.append(stop)
-                }
+                let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStop.stopTag!), moc: appDelegate.persistentContainer.viewContext).object as! Stop
+                favoriteStops.append(stop)
             }
             
             routeInfoToChange = favoriteStops
