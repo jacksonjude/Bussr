@@ -22,6 +22,17 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     var locationFilterEnabled = false
     var waitingForLocation = false
     
+    //MARK: - View
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadRouteData), name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(toggleFavoriteForSelectedStop), name: NSNotification.Name("ToggleFavoriteForStop"), object: nil)
+    }
+    
+    //MARK: - Picker View
+    
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -52,42 +63,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         }
     }
     
-    func pickerSelectedRow()
-    {
-        updateSelectedObjectTags()
-        NotificationCenter.default.post(name: NSNotification.Name("UpdateRouteMap"), object: nil, userInfo: ["ChangingRouteInfoShowing":false])
-    }
-    
-    func updateSelectedObjectTags()
-    {
-        let row = routeInfoPicker.selectedRow(inComponent: 0)
-        
-        if routeInfoToChange.count > row
-        {
-            switch MapState.routeInfoShowing
-            {
-            case .direction:
-                if let direction = routeInfoToChange[row] as? Direction
-                {
-                    MapState.selectedDirectionTag = direction.directionTag
-                }
-            case .stop:
-                if let stop = routeInfoToChange[row] as? Stop
-                {
-                    MapState.selectedStopTag = stop.stopTag
-                }
-            default:
-                break
-            }
-        }
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadRouteData), name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(toggleFavoriteForSelectedStop), name: NSNotification.Name("ToggleFavoriteForStop"), object: nil)
-    }
+    //MARK: - Data Reload
     
     @objc func reloadRouteData()
     {
@@ -114,7 +90,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             }
             
             routeInfoPicker.reloadAllComponents()
-            
             routeInfoPicker.selectRow(0, inComponent: 0, animated: true)
             
             updateSelectedObjectTags()
@@ -159,6 +134,38 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         
         reloadRouteData()
     }
+    
+    func pickerSelectedRow()
+    {
+        updateSelectedObjectTags()
+        NotificationCenter.default.post(name: NSNotification.Name("UpdateRouteMap"), object: nil, userInfo: ["ChangingRouteInfoShowing":false])
+    }
+    
+    func updateSelectedObjectTags()
+    {
+        let row = routeInfoPicker.selectedRow(inComponent: 0)
+        
+        if routeInfoToChange.count > row
+        {
+            switch MapState.routeInfoShowing
+            {
+            case .direction:
+                if let direction = routeInfoToChange[row] as? Direction
+                {
+                    MapState.selectedDirectionTag = direction.directionTag
+                }
+            case .stop:
+                if let stop = routeInfoToChange[row] as? Stop
+                {
+                    MapState.selectedStopTag = stop.stopTag
+                }
+            default:
+                break
+            }
+        }
+    }
+    
+    //MARK: - Filters
     
     func enableFilterButtons()
     {

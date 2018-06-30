@@ -51,18 +51,20 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     //37.773972
     //37.738802
     let initialLocation = CLLocation(latitude: 37.773972, longitude: -122.438765)
+    
+    var downloadAllData = false
     var progressAlertView: UIAlertController?
     var progressView: UIProgressView?
+    
     var selectedAnnotationLocation: String?
     var stopAnnotations = Dictionary<String,StopAnnotation>()
     var directionPolyline: MKPolyline?
     var busAnnotations = Dictionary<String,(annotation: BusAnnotation, annotationView: MKAnnotationView?)>()
-    
-    var downloadAllData = false
+    var vehicleIDs = Array<String>()
     
     var locationManager = CLLocationManager()
     
-    var vehicleIDs = Array<String>()
+    //MARK: - View
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,6 +83,58 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             downloadAllData = true
         }
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if downloadAllData
+        {
+            progressAlertView = UIAlertController(title: "Updating", message: "Updating route data...\n", preferredStyle: .alert)
+            
+            self.present(progressAlertView!, animated: true, completion: {
+                let margin: CGFloat = 8.0
+                let rect = CGRect(x: margin, y: 72.0, width: self.progressAlertView!.view.frame.width - margin * 2.0, height: 2.0)
+                self.progressView = UIProgressView(frame: rect)
+                self.progressView!.tintColor = UIColor.blue
+                self.progressAlertView!.view.addSubview(self.progressView!)
+                
+                NotificationCenter.default.addObserver(self, selector: #selector(self.addToProgress(notification:)), name: NSNotification.Name("CompletedRoute"), object: nil)
+                
+                NotificationCenter.default.addObserver(self, selector: #selector(self.dismissAlertView), name: NSNotification.Name("FinishedUpdatingRoutes"), object: nil)
+                
+                DispatchQueue.global(qos: .background).async
+                    {
+                        RouteDataManager.updateAllData()
+                }
+            })
+            
+            downloadAllData = false
+        }
+    }
+    
+    //MARK: - Update Routes
+    
+    @objc func addToProgress(notification: Notification)
+    {
+        OperationQueue.main.addOperation {
+            self.progressView?.progress = notification.userInfo?["progress"] as? Float ?? 0.0
+        }
+    }
+    
+    @objc func dismissAlertView()
+    {
+        progressAlertView?.dismiss(animated: true, completion: {
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name("CompletedRoute"), object: nil)
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name("FinishedUpdatingRoutes"), object: nil)
+            
+            if appDelegate.firstLaunch && CLLocationManager.authorizationStatus() != .denied
+            {
+                self.locationManager.requestWhenInUseAuthorization()
+            }
+        })
+    }
+    
+    //MARK: - Picker View Show/Hide
     
     @objc func showPickerView()
     {
@@ -114,42 +168,16 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         showHidePickerButton.action = #selector(showPickerView)
     }
     
+    //MARK: - Update Notifications
+    
     func setupRouteMapUpdateNotifications()
     {
-        NotificationCenter.default.addObserver(self, selector: #selector(focusMapFromRouteObject(notification:)), name: NSNotification.Name("UpdateRouteMap"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateMap(notification:)), name: NSNotification.Name("UpdateRouteMap"), object: nil)
     }
     
     func removeRouteMapUpdateNotifications()
     {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("UpdateRouteMap"), object: nil)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        if downloadAllData
-        {
-            progressAlertView = UIAlertController(title: "Updating", message: "Updating route data...\n", preferredStyle: .alert)
-            
-            self.present(progressAlertView!, animated: true, completion: {
-                let margin: CGFloat = 8.0
-                let rect = CGRect(x: margin, y: 72.0, width: self.progressAlertView!.view.frame.width - margin * 2.0, height: 2.0)
-                self.progressView = UIProgressView(frame: rect)
-                self.progressView!.tintColor = UIColor.blue
-                self.progressAlertView!.view.addSubview(self.progressView!)
-                
-                NotificationCenter.default.addObserver(self, selector: #selector(self.addToProgress(notification:)), name: NSNotification.Name("CompletedRoute"), object: nil)
-                
-                NotificationCenter.default.addObserver(self, selector: #selector(self.dismissAlertView), name: NSNotification.Name("FinishedUpdatingRoutes"), object: nil)
-                
-                DispatchQueue.global(qos: .background).async
-                {
-                    RouteDataManager.updateAllData()
-                }
-            })
-            
-            downloadAllData = false
-        }
     }
     
     func centerMapOnLocation(location: CLLocation, range: CLLocationDistance, willChangeRange: Bool = true)
@@ -165,31 +193,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         mainMapView.setRegion(MKCoordinateRegion(center: offsetCoordinate, latitudinalMeters: range, longitudinalMeters: range), animated: !willChangeRange)
     }
     
-    @objc func addToProgress(notification: Notification)
-    {
-        OperationQueue.main.addOperation {
-            self.progressView?.progress = notification.userInfo?["progress"] as? Float ?? 0.0
-        }
-    }
-
-    @objc func dismissAlertView()
-    {
-        progressAlertView?.dismiss(animated: true, completion: {
-            NotificationCenter.default.removeObserver(self, name: NSNotification.Name("CompletedRoute"), object: nil)
-            NotificationCenter.default.removeObserver(self, name: NSNotification.Name("FinishedUpdatingRoutes"), object: nil)
-            
-            if appDelegate.firstLaunch && CLLocationManager.authorizationStatus() != .denied
-            {
-                self.locationManager.requestWhenInUseAuthorization()
-            }
-        })
-    }
-    
-    @IBAction func routesButtonPressed(_ sender: Any) {
-        self.performSegue(withIdentifier: "showRoutesTableView", sender: self)
-    }
-    
-    @objc func focusMapFromRouteObject(notification: Notification)
+    @objc func updateMap(notification: Notification)
     {
         switch MapState.routeInfoShowing
         {
@@ -250,6 +254,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
+    //MARK: - Annotations
+    
     func addAnnotation(coordinate: CLLocationCoordinate2D, annotationType: AnnotationType = .red)
     {
         let annotation = StopAnnotation(coordinate: coordinate, annotationType: annotationType)
@@ -307,6 +313,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             mainMapView.addOverlay(directionPolyline!)
         }
     }
+    
+    //MARK: - Map Delegate Calls
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let polylineRenderer = MKPolylineRenderer(overlay: overlay)
@@ -379,6 +387,12 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         return nil
     }
     
+    //MARK: - Segue
+    
+    @IBAction func routesButtonPressed(_ sender: Any) {
+        self.performSegue(withIdentifier: "showRoutesTableView", sender: self)
+    }
+    
     @IBAction func unwindFromRouteTableViewWithSelectedRoute(_ segue: UIStoryboardSegue)
     {
         MapState.showingPickerView = true
@@ -395,6 +409,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     {
         
     }
+    
+    //MARK: - Bus Predications
     
     func showPredictionNavigationBar()
     {
@@ -416,9 +432,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     @IBAction func refreshPredictionNavigationBar()
     {
-        fetchPredictionTimes()
+        NotificationCenter.default.addObserver(self, selector: #selector(fetchVehicleLocations), name: NSNotification.Name("FetchVehicleLocations"), object: nil)
         
-        //fetchVehicleLocations()
+        fetchPredictionTimes()
     }
     
     func fetchPredictionTimes()
@@ -434,7 +450,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    func fetchVehicleLocations()
+    @objc func fetchVehicleLocations()
     {
         let vehicleLocationsReturnUUID = UUID().uuidString
         NotificationCenter.default.addObserver(self, selector: #selector(receiveVehicleLocations(_:)), name: NSNotification.Name("FoundVehicleLocations:" + vehicleLocationsReturnUUID), object: nil)
@@ -502,7 +518,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         {
             self.vehicleIDs = vehicleIDs
             
-            fetchVehicleLocations()
+            NotificationCenter.default.post(name: NSNotification.Name("FetchVehicleLocations"), object: nil)
         }
     }
     
@@ -575,9 +591,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             self.busAnnotations = annotationsToSave
         }
-        
-        
     }
+    
+    //MARK: - Add Favorite
     
     @IBAction func addFavoriteButtonPressed(_ sender: Any) {
         setFavoriteButtonImage(inverse: true)

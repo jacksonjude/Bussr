@@ -29,6 +29,8 @@ class SettingsViewController: UIViewController
     var progressAlertView: UIAlertController?
     var progressView: UIProgressView?
     
+    //MARK: - Route Manage
+    
     @IBAction func updateRoutes(_ sender: Any) {
         progressAlertView = UIAlertController(title: "Updating", message: "Updating route data...\n", preferredStyle: .alert)
         //progressAlertView!.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -108,6 +110,8 @@ class SettingsViewController: UIViewController
         
         self.present(deletionAlertView, animated: true, completion: nil)
     }
+    
+    //MARK: - Filter Config
     
     @IBAction func toggleFavoritesSortType(_ sender: Any) {
         let favoritesSortType: FavoritesSortType = (UserDefaults.standard.object(forKey: "FavoritesSortType") as? Int).map { FavoritesSortType(rawValue: $0) ?? .location } ?? .location

@@ -31,6 +31,8 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
     var sortedRouteDictionary = Dictionary<Int,Array<String>>()
     let sectionTitles = ["01", "10", "20", "30", "40", "50", "60", "70", "80", "90", "A"]
     
+    //MARK: - TableView
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return sortedRouteDictionary.keys.count
     }
@@ -67,6 +69,24 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
         return index/2
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let routeFullTitle = sortedRouteDictionary[indexPath.section]![indexPath.row].split(separator: "-")
+        
+        let selectedRouteTag = String(routeFullTitle[0].dropLast())
+        
+        let routeFetchCallback = RouteDataManager.fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "routeTag == %@", selectedRouteTag), moc: appDelegate.persistentContainer.viewContext)
+        selectedRouteObject = routeFetchCallback.object as? Route
+        
+        performSegue(withIdentifier: "SelectedRouteUnwind", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        MapState.routeInfoObject = selectedRouteObject
+        MapState.routeInfoShowing = .direction
+    }
+    
+    //MARK: - Route Dictionary
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -147,21 +167,5 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
         OperationQueue.main.addOperation {
             self.routesTableView.reloadData()
         }
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let routeFullTitle = sortedRouteDictionary[indexPath.section]![indexPath.row].split(separator: "-")
-        
-        let selectedRouteTag = String(routeFullTitle[0].dropLast())
-        
-        let routeFetchCallback = RouteDataManager.fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "routeTag == %@", selectedRouteTag), moc: appDelegate.persistentContainer.viewContext)
-        selectedRouteObject = routeFetchCallback.object as? Route
-        
-        performSegue(withIdentifier: "SelectedRouteUnwind", sender: self)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        MapState.routeInfoObject = selectedRouteObject
-        MapState.routeInfoShowing = .direction
     }
 }

@@ -17,13 +17,7 @@ class RouteDataManager
 {
     static var mocSaveGroup = DispatchGroup()
     
-    enum RouteFetchType: Int {
-        case routeList
-        case routeConfig
-        case predictionTimes
-        case routeLocations
-    }
-    
+    //MARK: - Feed Source
     static let xmlFeedSource = "http://webservices.nextbus.com/service/publicXMLFeed"
     static let jsonFeedSource = "http://webservices.nextbus.com/service/publicJSONFeed"
     
@@ -64,6 +58,8 @@ class RouteDataManager
             callback(nil)
         }).resume()
     }
+    
+    //MARK: - Data Update
     
     static func updateAllData()
     {
@@ -163,7 +159,6 @@ class RouteDataManager
         var routeDictionary = Dictionary<String,String>()
         
         let backgroundGroup = DispatchGroup()
-        
         backgroundGroup.enter()
         
         getJSONFromSource("routeList", ["a":agencyTag]) { (json) in
@@ -189,7 +184,6 @@ class RouteDataManager
         var routeInfoDictionary: Dictionary<String,Dictionary<String,Dictionary<String,Any>>>?
         
         let backgroundGroup = DispatchGroup()
-        
         backgroundGroup.enter()
         
         getJSONFromSource("routeConfig", ["a":agencyTag,"r":routeTag,"terse":"618"]) { (json) in
@@ -296,6 +290,8 @@ class RouteDataManager
         return routeInfoDictionary!
     }
     
+    //MARK: - Core Data
+    
     static func fetchLocalObjects(type: String, predicate: NSPredicate, moc: NSManagedObjectContext) -> [AnyObject]?
     {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: type)
@@ -370,6 +366,39 @@ class RouteDataManager
         
         return nil
     }
+    
+    static func fetchFavoriteStops(directionTag: String, stopTag: String? = nil) -> [FavoriteStop]
+    {
+        let predicate: NSPredicate?
+        if stopTag != nil
+        {
+            predicate = NSPredicate(format: "stopTag == %@ && directionTag == %@", stopTag!, directionTag)
+        }
+        else
+        {
+            predicate = NSPredicate(format: "directionTag == %@", directionTag)
+        }
+        
+        if let favoriteStopCallback = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: predicate!, moc: appDelegate.persistentContainer.viewContext)
+        {
+            return favoriteStopCallback as! [FavoriteStop]
+        }
+        
+        return []
+    }
+    
+    static func favoriteStopExists(stopTag: String, directionTag: String) -> Bool
+    {
+        let favoriteStopCallback = fetchFavoriteStops(directionTag: directionTag, stopTag: stopTag)
+        if favoriteStopCallback.count > 0
+        {
+            return true
+        }
+        
+        return false
+    }
+    
+    //MARK: - Data Fetch
     
     static func fetchPredictionTimesForStop(returnUUID: String)
     {
@@ -464,37 +493,6 @@ class RouteDataManager
                 }
             }
         }
-    }
-    
-    static func fetchFavoriteStops(directionTag: String, stopTag: String? = nil) -> [FavoriteStop]
-    {
-        let predicate: NSPredicate?
-        if stopTag != nil
-        {
-            predicate = NSPredicate(format: "stopTag == %@ && directionTag == %@", stopTag!, directionTag)
-        }
-        else
-        {
-            predicate = NSPredicate(format: "directionTag == %@", directionTag)
-        }
-        
-        if let favoriteStopCallback = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: predicate!, moc: appDelegate.persistentContainer.viewContext)
-        {
-            return favoriteStopCallback as! [FavoriteStop]
-        }
-        
-        return []
-    }
-    
-    static func favoriteStopExists(stopTag: String, directionTag: String) -> Bool
-    {
-        let favoriteStopCallback = fetchFavoriteStops(directionTag: directionTag, stopTag: stopTag)
-        if favoriteStopCallback.count > 0
-        {
-            return true
-        }
-        
-        return false
     }
 }
 
