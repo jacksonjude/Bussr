@@ -400,7 +400,7 @@ class RouteDataManager
     
     //MARK: - Data Fetch
     
-    let maxPredictions = 5
+    static let maxPredictions = 5
     
     static func fetchPredictionTimesForStop(returnUUID: String)
     {
