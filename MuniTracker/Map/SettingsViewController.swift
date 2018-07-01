@@ -25,9 +25,47 @@ class SettingsViewController: UIViewController
 {
     @IBOutlet weak var favoritesSortedByButton: UIButton!
     @IBOutlet weak var locationSortTypeButton: UIButton!
+    @IBOutlet weak var themeButton: UIButton!
+    
+    @IBOutlet weak var mainNavigationBar: UINavigationBar!
+    
+    @IBOutlet weak var filterConfigLabel: UILabel!
+    @IBOutlet weak var manageRouteDataLabel: UILabel!
+    @IBOutlet weak var generalLabel: UILabel!
     
     var progressAlertView: UIAlertController?
     var progressView: UIProgressView?
+    
+    //MARK: - View
+    
+    override func viewDidLoad() {
+        setupThemeElements()
+    }
+    
+    func setupThemeElements()
+    {
+        let offWhite = UIColor(white: 0.97647, alpha: 1)
+        let white = UIColor(white: 1, alpha: 1)
+        let black = UIColor(white: 0, alpha: 1)
+        
+        switch appDelegate.getCurrentTheme()
+        {
+        case .light:
+            self.view.backgroundColor = offWhite
+            self.mainNavigationBar.barTintColor = offWhite
+            self.mainNavigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
+            self.filterConfigLabel.textColor = black
+            self.generalLabel.textColor = black
+            self.manageRouteDataLabel.textColor = black
+        case .dark:
+            self.view.backgroundColor = black
+            self.mainNavigationBar.barTintColor = black
+            self.mainNavigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+            self.filterConfigLabel.textColor = white
+            self.generalLabel.textColor = white
+            self.manageRouteDataLabel.textColor = white
+        }
+    }
     
     //MARK: - Route Manage
     
@@ -77,7 +115,7 @@ class SettingsViewController: UIViewController
     }
     
     @IBAction func clearRoutes(_ sender: Any) {
-        let entityTypes = ["Agency", "Route", "Direction", "Stop"]
+        let entityTypes = ["Agency", "Route", "Direction", "Stop", "FavoriteStop"]
         
         var deletionLogs = ""
         
@@ -141,6 +179,22 @@ class SettingsViewController: UIViewController
         }
     }
     
+    @IBAction func toggleTheme(_ sender: Any) {
+        let theme: ThemeType = (UserDefaults.standard.object(forKey: "theme") as? Int).map { ThemeType(rawValue: $0)  ?? .dark } ?? .dark
+        
+        switch theme
+        {
+        case .light:
+            UserDefaults.standard.set(ThemeType.dark.rawValue, forKey: "theme")
+            setThemeButtonTitle(themeType: .dark)
+        case .dark:
+            UserDefaults.standard.set(ThemeType.light.rawValue, forKey: "theme")
+            setThemeButtonTitle(themeType: .light)
+        }
+        
+        setupThemeElements()
+    }
+    
     func setFavoritesSortedByButtonTitle(favoritesSortType: FavoritesSortType)
     {
         switch favoritesSortType
@@ -160,6 +214,17 @@ class SettingsViewController: UIViewController
             locationSortTypeButton.setTitle("Location - " + "Full Sort", for: UIControl.State.normal)
         case .selectClosest:
             locationSortTypeButton.setTitle("Location - " + "Select Closest", for: UIControl.State.normal)
+        }
+    }
+    
+    func setThemeButtonTitle(themeType: ThemeType)
+    {
+        switch themeType
+        {
+        case .light:
+            themeButton.setTitle("Theme - " + "Light", for: UIControl.State.normal)
+        case .dark:
+            themeButton.setTitle("Theme - " + "Dark", for: UIControl.State.normal)
         }
     }
 }

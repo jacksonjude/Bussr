@@ -10,6 +10,12 @@ import UIKit
 import CoreData
 import CoreLocation
 
+enum ThemeType: Int
+{
+    case light
+    case dark
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -28,8 +34,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         {
             firstLaunch = true
             UserDefaults.standard.set(618, forKey: "firstLaunch")
+            
+            UserDefaults.standard.set(ThemeType.dark.rawValue, forKey: "theme")
         }
-        
+                        
         return true
     }
 
@@ -100,6 +108,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
+    }
+    
+    func getCurrentTheme() -> ThemeType
+    {
+        return (UserDefaults.standard.object(forKey: "theme") as? Int).map { ThemeType(rawValue: $0) ?? .dark } ?? .dark
     }
 
 }

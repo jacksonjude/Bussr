@@ -17,6 +17,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     @IBOutlet weak var routeInfoPicker: UIPickerView!
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var locationButton: UIButton!
+    @IBOutlet weak var directionButton: UIButton!
     
     var favoriteFilterEnabled = false
     var locationFilterEnabled = false
@@ -29,6 +30,57 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadRouteData), name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(toggleFavoriteForSelectedStop), name: NSNotification.Name("ToggleFavoriteForStop"), object: nil)
+        
+        setupThemeElements()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        setupThemeElements()
+        
+        reloadRouteData()
+    }
+    
+    func setupThemeElements()
+    {
+        let offWhite = UIColor(white: 0.97647, alpha: 1)
+        //let white = UIColor(white: 1, alpha: 1)
+        let black = UIColor(white: 0, alpha: 1)
+        
+        switch appDelegate.getCurrentTheme()
+        {
+        case .light:
+            self.routeInfoPicker.backgroundColor = offWhite
+            self.favoriteButton.setImage(UIImage(named: "FavoriteIcon"), for: UIControl.State.normal)
+            self.locationButton.setImage(UIImage(named: "LocationIcon"), for: UIControl.State.normal)
+            self.directionButton.setImage(UIImage(named: "DirectionIcon"), for: UIControl.State.normal)
+        case .dark:
+            self.routeInfoPicker.backgroundColor = black
+            self.favoriteButton.setImage(UIImage(named: "FavoriteIconDark"), for: UIControl.State.normal)
+            self.locationButton.setImage(UIImage(named: "LocationIconDark"), for: UIControl.State.normal)
+            self.directionButton.setImage(UIImage(named: "DirectionIconDark"), for: UIControl.State.normal)
+        }
+    }
+    
+    func darkImageAppend() -> String
+    {
+        switch appDelegate.getCurrentTheme()
+        {
+        case .light:
+            return ""
+        case .dark:
+            return "Dark"
+        }
+    }
+    
+    func inverseThemeColor() -> UIColor
+    {
+        switch appDelegate.getCurrentTheme()
+        {
+        case .light:
+            return UIColor.black
+        case .dark:
+            return UIColor.white
+        }
     }
     
     //MARK: - Picker View
@@ -41,7 +93,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         return routeInfoToChange.count
     }
     
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    /*func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         switch MapState.routeInfoShowing
         {
         case .none:
@@ -51,6 +103,23 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         case .stop:
             return (routeInfoToChange[row] as? Stop)?.stopTitle
         }
+    }*/
+    
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        
+        let title: String?
+        
+        switch MapState.routeInfoShowing
+        {
+        case .none:
+            title = nil
+        case .direction:
+            title = (routeInfoToChange[row] as? Direction)?.directionTitle
+        case .stop:
+            title = (routeInfoToChange[row] as? Stop)?.stopTitle
+        }
+        
+        return NSAttributedString(string: title ?? "", attributes: [NSAttributedString.Key.foregroundColor: inverseThemeColor()])
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -59,7 +128,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         if locationFilterEnabled
         {
             locationFilterEnabled = false
-            locationButton.setImage(UIImage(named: "CurrentLocationIcon"), for: UIControl.State.normal)
+            locationButton.setImage(UIImage(named: "CurrentLocationIcon" + darkImageAppend()), for: UIControl.State.normal)
         }
     }
     
@@ -185,8 +254,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         favoriteFilterEnabled = false
         locationFilterEnabled = false
         
-        favoriteButton.setImage(UIImage(named: "FavoriteIcon"), for: UIControl.State.normal)
-        locationButton.setImage(UIImage(named: "CurrentLocationIcon"), for: UIControl.State.normal)
+        favoriteButton.setImage(UIImage(named: "FavoriteIcon" + darkImageAppend()), for: UIControl.State.normal)
+        locationButton.setImage(UIImage(named: "CurrentLocationIcon" + darkImageAppend()), for: UIControl.State.normal)
     }
     
     @IBAction func favoriteFilterButtonPressed(_ sender: Any) {
@@ -194,13 +263,13 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         
         if favoriteFilterEnabled
         {
-            favoriteButton.setImage(UIImage(named: "FavoriteFillIcon"), for: UIControl.State.normal)
+            favoriteButton.setImage(UIImage(named: "FavoriteFillIcon" + darkImageAppend()), for: UIControl.State.normal)
             
             filterByFavorites()
         }
         else
         {
-            favoriteButton.setImage(UIImage(named: "FavoriteIcon"), for: UIControl.State.normal)
+            favoriteButton.setImage(UIImage(named: "FavoriteIcon" + darkImageAppend()), for: UIControl.State.normal)
             
             reloadRouteData()
         }
@@ -266,7 +335,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         
         if locationFilterEnabled
         {
-            locationButton.setImage(UIImage(named: "CurrentLocationFillIcon"), for: UIControl.State.normal)
+            locationButton.setImage(UIImage(named: "CurrentLocationFillIcon" + darkImageAppend()), for: UIControl.State.normal)
             
             if let currentLocation = appDelegate.mainMapViewController?.mainMapView.userLocation.location
             {
@@ -276,7 +345,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         }
         else
         {
-            locationButton.setImage(UIImage(named: "CurrentLocationIcon"), for: UIControl.State.normal)
+            locationButton.setImage(UIImage(named: "CurrentLocationIcon" + darkImageAppend()), for: UIControl.State.normal)
             
             reloadRouteData()
         }

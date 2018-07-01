@@ -400,6 +400,8 @@ class RouteDataManager
     
     //MARK: - Data Fetch
     
+    let maxPredictions = 5
+    
     static func fetchPredictionTimesForStop(returnUUID: String)
     {
         DispatchQueue.global(qos: .background).async {
@@ -419,13 +421,13 @@ class RouteDataManager
                                 {
                                     for prediction in directionInfo.children
                                     {
-                                        //if prediction.element?.allAttributes["dirTag"]?.text == direction.directionTag
-                                        //{
-                                            predictions.append(prediction.element?.allAttributes["minutes"]?.text ?? "nil")
+                                        predictions.append(prediction.element?.allAttributes["minutes"]?.text ?? "nil")
                                         vehicles.append(prediction.element!.allAttributes["vehicle"]!.text)
-                                        //}
                                     }
                                 }
+                                
+                                predictions = Array(predictions.prefix(maxPredictions))
+                                vehicles = Array(vehicles.prefix(maxPredictions))
                                 
                                 NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictions,"vehicleIDs":vehicles])
                             }

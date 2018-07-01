@@ -24,12 +24,47 @@ extension String
 class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource
 {
     @IBOutlet weak var routesTableView: UITableView!
+    @IBOutlet weak var mainNavigationBar: UINavigationBar!
     
     var selectedRouteObject: Route?
     
     var routeTitleDictionary = Dictionary<String,String>()
     var sortedRouteDictionary = Dictionary<Int,Array<String>>()
     let sectionTitles = ["01", "10", "20", "30", "40", "50", "60", "70", "80", "90", "A"]
+    
+    //MARK: - View
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        convertRouteObjectsToRouteTitleDictionary()
+        convertRouteDictionaryToRouteTitles()
+        
+        setupThemeElements()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        setupThemeElements()
+    }
+    
+    func setupThemeElements()
+    {
+        //let offWhite = UIColor(white: 0.97647, alpha: 1)
+        let white = UIColor(white: 1, alpha: 1)
+        let black = UIColor(white: 0, alpha: 1)
+        
+        switch appDelegate.getCurrentTheme()
+        {
+        case .light:
+            self.view.backgroundColor = white
+            self.mainNavigationBar.barTintColor = nil
+            self.mainNavigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
+        case .dark:
+            self.view.backgroundColor = black
+            self.mainNavigationBar.barTintColor = black
+            self.mainNavigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+        }
+    }
     
     //MARK: - TableView
     
@@ -87,13 +122,6 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     //MARK: - Route Dictionary
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        convertRouteObjectsToRouteTitleDictionary()
-        convertRouteDictionaryToRouteTitles()
-    }
     
     @objc func receiveRouteDictionary(_ notification: Notification)
     {

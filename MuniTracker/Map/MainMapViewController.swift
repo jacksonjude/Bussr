@@ -46,6 +46,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var refreshButton: UIBarButtonItem!
     @IBOutlet weak var mainNavigationItem: UINavigationItem!
+    @IBOutlet weak var mainNavigationBar: UINavigationBar!
+    @IBOutlet weak var mainToolbar: UIToolbar!
     @IBOutlet weak var showHidePickerButton: UIBarButtonItem!
     
     //37.773972
@@ -82,6 +84,59 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         {
             downloadAllData = true
         }
+        
+        setupThemeElements()
+    }
+    
+    func setupThemeElements()
+    {
+        let offWhite = UIColor(white: 0.97647, alpha: 1)
+        let white = UIColor(white: 1, alpha: 1)
+        let black = UIColor(white: 0, alpha: 1)
+        
+        switch appDelegate.getCurrentTheme()
+        {
+        case .light:
+            self.view.backgroundColor = offWhite
+            self.predictionTimesNavigationBar.barTintColor = nil
+            self.predictionTimesLabel.textColor = black
+            self.mainNavigationBar.barTintColor = offWhite
+            self.mainNavigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
+            self.mainToolbar.barTintColor = nil
+            self.addFavoriteButton.setImage(UIImage(named: "FavoriteAddIcon"), for: UIControl.State.normal)
+            self.activityIndicator.activityIndicatorViewStyle = .gray
+        case .dark:
+            self.view.backgroundColor = black
+            self.predictionTimesNavigationBar.barTintColor = black
+            self.predictionTimesLabel.textColor = white
+            self.mainNavigationBar.barTintColor = black
+            self.mainNavigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+            self.mainToolbar.barTintColor = black
+            self.addFavoriteButton.setImage(UIImage(named: "FavoriteAddIconDark"), for: UIControl.State.normal)
+            self.activityIndicator.activityIndicatorViewStyle = .white
+        }
+    }
+    
+    func darkImageAppend() -> String
+    {
+        switch appDelegate.getCurrentTheme()
+        {
+        case .light:
+            return ""
+        case .dark:
+            return "Dark"
+        }
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle
+    {
+        switch appDelegate.getCurrentTheme()
+        {
+        case .light:
+            return .default
+        case .dark:
+            return .lightContent
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -110,6 +165,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             downloadAllData = false
         }
+        
+        setupThemeElements()
     }
     
     //MARK: - Update Routes
@@ -282,6 +339,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         mainMapView.removeAnnotations(mainMapView.annotations)
         stopAnnotations.removeAll()
         busAnnotations.removeAll()
+        vehicleIDs.removeAll()
         RouteDataManager.lastVehicleTime = nil
         
         if directionPolyline != nil
@@ -536,11 +594,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             let vehicleLocations = notification.userInfo!["vehicleLocations"] as! Array<(id: String, location: CLLocation, heading: Int)>
             for vehicleLocation in vehicleLocations
             {
-                /*if let annotation = self.busAnnotations[vehicleLocation.id]
-                 {
-                 self.mainMapView.removeAnnotation(annotation)
-                 }*/
-                
                 if let busAnnotationTuple = self.busAnnotations[vehicleLocation.id]
                 {
                     busAnnotationTuple.annotation.coordinate = vehicleLocation.location.coordinate
@@ -615,11 +668,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 
                 if stopIsFavorite
                 {
-                    addFavoriteButton.setImage(UIImage(named:  "FavoriteAddFillIcon"), for: UIControl.State.normal)
+                    addFavoriteButton.setImage(UIImage(named:  "FavoriteAddFillIcon" + darkImageAppend()), for: UIControl.State.normal)
                 }
                 else
                 {
-                    addFavoriteButton.setImage(UIImage(named: "FavoriteAddIcon"), for: UIControl.State.normal)
+                    addFavoriteButton.setImage(UIImage(named: "FavoriteAddIcon" + darkImageAppend()), for: UIControl.State.normal)
                 }
             }
         }
