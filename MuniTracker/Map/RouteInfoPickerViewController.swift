@@ -51,12 +51,12 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         case .light:
             self.routeInfoPicker.backgroundColor = offWhite
             self.favoriteButton.setImage(UIImage(named: "FavoriteIcon"), for: UIControl.State.normal)
-            self.locationButton.setImage(UIImage(named: "LocationIcon"), for: UIControl.State.normal)
+            self.locationButton.setImage(UIImage(named: "CurrentLocationIcon"), for: UIControl.State.normal)
             self.directionButton.setImage(UIImage(named: "DirectionIcon"), for: UIControl.State.normal)
         case .dark:
             self.routeInfoPicker.backgroundColor = black
             self.favoriteButton.setImage(UIImage(named: "FavoriteIconDark"), for: UIControl.State.normal)
-            self.locationButton.setImage(UIImage(named: "LocationIconDark"), for: UIControl.State.normal)
+            self.locationButton.setImage(UIImage(named: "CurrentLocationIconDark"), for: UIControl.State.normal)
             self.directionButton.setImage(UIImage(named: "DirectionIconDark"), for: UIControl.State.normal)
         }
     }

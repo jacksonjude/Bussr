@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             firstLaunch = true
             UserDefaults.standard.set(618, forKey: "firstLaunch")
             
-            UserDefaults.standard.set(ThemeType.dark.rawValue, forKey: "theme")
+            UserDefaults.standard.set(ThemeType.light.rawValue, forKey: "theme")
         }
                         
         return true
@@ -112,7 +112,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func getCurrentTheme() -> ThemeType
     {
-        return (UserDefaults.standard.object(forKey: "theme") as? Int).map { ThemeType(rawValue: $0) ?? .dark } ?? .dark
+        return (UserDefaults.standard.object(forKey: "theme") as? Int).map { ThemeType(rawValue: $0) ?? .light } ?? .light
     }
 
 }

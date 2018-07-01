@@ -40,6 +40,14 @@ class SettingsViewController: UIViewController
     
     override func viewDidLoad() {
         setupThemeElements()
+        
+        setThemeButtonTitle(themeType: appDelegate.getCurrentTheme())
+        
+        let favoritesSortType: FavoritesSortType = (UserDefaults.standard.object(forKey: "FavoritesSortType") as? Int).map { FavoritesSortType(rawValue: $0) ?? .location } ?? .location
+        let locationSortType: LocationSortType = (UserDefaults.standard.object(forKey: "LocationSortType") as? Int).map { LocationSortType(rawValue: $0)  ?? .selectClosest } ?? .selectClosest
+        
+        setFavoritesSortedByButtonTitle(favoritesSortType: favoritesSortType)
+        setLocationSortTypeButtonTitle(locationSortType: locationSortType)
     }
     
     func setupThemeElements()
@@ -180,7 +188,7 @@ class SettingsViewController: UIViewController
     }
     
     @IBAction func toggleTheme(_ sender: Any) {
-        let theme: ThemeType = (UserDefaults.standard.object(forKey: "theme") as? Int).map { ThemeType(rawValue: $0)  ?? .dark } ?? .dark
+        let theme: ThemeType = (UserDefaults.standard.object(forKey: "theme") as? Int).map { ThemeType(rawValue: $0)  ?? .light } ?? .light
         
         switch theme
         {
