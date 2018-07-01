@@ -407,10 +407,26 @@ class RouteDataManager
         DispatchQueue.global(qos: .background).async {
             if let direction = getCurrentDirection(), let stop = getCurrentStop(), let route = direction.route
             {
-                getXMLFromSource("predictions", ["a":agencyTag,"s":stop.stopTag!,"r":route.routeTag!]) { (xmlBody) in
-                    if xmlBody != nil
+                getJSONFromSource("predictions", ["a":agencyTag,"s":stop.stopTag!,"r":route.routeTag!]) { (json) in
+                    if let json = json
                     {
-                        for child in xmlBody!.children
+                        let predictionsMain = json["predictions"] as? Dictionary<String,Any> ?? [:]
+                        
+                        let predictionsDictionary = (predictionsMain["direction"] as? Dictionary<String,Any> ?? [:])["prediction"] as? Array<Dictionary<String,String>> ?? []
+                        
+                        var predictions = Array<String>()
+                        var vehicles = Array<String>()
+                        
+                        for prediction in predictionsDictionary
+                        {
+                            predictions.append(prediction["minutes"] ?? "nil")
+                            vehicles.append(prediction["vehicle"]!)
+                        }
+                        
+                        NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictions,"vehicleIDs":vehicles])
+                        
+                        
+                        /*for child in xmlBody!.children
                         {
                             if child.element?.text != "\n" && child.element?.name == "predictions"
                             {
@@ -431,7 +447,7 @@ class RouteDataManager
                                 
                                 NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictions,"vehicleIDs":vehicles])
                             }
-                        }
+                        }*/
                     }
                     else
                     {
@@ -464,34 +480,50 @@ class RouteDataManager
         DispatchQueue.global(qos: .background).async {
             if let direction = getCurrentDirection(), let route = direction.route
             {
-                getXMLFromSource("vehicleLocations", ["a":agencyTag,"r":route.routeTag!,"t":lastVehicleTime ?? "0"]) { (xmlBody) in
-                    if xmlBody != nil
+                getJSONFromSource("vehicleLocations", ["a":agencyTag,"r":route.routeTag!,"t":lastVehicleTime ?? "0"]) { (json) in
+                    guard let json = json else { return }
+                    
+                    let vehicles = json["vehicle"] as? Array<Dictionary<String,String>> ?? []
+                    
+                    var vehiclesInDirection = Array<(id: String, location: CLLocation, heading: Int)>()
+                    
+                    for vehicle in vehicles
                     {
-                        var vehiclesInDirection = Array<(id: String, location: CLLocation, heading: Int)>()
-                        for child in xmlBody!.children
+                        if vehicleIDs.contains(vehicle["id"]!)
                         {
-                            if child.element?.text != "\n" && child.element?.name == "vehicle"
+                            let id = vehicle["id"]!
+                            let lat = Double(vehicle["lat"]!) ?? 0
+                            let lon = Double(vehicle["lon"]!) ?? 0
+                            let location = CLLocation(latitude: lat, longitude: lon)
+                            let heading = Int(vehicle["heading"]!) ?? 0
+                            
+                            vehiclesInDirection.append((id: id, location: location, heading: heading))
+                        }
+                    }
+                    
+                    /*for child in xmlBody!.children
+                    {
+                        if child.element?.text != "\n" && child.element?.name == "vehicle"
+                        {
+                            //if child.element?.allAttributes["dirTag"]?.text == direction.directionTag
+                            if vehicleIDs.contains(child.element!.allAttributes["id"]!.text)
                             {
-                                //if child.element?.allAttributes["dirTag"]?.text == direction.directionTag
-                                if vehicleIDs.contains(child.element!.allAttributes["id"]!.text)
-                                {
-                                    let id = child.element!.allAttributes["id"]!.text
-                                    let lat = Double(child.element!.allAttributes["lat"]!.text) ?? 0
-                                    let lon = Double(child.element!.allAttributes["lon"]!.text) ?? 0
-                                    let location = CLLocation(latitude: lat, longitude: lon)
-                                    let heading = Int(child.element!.allAttributes["heading"]!.text) ?? 0
-                                    
-                                    vehiclesInDirection.append((id: id, location: location, heading: heading))
-                                }
-                            }
-                            else if child.element?.text != "\n" && child.element?.name == "lastTime"
-                            {
-                                //lastVehicleTime = child.element?.allAttributes["time"]?.text
+                                let id = child.element!.allAttributes["id"]!.text
+                                let lat = Double(child.element!.allAttributes["lat"]!.text) ?? 0
+                                let lon = Double(child.element!.allAttributes["lon"]!.text) ?? 0
+                                let location = CLLocation(latitude: lat, longitude: lon)
+                                let heading = Int(child.element!.allAttributes["heading"]!.text) ?? 0
+                                
+                                vehiclesInDirection.append((id: id, location: location, heading: heading))
                             }
                         }
-                        
-                        NotificationCenter.default.post(name: NSNotification.Name("FoundVehicleLocations:" + returnUUID), object: nil, userInfo: ["vehicleLocations":vehiclesInDirection])
-                    }
+                        else if child.element?.text != "\n" && child.element?.name == "lastTime"
+                        {
+                            //lastVehicleTime = child.element?.allAttributes["time"]?.text
+                        }
+                    }*/
+                    
+                    NotificationCenter.default.post(name: NSNotification.Name("FoundVehicleLocations:" + returnUUID), object: nil, userInfo: ["vehicleLocations":vehiclesInDirection])
                 }
             }
         }
