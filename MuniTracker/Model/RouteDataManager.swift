@@ -235,48 +235,6 @@ class RouteDataManager
                 routeDirectionsArray[direction["tag"] as! String] = routeDirectionDictionary
             }
             
-            /*for routePart in bodyChild.children
-            {
-                if routePart.element?.text != "\n" && routePart.element?.name == "stop"
-                {
-                    var routeStopDictionary = Dictionary<String,String>()
-                    
-                    let attributesToSet = ["title", "shortTitle", "lon", "lat", "stopId"]
-                    
-                    for attribute in attributesToSet
-                    {
-                        routeStopDictionary[attribute] = routePart.element?.allAttributes[attribute]?.text
-                    }
-                    
-                    routeStopsArray[routePart.element!.allAttributes["tag"]!.text] = routeStopDictionary
-                }
-                else if routePart.element?.text != "\n" && routePart.element?.name == "direction"
-                {
-                    var routeDirectionDictionary = Dictionary<String,Any>()
-                    
-                    let attributesToSet = ["title", "name"]
-                    
-                    for attribute in attributesToSet
-                    {
-                        routeDirectionDictionary[attribute] = routePart.element?.allAttributes[attribute]?.text
-                    }
-                    
-                    var directionStops = Array<String>()
-                    
-                    for directionStop in routePart.children
-                    {
-                        if directionStop.element?.text != "\n" && directionStop.element?.name == "stop"
-                        {
-                            directionStops.append(directionStop.element!.allAttributes["tag"]!.text)
-                        }
-                    }
-                    
-                    routeDirectionDictionary["stops"] = directionStops
-                    
-                    routeDirectionsArray[routePart.element!.allAttributes["tag"]!.text] = routeDirectionDictionary
-                }
-            }*/
-            
             routeInfoDictionary = Dictionary<String,Dictionary<String,Dictionary<String,Any>>>()
             routeInfoDictionary!["stops"] = routeStopsArray
             routeInfoDictionary!["directions"] = routeDirectionsArray
@@ -424,30 +382,6 @@ class RouteDataManager
                         }
                         
                         NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictions,"vehicleIDs":vehicles])
-                        
-                        
-                        /*for child in xmlBody!.children
-                        {
-                            if child.element?.text != "\n" && child.element?.name == "predictions"
-                            {
-                                var predictions = Array<String>()
-                                var vehicles = Array<String>()
-                                
-                                for directionInfo in child.children
-                                {
-                                    for prediction in directionInfo.children
-                                    {
-                                        predictions.append(prediction.element?.allAttributes["minutes"]?.text ?? "nil")
-                                        vehicles.append(prediction.element!.allAttributes["vehicle"]!.text)
-                                    }
-                                }
-                                
-                                predictions = Array(predictions.prefix(maxPredictions))
-                                vehicles = Array(vehicles.prefix(maxPredictions))
-                                
-                                NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictions,"vehicleIDs":vehicles])
-                            }
-                        }*/
                     }
                     else
                     {
@@ -500,28 +434,6 @@ class RouteDataManager
                             vehiclesInDirection.append((id: id, location: location, heading: heading))
                         }
                     }
-                    
-                    /*for child in xmlBody!.children
-                    {
-                        if child.element?.text != "\n" && child.element?.name == "vehicle"
-                        {
-                            //if child.element?.allAttributes["dirTag"]?.text == direction.directionTag
-                            if vehicleIDs.contains(child.element!.allAttributes["id"]!.text)
-                            {
-                                let id = child.element!.allAttributes["id"]!.text
-                                let lat = Double(child.element!.allAttributes["lat"]!.text) ?? 0
-                                let lon = Double(child.element!.allAttributes["lon"]!.text) ?? 0
-                                let location = CLLocation(latitude: lat, longitude: lon)
-                                let heading = Int(child.element!.allAttributes["heading"]!.text) ?? 0
-                                
-                                vehiclesInDirection.append((id: id, location: location, heading: heading))
-                            }
-                        }
-                        else if child.element?.text != "\n" && child.element?.name == "lastTime"
-                        {
-                            //lastVehicleTime = child.element?.allAttributes["time"]?.text
-                        }
-                    }*/
                     
                     NotificationCenter.default.post(name: NSNotification.Name("FoundVehicleLocations:" + returnUUID), object: nil, userInfo: ["vehicleLocations":vehiclesInDirection])
                 }

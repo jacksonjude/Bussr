@@ -424,8 +424,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             let busImageSize = headingAnnotation.busAnnotationViewImageSize ?? UIImage(named: "BusAnnotation")!.size
             
-            let xOffset = (busImageSize.width/2+(headingImage.size.height/2)*1.5) * cos(UIImage.degreesToRadians(degrees: CGFloat(headingAnnotation.headingValue - 90)))
-            let yOffset = (busImageSize.width/2+(headingImage.size.height/2)*1.5) * sin(UIImage.degreesToRadians(degrees: CGFloat(headingAnnotation.headingValue - 90)))
+            let xOffset = (busImageSize.width/2+(headingImage.size.height/2)*2) * cos(UIImage.degreesToRadians(degrees: CGFloat(headingAnnotation.headingValue - 90)))
+            let yOffset = (busImageSize.width/2+(headingImage.size.height/2)*2) * sin(UIImage.degreesToRadians(degrees: CGFloat(headingAnnotation.headingValue - 90)))
             
             let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: nil)
             annotationView.centerOffset = CGPoint(x: xOffset, y: yOffset - busImageSize.height/2)
