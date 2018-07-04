@@ -52,6 +52,43 @@ extension CLLocationCoordinate2D {
     }
 }
 
+/*extension Dictionary.Keys
+{
+    var array: [Key] {
+        var keyArray = Array<Key>()
+        for key in self
+        {
+            keyArray.append(key)
+        }
+        return keyArray
+    }
+}
+
+extension Dictionary.Values
+{
+    var array: [Value] {
+        var valueArray = Array<Value>()
+        for value in self
+        {
+            valueArray.append(value)
+        }
+        return valueArray
+    }
+}
+
+extension Dictionary
+{
+    mutating func setKeysValues(keys: [Key], values: [Value])
+    {
+        var numOn = 0
+        for key in keys
+        {
+            self[key] = values[numOn]
+            numOn += 1
+        }
+    }
+}*/
+
 class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var mainMapView: MKMapView!
@@ -78,6 +115,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     var directionPolyline: MKPolyline?
     var busAnnotations = Dictionary<String,(annotation: BusAnnotation, annotationView: MKAnnotationView?)>()
     var vehicleIDs = Array<String>()
+    var predictions = Array<String>()
     var selectedStopHeading: SelectedStopHeadingAnnotation?
     var selectedVehicleID: String?
     
@@ -103,6 +141,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         }
         
         setupThemeElements()
+        
+        appDelegate.updateAppIcon()
     }
     
     func setupThemeElements()
@@ -520,7 +560,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-        if let _ = view.annotation as? BusAnnotation
+        if view.annotation is BusAnnotation
         {
             selectedVehicleID = nil
         }
@@ -597,6 +637,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     {
         let vehicleLocationsReturnUUID = UUID().uuidString
         NotificationCenter.default.addObserver(self, selector: #selector(receiveVehicleLocations(_:)), name: NSNotification.Name("FoundVehicleLocations:" + vehicleLocationsReturnUUID), object: nil)
+        
         RouteDataManager.fetchVehicleLocations(returnUUID: vehicleLocationsReturnUUID, vehicleIDs: vehicleIDs)
     }
     
@@ -649,19 +690,21 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             OperationQueue.main.addOperation {
                 self.predictionTimesLabel.text = predictionsString
             }
+            
+            self.predictions = predictions
+            
+            if let vehicleIDs = notification.userInfo!["vehicleIDs"] as? Array<String>
+            {
+                self.vehicleIDs = vehicleIDs
+                
+                NotificationCenter.default.post(name: NSNotification.Name("FetchVehicleLocations"), object: nil)
+            }
         }
         else if let error = notification.userInfo!["error"] as? String
         {
             OperationQueue.main.addOperation {
                 self.predictionTimesLabel.text = error
             }
-        }
-        
-        if let vehicleIDs = notification.userInfo!["vehicleIDs"] as? Array<String>
-        {
-            self.vehicleIDs = vehicleIDs
-            
-            NotificationCenter.default.post(name: NSNotification.Name("FetchVehicleLocations"), object: nil)
         }
     }
     

@@ -26,6 +26,7 @@ class SettingsViewController: UIViewController
     @IBOutlet weak var favoritesSortedByButton: UIButton!
     @IBOutlet weak var locationSortTypeButton: UIButton!
     @IBOutlet weak var themeButton: UIButton!
+    @IBOutlet weak var appIconButton: UIButton!
     
     @IBOutlet weak var mainNavigationBar: UINavigationBar!
     
@@ -48,6 +49,9 @@ class SettingsViewController: UIViewController
         
         setFavoritesSortedByButtonTitle(favoritesSortType: favoritesSortType)
         setLocationSortTypeButtonTitle(locationSortType: locationSortType)
+        
+        let appIcon = UserDefaults.standard.object(forKey: "AppIcon") as? Int ?? 1
+        setAppIconButtonTitle(appIcon: appIcon)
     }
     
     func setupThemeElements()
@@ -157,7 +161,7 @@ class SettingsViewController: UIViewController
         self.present(deletionAlertView, animated: true, completion: nil)
     }
     
-    //MARK: - Filter Config
+    //MARK: - Other Buttons
     
     @IBAction func toggleFavoritesSortType(_ sender: Any) {
         let favoritesSortType: FavoritesSortType = (UserDefaults.standard.object(forKey: "FavoritesSortType") as? Int).map { FavoritesSortType(rawValue: $0) ?? .location } ?? .location
@@ -203,6 +207,24 @@ class SettingsViewController: UIViewController
         setupThemeElements()
     }
     
+    @IBAction func toggleAppIcon(_ sender: Any) {
+        let appIcon = UserDefaults.standard.object(forKey: "AppIcon") as? Int ?? 1
+        
+        switch appIcon
+        {
+        case 1:
+            UserDefaults.standard.set(2, forKey: "AppIcon")
+            setAppIconButtonTitle(appIcon: 2)
+        case 2:
+            UserDefaults.standard.set(1, forKey: "AppIcon")
+            setAppIconButtonTitle(appIcon: 1)
+        default:
+            break
+        }
+        
+        appDelegate.updateAppIcon()
+    }
+    
     func setFavoritesSortedByButtonTitle(favoritesSortType: FavoritesSortType)
     {
         switch favoritesSortType
@@ -234,5 +256,10 @@ class SettingsViewController: UIViewController
         case .dark:
             themeButton.setTitle("Theme - " + "Dark", for: UIControl.State.normal)
         }
+    }
+    
+    func setAppIconButtonTitle(appIcon: Int)
+    {
+        appIconButton.setTitle("AppIcon - " + String(appIcon), for: UIControl.State.normal)
     }
 }

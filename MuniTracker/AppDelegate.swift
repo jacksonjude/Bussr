@@ -114,6 +114,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     {
         return (UserDefaults.standard.object(forKey: "theme") as? Int).map { ThemeType(rawValue: $0) ?? .light } ?? .light
     }
+    
+    func updateAppIcon()
+    {
+        switch UserDefaults.standard.object(forKey: "AppIcon") as? Int ?? 1
+        {
+        case 1:
+            UIApplication.shared.setAlternateIconName(nil) { (error) in
+                if error != nil
+                {
+                    print(error!.localizedDescription)
+                }
+            }
+        case 2:
+            UIApplication.shared.setAlternateIconName("AppIcon-2") { (error) in
+                if error != nil
+                {
+                    print(error!.localizedDescription)
+                }
+            }
+        default:
+            break
+        }
+    }
 
 }
 

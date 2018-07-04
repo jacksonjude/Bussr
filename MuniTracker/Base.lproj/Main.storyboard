@@ -198,7 +198,7 @@
                                 </items>
                             </navigationBar>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SJv-iR-MC2">
-                                <rect key="frame" x="0.0" y="232" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="289" width="375" height="50"/>
                                 <color key="backgroundColor" white="0.90225505665557026" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="Wmo-2L-E0x"/>
@@ -209,7 +209,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zca-7o-oA7">
-                                <rect key="frame" x="0.0" y="290" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="347" width="375" height="50"/>
                                 <color key="backgroundColor" white="0.90225505669999995" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="FhT-jB-Zv5"/>
@@ -221,7 +221,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8t1-xO-Kof">
-                                <rect key="frame" x="0.0" y="399" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="456" width="375" height="50"/>
                                 <color key="backgroundColor" white="0.90225505669999995" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="ee7-UR-hwl"/>
@@ -232,7 +232,7 @@
                                 </connections>
                             </button>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yIH-yr-zYm">
-                                <rect key="frame" x="0.0" y="457" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="514" width="375" height="50"/>
                                 <color key="backgroundColor" white="0.90225505669999995" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="5Gn-es-juI"/>
@@ -243,7 +243,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Manage Route Data" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pug-9z-DTI">
-                                <rect key="frame" x="93.5" y="203" width="188" height="21"/>
+                                <rect key="frame" x="93.5" y="260" width="188" height="21"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="UNr-qJ-Juo"/>
@@ -276,7 +276,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Filter Config" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="06f-ly-ef9">
-                                <rect key="frame" x="127.5" y="370" width="120" height="21"/>
+                                <rect key="frame" x="127.5" y="427" width="120" height="21"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="EZ1-K2-K0r"/>
@@ -286,6 +286,17 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="94b-MH-tG0">
+                                <rect key="frame" x="0.0" y="181" width="375" height="50"/>
+                                <color key="backgroundColor" white="0.90225505669999995" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="KPd-uS-9sa"/>
+                                </constraints>
+                                <state key="normal" title="App Icon - 1"/>
+                                <connections>
+                                    <action selector="toggleAppIcon:" destination="GPV-yC-TYY" eventType="touchUpInside" id="2rm-Q3-JQ9"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -293,8 +304,11 @@
                             <constraint firstItem="yIH-yr-zYm" firstAttribute="top" secondItem="8t1-xO-Kof" secondAttribute="bottom" constant="8" id="9gq-3d-K65"/>
                             <constraint firstItem="Zca-7o-oA7" firstAttribute="leading" secondItem="Geo-jd-vwe" secondAttribute="leading" id="BQz-Zc-vo4"/>
                             <constraint firstItem="06f-ly-ef9" firstAttribute="centerX" secondItem="xhN-MR-iBl" secondAttribute="centerX" id="D2n-XR-9nu"/>
+                            <constraint firstItem="94b-MH-tG0" firstAttribute="top" secondItem="MGo-XK-8RR" secondAttribute="bottom" constant="8" id="G8t-Uo-A3c"/>
+                            <constraint firstItem="94b-MH-tG0" firstAttribute="trailing" secondItem="Geo-jd-vwe" secondAttribute="trailing" id="Hdt-X2-VcO"/>
                             <constraint firstItem="pug-9z-DTI" firstAttribute="centerX" secondItem="xhN-MR-iBl" secondAttribute="centerX" id="KwT-Ai-p82"/>
                             <constraint firstItem="8t1-xO-Kof" firstAttribute="leading" secondItem="Geo-jd-vwe" secondAttribute="leading" id="N8q-Ct-VJP"/>
+                            <constraint firstItem="94b-MH-tG0" firstAttribute="leading" secondItem="Geo-jd-vwe" secondAttribute="leading" id="Q89-sQ-tBR"/>
                             <constraint firstItem="Zca-7o-oA7" firstAttribute="trailing" secondItem="Geo-jd-vwe" secondAttribute="trailing" id="QWd-7e-YFF"/>
                             <constraint firstItem="J98-vJ-ZgX" firstAttribute="top" secondItem="cYB-N8-WJX" secondAttribute="bottom" constant="30" id="VD6-GU-2NW"/>
                             <constraint firstItem="Zca-7o-oA7" firstAttribute="top" secondItem="SJv-iR-MC2" secondAttribute="bottom" constant="8" id="VJU-aI-dgy"/>
@@ -303,7 +317,7 @@
                             <constraint firstItem="yIH-yr-zYm" firstAttribute="leading" secondItem="Geo-jd-vwe" secondAttribute="leading" id="cbs-ai-Bdq"/>
                             <constraint firstItem="8t1-xO-Kof" firstAttribute="trailing" secondItem="Geo-jd-vwe" secondAttribute="trailing" id="dPZ-Zc-X17"/>
                             <constraint firstItem="MGo-XK-8RR" firstAttribute="top" secondItem="J98-vJ-ZgX" secondAttribute="bottom" constant="8" id="g50-lz-4jX"/>
-                            <constraint firstItem="pug-9z-DTI" firstAttribute="top" secondItem="MGo-XK-8RR" secondAttribute="bottom" constant="30" id="ivU-Am-AMn"/>
+                            <constraint firstItem="pug-9z-DTI" firstAttribute="top" secondItem="94b-MH-tG0" secondAttribute="bottom" constant="29" id="ivU-Am-AMn"/>
                             <constraint firstItem="MGo-XK-8RR" firstAttribute="trailing" secondItem="Geo-jd-vwe" secondAttribute="trailing" id="mYH-Vg-bbS"/>
                             <constraint firstItem="8t1-xO-Kof" firstAttribute="top" secondItem="06f-ly-ef9" secondAttribute="bottom" constant="8" id="qUn-ao-DqH"/>
                             <constraint firstItem="yIH-yr-zYm" firstAttribute="trailing" secondItem="Geo-jd-vwe" secondAttribute="trailing" id="qZa-JL-kX4"/>
@@ -317,6 +331,7 @@
                         <viewLayoutGuide key="safeArea" id="Geo-jd-vwe"/>
                     </view>
                     <connections>
+                        <outlet property="appIconButton" destination="94b-MH-tG0" id="Enh-y5-zYV"/>
                         <outlet property="favoritesSortedByButton" destination="yIH-yr-zYm" id="kFO-fX-lum"/>
                         <outlet property="filterConfigLabel" destination="06f-ly-ef9" id="A7P-Fl-xO6"/>
                         <outlet property="generalLabel" destination="J98-vJ-ZgX" id="Hnp-GT-uxc"/>
