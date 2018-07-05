@@ -16,6 +16,8 @@ class MapState: NSObject
         case none
         case direction
         case stop
+        case otherDirections
+        case vehicles
     }
     
     static var routeInfoShowing: RouteInfoType = .none

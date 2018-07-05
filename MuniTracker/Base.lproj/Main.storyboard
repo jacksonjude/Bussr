@@ -68,17 +68,6 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PSx-ff-C8w">
-                                <rect key="frame" x="331" y="70" width="32" height="32"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="32" id="R2a-WJ-4cz"/>
-                                    <constraint firstAttribute="height" constant="32" id="chU-qR-LiJ"/>
-                                </constraints>
-                                <state key="normal" image="FavoriteAddIconDark"/>
-                                <connections>
-                                    <action selector="addFavoriteButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7XN-hi-GUc"/>
-                                </connections>
-                            </button>
                             <activityIndicatorView hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="qgo-qY-04b">
                                 <rect key="frame" x="15" y="77" width="20" height="20"/>
                                 <constraints>
@@ -109,6 +98,12 @@
                                     <barButtonItem width="11" style="plain" systemItem="fixedSpace" id="Yjc-mT-pJ8"/>
                                     <barButtonItem image="FavoriteMenuIcon" id="5kM-u0-fk3"/>
                                     <barButtonItem systemItem="flexibleSpace" id="cnm-e2-ces"/>
+                                    <barButtonItem enabled="NO" image="FavoriteAddIcon" id="ou7-bv-Nre">
+                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <action selector="addFavoriteButtonPressed:" destination="BYZ-38-t0r" id="UBp-nw-VeX"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem enabled="NO" title="Hide" id="XQg-PL-EFo"/>
                                 </items>
                             </toolbar>
@@ -121,21 +116,29 @@
                                     <segue destination="4Mg-kq-ULL" kind="embed" id="R2f-5Y-fTt"/>
                                 </connections>
                             </containerView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H9D-HN-JaI">
+                                <rect key="frame" x="333" y="72" width="30" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="7he-ZY-2Z2"/>
+                                    <constraint firstAttribute="width" constant="30" id="emR-jD-JKE"/>
+                                </constraints>
+                                <state key="normal" image="BusIcon"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="1Gt-Fk-FGB" firstAttribute="top" secondItem="5DO-YH-hPg" secondAttribute="bottom" id="1ra-qJ-VDJ"/>
                             <constraint firstItem="1Gt-Fk-FGB" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="3NM-hA-e0F"/>
                             <constraint firstItem="Ea2-9E-S1F" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="3XA-Ct-hSF"/>
+                            <constraint firstItem="H9D-HN-JaI" firstAttribute="top" secondItem="NHQ-Gi-Nhr" secondAttribute="bottom" constant="8" id="5Ur-mN-N7l"/>
                             <constraint firstItem="yev-Ge-C71" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="7PP-Im-Eqw"/>
                             <constraint firstItem="1Gt-Fk-FGB" firstAttribute="top" secondItem="yev-Ge-C71" secondAttribute="bottom" id="9Fz-cE-Kfx"/>
                             <constraint firstItem="Ea2-9E-S1F" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="B1R-tl-dJU"/>
                             <constraint firstItem="1Gt-Fk-FGB" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="DVw-Kf-7kL"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="PSx-ff-C8w" secondAttribute="trailing" constant="12" id="FoU-d5-oSp"/>
                             <constraint firstItem="NHQ-Gi-Nhr" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="GgD-iC-bBp"/>
                             <constraint firstItem="qgo-qY-04b" firstAttribute="top" secondItem="Ea2-9E-S1F" secondAttribute="top" constant="13" id="McW-xc-rTe"/>
-                            <constraint firstItem="PSx-ff-C8w" firstAttribute="top" secondItem="Ea2-9E-S1F" secondAttribute="top" constant="6" id="NHD-76-lbd"/>
                             <constraint firstItem="NHQ-Gi-Nhr" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Q4X-Yo-Ibx"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="H9D-HN-JaI" secondAttribute="trailing" constant="12" id="Q6w-Rd-Hws"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="y4A-7Q-DBF" secondAttribute="trailing" constant="16" id="QsX-se-Sa7"/>
                             <constraint firstItem="NHQ-Gi-Nhr" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Sn5-g7-B6b"/>
                             <constraint firstItem="y4A-7Q-DBF" firstAttribute="top" secondItem="NHQ-Gi-Nhr" secondAttribute="bottom" constant="50" id="TWC-1x-U1Q"/>
@@ -149,14 +152,13 @@
                             <constraint firstItem="NHQ-Gi-Nhr" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="idi-En-4N2"/>
                             <constraint firstItem="5DO-YH-hPg" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="q6m-Os-HvH"/>
                             <constraint firstItem="5DO-YH-hPg" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="qIj-2A-rkB"/>
-                            <constraint firstItem="Ea2-9E-S1F" firstAttribute="bottom" secondItem="PSx-ff-C8w" secondAttribute="bottom" constant="6" id="sgY-QT-ASG"/>
                             <constraint firstItem="yev-Ge-C71" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="tQq-uS-KJS"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="activityIndicator" destination="qgo-qY-04b" id="9lK-9M-ccn"/>
-                        <outlet property="addFavoriteButton" destination="PSx-ff-C8w" id="GCq-GV-f38"/>
+                        <outlet property="addFavoriteButton" destination="ou7-bv-Nre" id="Wic-jd-FP3"/>
                         <outlet property="mainMapView" destination="5DO-YH-hPg" id="0m6-8a-pgb"/>
                         <outlet property="mainNavigationBar" destination="NHQ-Gi-Nhr" id="9xR-4v-MqW"/>
                         <outlet property="mainNavigationItem" destination="QLn-ub-iwV" id="hNJ-gC-s7c"/>
@@ -182,10 +184,9 @@
                         <subviews>
                             <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cYB-N8-WJX">
                                 <rect key="frame" x="0.0" y="20" width="375" height="44"/>
-                                <color key="barTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="barTintColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
                                 <textAttributes key="titleTextAttributes">
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
-                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </textAttributes>
                                 <items>
                                     <navigationItem title="Settings" id="vnP-V5-GAj">
@@ -250,7 +251,6 @@
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="188" id="Yqv-r2-w5O"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="General" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J98-vJ-ZgX">
@@ -261,7 +261,6 @@
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="cmt-l2-E3h"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MGo-XK-8RR">
@@ -283,7 +282,6 @@
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="bp7-Wi-6Xj"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="94b-MH-tG0">
@@ -298,7 +296,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="J98-vJ-ZgX" firstAttribute="centerX" secondItem="xhN-MR-iBl" secondAttribute="centerX" id="6aT-u5-baj"/>
                             <constraint firstItem="yIH-yr-zYm" firstAttribute="top" secondItem="8t1-xO-Kof" secondAttribute="bottom" constant="8" id="9gq-3d-K65"/>
@@ -356,10 +354,7 @@
                         <subviews>
                             <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w4m-0I-vaA">
                                 <rect key="frame" x="0.0" y="20" width="375" height="44"/>
-                                <color key="barTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <textAttributes key="titleTextAttributes">
-                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </textAttributes>
+                                <color key="barTintColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
                                 <items>
                                     <navigationItem title="Routes" id="Uj8-et-JFW">
                                         <barButtonItem key="leftBarButtonItem" title="Back" id="yYP-WZ-dVJ">
@@ -389,7 +384,7 @@
                                 </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="w4m-0I-vaA" firstAttribute="trailing" secondItem="otl-eN-jSg" secondAttribute="trailing" id="C4d-fF-PBt"/>
                             <constraint firstItem="zEF-xc-V9T" firstAttribute="top" secondItem="w4m-0I-vaA" secondAttribute="bottom" id="Duu-vc-Ff4"/>
@@ -501,10 +496,11 @@
         </scene>
     </scenes>
     <resources>
+        <image name="BusIcon" width="60" height="60"/>
         <image name="BusStopIcon" width="64" height="64"/>
         <image name="CurrentLocationIcon" width="64" height="64"/>
         <image name="DirectionIcon" width="64" height="64"/>
-        <image name="FavoriteAddIconDark" width="60" height="60"/>
+        <image name="FavoriteAddIcon" width="30" height="30"/>
         <image name="FavoriteIcon" width="64" height="64"/>
         <image name="FavoriteMenuIcon" width="26" height="35"/>
         <image name="RouteListIcon" width="27" height="30"/>

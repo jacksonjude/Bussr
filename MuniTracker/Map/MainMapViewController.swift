@@ -94,7 +94,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var mainMapView: MKMapView!
     @IBOutlet weak var predictionTimesNavigationBar: UINavigationBar!
     @IBOutlet weak var predictionTimesLabel: UILabel!
-    @IBOutlet weak var addFavoriteButton: UIButton!
+    @IBOutlet weak var addFavoriteButton: UIBarButtonItem!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var refreshButton: UIBarButtonItem!
     @IBOutlet weak var mainNavigationItem: UINavigationItem!
@@ -141,8 +141,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         }
         
         setupThemeElements()
-        
-        appDelegate.updateAppIcon()
     }
     
     func setupThemeElements()
@@ -160,7 +158,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             self.mainNavigationBar.barTintColor = offWhite
             self.mainNavigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
             self.mainToolbar.barTintColor = nil
-            self.addFavoriteButton.setImage(UIImage(named: "FavoriteAddIcon"), for: UIControl.State.normal)
             self.activityIndicator.activityIndicatorViewStyle = .gray
         case .dark:
             self.view.backgroundColor = black
@@ -169,7 +166,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             self.mainNavigationBar.barTintColor = black
             self.mainNavigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
             self.mainToolbar.barTintColor = black
-            self.addFavoriteButton.setImage(UIImage(named: "FavoriteAddIconDark"), for: UIControl.State.normal)
             self.activityIndicator.activityIndicatorViewStyle = .white
         }
     }
@@ -367,6 +363,12 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             setFavoriteButtonImage(inverse: false)
             
             showHidePickerButton.isEnabled = true
+        case .otherDirections:
+            //TODO
+            break
+        case .vehicles:
+            //TODO
+            break
         }
     }
     
@@ -505,7 +507,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         }
         else if let headingAnnotation = annotation as? HeadingAnnotation
         {
-            let headingImage = UIImage(named: "HeadingIndicator")!//?.imageRotatedByDegrees(deg: CGFloat(headingAnnotation.headingValue))
+            let headingImage = UIImage(named: "HeadingIndicator")!
             
             let busImageSize = headingAnnotation.busAnnotationViewImageSize ?? UIImage(named: "BusAnnotation")!.size
             
@@ -516,7 +518,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             annotationView.centerOffset = CGPoint(x: xOffset, y: yOffset - busImageSize.height/2)
             annotationView.image = headingImage
             
-            //annotationView.displayPriority = MKFeatureDisplayPriority.defaultHigh
             let t: CGAffineTransform = CGAffineTransform(rotationAngle: CGFloat(headingAnnotation.headingValue) * CGFloat.pi / 180)
             annotationView.transform = t
             
@@ -597,7 +598,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             UIView.animate(withDuration: 1) {
                 self.predictionTimesNavigationBar.isHidden = false
                 self.addFavoriteButton.isEnabled = true
-                self.addFavoriteButton.isHidden = false
+                self.addFavoriteButton.tintColor = nil
             }
         }
     }
@@ -608,7 +609,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             UIView.animate(withDuration: 1) {
                 self.predictionTimesNavigationBar.isHidden = true
                 self.addFavoriteButton.isEnabled = false
-                self.addFavoriteButton.isHidden = true
+                self.addFavoriteButton.tintColor = UIColor.clear
             }
         }
     }
@@ -792,11 +793,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 
                 if stopIsFavorite
                 {
-                    addFavoriteButton.setImage(UIImage(named:  "FavoriteAddFillIcon" + darkImageAppend()), for: UIControl.State.normal)
+                    addFavoriteButton.image = UIImage(named:  "FavoriteAddFillIcon")
                 }
                 else
                 {
-                    addFavoriteButton.setImage(UIImage(named: "FavoriteAddIcon" + darkImageAppend()), for: UIControl.State.normal)
+                    addFavoriteButton.image = UIImage(named: "FavoriteAddIcon")
                 }
             }
         }

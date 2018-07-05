@@ -117,6 +117,12 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             title = (routeInfoToChange[row] as? Direction)?.directionTitle
         case .stop:
             title = (routeInfoToChange[row] as? Stop)?.stopTitle
+        case .otherDirections:
+            //TODO
+            title = ""
+        case .vehicles:
+            //TODO
+            title = ""
         }
         
         return NSAttributedString(string: title ?? "", attributes: [NSAttributedString.Key.foregroundColor: inverseThemeColor()])
@@ -156,6 +162,12 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 routeInfoToChange = (MapState.routeInfoObject as? Direction)?.stops?.array as? Array<Stop> ?? Array<Stop>()
                 
                 enableFilterButtons()
+            case .otherDirections:
+                //TODO
+                break
+            case .vehicles:
+                //TODO
+                break
             }
             
             routeInfoPicker.reloadAllComponents()
