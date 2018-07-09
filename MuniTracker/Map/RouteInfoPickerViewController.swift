@@ -13,7 +13,7 @@ import CoreLocation
 
 class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate
 {
-    var routeInfoToChange = Array<NSManagedObject>()
+    var routeInfoToChange = Array<Any>()
     @IBOutlet weak var routeInfoPicker: UIPickerView!
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var locationButton: UIButton!
@@ -170,25 +170,27 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 break
             }
             
-            routeInfoPicker.reloadAllComponents()
-            routeInfoPicker.selectRow(0, inComponent: 0, animated: true)
+            OperationQueue.main.addOperation {
+                self.routeInfoPicker.reloadAllComponents()
+                self.routeInfoPicker.selectRow(0, inComponent: 0, animated: true)
             
-            updateSelectedObjectTags()
-            
-            if favoriteFilterEnabled
-            {
-                filterByFavorites()
-            }
-            
-            if locationFilterEnabled
-            {
-                if let currentLocation = appDelegate.mainMapViewController?.mainMapView.userLocation.location
+                self.updateSelectedObjectTags()
+                
+                if self.favoriteFilterEnabled
                 {
-                    sortStopsByCurrentLocation(location: currentLocation)
+                    self.filterByFavorites()
                 }
+                
+                if self.locationFilterEnabled
+                {
+                    if let currentLocation = appDelegate.mainMapViewController?.mainMapView.userLocation.location
+                    {
+                        self.sortStopsByCurrentLocation(location: currentLocation)
+                    }
+                }
+                
+                NotificationCenter.default.post(name: NSNotification.Name("UpdateRouteMap"), object: nil, userInfo: ["ChangingRouteInfoShowing":true])
             }
-            
-            NotificationCenter.default.post(name: NSNotification.Name("UpdateRouteMap"), object: nil, userInfo: ["ChangingRouteInfoShowing":true])
         }
         else
         {
@@ -324,21 +326,23 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             
             routeInfoToChange = favoriteStops
             
-            routeInfoPicker.reloadAllComponents()
-            
-            if locationFilterEnabled
-            {
-                if let currentLocation = appDelegate.mainMapViewController?.mainMapView.userLocation.location
+            OperationQueue.main.addOperation {
+                self.routeInfoPicker.reloadAllComponents()
+                
+                if self.locationFilterEnabled
                 {
-                    sortStopsByCurrentLocation(location: currentLocation)
+                    if let currentLocation = appDelegate.mainMapViewController?.mainMapView.userLocation.location
+                    {
+                        self.sortStopsByCurrentLocation(location: currentLocation)
+                    }
                 }
+                else
+                {
+                    self.routeInfoPicker.selectRow(0, inComponent: 0, animated: true)
+                }
+                
+                self.pickerSelectedRow()
             }
-            else
-            {
-                routeInfoPicker.selectRow(0, inComponent: 0, animated: true)
-            }
-            
-            pickerSelectedRow()
         }
     }
     
@@ -371,21 +375,23 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             
             let locationSortType: LocationSortType = (UserDefaults.standard.object(forKey: "LocationSortType") as? Int).map { LocationSortType(rawValue: $0)  ?? .selectClosest } ?? .selectClosest
             
-            switch locationSortType
-            {
-            case .fullSort:
-                routeInfoToChange = sortedStops
-                
-                routeInfoPicker.reloadAllComponents()
-                routeInfoPicker.selectRow(0, inComponent: 0, animated: true)
-            case .selectClosest:
-                if sortedStops.count > 0
+            OperationQueue.main.addOperation {
+                switch locationSortType
                 {
-                    routeInfoPicker.selectRow(routeInfoToChange.firstIndex(of: sortedStops[0]) ?? 0, inComponent: 0, animated: true)
+                case .fullSort:
+                    self.routeInfoToChange = sortedStops
+                    
+                    self.routeInfoPicker.reloadAllComponents()
+                    self.routeInfoPicker.selectRow(0, inComponent: 0, animated: true)
+                case .selectClosest:
+                    if sortedStops.count > 0
+                    {
+                        self.routeInfoPicker.selectRow(routeStops.firstIndex(of: sortedStops[0]) ?? 0, inComponent: 0, animated: true)
+                    }
                 }
+                
+                self.pickerSelectedRow()
             }
-            
-            pickerSelectedRow()
         }
     }
 }

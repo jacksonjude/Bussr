@@ -116,13 +116,16 @@
                                     <segue destination="4Mg-kq-ULL" kind="embed" id="R2f-5Y-fTt"/>
                                 </connections>
                             </containerView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H9D-HN-JaI">
-                                <rect key="frame" x="333" y="72" width="30" height="30"/>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H9D-HN-JaI">
+                                <rect key="frame" x="332" y="72" width="30" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="7he-ZY-2Z2"/>
                                     <constraint firstAttribute="width" constant="30" id="emR-jD-JKE"/>
                                 </constraints>
                                 <state key="normal" image="BusIcon"/>
+                                <connections>
+                                    <action selector="toggleVehiclesButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="haZ-97-UH2"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
@@ -138,7 +141,7 @@
                             <constraint firstItem="NHQ-Gi-Nhr" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="GgD-iC-bBp"/>
                             <constraint firstItem="qgo-qY-04b" firstAttribute="top" secondItem="Ea2-9E-S1F" secondAttribute="top" constant="13" id="McW-xc-rTe"/>
                             <constraint firstItem="NHQ-Gi-Nhr" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Q4X-Yo-Ibx"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="H9D-HN-JaI" secondAttribute="trailing" constant="12" id="Q6w-Rd-Hws"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="H9D-HN-JaI" secondAttribute="trailing" constant="13" id="Q6w-Rd-Hws"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="y4A-7Q-DBF" secondAttribute="trailing" constant="16" id="QsX-se-Sa7"/>
                             <constraint firstItem="NHQ-Gi-Nhr" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Sn5-g7-B6b"/>
                             <constraint firstItem="y4A-7Q-DBF" firstAttribute="top" secondItem="NHQ-Gi-Nhr" secondAttribute="bottom" constant="50" id="TWC-1x-U1Q"/>

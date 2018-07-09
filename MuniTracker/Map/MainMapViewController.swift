@@ -487,9 +487,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         {
             if let annotationView = busAnnotations[(annotation as! BusAnnotation).id]?.annotationView
             {
-                UIView.animate(withDuration: 1) {
-                    annotationView.annotation = annotation
-                }
+                annotationView.annotation = annotation
                 
                 return annotationView
             }
@@ -721,7 +719,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             {
                 if let busAnnotationTuple = self.busAnnotations[vehicleLocation.id]
                 {
-                    busAnnotationTuple.annotation.coordinate = vehicleLocation.location.coordinate
+                    UIView.animate(withDuration: 1, animations: {
+                        busAnnotationTuple.annotation.coordinate = vehicleLocation.location.coordinate
+                    })
                     busAnnotationTuple.annotation.heading = vehicleLocation.heading
                 }
                 else
@@ -731,9 +731,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 
                 if let annotationView = self.busAnnotations[vehicleLocation.id]?.annotationView
                 {
-                    UIView.animate(withDuration: 1) {
-                        annotationView.annotation = self.busAnnotations[vehicleLocation.id]!.annotation
-                    }
+                    annotationView.annotation = self.busAnnotations[vehicleLocation.id]!.annotation
                 }
                 else
                 {
@@ -742,13 +740,19 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 
                 if let headingAnnotation = self.busAnnotations[vehicleLocation.id]!.annotation.headingAnnotation
                 {
-                    self.mainMapView.removeAnnotation(headingAnnotation)
+                    //self.mainMapView.removeAnnotation(headingAnnotation)
+                    UIView.animate(withDuration: 1, animations: {
+                        headingAnnotation.coordinate = vehicleLocation.location.coordinate
+                    })
+                    headingAnnotation.headingValue = vehicleLocation.heading                    
                 }
-                
-                let headingAnnotation = HeadingAnnotation(coordinate: vehicleLocation.location.coordinate, heading: vehicleLocation.heading)
-                self.mainMapView.addAnnotation(headingAnnotation)
-                
-                self.busAnnotations[vehicleLocation.id]?.annotation.headingAnnotation = headingAnnotation
+                else
+                {
+                    let headingAnnotation = HeadingAnnotation(coordinate: vehicleLocation.location.coordinate, heading: vehicleLocation.heading)
+                    self.mainMapView.addAnnotation(headingAnnotation)
+                    
+                    self.busAnnotations[vehicleLocation.id]?.annotation.headingAnnotation = headingAnnotation
+                }
                 
                 annotationsToSave[vehicleLocation.id] = self.busAnnotations[vehicleLocation.id]
             }
@@ -802,6 +806,13 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             }
         }
     }
+    
+    //MARK: - Tracking
+    
+    @IBAction func toggleVehiclesButtonPressed(_ sender: Any) {
+        MapState.routeInfoShowing = .vehicles
+    }
+    
 }
 
 class StopAnnotation: NSObject, MKAnnotation
