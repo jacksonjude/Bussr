@@ -113,7 +113,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     var selectedAnnotationLocation: String?
     var stopAnnotations = Dictionary<String,StopAnnotation>()
     var directionPolyline: MKPolyline?
-    var busAnnotations = Dictionary<String,(annotation: BusAnnotation, annotationView: MKAnnotationView?)>()
+    var busAnnotations = Dictionary<String,(annotation: BusAnnotation, annotationView: MKAnnotationView?, headingAnnotationView: MKAnnotationView?)>()
     var vehicleIDs = Array<String>()
     var predictions = Array<String>()
     var selectedStopHeading: SelectedStopHeadingAnnotation?
@@ -506,20 +506,17 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         else if let headingAnnotation = annotation as? HeadingAnnotation
         {
             let headingImage = UIImage(named: "HeadingIndicator")!
-            
             let busImageSize = headingAnnotation.busAnnotationViewImageSize ?? UIImage(named: "BusAnnotation")!.size
             
-            let xOffset = (busImageSize.width/2+(headingImage.size.height/2)*2) * cos(CGFloat(headingAnnotation.headingValue - 90).degreesToRadians)
-            let yOffset = (busImageSize.width/2+(headingImage.size.height/2)*2) * sin(CGFloat(headingAnnotation.headingValue - 90).degreesToRadians)
-            
             let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: nil)
-            annotationView.centerOffset = CGPoint(x: xOffset, y: yOffset - busImageSize.height/2)
+            annotationView.centerOffset = calculateOffsetForAnnotationView(busImageSize: busImageSize, headingImageSize: headingImage.size, headingValue: headingAnnotation.headingValue)
             annotationView.image = headingImage
             
-            let t: CGAffineTransform = CGAffineTransform(rotationAngle: CGFloat(headingAnnotation.headingValue) * CGFloat.pi / 180)
-            annotationView.transform = t
+            annotationView.transform = calculateHeadingDegreeShift(headingValue: headingAnnotation.headingValue)
             
             annotationView.isEnabled = false
+            
+            self.busAnnotations[headingAnnotation.id]!.headingAnnotationView = annotationView
             
             return annotationView
         }
@@ -549,6 +546,19 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         }
         
         return nil
+    }
+    
+    func calculateOffsetForAnnotationView(busImageSize: CGSize, headingImageSize: CGSize, headingValue: Int) -> CGPoint
+    {
+        let xOffset = (busImageSize.width/2+(headingImageSize.height/2)*2) * cos(CGFloat(headingValue - 90).degreesToRadians)
+        let yOffset = (busImageSize.width/2+(headingImageSize.height/2)*2) * sin(CGFloat(headingValue - 90).degreesToRadians)
+        
+        return CGPoint(x: xOffset, y: yOffset - busImageSize.height/2)
+    }
+    
+    func calculateHeadingDegreeShift(headingValue: Int) -> CGAffineTransform
+    {
+        return CGAffineTransform(rotationAngle: CGFloat(headingValue) * CGFloat.pi / 180)
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
@@ -712,7 +722,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
         
         OperationQueue.main.addOperation {
-            var annotationsToSave = Dictionary<String,(annotation: BusAnnotation, annotationView: MKAnnotationView?)>()
+            var annotationsToSave = Dictionary<String,(annotation: BusAnnotation, annotationView: MKAnnotationView?, headingAnnotationView: MKAnnotationView?)>()
             
             let vehicleLocations = notification.userInfo!["vehicleLocations"] as! Array<(id: String, location: CLLocation, heading: Int)>
             for vehicleLocation in vehicleLocations
@@ -726,7 +736,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 }
                 else
                 {
-                    self.busAnnotations[vehicleLocation.id] = (annotation: BusAnnotation(coordinate: vehicleLocation.location.coordinate, heading: vehicleLocation.heading, id: vehicleLocation.id), annotationView: nil)
+                    self.busAnnotations[vehicleLocation.id] = (annotation: BusAnnotation(coordinate: vehicleLocation.location.coordinate, heading: vehicleLocation.heading, id: vehicleLocation.id), annotationView: nil, headingAnnotationView: nil)
                 }
                 
                 if let annotationView = self.busAnnotations[vehicleLocation.id]?.annotationView
@@ -744,11 +754,22 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                     UIView.animate(withDuration: 1, animations: {
                         headingAnnotation.coordinate = vehicleLocation.location.coordinate
                     })
-                    headingAnnotation.headingValue = vehicleLocation.heading                    
+                    headingAnnotation.headingValue = vehicleLocation.heading
+                    
+                    if let headingAnnotationView = self.busAnnotations[vehicleLocation.id]!.headingAnnotationView
+                    {
+                        let headingImage = UIImage(named: "HeadingIndicator")!
+                        let busImageSize = headingAnnotation.busAnnotationViewImageSize ?? UIImage(named: "BusAnnotation")!.size
+                        
+                        UIView.animate(withDuration: 1, animations: {
+                            headingAnnotationView.centerOffset = self.calculateOffsetForAnnotationView(busImageSize: busImageSize, headingImageSize: headingImage.size, headingValue: headingAnnotation.headingValue)
+                            headingAnnotationView.transform = self.calculateHeadingDegreeShift(headingValue: headingAnnotation.headingValue)
+                        })
+                    }
                 }
                 else
                 {
-                    let headingAnnotation = HeadingAnnotation(coordinate: vehicleLocation.location.coordinate, heading: vehicleLocation.heading)
+                    let headingAnnotation = HeadingAnnotation(coordinate: vehicleLocation.location.coordinate, heading: vehicleLocation.heading, id: vehicleLocation.id)
                     self.mainMapView.addAnnotation(headingAnnotation)
                     
                     self.busAnnotations[vehicleLocation.id]?.annotation.headingAnnotation = headingAnnotation
@@ -861,11 +882,13 @@ class HeadingAnnotation: NSObject, MKAnnotation
     var title: String?
     var subtitle: String?
     var busAnnotationViewImageSize: CGSize?
+    var id: String
     
-    init(coordinate: CLLocationCoordinate2D, heading: Int)
+    init(coordinate: CLLocationCoordinate2D, heading: Int, id: String)
     {
         self.coordinate = coordinate
         self.headingValue = heading
+        self.id = id
     }
 }
 
