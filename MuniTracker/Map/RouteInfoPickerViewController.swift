@@ -90,6 +90,11 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        if MapState.routeInfoShowing == .vehicles
+        {
+            return routeInfoToChange.count + 1
+        }
+        
         return routeInfoToChange.count
     }
     
@@ -122,7 +127,16 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             title = ""
         case .vehicles:
             //TODO
-            title = ""
+            if row == 0
+            {
+                title = "None"
+            }
+            else
+            {
+                let vehiclePrediction = (routeInfoToChange[row-1] as? (vehicleID: String, prediction: String))
+                title = String(row) + " - " + (vehiclePrediction?.prediction ?? "")
+                title! += " mins - id: " + (vehiclePrediction?.vehicleID ?? "")
+            }
         }
         
         return NSAttributedString(string: title ?? "", attributes: [NSAttributedString.Key.foregroundColor: inverseThemeColor()])
@@ -146,6 +160,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         {
             routeInfoToChange.removeAll()
             
+            var rowToSelect = 0
+            
             switch MapState.routeInfoShowing
             {
             case .none:
@@ -156,23 +172,66 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 routeInfoToChange = (MapState.routeInfoObject as? Route)?.directions?.array as? Array<Direction> ?? Array<Direction>()
                 
                 disableFilterButtons()
+                
+                var directionOn = 0
+                for direction in routeInfoToChange as! Array<Direction>
+                {
+                    if direction.directionTag == MapState.selectedDirectionTag
+                    {
+                        rowToSelect = directionOn
+                        
+                        break
+                    }
+                    
+                    directionOn += 1
+                }
             case .stop:
                 self.view.superview!.isHidden = false
                 
                 routeInfoToChange = (MapState.routeInfoObject as? Direction)?.stops?.array as? Array<Stop> ?? Array<Stop>()
                 
                 enableFilterButtons()
+                
+                var stopOn = 0
+                for stop in routeInfoToChange as! Array<Stop>
+                {
+                    if stop.stopTag == MapState.selectedStopTag
+                    {
+                        rowToSelect = stopOn
+                        
+                        break
+                    }
+                    
+                    stopOn += 1
+                }
             case .otherDirections:
                 //TODO
                 break
             case .vehicles:
                 //TODO
-                break
+                self.view.superview!.isHidden = false
+                
+                routeInfoToChange = MapState.routeInfoObject as? Array<(vehicleID: String, prediction: String)> ?? Array<(vehicleID: String, prediction: String)>()
+                
+                disableFilterButtons()
+                
+                var vehicleOn = 0
+                for vehicle in routeInfoToChange as! Array<(vehicleID: String, prediction: String)>
+                {
+                    if vehicle.vehicleID == MapState.selectedVehicleID
+                    {
+                        rowToSelect = vehicleOn + 1
+                        
+                        break
+                    }
+                    
+                    vehicleOn += 1
+                }
             }
             
             OperationQueue.main.addOperation {
                 self.routeInfoPicker.reloadAllComponents()
-                self.routeInfoPicker.selectRow(0, inComponent: 0, animated: true)
+                self.routeInfoPicker.selectRow(rowToSelect, inComponent: 0, animated: true)
             
                 self.updateSelectedObjectTags()
                 
@@ -228,7 +287,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     {
         let row = routeInfoPicker.selectedRow(inComponent: 0)
         
-        if routeInfoToChange.count > row
+        if routeInfoToChange.count > row || (MapState.routeInfoShowing == .vehicles && routeInfoToChange.count + 1 > row)
         {
             switch MapState.routeInfoShowing
             {
@@ -241,6 +300,15 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 if let stop = routeInfoToChange[row] as? Stop
                 {
                     MapState.selectedStopTag = stop.stopTag
+                }
+            case .vehicles:
+                if row == 0
+                {
+                    MapState.selectedVehicleID = nil
+                }
+                else if let vehicleID = (routeInfoToChange[row-1] as? (vehicleID: String, prediction: String))?.vehicleID
+                {
+                    MapState.selectedVehicleID = vehicleID
                 }
             default:
                 break

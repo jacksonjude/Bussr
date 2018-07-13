@@ -54,8 +54,10 @@ class RouteDataManager
             {
                 callback(json)
             }
-            
-            callback(nil)
+            else
+            {
+                callback(nil)
+            }
         }).resume()
     }
     
@@ -310,6 +312,11 @@ class RouteDataManager
         {
             return direction
         }
+        else if MapState.selectedDirectionTag != nil
+        {
+            let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", MapState.selectedDirectionTag!), moc: appDelegate.persistentContainer.viewContext).object as? Direction
+            return direction
+        }
         
         return nil
     }
@@ -370,7 +377,25 @@ class RouteDataManager
                     {
                         let predictionsMain = json["predictions"] as? Dictionary<String,Any> ?? [:]
                         
-                        let predictionsDictionary = (predictionsMain["direction"] as? Dictionary<String,Any> ?? [:])["prediction"] as? Array<Dictionary<String,String>> ?? []
+                        var directionDictionary: Dictionary<String,Any>?
+                        
+                        if let directionDictionaryTmp = predictionsMain["direction"] as? Dictionary<String,Any>
+                        {
+                            directionDictionary = directionDictionaryTmp
+                        }
+                        else if let directionArray = predictionsMain["direction"] as? Array<Dictionary<String,Any>>
+                        {
+                            for directionDictionaryTmp in directionArray
+                            {
+                                if directionDictionaryTmp["title"] as? String == direction.directionTitle
+                                {
+                                    directionDictionary = directionDictionaryTmp
+                                    break
+                                }
+                            }
+                        }
+                        
+                        let predictionsDictionary = directionDictionary?["prediction"] as? Array<Dictionary<String,String>> ?? []
                         
                         var predictions = Array<String>()
                         var vehicles = Array<String>()

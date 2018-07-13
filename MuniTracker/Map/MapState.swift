@@ -25,6 +25,7 @@ class MapState: NSObject
     
     static var selectedDirectionTag: String? = nil
     static var selectedStopTag: String? = nil
+    static var selectedVehicleID: String? = nil
     
     static var showingPickerView = false
 }

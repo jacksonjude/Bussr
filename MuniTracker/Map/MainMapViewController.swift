@@ -101,6 +101,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var mainNavigationBar: UINavigationBar!
     @IBOutlet weak var mainToolbar: UIToolbar!
     @IBOutlet weak var showHidePickerButton: UIBarButtonItem!
+    @IBOutlet weak var vehicleSelectionButton: UIButton!
     
     //37.773972
     //37.738802
@@ -159,6 +160,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             self.mainNavigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
             self.mainToolbar.barTintColor = nil
             self.activityIndicator.activityIndicatorViewStyle = .gray
+            self.vehicleSelectionButton.setImage(UIImage(named: "BusIcon" + darkImageAppend()), for: UIControl.State.normal)
         case .dark:
             self.view.backgroundColor = black
             self.predictionTimesNavigationBar.barTintColor = black
@@ -167,6 +169,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             self.mainNavigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
             self.mainToolbar.barTintColor = black
             self.activityIndicator.activityIndicatorViewStyle = .white
+            self.vehicleSelectionButton.setImage(UIImage(named: "BusIcon" + darkImageAppend()), for: UIControl.State.normal)
         }
     }
     
@@ -303,7 +306,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         mainMapView.setRegion(MKCoordinateRegion(center: offsetCoordinate, latitudinalMeters: range, longitudinalMeters: range), animated: !willChangeRange)
     }
     
-    @objc func updateMap(notification: Notification)
+    @objc func updateMap(notification: Notification?)
     {
         switch MapState.routeInfoShowing
         {
@@ -335,7 +338,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             showHidePickerButton.isEnabled = true
         case .stop:
-            let changingRouteInfoShowing = notification.userInfo!["ChangingRouteInfoShowing"] as! Bool
+            let changingRouteInfoShowing = notification?.userInfo?["ChangingRouteInfoShowing"] as? Bool ?? true
             
             if let stop = RouteDataManager.getCurrentStop()
             {
@@ -368,7 +371,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             break
         case .vehicles:
             //TODO
-            break
+            
+            reloadPredictionTimesLabel()
         }
     }
     
@@ -607,6 +611,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 self.predictionTimesNavigationBar.isHidden = false
                 self.addFavoriteButton.isEnabled = true
                 self.addFavoriteButton.tintColor = nil
+                self.vehicleSelectionButton.isEnabled = true
+                self.vehicleSelectionButton.isHidden = false
             }
         }
     }
@@ -618,6 +624,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 self.predictionTimesNavigationBar.isHidden = true
                 self.addFavoriteButton.isEnabled = false
                 self.addFavoriteButton.tintColor = UIColor.clear
+                self.vehicleSelectionButton.isEnabled = false
+                self.vehicleSelectionButton.isHidden = true
             }
         }
     }
@@ -662,44 +670,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         
         if let predictions = notification.userInfo!["predictions"] as? Array<String>
         {
-            var predictionsString = ""
-            var predictionOn = 0
-            
-            for prediction in predictions
-            {
-                if predictionOn != 0
-                {
-                    predictionsString += ", "
-                }
-                
-                if prediction == "0"
-                {
-                    predictionsString += "Now"
-                }
-                else
-                {
-                    predictionsString += prediction
-                }
-                
-                predictionOn += 1
-            }
-            
-            if predictions.count > 0
-            {
-                if predictions.count > 1 || predictions[0] != "0"
-                {
-                    predictionsString += " mins"
-                }
-            }
-            else
-            {
-                predictionsString = "No Predictions"
-            }
-            
-            OperationQueue.main.addOperation {
-                self.predictionTimesLabel.text = predictionsString
-            }
-            
             self.predictions = predictions
             
             if let vehicleIDs = notification.userInfo!["vehicleIDs"] as? Array<String>
@@ -708,11 +678,72 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 
                 NotificationCenter.default.post(name: NSNotification.Name("FetchVehicleLocations"), object: nil)
             }
+            
+            reloadPredictionTimesLabel()
         }
         else if let error = notification.userInfo!["error"] as? String
         {
             OperationQueue.main.addOperation {
                 self.predictionTimesLabel.text = error
+            }
+        }
+    }
+    
+    func reloadPredictionTimesLabel()
+    {
+        var predictionsString = ""
+        var predictionOn = 0
+        
+        var selectedVehicleRange: NSRange?
+        
+        for prediction in self.predictions
+        {
+            if predictionOn != 0
+            {
+                predictionsString += ", "
+            }
+            
+            if self.vehicleIDs.count > predictionOn && self.vehicleIDs[predictionOn] == MapState.selectedVehicleID && selectedVehicleRange == nil
+            {
+                selectedVehicleRange = NSRange(location: predictionsString.count, length: prediction.count)
+            }
+            
+            if prediction == "0"
+            {
+                selectedVehicleRange = NSRange(location: predictionsString.count, length: 3)
+                predictionsString += "Now"
+            }
+            else
+            {
+                predictionsString += prediction
+            }
+            
+            predictionOn += 1
+        }
+        
+        if predictions.count > 0
+        {
+            if predictions.count > 1 || predictions[0] != "0"
+            {
+                predictionsString += " mins"
+            }
+        }
+        else
+        {
+            predictionsString = "No Predictions"
+        }
+        
+        OperationQueue.main.addOperation {
+            if selectedVehicleRange != nil
+            {
+                let predictionsAttributedString = NSMutableAttributedString(string: predictionsString, attributes: [:])
+                predictionsAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor(red: 0, green: 0.5, blue: 1, alpha: 1), range: selectedVehicleRange!)
+                self.predictionTimesLabel.attributedText = predictionsAttributedString
+            }
+            else
+            {
+                self.predictionTimesLabel.attributedText = nil
+                self.predictionTimesLabel.text = predictionsString
             }
         }
     }
@@ -762,6 +793,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                         let busImageSize = headingAnnotation.busAnnotationViewImageSize ?? UIImage(named: "BusAnnotation")!.size
                         
                         UIView.animate(withDuration: 1, animations: {
+                            headingAnnotationView.centerOffset = CGPoint(x: 0, y: 0)
                             headingAnnotationView.centerOffset = self.calculateOffsetForAnnotationView(busImageSize: busImageSize, headingImageSize: headingImage.size, headingValue: headingAnnotation.headingValue)
                             headingAnnotationView.transform = self.calculateHeadingDegreeShift(headingValue: headingAnnotation.headingValue)
                         })
@@ -831,7 +863,27 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     //MARK: - Tracking
     
     @IBAction func toggleVehiclesButtonPressed(_ sender: Any) {
-        MapState.routeInfoShowing = .vehicles
+        if MapState.routeInfoShowing != .vehicles && vehicleIDs.count == predictions.count
+        {
+            var predictionVehicleArray = Array<(vehicleID: String, prediction: String)>()
+            
+            var vehicleOn = 0
+            while vehicleOn < vehicleIDs.count
+            {
+                predictionVehicleArray.append((vehicleID: vehicleIDs[vehicleOn], prediction: predictions[vehicleOn]))
+                vehicleOn += 1
+            }
+            
+            MapState.routeInfoObject = predictionVehicleArray
+            MapState.routeInfoShowing = .vehicles
+        }
+        else if MapState.routeInfoShowing == .vehicles
+        {
+            MapState.routeInfoObject = RouteDataManager.getCurrentDirection()
+            MapState.routeInfoShowing = .stop
+        }
+        
+        NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
     }
     
 }
