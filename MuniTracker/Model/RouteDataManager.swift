@@ -308,10 +308,6 @@ class RouteDataManager
             
             return direction
         }
-        else if let direction = MapState.routeInfoObject as? Direction
-        {
-            return direction
-        }
         else if MapState.selectedDirectionTag != nil
         {
             let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", MapState.selectedDirectionTag!), moc: appDelegate.persistentContainer.viewContext).object as? Direction

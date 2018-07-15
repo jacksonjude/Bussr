@@ -316,6 +316,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             hidePredictionNavigationBar()
             
             showHidePickerButton.isEnabled = false
+            
+            mainNavigationItem.title = "Map"
         case .direction:
             reloadAllAnnotations()
             
@@ -324,6 +326,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             hidePredictionNavigationBar()
             
             showHidePickerButton.isEnabled = true
+            
+            mainNavigationItem.title = RouteDataManager.getCurrentDirection()?.route?.routeTitle
         case .stop:
             let changingRouteInfoShowing = notification?.userInfo?["ChangingRouteInfoShowing"] as? Bool ?? true
             
@@ -353,13 +357,23 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             setFavoriteButtonImage(inverse: false)
             
             showHidePickerButton.isEnabled = true
+            
+            mainNavigationItem.title = RouteDataManager.getCurrentDirection()?.route?.routeTitle
         case .otherDirections:
             //TODO
-            break
+            reloadAllAnnotations()
+            
+            centerMapOnLocation(location: initialLocation, range: 15000)
+            
+            hidePredictionNavigationBar()
+            
+            mainNavigationItem.title = RouteDataManager.getCurrentDirection()?.route?.routeTitle
         case .vehicles:
             //TODO
             
             reloadPredictionTimesLabel()
+            
+            mainNavigationItem.title = RouteDataManager.getCurrentDirection()?.route?.routeTitle
         }
     }
     

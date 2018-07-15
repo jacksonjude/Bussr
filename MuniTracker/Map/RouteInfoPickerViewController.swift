@@ -18,6 +18,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var locationButton: UIButton!
     @IBOutlet weak var directionButton: UIButton!
+    @IBOutlet weak var otherDirectionsButton: UIButton!
     
     var favoriteFilterEnabled = false
     var locationFilterEnabled = false
@@ -56,11 +57,13 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             self.favoriteButton.setImage(UIImage(named: "Favorite" + favoriteFillAppend() + "Icon"), for: UIControl.State.normal)
             self.locationButton.setImage(UIImage(named: "CurrentLocation" + locationFillAppend() + "Icon"), for: UIControl.State.normal)
             self.directionButton.setImage(UIImage(named: "DirectionIcon"), for: UIControl.State.normal)
+            self.otherDirectionsButton.setImage(UIImage(named: "BusStopIcon"), for: UIControl.State.normal)
         case .dark:
             self.routeInfoPicker.backgroundColor = black
             self.favoriteButton.setImage(UIImage(named: "Favorite" + favoriteFillAppend() + "IconDark"), for: UIControl.State.normal)
             self.locationButton.setImage(UIImage(named: "CurrentLocation" + locationFillAppend() + "IconDark"), for: UIControl.State.normal)
             self.directionButton.setImage(UIImage(named: "DirectionIconDark"), for: UIControl.State.normal)
+            self.otherDirectionsButton.setImage(UIImage(named: "BusStopIconDark"), for: UIControl.State.normal)
         }
     }
     
@@ -125,18 +128,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         return routeInfoToChange.count
     }
     
-    /*func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        switch MapState.routeInfoShowing
-        {
-        case .none:
-            return nil
-        case .direction:
-            return (routeInfoToChange[row] as? Direction)?.directionTitle
-        case .stop:
-            return (routeInfoToChange[row] as? Stop)?.stopTitle
-        }
-    }*/
-    
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
         
         let title: String?
@@ -151,7 +142,10 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             title = (routeInfoToChange[row] as? Stop)?.stopTitle
         case .otherDirections:
             //TODO
-            title = ""
+            let routeTitle = (routeInfoToChange[row] as? Direction)?.route?.routeTitle ?? ""
+            let directionName = (routeInfoToChange[row] as? Direction)?.directionName ?? ""
+            
+            title = routeTitle + " - " + directionName
         case .vehicles:
             //TODO
             if row == 0
@@ -200,6 +194,12 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 
                 disableFilterButtons()
                 
+                directionButton.isHidden = false
+                directionButton.isEnabled = true
+                
+                otherDirectionsButton.isHidden = true
+                otherDirectionsButton.isEnabled = false
+                
                 var directionOn = 0
                 for direction in routeInfoToChange as! Array<Direction>
                 {
@@ -219,6 +219,12 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 
                 enableFilterButtons()
                 
+                directionButton.isHidden = false
+                directionButton.isEnabled = true
+                
+                otherDirectionsButton.isHidden = false
+                otherDirectionsButton.isEnabled = true
+                
                 var stopOn = 0
                 for stop in routeInfoToChange as! Array<Stop>
                 {
@@ -233,7 +239,27 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 }
             case .otherDirections:
                 //TODO
-                break
+                self.view.superview!.isHidden = false
+                
+                routeInfoToChange = MapState.routeInfoObject as? Array<Direction> ?? Array<Direction>()
+                
+                disableFilterButtons()
+                
+                directionButton.isHidden = true
+                directionButton.isEnabled = false
+                
+                var directionOn = 0
+                for direction in routeInfoToChange as! Array<Direction>
+                {
+                    if direction.directionTag == MapState.selectedDirectionTag
+                    {
+                        rowToSelect = directionOn
+                        
+                        break
+                    }
+                    
+                    directionOn += 1
+                }
             case .vehicles:
                 //TODO
                 self.view.superview!.isHidden = false
@@ -241,6 +267,12 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 routeInfoToChange = MapState.routeInfoObject as? Array<(vehicleID: String, prediction: String)> ?? Array<(vehicleID: String, prediction: String)>()
                 
                 disableFilterButtons()
+                
+                directionButton.isHidden = true
+                directionButton.isEnabled = false
+                
+                otherDirectionsButton.isHidden = true
+                otherDirectionsButton.isEnabled = false
                 
                 var vehicleOn = 0
                 for vehicle in routeInfoToChange as! Array<(vehicleID: String, prediction: String)>
@@ -325,6 +357,11 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 if let stop = routeInfoToChange[row] as? Stop
                 {
                     MapState.selectedStopTag = stop.stopTag
+                }
+            case .otherDirections:
+                if let direction = routeInfoToChange[row] as? Direction
+                {
+                    MapState.selectedDirectionTag = direction.directionTag
                 }
             case .vehicles:
                 if row == 0
@@ -507,5 +544,31 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 self.pickerSelectedRow()
             }
         }
+    }
+    
+    //MARK: - Other Directions
+    
+    @IBAction func otherDirectionsButtonPressed(_ sender: Any) {
+        if MapState.routeInfoShowing != .otherDirections
+        {
+            if let selectedStop = RouteDataManager.getCurrentStop()
+            {
+                MapState.routeInfoObject = selectedStop.direction?.allObjects
+                MapState.routeInfoShowing = .otherDirections
+                
+                reloadRouteData()
+            }
+        }
+        else
+        {
+            if let selectedDirection = RouteDataManager.getCurrentDirection()
+            {
+                MapState.routeInfoObject = selectedDirection
+                MapState.routeInfoShowing = .stop
+                
+                reloadRouteData()
+            }
+        }
+        
     }
 }
