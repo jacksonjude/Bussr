@@ -23,6 +23,9 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     var locationFilterEnabled = false
     var waitingForLocation = false
     
+    var favoriteFilterWasEnabled = false
+    var locationFilterWasEnabled = false
+    
     //MARK: - View
     
     override func viewDidLoad() {
@@ -50,13 +53,13 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         {
         case .light:
             self.routeInfoPicker.backgroundColor = offWhite
-            self.favoriteButton.setImage(UIImage(named: "FavoriteIcon"), for: UIControl.State.normal)
-            self.locationButton.setImage(UIImage(named: "CurrentLocationIcon"), for: UIControl.State.normal)
+            self.favoriteButton.setImage(UIImage(named: "Favorite" + favoriteFillAppend() + "Icon"), for: UIControl.State.normal)
+            self.locationButton.setImage(UIImage(named: "CurrentLocation" + locationFillAppend() + "Icon"), for: UIControl.State.normal)
             self.directionButton.setImage(UIImage(named: "DirectionIcon"), for: UIControl.State.normal)
         case .dark:
             self.routeInfoPicker.backgroundColor = black
-            self.favoriteButton.setImage(UIImage(named: "FavoriteIconDark"), for: UIControl.State.normal)
-            self.locationButton.setImage(UIImage(named: "CurrentLocationIconDark"), for: UIControl.State.normal)
+            self.favoriteButton.setImage(UIImage(named: "Favorite" + favoriteFillAppend() + "IconDark"), for: UIControl.State.normal)
+            self.locationButton.setImage(UIImage(named: "CurrentLocation" + locationFillAppend() + "IconDark"), for: UIControl.State.normal)
             self.directionButton.setImage(UIImage(named: "DirectionIconDark"), for: UIControl.State.normal)
         }
     }
@@ -80,6 +83,30 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             return UIColor.black
         case .dark:
             return UIColor.white
+        }
+    }
+    
+    func locationFillAppend() -> String
+    {
+        if locationFilterEnabled
+        {
+            return "Fill"
+        }
+        else
+        {
+            return ""
+        }
+    }
+    
+    func favoriteFillAppend() -> String
+    {
+        if favoriteFilterEnabled
+        {
+            return "Fill"
+        }
+        else
+        {
+            return ""
         }
     }
     
@@ -230,14 +257,16 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             }
             
             OperationQueue.main.addOperation {
-                self.routeInfoPicker.reloadAllComponents()
-                self.routeInfoPicker.selectRow(rowToSelect, inComponent: 0, animated: true)
-            
-                self.updateSelectedObjectTags()
-                
                 if self.favoriteFilterEnabled
                 {
                     self.filterByFavorites()
+                }
+                else
+                {
+                    self.routeInfoPicker.reloadAllComponents()
+                    self.routeInfoPicker.selectRow(rowToSelect, inComponent: 0, animated: true)
+                    
+                    self.updateSelectedObjectTags()
                 }
                 
                 if self.locationFilterEnabled
@@ -263,13 +292,9 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         case .direction:
             MapState.routeInfoShowing = .stop
             MapState.routeInfoObject = routeInfoToChange[routeInfoPicker.selectedRow(inComponent: 0)] as? Direction
-            
-            enableFilterButtons()
         case .stop:
             MapState.routeInfoShowing = .direction
             MapState.routeInfoObject = (MapState.routeInfoObject as? Direction)?.route
-            
-            disableFilterButtons()
         default:
             break
         }
@@ -324,6 +349,9 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         favoriteButton.isEnabled = true
         locationButton.isHidden = false
         locationButton.isEnabled = true
+        
+        //favoriteFilterEnabled = favoriteFilterWasEnabled
+        //locationFilterEnabled = locationFilterWasEnabled
     }
     
     func disableFilterButtons()
@@ -332,6 +360,9 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         favoriteButton.isEnabled = false
         locationButton.isHidden = true
         locationButton.isEnabled = false
+        
+        //favoriteFilterWasEnabled = favoriteFilterEnabled
+        //locationFilterWasEnabled = locationFilterEnabled
         
         favoriteFilterEnabled = false
         locationFilterEnabled = false
@@ -367,17 +398,32 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 if favoriteStopCallback.count > 0
                 {
                     appDelegate.persistentContainer.viewContext.delete(favoriteStopCallback[0])
+                    
+                    CloudManager.addToLocalChanges(type: ManagedObjectChangeType.delete, uuid: favoriteStopCallback[0].uuid!)
+                    NotificationCenter.default.addObserver(self, selector: #selector(didSaveFavoriteStop), name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
                 }
                 else
                 {
                     let newFavoriteStop = FavoriteStop(context: appDelegate.persistentContainer.viewContext)
                     newFavoriteStop.directionTag = selectedDirection.directionTag
                     newFavoriteStop.stopTag = selectedStop.stopTag
+                    newFavoriteStop.uuid = UUID().uuidString
+                    
+                    CloudManager.addToLocalChanges(type: ManagedObjectChangeType.insert, uuid: newFavoriteStop.uuid!)
+                    NotificationCenter.default.addObserver(self, selector: #selector(didSaveFavoriteStop), name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
                 }
+                
+                
                 
                 appDelegate.saveContext()
             }
         }
+    }
+    
+    @objc func didSaveFavoriteStop(notification: Notification)
+    {
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
+        CloudManager.syncToCloud()
     }
     
     func filterByFavorites()

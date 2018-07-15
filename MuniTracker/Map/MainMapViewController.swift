@@ -317,20 +317,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             showHidePickerButton.isEnabled = false
         case .direction:
-            resetAnnotations()
-            
-            if let direction = RouteDataManager.getCurrentDirection()
-            {
-                for stop in direction.stops!.array
-                {
-                    let stop = stop as! Stop
-                    addAnnotation(coordinate: CLLocationCoordinate2D(latitude: stop.stopLatitude, longitude: stop.stopLongitude))
-                }
-                
-                reloadPolyline()
-                
-                fetchVehicleLocations()
-            }
+            reloadAllAnnotations()
             
             centerMapOnLocation(location: initialLocation, range: 15000)
             
@@ -377,6 +364,24 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     }
     
     //MARK: - Annotations
+    
+    func reloadAllAnnotations()
+    {
+        resetAnnotations()
+        
+        if let direction = RouteDataManager.getCurrentDirection()
+        {
+            for stop in direction.stops!.array
+            {
+                let stop = stop as! Stop
+                addAnnotation(coordinate: CLLocationCoordinate2D(latitude: stop.stopLatitude, longitude: stop.stopLongitude))
+            }
+            
+            reloadPolyline()
+            
+            fetchVehicleLocations()
+        }
+    }
     
     func addAnnotation(coordinate: CLLocationCoordinate2D, annotationType: AnnotationType = .red)
     {
@@ -585,6 +590,10 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         self.performSegue(withIdentifier: "showRoutesTableView", sender: self)
     }
     
+    @IBAction func favoritesButtonPressed(_ sender: Any) {
+        self.performSegue(withIdentifier: "showFavoritesTableView", sender: self)
+    }
+    
     @IBAction func unwindFromRouteTableViewWithSelectedRoute(_ segue: UIStoryboardSegue)
     {
         MapState.showingPickerView = true
@@ -593,6 +602,19 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     }
     
     @IBAction func unwindFromRouteTableView(_ segue: UIStoryboardSegue)
+    {
+        
+    }
+    
+    @IBAction func unwindFromFavoritesViewWithSelectedStop(_ segue: UIStoryboardSegue)
+    {
+        MapState.showingPickerView = true
+        setupHidePickerButton()
+        reloadAllAnnotations()
+        NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
+    }
+    
+    @IBAction func unwindFromFavoritesView(_ segue: UIStoryboardSegue)
     {
         
     }
@@ -710,7 +732,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             if prediction == "0"
             {
-                selectedVehicleRange = NSRange(location: predictionsString.count, length: 3)
+                if selectedVehicleRange?.location == predictionsString.count
+                {
+                    selectedVehicleRange?.length = "Now".count
+                }
+                
                 predictionsString += "Now"
             }
             else

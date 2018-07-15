@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import CoreLocation
+import CloudKit
 
 enum ThemeType: Int
 {
@@ -37,6 +38,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             UserDefaults.standard.set(ThemeType.light.rawValue, forKey: "theme")
         }
+        
+        if let lastServerChangeToken = UserDefaults.standard.object(forKey: "LastServerChangeToken") as? Data
+        {
+            CloudManager.currentChangeToken = NSKeyedUnarchiver.unarchiveObject(with: lastServerChangeToken) as? CKServerChangeToken
+        }
+        
+        CloudManager.fetchChangesFromCloud()
                         
         return true
     }
