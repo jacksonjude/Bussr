@@ -121,7 +121,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             favoriteStops.sort(by: {
                 if let direction1 = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", $0.directionTag!), moc: appDelegate.persistentContainer.viewContext).object as? Direction, let direction2 = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", $1.directionTag!), moc: appDelegate.persistentContainer.viewContext).object as? Direction
                 {
-                    return direction1.route!.routeTitle! < direction2.route!.routeTitle!
+                    return direction1.route!.routeTag!.compare(direction2.route!.routeTag!, options: .numeric) == .orderedAscending
                 }
                 else
                 {

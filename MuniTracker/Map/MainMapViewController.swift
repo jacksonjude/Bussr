@@ -118,7 +118,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     var vehicleIDs = Array<String>()
     var predictions = Array<String>()
     var selectedStopHeading: SelectedStopHeadingAnnotation?
-    var selectedVehicleID: String?
     
     var locationManager = CLLocationManager()
     
@@ -374,6 +373,20 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             reloadPredictionTimesLabel()
             
             mainNavigationItem.title = RouteDataManager.getCurrentDirection()?.route?.routeTitle
+            
+            let darkBusIcon = UIImage(named: "BusAnnotationDark")
+            for busAnnotation in busAnnotations
+            {
+                if busAnnotation.value.annotationView?.image == darkBusIcon
+                {
+                    busAnnotation.value.annotationView?.image = UIImage(named: "BusAnnotation")
+                }
+            }
+            
+            if let busAnnotationView = busAnnotations[MapState.selectedVehicleID ?? ""]?.annotationView
+            {
+                busAnnotationView.image = UIImage(named: "BusAnnotationDark")
+            }
         }
     }
     
@@ -587,14 +600,20 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         if let busAnnotation = view.annotation as? BusAnnotation
         {
-            selectedVehicleID = busAnnotation.id
+            MapState.selectedVehicleID = busAnnotation.id
+            view.image = UIImage(named: "BusAnnotationDark")
+            
+            reloadPredictionTimesLabel()
         }
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
         if view.annotation is BusAnnotation
         {
-            selectedVehicleID = nil
+            MapState.selectedVehicleID = nil
+            view.image = UIImage(named: "BusAnnotation")
+            
+            reloadPredictionTimesLabel()
         }
     }
     
