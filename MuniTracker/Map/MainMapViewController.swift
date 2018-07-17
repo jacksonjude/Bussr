@@ -285,11 +285,13 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     func setupRouteMapUpdateNotifications()
     {
         NotificationCenter.default.addObserver(self, selector: #selector(updateMap(notification:)), name: NSNotification.Name("UpdateRouteMap"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadAllAnnotations), name: NSNotification.Name("ReloadAnnotations"), object: nil)
     }
     
     func removeRouteMapUpdateNotifications()
     {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("UpdateRouteMap"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("ReloadAnnotations"), object: nil)
     }
     
     func centerMapOnLocation(location: CLLocation, range: CLLocationDistance, willChangeRange: Bool = true)
@@ -392,7 +394,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     //MARK: - Annotations
     
-    func reloadAllAnnotations()
+    @objc func reloadAllAnnotations()
     {
         resetAnnotations()
         

@@ -325,8 +325,28 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             MapState.routeInfoShowing = .stop
             MapState.routeInfoObject = routeInfoToChange[routeInfoPicker.selectedRow(inComponent: 0)] as? Direction
         case .stop:
-            MapState.routeInfoShowing = .direction
-            MapState.routeInfoObject = (MapState.routeInfoObject as? Direction)?.route
+            let route = (MapState.routeInfoObject as? Direction)?.route
+            
+            if route?.directions?.count == 2
+            {
+                var directionArray = route!.directions!.array as! [Direction]
+                directionArray.remove(at: directionArray.firstIndex(of: (MapState.routeInfoObject as! Direction))!)
+                MapState.routeInfoObject = directionArray[0]
+                MapState.selectedDirectionTag = directionArray[0].directionTag
+                
+                if let selectedStop = RouteDataManager.getCurrentStop(), let stops = directionArray[0].stops?.array as? [Stop]
+                {
+                    let sortedStops = RouteDataManager.sortStopsByDistanceFromLocation(stops: stops, locationToTest: CLLocation(latitude: selectedStop.stopLatitude, longitude: selectedStop.stopLongitude))
+                    MapState.selectedStopTag = sortedStops[0].stopTag
+                }
+                
+                NotificationCenter.default.post(name: NSNotification.Name("ReloadAnnotations"), object: nil)
+            }
+            else
+            {
+                MapState.routeInfoShowing = .direction
+                MapState.routeInfoObject = (MapState.routeInfoObject as? Direction)?.route
+            }
         default:
             break
         }
