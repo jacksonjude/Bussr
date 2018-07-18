@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import SWXMLHash
+//import SWXMLHash
 import CoreData
 import MapKit
 
@@ -21,7 +21,7 @@ class RouteDataManager
     static let xmlFeedSource = "http://webservices.nextbus.com/service/publicXMLFeed"
     static let jsonFeedSource = "http://webservices.nextbus.com/service/publicJSONFeed"
     
-    static func getXMLFromSource(_ command: String, _ arguments: Dictionary<String,String>, _ callback: @escaping (_ xmlBody: XMLIndexer?) -> Void)
+    /*static func getXMLFromSource(_ command: String, _ arguments: Dictionary<String,String>, _ callback: @escaping (_ xmlBody: XMLIndexer?) -> Void)
     {
         var commandString = ""
         for commandArgument in arguments
@@ -38,7 +38,7 @@ class RouteDataManager
             }
             callback(xmlBody)
         }).resume()
-    }
+    }*/
     
     static func getJSONFromSource(_ command: String, _ arguments: Dictionary<String,String>, _ callback: @escaping (_ json: [String : Any]?) -> Void)
     {
