@@ -7,7 +7,6 @@
 //
 
 import Foundation
-//import SWXMLHash
 import CoreData
 import MapKit
 
@@ -18,27 +17,7 @@ class RouteDataManager
     static var mocSaveGroup = DispatchGroup()
     
     //MARK: - Feed Source
-    static let xmlFeedSource = "http://webservices.nextbus.com/service/publicXMLFeed"
     static let jsonFeedSource = "http://webservices.nextbus.com/service/publicJSONFeed"
-    
-    /*static func getXMLFromSource(_ command: String, _ arguments: Dictionary<String,String>, _ callback: @escaping (_ xmlBody: XMLIndexer?) -> Void)
-    {
-        var commandString = ""
-        for commandArgument in arguments
-        {
-            commandString += "&" + commandArgument.key + "=" + commandArgument.value
-        }
-        
-        _ = (URLSession.shared.dataTask(with: URL(string: xmlFeedSource + "?command=" + command + commandString)!) { data, response, error in
-            var xmlBody: XMLIndexer?
-            if data != nil
-            {
-                let xml = SWXMLHash.parse(data!)
-                xmlBody = xml.children[0]
-            }
-            callback(xmlBody)
-        }).resume()
-    }*/
     
     static func getJSONFromSource(_ command: String, _ arguments: Dictionary<String,String>, _ callback: @escaping (_ json: [String : Any]?) -> Void)
     {
@@ -48,7 +27,7 @@ class RouteDataManager
             commandString += "&" + commandArgument.key + "=" + commandArgument.value
         }
         
-        _ = (URLSession.shared.dataTask(with: URL(string: jsonFeedSource + "?command=" + command + commandString)!) { data, response, error in
+        let task = (URLSession.shared.dataTask(with: URL(string: jsonFeedSource + "?command=" + command + commandString)!) { data, response, error in
             
             if data != nil, let json = try? JSONSerialization.jsonObject(with: data!) as? [String: Any]
             {
@@ -58,7 +37,9 @@ class RouteDataManager
             {
                 callback(nil)
             }
-        }).resume()
+        })
+        
+        task.resume()
     }
     
     //MARK: - Data Update
@@ -363,10 +344,10 @@ class RouteDataManager
     
     static let maxPredictions = 5
     
-    static func fetchPredictionTimesForStop(returnUUID: String)
+    static func fetchPredictionTimesForStop(returnUUID: String, stop: Stop?, direction: Direction?)
     {
         DispatchQueue.global(qos: .background).async {
-            if let direction = getCurrentDirection(), let stop = getCurrentStop(), let route = direction.route
+            if let stop = stop, let direction = direction, let route = direction.route
             {
                 getJSONFromSource("predictions", ["a":agencyTag,"s":stop.stopTag!,"r":route.routeTag!]) { (json) in
                     if let json = json
@@ -411,6 +392,57 @@ class RouteDataManager
                 }
             }
         }
+    }
+    
+    static func formatPredictions(predictions: Array<String>, vehicleIDs: Array<String>? = nil) -> (predictionsString: String, selectedVehicleRange: NSRange?)
+    {
+        var predictionsString = ""
+        var predictionOn = 0
+        
+        var selectedVehicleRange: NSRange?
+        
+        for prediction in predictions
+        {
+            if predictionOn != 0
+            {
+                predictionsString += ", "
+            }
+            
+            if vehicleIDs != nil && vehicleIDs!.count > predictionOn && vehicleIDs![predictionOn] == MapState.selectedVehicleID && selectedVehicleRange == nil
+            {
+                selectedVehicleRange = NSRange(location: predictionsString.count, length: prediction.count)
+            }
+            
+            if prediction == "0"
+            {
+                if selectedVehicleRange?.location == predictionsString.count
+                {
+                    selectedVehicleRange?.length = "Now".count
+                }
+                
+                predictionsString += "Now"
+            }
+            else
+            {
+                predictionsString += prediction
+            }
+            
+            predictionOn += 1
+        }
+        
+        if predictions.count > 0
+        {
+            if predictions.count > 1 || predictions[0] != "0"
+            {
+                predictionsString += " mins"
+            }
+        }
+        else
+        {
+            predictionsString = "No Predictions"
+        }
+        
+        return (predictionsString, selectedVehicleRange)
     }
     
     static func sortStopsByDistanceFromLocation(stops: Array<Stop>, locationToTest: CLLocation) -> Array<Stop>

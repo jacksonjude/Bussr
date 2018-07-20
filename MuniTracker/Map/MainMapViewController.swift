@@ -698,7 +698,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     {
         let predictionTimesReturnUUID = UUID().uuidString
         NotificationCenter.default.addObserver(self, selector: #selector(receivePredictionTimes(_:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
-        RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID)
+        RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: RouteDataManager.getCurrentStop(), direction: RouteDataManager.getCurrentDirection())
         
         OperationQueue.main.addOperation {
             self.refreshButton.isEnabled = false
@@ -748,51 +748,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     func reloadPredictionTimesLabel()
     {
-        var predictionsString = ""
-        var predictionOn = 0
-        
-        var selectedVehicleRange: NSRange?
-        
-        for prediction in self.predictions
-        {
-            if predictionOn != 0
-            {
-                predictionsString += ", "
-            }
-            
-            if self.vehicleIDs.count > predictionOn && self.vehicleIDs[predictionOn] == MapState.selectedVehicleID && selectedVehicleRange == nil
-            {
-                selectedVehicleRange = NSRange(location: predictionsString.count, length: prediction.count)
-            }
-            
-            if prediction == "0"
-            {
-                if selectedVehicleRange?.location == predictionsString.count
-                {
-                    selectedVehicleRange?.length = "Now".count
-                }
-                
-                predictionsString += "Now"
-            }
-            else
-            {
-                predictionsString += prediction
-            }
-            
-            predictionOn += 1
-        }
-        
-        if predictions.count > 0
-        {
-            if predictions.count > 1 || predictions[0] != "0"
-            {
-                predictionsString += " mins"
-            }
-        }
-        else
-        {
-            predictionsString = "No Predictions"
-        }
+        let predictionsFormatCallback = RouteDataManager.formatPredictions(predictions: self.predictions)
+        let predictionsString = predictionsFormatCallback.predictionsString
+        let selectedVehicleRange = predictionsFormatCallback.selectedVehicleRange
         
         OperationQueue.main.addOperation {
             if selectedVehicleRange != nil
@@ -937,6 +895,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             MapState.routeInfoObject = predictionVehicleArray
             MapState.routeInfoShowing = .vehicles
+            
+            showPickerView()
         }
         else if MapState.routeInfoShowing == .vehicles
         {

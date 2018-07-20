@@ -173,6 +173,22 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         }
     }
     
+    /*func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        let pickerRowView = UIView(frame: CGRect(x: 0, y: 0, width: 110, height: 60))
+        switch MapState.routeInfoShowing
+        {
+        case .stop:
+            if let stops = routeInfoToChange as? [Stop], RouteDataManager.favoriteStopExists(stopTag: stops[row].stopTag!, directionTag: (stops[row].direction!.allObjects[0] as! Direction).directionTag!)
+            {
+                
+            }
+        default:
+            break
+        }
+        
+        return pickerRowView
+    }*/
+    
     //MARK: - Data Reload
     
     @objc func reloadRouteData()

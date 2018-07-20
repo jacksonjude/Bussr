@@ -59,6 +59,7 @@ extension UIColor
 class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource
 {
     var favoriteStopObjects: Array<FavoriteStop>?
+    var loadedPredictions = Array<Bool>()
     @IBOutlet weak var favoriteStopsTableView: UITableView!
     
     @IBOutlet weak var mainNavigationBar: UINavigationBar!
@@ -81,6 +82,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         fetchFavoriteStops()
         sortFavoriteStops()
         favoriteStopsTableView.reloadData()
+        //fetchFavoritesPredictionTimes()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -111,6 +113,12 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         if let favoriteStops = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: NSPredicate(format: "TRUEPREDICATE"), moc: appDelegate.persistentContainer.viewContext) as? [FavoriteStop]
         {
             favoriteStopObjects = favoriteStops
+            
+            loadedPredictions = Array<Bool>()
+            for _ in favoriteStops
+            {
+                loadedPredictions.append(false)
+            }
         }
     }
     
@@ -130,6 +138,56 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             })
             
             favoriteStopObjects = favoriteStops
+        }
+    }
+    
+    func fetchFavoritesPredictionTimes()
+    {
+        if let favoriteStops = favoriteStopObjects
+        {
+            for favoriteStop in favoriteStops
+            {
+                let index = favoriteStops.firstIndex(of: favoriteStop)!
+                let predictionTimesReturnUUID = UUID().uuidString + ";" + String(index)
+                NotificationCenter.default.addObserver(self, selector: #selector(receiveFavoritesPrediction(_:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
+                if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStop.stopTag!), moc: appDelegate.persistentContainer.viewContext).object as? Stop, let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", favoriteStop.directionTag!), moc: appDelegate.persistentContainer.viewContext).object as? Direction
+                {
+                    RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: stop, direction: direction)
+                }
+                
+            }
+        }
+    }
+    
+    @objc func receiveFavoritesPrediction(_ notification: Notification)
+    {
+        NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
+        
+        if let predictions = notification.userInfo!["predictions"] as? [String]
+        {
+            OperationQueue.main.addOperation {
+                let predictionsString = RouteDataManager.formatPredictions(predictions: predictions).predictionsString
+                let indexRow = Int(notification.name.rawValue.split(separator: ";")[1]) ?? 0
+                
+                if let favoritesPredictionLabel = self.favoriteStopsTableView.cellForRow(at: IndexPath(row: indexRow, section: 0))?.viewWithTag(603) as? UILabel
+                {
+                    self.loadedPredictions[indexRow] = true
+                    favoritesPredictionLabel.text = predictionsString
+                }
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if !loadedPredictions[indexPath.row]
+        {
+            let predictionTimesReturnUUID = UUID().uuidString + ";" + String(indexPath.row)
+            let favoriteStop = favoriteStopObjects![indexPath.row]
+            NotificationCenter.default.addObserver(self, selector: #selector(receiveFavoritesPrediction(_:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
+            if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStop.stopTag!), moc: appDelegate.persistentContainer.viewContext).object as? Stop, let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", favoriteStop.directionTag!), moc: appDelegate.persistentContainer.viewContext).object as? Direction
+            {
+                RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: stop, direction: direction)
+            }
         }
     }
     
