@@ -641,11 +641,12 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         
     }
     
-    @IBAction func unwindFromFavoritesViewWithSelectedStop(_ segue: UIStoryboardSegue)
+    @IBAction func unwindWithSelectedStop(_ segue: UIStoryboardSegue)
     {
         MapState.showingPickerView = true
         setupHidePickerButton()
         reloadAllAnnotations()
+        NotificationCenter.default.post(name: NSNotification.Name("DisableFilters"), object: nil)
         NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
     }
     
@@ -657,6 +658,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     @IBAction func unwindFromSettingsView(_ segue: UIStoryboardSegue)
     {
         
+    }
+    
+    @IBAction func unwindFromOtherDirectionsView(_ segue: UIStoryboardSegue)
+    {
+        MapState.routeInfoObject = RouteDataManager.getCurrentDirection()
     }
     
     //MARK: - Bus Predications
@@ -748,7 +754,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     func reloadPredictionTimesLabel()
     {
-        let predictionsFormatCallback = RouteDataManager.formatPredictions(predictions: self.predictions)
+        let predictionsFormatCallback = RouteDataManager.formatPredictions(predictions: self.predictions, vehicleIDs: self.vehicleIDs)
         let predictionsString = predictionsFormatCallback.predictionsString
         let selectedVehicleRange = predictionsFormatCallback.selectedVehicleRange
         

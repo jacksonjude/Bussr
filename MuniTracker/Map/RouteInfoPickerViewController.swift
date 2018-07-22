@@ -34,6 +34,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadRouteData), name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(toggleFavoriteForSelectedStop), name: NSNotification.Name("ToggleFavoriteForStop"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(disableFilters), name: NSNotification.Name("DisableFilters"), object: nil)
         
         setupThemeElements()
     }
@@ -437,6 +438,11 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         //favoriteFilterWasEnabled = favoriteFilterEnabled
         //locationFilterWasEnabled = locationFilterEnabled
         
+        disableFilters()
+    }
+    
+    @objc func disableFilters()
+    {
         favoriteFilterEnabled = false
         locationFilterEnabled = false
         
@@ -585,7 +591,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     //MARK: - Other Directions
     
     @IBAction func otherDirectionsButtonPressed(_ sender: Any) {
-        if MapState.routeInfoShowing != .otherDirections
+        /*if MapState.routeInfoShowing != .otherDirections
         {
             if let selectedStop = RouteDataManager.getCurrentStop()
             {
@@ -604,7 +610,12 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 
                 reloadRouteData()
             }
-        }
+        }*/
         
+        if let selectedStop = RouteDataManager.getCurrentStop()
+        {
+            MapState.routeInfoObject = selectedStop.direction?.allObjects
+            appDelegate.mainMapViewController?.performSegue(withIdentifier: "showOtherDirectionsTableView", sender: self)
+        }
     }
 }

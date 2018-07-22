@@ -13,6 +13,7 @@
 		7A0EF1FD20E80AC90039212B /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A0EF1FC20E80AC90039212B /* CloudKit.framework */; };
 		7A0EF1FF20E818500039212B /* CloudManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0EF1FE20E818500039212B /* CloudManager.swift */; };
 		7A24529020FA73170033E333 /* FavoritesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A24528F20FA73170033E333 /* FavoritesTableViewController.swift */; };
+		7A42C934210521090022FC96 /* OtherDirectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A42C933210521090022FC96 /* OtherDirectionTableViewController.swift */; };
 		7A4930C420D788EA008208D1 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A4930C320D788EA008208D1 /* MapKit.framework */; };
 		7A61EF8420D77BE100481037 /* RouteInfoPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */; };
 		7A71722B20D70943002144D5 /* RoutesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A71722A20D70943002144D5 /* RoutesTableViewController.swift */; };
@@ -34,6 +35,7 @@
 		7A0EF1FC20E80AC90039212B /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		7A0EF1FE20E818500039212B /* CloudManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudManager.swift; sourceTree = "<group>"; };
 		7A24528F20FA73170033E333 /* FavoritesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesTableViewController.swift; sourceTree = "<group>"; };
+		7A42C933210521090022FC96 /* OtherDirectionTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherDirectionTableViewController.swift; sourceTree = "<group>"; };
 		7A4930C220D788BB008208D1 /* MuniTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MuniTracker.entitlements; sourceTree = "<group>"; };
 		7A4930C320D788EA008208D1 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoPickerViewController.swift; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 				7AF50BE120E1B71E00E4BFD1 /* SettingsViewController.swift */,
 				7AD81E0B20D6E60C004BAB1E /* MainMapViewController.swift */,
 				7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */,
+				7A42C933210521090022FC96 /* OtherDirectionTableViewController.swift */,
 				7A7FE2B420DB4761005B654C /* MapState.swift */,
 			);
 			path = Map;
@@ -243,6 +246,7 @@
 			files = (
 				7A0EF1FF20E818500039212B /* CloudManager.swift in Sources */,
 				7AD81E1220D6E60C004BAB1E /* MuniTracker.xcdatamodeld in Sources */,
+				7A42C934210521090022FC96 /* OtherDirectionTableViewController.swift in Sources */,
 				7AD81E1F20D6EEDB004BAB1E /* RouteDataManager.swift in Sources */,
 				7A24529020FA73170033E333 /* FavoritesTableViewController.swift in Sources */,
 				7A61EF8420D77BE100481037 /* RouteInfoPickerViewController.swift in Sources */,
