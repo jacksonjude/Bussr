@@ -17,13 +17,60 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dfa-Lx-MC5">
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <color key="barTintColor" white="0.97999999999999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <items>
+                                    <navigationItem title="Map" id="Rkq-Nx-Ftj">
+                                        <barButtonItem key="rightBarButtonItem" image="SettingsIcon" id="tji-cl-fAa"/>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KLg-1V-UoO">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="20"/>
+                                <color key="backgroundColor" white="0.97647000000000006" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="nOt-V5-BXf"/>
+                                </constraints>
+                            </view>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b4h-lD-wcm">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <items>
+                                    <barButtonItem image="RouteListIcon" id="bWp-fz-QWF"/>
+                                    <barButtonItem width="11" style="plain" systemItem="fixedSpace" id="elo-O3-4sF"/>
+                                    <barButtonItem image="FavoriteMenuIcon" id="L1W-sd-83F"/>
+                                    <barButtonItem systemItem="flexibleSpace" id="lFn-WC-MJW"/>
+                                </items>
+                            </toolbar>
+                        </subviews>
                         <color key="backgroundColor" red="0.78431372549019607" green="0.78431372549019607" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="b4h-lD-wcm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="3yF-4L-yCx"/>
+                            <constraint firstItem="KLg-1V-UoO" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="8yb-DM-rd8"/>
+                            <constraint firstItem="dfa-Lx-MC5" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="9dG-zt-aEc"/>
+                            <constraint firstItem="b4h-lD-wcm" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="FbO-a2-pHQ"/>
+                            <constraint firstItem="dfa-Lx-MC5" firstAttribute="top" secondItem="KLg-1V-UoO" secondAttribute="bottom" id="RGN-Tt-EcR"/>
+                            <constraint firstItem="b4h-lD-wcm" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="XBw-HV-Xgf"/>
+                            <constraint firstItem="dfa-Lx-MC5" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="eva-fg-bh5"/>
+                            <constraint firstItem="KLg-1V-UoO" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="jZX-1Y-OJa"/>
+                            <constraint firstAttribute="trailing" secondItem="KLg-1V-UoO" secondAttribute="trailing" id="wMF-AQ-uXF"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <connections>
+                        <outlet property="mainNavigationBar" destination="dfa-Lx-MC5" id="gYI-X9-69Y"/>
+                        <outlet property="mainToolbar" destination="b4h-lD-wcm" id="ism-IE-3Kp"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="53" y="375"/>
+            <point key="canvasLocation" x="52" y="374.66266866566718"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="FavoriteMenuIcon" width="26" height="35"/>
+        <image name="RouteListIcon" width="27" height="30"/>
+        <image name="SettingsIcon" width="25" height="25"/>
+    </resources>
 </document>
