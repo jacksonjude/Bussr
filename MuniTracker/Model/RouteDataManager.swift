@@ -29,7 +29,7 @@ class RouteDataManager
         
         let task = (URLSession.shared.dataTask(with: URL(string: jsonFeedSource + "?command=" + command + commandString)!) { data, response, error in
             
-            if data != nil, let json = try? JSONSerialization.jsonObject(with: data!) as? [String: Any]
+            if data != nil, let json = try? JSONSerialization.jsonObject(with: data!) as? [String:Any]
             {
                 callback(json)
             }

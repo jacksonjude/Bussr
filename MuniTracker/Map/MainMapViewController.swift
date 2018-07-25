@@ -157,7 +157,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             self.predictionTimesLabel.textColor = black
             self.mainNavigationBar.barTintColor = offWhite
             self.mainNavigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
-            self.mainToolbar.barTintColor = nil
+            self.mainToolbar.barTintColor = offWhite
             self.activityIndicator.activityIndicatorViewStyle = .gray
             self.vehicleSelectionButton.setImage(UIImage(named: "BusIcon" + darkImageAppend()), for: UIControl.State.normal)
         case .dark:
@@ -663,6 +663,15 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     @IBAction func unwindFromOtherDirectionsView(_ segue: UIStoryboardSegue)
     {
         MapState.routeInfoObject = RouteDataManager.getCurrentDirection()
+    }
+    
+    @IBAction func unwindFromStopsTableViewWithSelectedStop(_ segue: UIStoryboardSegue)
+    {
+        MapState.showingPickerView = true
+        setupHidePickerButton()
+        reloadAllAnnotations()
+        NotificationCenter.default.post(name: NSNotification.Name("DisableFilters"), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
     }
     
     //MARK: - Bus Predications

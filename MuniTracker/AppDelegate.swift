@@ -45,6 +45,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         CloudManager.fetchChangesFromCloud()
+        
+        if let favoritesOrganizeTypeInt = UserDefaults.standard.object(forKey: "FavoritesOrganizeType") as? Int
+        {
+            FavoriteState.favoritesOrganizeType = FavoriteState.FavoritesOrganizeType(rawValue: favoritesOrganizeTypeInt) ?? .list
+        }
                         
         return true
     }

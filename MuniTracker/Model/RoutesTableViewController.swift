@@ -49,15 +49,15 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     func setupThemeElements()
     {
-        //let offWhite = UIColor(white: 0.97647, alpha: 1)
-        let white = UIColor(white: 1, alpha: 1)
+        let offWhite = UIColor(white: 0.97647, alpha: 1)
+        //let white = UIColor(white: 1, alpha: 1)
         let black = UIColor(white: 0, alpha: 1)
         
         switch appDelegate.getCurrentTheme()
         {
         case .light:
-            self.view.backgroundColor = white
-            self.mainNavigationBar.barTintColor = nil
+            self.view.backgroundColor = offWhite
+            self.mainNavigationBar.barTintColor = offWhite
             self.mainNavigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
         case .dark:
             self.view.backgroundColor = black
