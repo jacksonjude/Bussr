@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MainMapViewController.swift
 //  MuniTracker
 //
 //  Created by jackson on 6/17/18.
@@ -129,6 +129,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         
         mainMapView.delegate = self
         mainMapView.showsUserLocation = true
+        mainMapView.isRotateEnabled = false
         centerMapOnLocation(location: initialLocation, range: 15000)
         
         setupRouteMapUpdateNotifications()
@@ -361,7 +362,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             mainNavigationItem.title = RouteDataManager.getCurrentDirection()?.route?.routeTitle
         case .otherDirections:
-            //TODO
             reloadAllAnnotations()
             
             centerMapOnLocation(location: initialLocation, range: 15000)
@@ -370,8 +370,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             mainNavigationItem.title = RouteDataManager.getCurrentDirection()?.route?.routeTitle
         case .vehicles:
-            //TODO
-            
             reloadPredictionTimesLabel()
             
             mainNavigationItem.title = RouteDataManager.getCurrentDirection()?.route?.routeTitle
@@ -383,12 +381,14 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 {
                     busAnnotation.value.annotationView?.image = UIImage(named: "BusAnnotation")
                 }
+                
+                if busAnnotation.value.annotation.isMapKitSelected
+                {
+                    mainMapView.deselectAnnotation(busAnnotations[MapState.selectedVehicleID!]?.annotation, animated: false)
+                }
             }
             
-            if let busAnnotationView = busAnnotations[MapState.selectedVehicleID ?? ""]?.annotationView
-            {
-                busAnnotationView.image = UIImage(named: "BusAnnotationDark")
-            }
+            busAnnotations[MapState.selectedVehicleID ?? ""]?.annotationView?.image = UIImage(named: "BusAnnotationDark")
         }
     }
     
@@ -403,7 +403,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             for stop in direction.stops!.array
             {
                 let stop = stop as! Stop
-                addAnnotation(coordinate: CLLocationCoordinate2D(latitude: stop.stopLatitude, longitude: stop.stopLongitude))
+                addAnnotation(coordinate: CLLocationCoordinate2D(latitude: stop.stopLatitude, longitude: stop.stopLongitude), stopTag: stop.stopTag!)
             }
             
             reloadPolyline()
@@ -412,9 +412,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    func addAnnotation(coordinate: CLLocationCoordinate2D, annotationType: AnnotationType = .red)
+    func addAnnotation(coordinate: CLLocationCoordinate2D, stopTag: String, annotationType: AnnotationType = .red)
     {
-        let annotation = StopAnnotation(coordinate: coordinate, annotationType: annotationType)
+        let annotation = StopAnnotation(coordinate: coordinate, stopTag: stopTag, annotationType: annotationType)
         
         mainMapView.addAnnotation(annotation)
         stopAnnotations[CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude).convertToString()] = annotation
@@ -509,7 +509,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if let stopAnnotation = annotation as? StopAnnotation
         {
-            let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: nil)
+            let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "StopAnnotation")
             
             switch stopAnnotation.type
             {
@@ -517,6 +517,13 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 annotationView.image = UIImage(named: "RedDot")
             case .orange:
                 annotationView.image = UIImage(named: "OrangeDot")
+            }
+            
+            if annotationView.gestureRecognizers == nil || annotationView.gestureRecognizers?.count == 0
+            {
+                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openOtherDirectionsView(_:)))
+                tapGesture.numberOfTapsRequired = 1
+                annotationView.addGestureRecognizer(tapGesture)
             }
             
             return annotationView
@@ -530,7 +537,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 return annotationView
             }
             
-            let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: nil)
+            let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "BusAnnotation")
             
             annotationView.image = UIImage(named: "BusAnnotation")
             annotationView.centerOffset = CGPoint(x: 0, y: -annotationView.image!.size.height/2)
@@ -546,7 +553,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             let headingImage = UIImage(named: "HeadingIndicator")!
             let busImageSize = headingAnnotation.busAnnotationViewImageSize ?? UIImage(named: "BusAnnotation")!.size
             
-            let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: nil)
+            let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "HeadingAnnotation")
             annotationView.centerOffset = calculateOffsetForAnnotationView(busImageSize: busImageSize, headingImageSize: headingImage.size, headingValue: headingAnnotation.headingValue)
             annotationView.image = headingImage
             
@@ -567,7 +574,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             let xOffset = (dotImageSize.width/2+(headingImage.size.height/2)) * cos(CGFloat(selectedStopHeadingAnnotation.headingValue - 90).degreesToRadians)
             let yOffset = (dotImageSize.width/2+(headingImage.size.height/2)) * sin(CGFloat(selectedStopHeadingAnnotation.headingValue - 90).degreesToRadians)
             
-            let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: nil)
+            let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "SelectedStopHeadingAnnotation")
             annotationView.centerOffset = CGPoint(x: xOffset, y: yOffset)
             annotationView.image = headingImage
             
@@ -602,20 +609,53 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         if let busAnnotation = view.annotation as? BusAnnotation
         {
+            busAnnotation.isMapKitSelected = true
+            
+            if MapState.selectedVehicleID != nil
+            {
+                busAnnotations[MapState.selectedVehicleID!]?.annotationView?.image = UIImage(named: "BusAnnotation")
+            }
+            
             MapState.selectedVehicleID = busAnnotation.id
             view.image = UIImage(named: "BusAnnotationDark")
             
             reloadPredictionTimesLabel()
         }
+        else if let stopAnnotation = view.annotation as? StopAnnotation
+        {
+            if MapState.selectedStopTag != stopAnnotation.stopTag
+            {
+                MapState.selectedStopTag = stopAnnotation.stopTag
+                NotificationCenter.default.post(name: NSNotification.Name("SelectCurrentStop"), object: self)
+            }
+        }
     }
     
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-        if view.annotation is BusAnnotation
+        if let busAnnotation = view.annotation as? BusAnnotation
         {
-            MapState.selectedVehicleID = nil
+            busAnnotation.isMapKitSelected = false
+            /*MapState.selectedVehicleID = nil
             view.image = UIImage(named: "BusAnnotation")
             
-            reloadPredictionTimesLabel()
+            reloadPredictionTimesLabel()*/
+        }
+    }
+    
+    @objc func openOtherDirectionsView(_ sender: UIGestureRecognizer)
+    {
+        let annotationStopTag = ((sender.view as? MKAnnotationView)?.annotation as? StopAnnotation)?.stopTag
+        
+        if MapState.selectedStopTag != annotationStopTag
+        {
+            return
+        }
+        
+        MapState.selectedStopTag = annotationStopTag
+        if let selectedStop = RouteDataManager.getCurrentStop()
+        {
+            MapState.routeInfoObject = selectedStop.direction?.allObjects
+            self.performSegue(withIdentifier: "showOtherDirectionsTableView", sender: self)
         }
     }
     
@@ -679,26 +719,26 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     func showPredictionNavigationBar()
     {
         OperationQueue.main.addOperation {
-            UIView.animate(withDuration: 1) {
+            UIView.animate(withDuration: 1, animations: {
                 self.predictionTimesNavigationBar.isHidden = false
-                self.addFavoriteButton.isEnabled = true
-                self.addFavoriteButton.tintColor = nil
+                //self.addFavoriteButton.isEnabled = true
+                //self.addFavoriteButton.tintColor = nil
                 self.vehicleSelectionButton.isEnabled = true
                 self.vehicleSelectionButton.isHidden = false
-            }
+            })
         }
     }
     
     func hidePredictionNavigationBar()
     {
         OperationQueue.main.addOperation {
-            UIView.animate(withDuration: 1) {
+            UIView.animate(withDuration: 1, animations: {
                 self.predictionTimesNavigationBar.isHidden = true
-                self.addFavoriteButton.isEnabled = false
-                self.addFavoriteButton.tintColor = UIColor.clear
+                //self.addFavoriteButton.isEnabled = false
+                //self.addFavoriteButton.tintColor = UIColor.clear
                 self.vehicleSelectionButton.isEnabled = false
                 self.vehicleSelectionButton.isHidden = true
-            }
+            })
         }
     }
     
@@ -930,11 +970,13 @@ class StopAnnotation: NSObject, MKAnnotation
     var title: String?
     var subtitle: String?
     var type: AnnotationType = .red
+    var stopTag: String?
     
-    init(coordinate: CLLocationCoordinate2D, annotationType: AnnotationType = .red)
+    init(coordinate: CLLocationCoordinate2D, stopTag: String, annotationType: AnnotationType = .red)
     {
         self.coordinate = coordinate
         self.type = annotationType
+        self.stopTag = stopTag
     }
     
     init(coordinate: CLLocationCoordinate2D, title: String?, subtitle: String?, annotationType: AnnotationType = .red)
@@ -954,6 +996,7 @@ class BusAnnotation: NSObject, MKAnnotation
     var title: String?
     var subtitle: String?
     var headingAnnotation: HeadingAnnotation?
+    var isMapKitSelected = false
     
     init(coordinate: CLLocationCoordinate2D, heading: Int, id: String)
     {

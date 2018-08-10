@@ -114,47 +114,56 @@ class CloudManager
     
     static func syncToCloud()
     {
-        for change in queuedChanges
-        {
-            switch change.type
+        DispatchQueue.global(qos: .background).async {
+            let syncToCloudGroup = DispatchGroup()
+            for change in queuedChanges
             {
-            case .insert:
-                print(" ↑ - Inserting: \(change.uuid)")
-                
-                let remoteID = CKRecord.ID(recordName: change.uuid, zoneID: favoriteStopZone.zoneID)
-                
-                let remoteRecord = CKRecord(recordType: "FavoriteStop", recordID: remoteID)
-                
-                let newPredicate = NSPredicate(format: "uuid == %@", change.uuid)
-                if let managedObject = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: newPredicate, moc: appDelegate.persistentContainer.viewContext)?.first as? FavoriteStop
+                syncToCloudGroup.enter()
+                switch change.type
                 {
-                    remoteRecord.setValue(managedObject.directionTag, forKey: "directionTag")
-                    remoteRecord.setValue(managedObject.stopTag, forKey: "stopTag")
+                case .insert:
+                    print(" ↑ - Inserting: \(change.uuid)")
                     
-                    privateDatabase.save(remoteRecord, completionHandler: { (record, error) -> Void in
-                        if (error != nil) {
+                    let remoteID = CKRecord.ID(recordName: change.uuid, zoneID: favoriteStopZone.zoneID)
+                    
+                    let remoteRecord = CKRecord(recordType: "FavoriteStop", recordID: remoteID)
+                    
+                    let newPredicate = NSPredicate(format: "uuid == %@", change.uuid)
+                    if let managedObject = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: newPredicate, moc: appDelegate.persistentContainer.viewContext)?.first as? FavoriteStop
+                    {
+                        remoteRecord.setValue(managedObject.directionTag, forKey: "directionTag")
+                        remoteRecord.setValue(managedObject.stopTag, forKey: "stopTag")
+                        
+                        privateDatabase.save(remoteRecord, completionHandler: { (record, error) -> Void in
+                            if (error != nil) {
+                                print("Error: \(String(describing: error))")
+                            }
+                            else if queuedChanges.count > 0
+                            {
+                                queuedChanges.removeFirst()
+                            }
+                            
+                            syncToCloudGroup.leave()
+                        })
+                    }
+                case .delete:
+                    print(" ↑ - Deleting: \(change.uuid)")
+                    privateDatabase.delete(withRecordID: CKRecord.ID(recordName: change.uuid, zoneID: favoriteStopZone.zoneID), completionHandler: { (recordID, error) -> Void in
+                        if error != nil
+                        {
                             print("Error: \(String(describing: error))")
                         }
-                        else
+                        else if queuedChanges.count > 0
                         {
                             queuedChanges.removeFirst()
                         }
+                        
+                        syncToCloudGroup.leave()
                     })
                 }
-            case .delete:
-                print(" ↑ - Deleting: \(change.uuid)")
-                privateDatabase.delete(withRecordID: CKRecord.ID(recordName: change.uuid, zoneID: favoriteStopZone.zoneID), completionHandler: { (recordID, error) -> Void in
-                    if error != nil
-                    {
-                        print("Error: \(String(describing: error))")
-                    }
-                    else
-                    {
-                        queuedChanges.removeFirst()
-                    }
-                })
+                
+                syncToCloudGroup.wait()
             }
         }
-        
     }
 }

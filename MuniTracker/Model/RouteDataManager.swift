@@ -197,7 +197,17 @@ class RouteDataManager
                 routeStopsArray[stop["tag"]!] = routeStopDictionary
             }
             
-            for direction in route["direction"] as? Array<Dictionary<String,Any>> ?? []
+            var routeConfigDirections: Array<Dictionary<String,Any>>?
+            if route["direction"] is Array<Dictionary<String,Any>>
+            {
+                routeConfigDirections = route["direction"] as? Array<Dictionary<String, Any>>
+            }
+            else if route["direction"] is Dictionary<String,Any>
+            {
+                routeConfigDirections = [route["direction"]] as? Array<Dictionary<String, Any>>
+            }
+            
+            for direction in routeConfigDirections ?? []
             {
                 var routeDirectionDictionary = Dictionary<String,Any>()
                 

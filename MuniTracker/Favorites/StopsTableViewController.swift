@@ -17,7 +17,7 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
     @IBOutlet weak var stopsTableView: UITableView!
     
     var currentDirection: Direction?
-    var stopObjects: Array<FavoriteStop>?
+    var favoriteStopObjects: Array<FavoriteStop>?
     var loadedPredictions = Array<Bool>()
     
     override func viewDidLoad() {
@@ -46,7 +46,7 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
     {
         if let favoriteStops = FavoriteState.favoriteObject as? Array<FavoriteStop>
         {
-            stopObjects = favoriteStops
+            favoriteStopObjects = favoriteStops
             
             loadedPredictions = Array<Bool>()
             for _ in favoriteStops
@@ -58,18 +58,32 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
     
     func sortStopObjects()
     {
-        if var stopObjects = self.stopObjects
+        if var favoriteStopObjects = self.favoriteStopObjects
         {
-            stopObjects.sort(by: {
-                if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", $0.stopTag ?? ""), moc: appDelegate.persistentContainer.viewContext).object as? Stop, let stop2 = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", $1.stopTag ?? ""), moc: appDelegate.persistentContainer.viewContext).object as? Stop
-                {
-                     return stop.stopTitle!.compare(stop2.stopTitle!) == .orderedAscending
-                }
-                
-                return true
-            })
+            let favoriteStopTags = favoriteStopObjects.map {$0.stopTag!}
             
-            self.stopObjects = stopObjects
+            if let location = appDelegate.mainMapViewController?.mainMapView.userLocation.location, let stopObjects = RouteDataManager.fetchLocalObjects(type: "Stop", predicate: NSPredicate(format: "stopTag IN %@", favoriteStopTags), moc: appDelegate.persistentContainer.viewContext) as? Array<Stop>
+            {
+                let sortedStopObjects = RouteDataManager.sortStopsByDistanceFromLocation(stops: stopObjects, locationToTest: location)
+                
+                let sortedStopTags = sortedStopObjects.map {$0.stopTag}
+                favoriteStopObjects.sort(by: {
+                    return (sortedStopTags.firstIndex(of: $0.stopTag) ?? 0) < (sortedStopTags.firstIndex(of: $1.stopTag) ?? 0)
+                })
+            }
+            else
+            {
+                favoriteStopObjects.sort(by: {
+                    if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", $0.stopTag ?? ""), moc: appDelegate.persistentContainer.viewContext).object as? Stop, let stop2 = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", $1.stopTag ?? ""), moc: appDelegate.persistentContainer.viewContext).object as? Stop
+                    {
+                        return stop.stopTitle!.compare(stop2.stopTitle!) == .orderedAscending
+                    }
+                    
+                    return true
+                })
+            }
+            
+            self.favoriteStopObjects = favoriteStopObjects
         }
     }
     
@@ -93,13 +107,13 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return stopObjects?.count ?? 0
+        return favoriteStopObjects?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let stopCell = tableView.dequeueReusableCell(withIdentifier: "StopCell")!
         
-        let stopObject = stopObjects![indexPath.row]
+        let stopObject = favoriteStopObjects![indexPath.row]
         
         var textColor = UIColor.black
         if let route = RouteDataManager.fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "routeTag == %@", FavoriteState.selectedRouteTag ?? ""), moc: appDelegate.persistentContainer.viewContext).object as? Route, let routeColor = route.routeColor, let routeOppositeColor = route.routeOppositeColor
@@ -157,14 +171,14 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if !loadedPredictions[indexPath.row]
         {
-            let favoriteStop = stopObjects![indexPath.row]
+            let favoriteStop = favoriteStopObjects![indexPath.row]
             
             fetchPrediction(favoriteStop: favoriteStop, index: indexPath.row)
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let favoriteStop = stopObjects![indexPath.row]
+        let favoriteStop = favoriteStopObjects![indexPath.row]
         
         MapState.selectedDirectionTag = favoriteStop.directionTag
         MapState.selectedStopTag = favoriteStop.stopTag

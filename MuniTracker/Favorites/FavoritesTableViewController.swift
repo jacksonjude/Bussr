@@ -178,8 +178,15 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
     {
         if var stopSet = favoriteStopSet
         {
-            stopSet.sort {
-                return $0.stopTitle!.compare($1.stopTitle!, options: .numeric) == .orderedAscending
+            if let location = appDelegate.mainMapViewController?.mainMapView.userLocation.location
+            {
+                stopSet = RouteDataManager.sortStopsByDistanceFromLocation(stops: stopSet, locationToTest: location)
+            }
+            else
+            {
+                stopSet.sort {
+                    return $0.stopTitle!.compare($1.stopTitle!, options: .numeric) == .orderedAscending
+                }
             }
             
             favoriteStopSet = stopSet
