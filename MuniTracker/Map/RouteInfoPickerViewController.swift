@@ -20,13 +20,13 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     @IBOutlet weak var directionButton: UIButton!
     @IBOutlet weak var otherDirectionsButton: UIButton!
     @IBOutlet weak var addFavoriteButton: UIButton!
+    @IBOutlet weak var favoriteButtonLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var expandFiltersButton: UIButton!
     
     var favoriteFilterEnabled = false
     var locationFilterEnabled = false
     var waitingForLocation = false
-    
-    var favoriteFilterWasEnabled = false
-    var locationFilterWasEnabled = false
+    var filtersExpanded = false
     
     //MARK: - View
     
@@ -37,6 +37,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         NotificationCenter.default.addObserver(self, selector: #selector(toggleFavoriteForSelectedStop), name: NSNotification.Name("ToggleFavoriteForStop"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(disableFilters), name: NSNotification.Name("DisableFilters"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(selectCurrentStop), name: NSNotification.Name("SelectCurrentStop"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(collapseFilters), name: NSNotification.Name("CollapseFilters"), object: nil)
         
         setupThemeElements()
     }
@@ -62,6 +63,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             self.directionButton.setImage(UIImage(named: "DirectionIcon"), for: UIControl.State.normal)
             self.otherDirectionsButton.setImage(UIImage(named: "BusStopIcon"), for: UIControl.State.normal)
             self.addFavoriteButton.setImage(UIImage(named: "FavoriteAddIcon"), for: UIControl.State.normal)
+            self.expandFiltersButton.setImage(UIImage(named: "FilterIcon"), for: UIControl.State.normal)
         case .dark:
             self.routeInfoPicker.backgroundColor = black
             self.favoriteButton.setImage(UIImage(named: "Favorite" + favoriteFillAppend() + "IconDark"), for: UIControl.State.normal)
@@ -69,6 +71,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             self.directionButton.setImage(UIImage(named: "DirectionIconDark"), for: UIControl.State.normal)
             self.otherDirectionsButton.setImage(UIImage(named: "BusStopIconDark"), for: UIControl.State.normal)
             self.addFavoriteButton.setImage(UIImage(named: "FavoriteAddIconDark"), for: UIControl.State.normal)
+            self.expandFiltersButton.setImage(UIImage(named: "FilterIconDark"), for: UIControl.State.normal)
         }
     }
     
@@ -146,13 +149,11 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         case .stop:
             title = (routeInfoToChange[row] as? Stop)?.stopTitle
         case .otherDirections:
-            //TODO
             let routeTitle = (routeInfoToChange[row] as? Direction)?.route?.routeTitle ?? ""
             let directionName = (routeInfoToChange[row] as? Direction)?.directionName ?? ""
             
             title = routeTitle + " - " + directionName
         case .vehicles:
-            //TODO
             if row == 0
             {
                 title = "None"
@@ -241,7 +242,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 
                 routeInfoToChange = (MapState.routeInfoObject as? Direction)?.stops?.array as? Array<Stop> ?? Array<Stop>()
                 
-                enableFilterButtons()
+                showFilterButtons()
                 
                 directionButton.isHidden = false
                 directionButton.isEnabled = true
@@ -267,7 +268,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                     stopOn += 1
                 }
             case .otherDirections:
-                //TODO
                 self.view.superview!.isHidden = false
                 
                 routeInfoToChange = MapState.routeInfoObject as? Array<Direction> ?? Array<Direction>()
@@ -293,7 +293,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                     directionOn += 1
                 }
             case .vehicles:
-                //TODO
                 self.view.superview!.isHidden = false
                 
                 routeInfoToChange = MapState.routeInfoObject as? Array<(vehicleID: String, prediction: String)> ?? Array<(vehicleID: String, prediction: String)>()
@@ -342,6 +341,12 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                     {
                         self.sortStopsByCurrentLocation(location: currentLocation)
                     }
+                }
+                
+                if self.routeInfoToChange.count == 0
+                {
+                    self.addFavoriteButton.isHidden = true
+                    self.addFavoriteButton.isEnabled = false
                 }
                 
                 NotificationCenter.default.post(name: NSNotification.Name("UpdateRouteMap"), object: nil, userInfo: ["ChangingRouteInfoShowing":true])
@@ -446,28 +451,71 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     
     //MARK: - Filters
     
-    func enableFilterButtons()
+    func showFilterButtons()
     {
-        favoriteButton.isHidden = false
-        favoriteButton.isEnabled = true
-        locationButton.isHidden = false
-        locationButton.isEnabled = true
-        
-        //favoriteFilterEnabled = favoriteFilterWasEnabled
-        //locationFilterEnabled = locationFilterWasEnabled
+        if filtersExpanded
+        {
+            favoriteButton.isHidden = false
+            favoriteButton.isEnabled = true
+            locationButton.isHidden = false
+            locationButton.isEnabled = true
+        }
+        else
+        {
+            expandFiltersButton.isHidden = false
+            expandFiltersButton.isEnabled = true
+        }
     }
     
     func disableFilterButtons()
     {
+        filtersExpanded = false
+        
+        expandFiltersButton.isHidden = true
+        expandFiltersButton.isEnabled = false
         favoriteButton.isHidden = true
         favoriteButton.isEnabled = false
         locationButton.isHidden = true
         locationButton.isEnabled = false
         
-        //favoriteFilterWasEnabled = favoriteFilterEnabled
-        //locationFilterWasEnabled = locationFilterEnabled
-        
         disableFilters()
+    }
+    
+    @IBAction func expandFilters()
+    {
+        filtersExpanded = true
+        
+        expandFiltersButton.isHidden = true
+        expandFiltersButton.isEnabled = false
+        
+        showFilterButtons()
+        
+        favoriteButtonLeadingConstraint.constant = -1*(favoriteButton.frame.size.height)
+        self.view.layoutSubviews()
+        favoriteButtonLeadingConstraint.constant = 8
+        
+        UIView.animate(withDuration: 0.5) {
+            self.view.layoutSubviews()
+        }
+    }
+    
+    @objc func collapseFilters()
+    {
+        filtersExpanded = false
+        
+        favoriteButtonLeadingConstraint.constant = -1*(favoriteButton.frame.size.height)
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            self.view.layoutSubviews()
+        }) { (bool) in
+            self.favoriteButton.isHidden = true
+            self.favoriteButton.isEnabled = false
+            self.locationButton.isHidden = true
+            self.locationButton.isEnabled = false
+            
+            self.expandFiltersButton.isHidden = false
+            self.expandFiltersButton.isEnabled = true
+        }
     }
     
     @objc func disableFilters()
@@ -559,6 +607,12 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 else
                 {
                     self.routeInfoPicker.selectRow(0, inComponent: 0, animated: true)
+                }
+                
+                if self.routeInfoToChange.count == 0
+                {
+                    self.addFavoriteButton.isHidden = true
+                    self.addFavoriteButton.isEnabled = false
                 }
                 
                 self.pickerSelectedRow()

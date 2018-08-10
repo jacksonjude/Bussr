@@ -17,11 +17,11 @@ enum AnnotationType
     case orange
 }
 
-extension CLLocation
+extension CLLocationCoordinate2D
 {
     func convertToString() -> String
     {
-        return String(self.coordinate.latitude) + "-" + String(self.coordinate.longitude)
+        return String(self.latitude) + "-" + String(self.longitude)
     }
 }
 
@@ -102,6 +102,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var mainToolbar: UIToolbar!
     @IBOutlet weak var showHidePickerButton: UIBarButtonItem!
     @IBOutlet weak var vehicleSelectionButton: UIButton!
+    @IBOutlet weak var pickerViewBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var predictionBarTopConstraint: NSLayoutConstraint!
     
     //37.773972
     //37.738802
@@ -252,19 +254,29 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     @objc func showPickerView()
     {
         MapState.showingPickerView = true
-        
+        self.pickerViewBottomConstraint.constant = 0
         self.view.viewWithTag(618)?.isHidden = false
         
-        setupHidePickerButton()
+        UIView.animate(withDuration: 0.5, animations: {
+            self.view.layoutSubviews()
+        }) { (bool) in
+            self.setupHidePickerButton()
+        }
     }
     
     @objc func hidePickerView()
     {
+        NotificationCenter.default.post(name: NSNotification.Name("CollapseFilters"), object: self)
+        
         MapState.showingPickerView = false
+        self.pickerViewBottomConstraint.constant = -1*(self.view.viewWithTag(618)?.frame.size.height ?? 0)
         
-        self.view.viewWithTag(618)?.isHidden = true
-        
-        setupShowPickerButton()
+        UIView.animate(withDuration: 0.5, animations: {
+            self.view.layoutSubviews()
+        }) { (bool) in
+            self.view.viewWithTag(618)?.isHidden = true
+            self.setupShowPickerButton()
+        }
     }
     
     func setupHidePickerButton()
@@ -325,6 +337,13 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             centerMapOnLocation(location: initialLocation, range: 15000)
             
+            if let direction = RouteDataManager.getCurrentDirection(), let location = self.mainMapView?.userLocation.location
+            {
+                let sortedStops = RouteDataManager.sortStopsByDistanceFromLocation(stops: direction.stops!.array as! [Stop], locationToTest: location)
+                MapState.selectedStopTag = sortedStops[0].stopTag!
+                updateSelectedStopAnnotation(stopTag: sortedStops[0].stopTag!)
+            }
+            
             hidePredictionNavigationBar()
             
             showHidePickerButton.isEnabled = true
@@ -340,11 +359,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 centerMapOnLocation(location: stopLocation, range: 1000, willChangeRange: changingRouteInfoShowing)
                 
                 setAnnotationType(coordinate: selectedAnnotationLocation, annotationType: .red)
-                setAnnotationType(coordinate: stopLocation.convertToString(), annotationType: .orange)
+                setAnnotationType(coordinate: stopLocation.coordinate.convertToString(), annotationType: .orange)
                 
                 reloadCurrentStopHeader(stopLocation: stopLocation)
                 
-                selectedAnnotationLocation = stopLocation.convertToString()
+                selectedAnnotationLocation = stopLocation.coordinate.convertToString()
             }
             
             showPredictionNavigationBar()
@@ -417,7 +436,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         let annotation = StopAnnotation(coordinate: coordinate, stopTag: stopTag, annotationType: annotationType)
         
         mainMapView.addAnnotation(annotation)
-        stopAnnotations[CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude).convertToString()] = annotation
+        stopAnnotations[CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude).coordinate.convertToString()] = annotation
     }
     
     func setAnnotationType(coordinate: String?, annotationType: AnnotationType)
@@ -623,10 +642,13 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         }
         else if let stopAnnotation = view.annotation as? StopAnnotation
         {
-            if MapState.selectedStopTag != stopAnnotation.stopTag
+            if MapState.routeInfoShowing == .stop
             {
-                MapState.selectedStopTag = stopAnnotation.stopTag
-                NotificationCenter.default.post(name: NSNotification.Name("SelectCurrentStop"), object: self)
+                if MapState.selectedStopTag != stopAnnotation.stopTag
+                {
+                    MapState.selectedStopTag = stopAnnotation.stopTag
+                    NotificationCenter.default.post(name: NSNotification.Name("SelectCurrentStop"), object: self)
+                }
             }
         }
     }
@@ -635,10 +657,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         if let busAnnotation = view.annotation as? BusAnnotation
         {
             busAnnotation.isMapKitSelected = false
-            /*MapState.selectedVehicleID = nil
-            view.image = UIImage(named: "BusAnnotation")
-            
-            reloadPredictionTimesLabel()*/
         }
     }
     
@@ -656,6 +674,21 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         {
             MapState.routeInfoObject = selectedStop.direction?.allObjects
             self.performSegue(withIdentifier: "showOtherDirectionsTableView", sender: self)
+        }
+    }
+    
+    func updateSelectedStopAnnotation(stopTag: String)
+    {
+        if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", stopTag), moc: appDelegate.persistentContainer.viewContext).object as? Stop
+        {
+            setAnnotationType(coordinate: CLLocationCoordinate2D(latitude: stop.stopLatitude, longitude: stop.stopLongitude).convertToString(), annotationType: .orange)
+            
+            reloadCurrentStopHeader(stopLocation: CLLocation(latitude: stop.stopLatitude, longitude: stop.stopLongitude))
+            
+            if let selectedStopHeading = self.selectedStopHeading, let selectedStopHeadingView = mainMapView.view(for: selectedStopHeading)
+            {
+                selectedStopHeadingView.superview?.bringSubviewToFront(selectedStopHeadingView)
+            }
         }
     }
     
@@ -719,26 +752,30 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     func showPredictionNavigationBar()
     {
         OperationQueue.main.addOperation {
-            UIView.animate(withDuration: 1, animations: {
-                self.predictionTimesNavigationBar.isHidden = false
-                //self.addFavoriteButton.isEnabled = true
-                //self.addFavoriteButton.tintColor = nil
-                self.vehicleSelectionButton.isEnabled = true
-                self.vehicleSelectionButton.isHidden = false
-            })
+            self.predictionBarTopConstraint.constant = 0
+            
+            self.predictionTimesNavigationBar.isHidden = false
+            self.vehicleSelectionButton.isEnabled = true
+            self.vehicleSelectionButton.isHidden = false
+            
+            UIView.animate(withDuration: 0.5) {
+                self.view.layoutSubviews()
+            }
         }
     }
     
     func hidePredictionNavigationBar()
     {
         OperationQueue.main.addOperation {
-            UIView.animate(withDuration: 1, animations: {
+            self.predictionBarTopConstraint.constant = -1*(self.predictionTimesNavigationBar.frame.size.height)
+            
+            UIView.animate(withDuration: 0.5, animations: {
+                self.view.layoutSubviews()
+            }) { (bool) in
                 self.predictionTimesNavigationBar.isHidden = true
-                //self.addFavoriteButton.isEnabled = false
-                //self.addFavoriteButton.tintColor = UIColor.clear
                 self.vehicleSelectionButton.isEnabled = false
                 self.vehicleSelectionButton.isHidden = true
-            })
+            }
         }
     }
     
