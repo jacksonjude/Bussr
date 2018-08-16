@@ -406,10 +406,21 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         case .route:
             let routeObject = favoriteRouteSet![indexPath.row]
             
-            FavoriteState.selectedRouteTag = routeObject.routeTag
+            if let favoriteRouteStops = getFavoritedStopsFromRoute(route: routeObject)?.stops
+            {
+                if favoriteRouteStops.count > 0
+                {
+                    MapState.routeInfoObject = favoriteRouteStops[0].direction?.allObjects.filter({ ($0 as? Direction)?.route?.routeTag == routeObject.routeTag })[0]
+                    MapState.routeInfoShowing = .stop
+                    MapState.selectedDirectionTag = (MapState.routeInfoObject as? Direction)?.directionTag
+                    self.performSegue(withIdentifier: "UnwindFromFavoritesViewWithSelectedRoute", sender: self)
+                }
+            }
+            
+            /*FavoriteState.selectedRouteTag = routeObject.routeTag
             FavoriteState.favoriteObject = getFavoritedStopsFromRoute(route: routeObject)?.favoriteStops
             
-            self.performSegue(withIdentifier: "showStopsTableView", sender: self)
+            self.performSegue(withIdentifier: "showStopsTableView", sender: self)*/
         }
     }
     

@@ -52,6 +52,22 @@ extension CLLocationCoordinate2D {
     }
 }
 
+extension UIImage {
+    func colorized(color : UIColor) -> UIImage {
+        let rect = CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height)
+        UIGraphicsBeginImageContextWithOptions(rect.size, false, 0.0)
+        let context = UIGraphicsGetCurrentContext()
+        context!.setBlendMode(.multiply)
+        context!.draw(self.cgImage!, in: rect)
+        context!.clip(to: rect, mask: self.cgImage!)
+        context!.setFillColor(color.cgColor)
+        context!.fill(rect)
+        let colorizedImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        return colorizedImage!
+    }
+}
+
 /*extension Dictionary.Keys
 {
     var array: [Key] {
@@ -342,6 +358,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 let sortedStops = RouteDataManager.sortStopsByDistanceFromLocation(stops: direction.stops!.array as! [Stop], locationToTest: location)
                 MapState.selectedStopTag = sortedStops[0].stopTag!
                 updateSelectedStopAnnotation(stopTag: sortedStops[0].stopTag!)
+                
+                bringSelectedStopHeaderToFront()
             }
             
             hidePredictionNavigationBar()
@@ -362,6 +380,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 setAnnotationType(coordinate: stopLocation.coordinate.convertToString(), annotationType: .orange)
                 
                 reloadCurrentStopHeader(stopLocation: stopLocation)
+                bringSelectedStopHeaderToFront()
                 
                 selectedAnnotationLocation = stopLocation.coordinate.convertToString()
             }
@@ -521,6 +540,10 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let polylineRenderer = MKPolylineRenderer(overlay: overlay)
         polylineRenderer.strokeColor = UIColor(red: 0.972, green: 0.611, blue: 0.266, alpha: 1)
+        if let route = RouteDataManager.getCurrentDirection()?.route
+        {
+            polylineRenderer.strokeColor = UIColor(hexString: route.routeColor!)
+        }
         polylineRenderer.lineWidth = 5
         return polylineRenderer
     }
@@ -533,9 +556,20 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             switch stopAnnotation.type
             {
             case .red:
-                annotationView.image = UIImage(named: "RedDot")
+                annotationView.image = UIImage(named: "SmallDot")
             case .orange:
-                annotationView.image = UIImage(named: "OrangeDot")
+                annotationView.image = UIImage(named: "BigDot")
+            }
+            
+            if let route = RouteDataManager.getCurrentDirection()?.route
+            {
+                var brightness: CGFloat = 0.0
+                UIColor(hexString: route.routeColor!).getHue(nil, saturation: nil, brightness: &brightness, alpha: nil)
+                
+                if brightness > 0.6
+                {
+                    annotationView.image = annotationView.image?.colorized(color: UIColor(hexString: route.routeColor!))
+                }
             }
             
             if annotationView.gestureRecognizers == nil || annotationView.gestureRecognizers?.count == 0
@@ -588,7 +622,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         {
             let headingImage = UIImage(named: "SelectedStopHeading")!
             
-            let dotImageSize = UIImage(named: "OrangeDot")!.size
+            let dotImageSize = UIImage(named: "BigDot")!.size
             
             let xOffset = (dotImageSize.width/2+(headingImage.size.height/2)) * cos(CGFloat(selectedStopHeadingAnnotation.headingValue - 90).degreesToRadians)
             let yOffset = (dotImageSize.width/2+(headingImage.size.height/2)) * sin(CGFloat(selectedStopHeadingAnnotation.headingValue - 90).degreesToRadians)
@@ -597,7 +631,22 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             annotationView.centerOffset = CGPoint(x: xOffset, y: yOffset)
             annotationView.image = headingImage
             
-            let t: CGAffineTransform = CGAffineTransform(rotationAngle: CGFloat(selectedStopHeadingAnnotation.headingValue) * CGFloat.pi / 180)
+            var headingValueToRotateBy = selectedStopHeadingAnnotation.headingValue
+            
+            if let route = RouteDataManager.getCurrentDirection()?.route
+            {
+                var brightness: CGFloat = 0.0
+                UIColor(hexString: route.routeColor!).getHue(nil, saturation: nil, brightness: &brightness, alpha: nil)
+                
+                if brightness > 0.6
+                {
+                    annotationView.image = annotationView.image?.colorized(color: UIColor(hexString: route.routeColor!))
+                    
+                    headingValueToRotateBy -= 180
+                }
+            }
+            
+            let t: CGAffineTransform = CGAffineTransform(rotationAngle: CGFloat(headingValueToRotateBy) * CGFloat.pi / 180)
             annotationView.transform = t
             
             annotationView.isEnabled = false
@@ -685,10 +734,15 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             reloadCurrentStopHeader(stopLocation: CLLocation(latitude: stop.stopLatitude, longitude: stop.stopLongitude))
             
-            if let selectedStopHeading = self.selectedStopHeading, let selectedStopHeadingView = mainMapView.view(for: selectedStopHeading)
-            {
-                selectedStopHeadingView.superview?.bringSubviewToFront(selectedStopHeadingView)
-            }
+            bringSelectedStopHeaderToFront()
+        }
+    }
+    
+    func bringSelectedStopHeaderToFront()
+    {
+        if let selectedStopHeading = self.selectedStopHeading, let selectedStopHeadingView = mainMapView.view(for: selectedStopHeading)
+        {
+            selectedStopHeadingView.superview?.bringSubviewToFront(selectedStopHeadingView)
         }
     }
     
@@ -704,8 +758,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     @IBAction func unwindFromRouteTableViewWithSelectedRoute(_ segue: UIStoryboardSegue)
     {
-        MapState.showingPickerView = true
-        setupHidePickerButton()
+        showPickerView()
         NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
     }
     
@@ -744,6 +797,14 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         setupHidePickerButton()
         reloadAllAnnotations()
         NotificationCenter.default.post(name: NSNotification.Name("DisableFilters"), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
+    }
+    
+    @IBAction func unwindFromFavoritesViewWithSelectedRoute(_ segue: UIStoryboardSegue)
+    {
+        showPickerView()
+        reloadAllAnnotations()
+        NotificationCenter.default.post(name: NSNotification.Name("EnableFilters"), object: nil)
         NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
     }
     

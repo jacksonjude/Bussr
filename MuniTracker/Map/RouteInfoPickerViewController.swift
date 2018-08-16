@@ -38,14 +38,22 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         NotificationCenter.default.addObserver(self, selector: #selector(disableFilters), name: NSNotification.Name("DisableFilters"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(selectCurrentStop), name: NSNotification.Name("SelectCurrentStop"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(collapseFilters), name: NSNotification.Name("CollapseFilters"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(enableFilters), name: NSNotification.Name("EnableFilters"), object: nil)
         
+        setFavoriteButtonImage(inverse: false)
         setupThemeElements()
     }
+    
+    var viewDidJustAppear = false
     
     override func viewDidAppear(_ animated: Bool) {
         setupThemeElements()
         
-        reloadRouteData()
+        if !viewDidJustAppear
+        {
+            reloadRouteData()
+            viewDidJustAppear = true
+        }
     }
     
     func setupThemeElements()
@@ -62,7 +70,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             self.locationButton.setImage(UIImage(named: "CurrentLocation" + locationFillAppend() + "Icon"), for: UIControl.State.normal)
             self.directionButton.setImage(UIImage(named: "DirectionIcon"), for: UIControl.State.normal)
             self.otherDirectionsButton.setImage(UIImage(named: "BusStopIcon"), for: UIControl.State.normal)
-            self.addFavoriteButton.setImage(UIImage(named: "FavoriteAddIcon"), for: UIControl.State.normal)
+            //self.addFavoriteButton.setImage(UIImage(named: "FavoriteAddIcon"), for: UIControl.State.normal)
             self.expandFiltersButton.setImage(UIImage(named: "FilterIcon"), for: UIControl.State.normal)
         case .dark:
             self.routeInfoPicker.backgroundColor = black
@@ -70,7 +78,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             self.locationButton.setImage(UIImage(named: "CurrentLocation" + locationFillAppend() + "IconDark"), for: UIControl.State.normal)
             self.directionButton.setImage(UIImage(named: "DirectionIconDark"), for: UIControl.State.normal)
             self.otherDirectionsButton.setImage(UIImage(named: "BusStopIconDark"), for: UIControl.State.normal)
-            self.addFavoriteButton.setImage(UIImage(named: "FavoriteAddIconDark"), for: UIControl.State.normal)
+            //self.addFavoriteButton.setImage(UIImage(named: "FavoriteAddIconDark"), for: UIControl.State.normal)
             self.expandFiltersButton.setImage(UIImage(named: "FilterIconDark"), for: UIControl.State.normal)
         }
     }
@@ -225,7 +233,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 addFavoriteButton.isHidden = true
                 addFavoriteButton.isEnabled = false
                 
-                var directionOn = 0
+                rowToSelect = (routeInfoToChange as! Array<Direction>).firstIndex(of: (routeInfoToChange as! Array<Direction>).filter({$0.directionTag == MapState.selectedDirectionTag}).first ?? (routeInfoToChange as! Array<Direction>)[0]) ?? 0
+                /*var directionOn = 0
                 for direction in routeInfoToChange as! Array<Direction>
                 {
                     if direction.directionTag == MapState.selectedDirectionTag
@@ -236,7 +245,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                     }
                     
                     directionOn += 1
-                }
+                }*/
             case .stop:
                 self.view.superview!.isHidden = false
                 
@@ -253,9 +262,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 addFavoriteButton.isHidden = false
                 addFavoriteButton.isEnabled = true
                 
-                setFavoriteButtonImage(inverse: false)
-                
-                var stopOn = 0
+                rowToSelect = (routeInfoToChange as! Array<Stop>).firstIndex(of: (routeInfoToChange as! Array<Stop>).filter({$0.stopTag == MapState.selectedStopTag}).first ?? (routeInfoToChange as! Array<Stop>)[0]) ?? 0
+                /*var stopOn = 0
                 for stop in routeInfoToChange as! Array<Stop>
                 {
                     if stop.stopTag == MapState.selectedStopTag
@@ -266,7 +274,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                     }
                     
                     stopOn += 1
-                }
+                }*/
             case .otherDirections:
                 self.view.superview!.isHidden = false
                 
@@ -280,7 +288,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 addFavoriteButton.isHidden = true
                 addFavoriteButton.isEnabled = false
                 
-                var directionOn = 0
+                rowToSelect = (routeInfoToChange as! Array<Direction>).firstIndex(of: (routeInfoToChange as! Array<Direction>).filter({$0.directionTag == MapState.selectedDirectionTag}).first ?? (routeInfoToChange as! Array<Direction>)[0]) ?? 0
+                /*var directionOn = 0
                 for direction in routeInfoToChange as! Array<Direction>
                 {
                     if direction.directionTag == MapState.selectedDirectionTag
@@ -291,7 +300,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                     }
                     
                     directionOn += 1
-                }
+                }*/
             case .vehicles:
                 self.view.superview!.isHidden = false
                 
@@ -327,20 +336,21 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 {
                     self.filterByFavorites()
                 }
+                else if self.locationFilterEnabled
+                {
+                    self.routeInfoPicker.reloadAllComponents()
+                    
+                    if let currentLocation = appDelegate.mainMapViewController?.mainMapView.userLocation.location
+                    {
+                        self.sortStopsByCurrentLocation(location: currentLocation)
+                    }
+                }
                 else
                 {
                     self.routeInfoPicker.reloadAllComponents()
                     self.routeInfoPicker.selectRow(rowToSelect, inComponent: 0, animated: true)
                     
                     self.updateSelectedObjectTags()
-                }
-                
-                if self.locationFilterEnabled
-                {
-                    if let currentLocation = appDelegate.mainMapViewController?.mainMapView.userLocation.location
-                    {
-                        self.sortStopsByCurrentLocation(location: currentLocation)
-                    }
                 }
                 
                 if self.routeInfoToChange.count == 0
@@ -441,11 +451,14 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     
     @objc func selectCurrentStop()
     {
-        if MapState.routeInfoShowing == .stop, let stops = routeInfoToChange as? Array<Stop>
+        if !favoriteFilterEnabled
         {
-            self.routeInfoPicker.selectRow(stops.firstIndex(of: stops.first(where: {$0.stopTag == MapState.selectedStopTag})!) ?? 0, inComponent: 0, animated: true)
-            
-            pickerSelectedRow()
+            if MapState.routeInfoShowing == .stop, let stops = routeInfoToChange as? Array<Stop>
+            {
+                self.routeInfoPicker.selectRow(stops.firstIndex(of: stops.first(where: {$0.stopTag == MapState.selectedStopTag})!) ?? 0, inComponent: 0, animated: true)
+                
+                pickerSelectedRow()
+            }
         }
     }
     
@@ -513,8 +526,11 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             self.locationButton.isHidden = true
             self.locationButton.isEnabled = false
             
-            self.expandFiltersButton.isHidden = false
-            self.expandFiltersButton.isEnabled = true
+            if MapState.routeInfoShowing == .stop
+            {
+                self.expandFiltersButton.isHidden = false
+                self.expandFiltersButton.isEnabled = true
+            }
         }
     }
     
@@ -525,6 +541,17 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         
         favoriteButton.setImage(UIImage(named: "FavoriteIcon" + darkImageAppend()), for: UIControl.State.normal)
         locationButton.setImage(UIImage(named: "CurrentLocationIcon" + darkImageAppend()), for: UIControl.State.normal)
+    }
+    
+    @objc func enableFilters()
+    {
+        expandFilters()
+        
+        favoriteFilterEnabled = true
+        locationFilterEnabled = true
+        
+        favoriteButton.setImage(UIImage(named: "FavoriteFillIcon" + darkImageAppend()), for: UIControl.State.normal)
+        locationButton.setImage(UIImage(named: "CurrentLocationFillIcon" + darkImageAppend()), for: UIControl.State.normal)
     }
     
     @IBAction func favoriteFilterButtonPressed(_ sender: Any) {
@@ -607,6 +634,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 else
                 {
                     self.routeInfoPicker.selectRow(0, inComponent: 0, animated: true)
+                    
+                    self.pickerSelectedRow()
                 }
                 
                 if self.routeInfoToChange.count == 0
@@ -614,8 +643,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                     self.addFavoriteButton.isHidden = true
                     self.addFavoriteButton.isEnabled = false
                 }
-                
-                self.pickerSelectedRow()
             }
         }
     }

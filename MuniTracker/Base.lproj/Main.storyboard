@@ -695,6 +695,7 @@
                         <segue destination="8je-80-YeV" kind="unwind" identifier="SelectedFavoriteUnwind" unwindAction="unwindWithSelectedStop:" id="DHM-hx-RjC"/>
                         <segue destination="m3x-Re-5zf" kind="show" identifier="showDirectionStopTableView" id="FM7-3T-SSq"/>
                         <segue destination="xzQ-6I-qok" kind="show" identifier="showStopsTableView" id="coT-D9-Khz"/>
+                        <segue destination="8je-80-YeV" kind="unwind" identifier="UnwindFromFavoritesViewWithSelectedRoute" unwindAction="unwindFromFavoritesViewWithSelectedRoute:" id="SXI-BW-pCX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t08-D3-rdH" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -932,6 +933,6 @@
         <image name="SettingsIcon" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="UJx-fY-8v6"/>
+        <segue reference="FM7-3T-SSq"/>
     </inferredMetricsTieBreakers>
 </document>
