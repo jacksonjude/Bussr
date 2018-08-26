@@ -23,7 +23,7 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
     override func viewDidLoad() {
         reloadTableView()
         
-        if let route = RouteDataManager.fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "routeTag == %@", FavoriteState.selectedRouteTag ?? ""), moc: appDelegate.persistentContainer.viewContext).object as? Route
+        if let route = RouteDataManager.fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "routeTag == %@", FavoriteState.selectedRouteTag ?? ""), moc: CoreDataStack.persistentContainer.viewContext).object as? Route
         {
             mainNavigationItem.title = route.routeTitle
         }
@@ -62,7 +62,7 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
         {
             let favoriteStopTags = favoriteStopObjects.map {$0.stopTag!}
             
-            if let location = appDelegate.mainMapViewController?.mainMapView.userLocation.location, let stopObjects = RouteDataManager.fetchLocalObjects(type: "Stop", predicate: NSPredicate(format: "stopTag IN %@", favoriteStopTags), moc: appDelegate.persistentContainer.viewContext) as? Array<Stop>
+            if let location = appDelegate.mainMapViewController?.mainMapView.userLocation.location, let stopObjects = RouteDataManager.fetchLocalObjects(type: "Stop", predicate: NSPredicate(format: "stopTag IN %@", favoriteStopTags), moc: CoreDataStack.persistentContainer.viewContext) as? Array<Stop>
             {
                 let sortedStopObjects = RouteDataManager.sortStopsByDistanceFromLocation(stops: stopObjects, locationToTest: location)
                 
@@ -74,7 +74,7 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
             else
             {
                 favoriteStopObjects.sort(by: {
-                    if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", $0.stopTag ?? ""), moc: appDelegate.persistentContainer.viewContext).object as? Stop, let stop2 = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", $1.stopTag ?? ""), moc: appDelegate.persistentContainer.viewContext).object as? Stop
+                    if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", $0.stopTag ?? ""), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop, let stop2 = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", $1.stopTag ?? ""), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
                     {
                         return stop.stopTitle!.compare(stop2.stopTitle!) == .orderedAscending
                     }
@@ -116,7 +116,7 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
         let stopObject = favoriteStopObjects![indexPath.row]
         
         var textColor = UIColor.black
-        if let route = RouteDataManager.fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "routeTag == %@", FavoriteState.selectedRouteTag ?? ""), moc: appDelegate.persistentContainer.viewContext).object as? Route, let routeColor = route.routeColor, let routeOppositeColor = route.routeOppositeColor
+        if let route = RouteDataManager.fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "routeTag == %@", FavoriteState.selectedRouteTag ?? ""), moc: CoreDataStack.persistentContainer.viewContext).object as? Route, let routeColor = route.routeColor, let routeOppositeColor = route.routeOppositeColor
         {
             stopCell.backgroundColor = UIColor(hexString: routeColor)
             textColor = UIColor(hexString: routeOppositeColor)
@@ -126,12 +126,12 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
         (stopCell.viewWithTag(601) as! UILabel).textColor = textColor
         (stopCell.viewWithTag(603) as! UILabel).textColor = textColor
         
-        if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", stopObject.stopTag ?? ""), moc: appDelegate.persistentContainer.viewContext).object as? Stop
+        if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", stopObject.stopTag ?? ""), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
         {
             (stopCell.viewWithTag(600) as! UILabel).text = stop.stopTitle
         }
         
-        if let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", stopObject.directionTag ?? ""), moc: appDelegate.persistentContainer.viewContext).object as? Direction
+        if let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", stopObject.directionTag ?? ""), moc: CoreDataStack.persistentContainer.viewContext).object as? Direction
         {
             (stopCell.viewWithTag(601) as! UILabel).text = direction.directionTitle
         }
@@ -143,7 +143,7 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
     {
         let predictionTimesReturnUUID = UUID().uuidString + ";" + String(index)
         NotificationCenter.default.addObserver(self, selector: #selector(receivePrediction(_:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
-        if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStop.stopTag!), moc: appDelegate.persistentContainer.viewContext).object as? Stop, let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", favoriteStop.directionTag!), moc: appDelegate.persistentContainer.viewContext).object as? Direction
+        if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStop.stopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop, let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", favoriteStop.directionTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Direction
         {
             RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: stop, direction: direction)
         }
@@ -156,7 +156,7 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
         if let predictions = notification.userInfo!["predictions"] as? [String]
         {
             OperationQueue.main.addOperation {
-                let predictionsString = RouteDataManager.formatPredictions(predictions: predictions).predictionsString
+                let predictionsString = MapState.formatPredictions(predictions: predictions).predictionsString
                 let indexRow = Int(notification.name.rawValue.split(separator: ";")[1]) ?? 0
                 
                 if let stopPredictionLabel = self.stopsTableView.cellForRow(at: IndexPath(row: indexRow, section: 0))?.viewWithTag(603) as? UILabel
@@ -183,7 +183,7 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
         MapState.selectedDirectionTag = favoriteStop.directionTag
         MapState.selectedStopTag = favoriteStop.stopTag
         MapState.routeInfoShowing = .stop
-        MapState.routeInfoObject = RouteDataManager.getCurrentDirection()
+        MapState.routeInfoObject = MapState.getCurrentDirection()
         
         self.performSegue(withIdentifier: "SelectedStopUnwind", sender: self)
     }

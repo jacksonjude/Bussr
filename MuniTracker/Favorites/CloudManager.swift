@@ -44,7 +44,7 @@ class CloudManager
         
         fetchRecordChangesOperation.recordChangedBlock = {(record) in
             let updateLocalObjectPredicate = NSPredicate(format: "uuid == %@", record.recordID.recordName)
-            if let recordToUpdate = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: updateLocalObjectPredicate, moc: appDelegate.persistentContainer.viewContext)?.first as? FavoriteStop
+            if let recordToUpdate = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: updateLocalObjectPredicate, moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStop
             {
                 recordToUpdate.directionTag = record.value(forKey: "directionTag") as? String
                 recordToUpdate.stopTag = record.value(forKey: "stopTag") as? String
@@ -53,7 +53,7 @@ class CloudManager
             }
             else
             {
-                let newFavoriteStop = FavoriteStop(context: appDelegate.persistentContainer.viewContext)
+                let newFavoriteStop = FavoriteStop(context: CoreDataStack.persistentContainer.viewContext)
                 newFavoriteStop.uuid = record.recordID.recordName
                 newFavoriteStop.directionTag = record.value(forKey: "directionTag") as? String
                 newFavoriteStop.stopTag = record.value(forKey: "stopTag") as? String
@@ -65,13 +65,13 @@ class CloudManager
         fetchRecordChangesOperation.recordWithIDWasDeletedBlock = {(recordID, string) in
             let deleteLocalObjectPredicate = NSPredicate(format: "uuid == %@", recordID.recordName)
             
-            if let recordToDelete = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: deleteLocalObjectPredicate, moc: appDelegate.persistentContainer.viewContext)?.first as? FavoriteStop
+            if let recordToDelete = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: deleteLocalObjectPredicate, moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStop
             {
                 print(" ↓ - Deleting: \(recordToDelete.uuid!)")
                 
                 OperationQueue.main.addOperation {
-                    appDelegate.persistentContainer.viewContext.delete(recordToDelete)
-                    appDelegate.saveContext()
+                    CoreDataStack.persistentContainer.viewContext.delete(recordToDelete)
+                    CoreDataStack.saveContext()
                 }
             }
         }
@@ -88,7 +88,7 @@ class CloudManager
             }
             
             OperationQueue.main.addOperation {
-                appDelegate.saveContext()
+                CoreDataStack.saveContext()
             }
         }
         
@@ -129,7 +129,7 @@ class CloudManager
                     let remoteRecord = CKRecord(recordType: "FavoriteStop", recordID: remoteID)
                     
                     let newPredicate = NSPredicate(format: "uuid == %@", change.uuid)
-                    if let managedObject = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: newPredicate, moc: appDelegate.persistentContainer.viewContext)?.first as? FavoriteStop
+                    if let managedObject = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: newPredicate, moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStop
                     {
                         remoteRecord.setValue(managedObject.directionTag, forKey: "directionTag")
                         remoteRecord.setValue(managedObject.stopTag, forKey: "stopTag")

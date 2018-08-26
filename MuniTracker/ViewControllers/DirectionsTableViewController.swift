@@ -98,7 +98,7 @@ class DirectionsTableViewController: UIViewController, UITableViewDelegate, UITa
     {
         let predictionTimesReturnUUID = UUID().uuidString + ";" + String(index)
         NotificationCenter.default.addObserver(self, selector: #selector(receivePrediction(_:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
-        if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", MapState.selectedStopTag!), moc: appDelegate.persistentContainer.viewContext).object as? Stop
+        if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", MapState.selectedStopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
         {
             RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: stop, direction: direction)
         }
@@ -111,7 +111,7 @@ class DirectionsTableViewController: UIViewController, UITableViewDelegate, UITa
         if let predictions = notification.userInfo!["predictions"] as? [String]
         {
             OperationQueue.main.addOperation {
-                let predictionsString = RouteDataManager.formatPredictions(predictions: predictions).predictionsString
+                let predictionsString = MapState.formatPredictions(predictions: predictions).predictionsString
                 let indexRow = Int(notification.name.rawValue.split(separator: ";")[1]) ?? 0
                 
                 if let directionPredictionLabel = self.directionsTableView.cellForRow(at: IndexPath(row: indexRow, section: 0))?.viewWithTag(603) as? UILabel
@@ -156,7 +156,7 @@ class DirectionsTableViewController: UIViewController, UITableViewDelegate, UITa
         (directionCell.viewWithTag(601) as! UILabel).textColor = textColor
         (directionCell.viewWithTag(600) as! UILabel).textColor = textColor
         
-        if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", MapState.selectedStopTag!), moc: appDelegate.persistentContainer.viewContext).object as? Stop
+        if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", MapState.selectedStopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
         {
             mainNavigationItem.title = stop.stopTitle
         }
@@ -171,7 +171,7 @@ class DirectionsTableViewController: UIViewController, UITableViewDelegate, UITa
         
         MapState.selectedDirectionTag = direction.directionTag
         MapState.routeInfoShowing = .stop
-        MapState.routeInfoObject = RouteDataManager.getCurrentDirection()
+        MapState.routeInfoObject = MapState.getCurrentDirection()
         
         self.performSegue(withIdentifier: "SelectedDirectionUnwind", sender: self)
     }

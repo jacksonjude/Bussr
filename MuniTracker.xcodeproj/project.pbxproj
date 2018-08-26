@@ -9,6 +9,22 @@
 /* Begin PBXBuildFile section */
 		7A0292E620ED8207006DFDF5 /* AppIcon-2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A0292E420ED8207006DFDF5 /* AppIcon-2@2x.png */; };
 		7A0292E720ED8207006DFDF5 /* AppIcon-2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A0292E520ED8207006DFDF5 /* AppIcon-2@3x.png */; };
+		7A068D1521266AC400D3425E /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D1421266AC400D3425E /* CoreDataStack.swift */; };
+		7A068D1E212697DA00D3425E /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A068D01212646A700D3425E /* NotificationCenter.framework */; };
+		7A068D21212697DA00D3425E /* FavoritesExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D20212697DA00D3425E /* FavoritesExtensionViewController.swift */; };
+		7A068D24212697DA00D3425E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A068D22212697DA00D3425E /* MainInterface.storyboard */; };
+		7A068D28212697DA00D3425E /* MuniTrackerFavoritesExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D1D212697DA00D3425E /* MuniTrackerFavoritesExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7A068D31212697F000D3425E /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A068D01212646A700D3425E /* NotificationCenter.framework */; };
+		7A068D34212697F000D3425E /* RecentExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D33212697F000D3425E /* RecentExtensionViewController.swift */; };
+		7A068D37212697F000D3425E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A068D35212697F000D3425E /* MainInterface.storyboard */; };
+		7A068D3B212697F000D3425E /* MuniTrackerRecentExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D30212697F000D3425E /* MuniTrackerRecentExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7A068D442126980900D3425E /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A068D01212646A700D3425E /* NotificationCenter.framework */; };
+		7A068D472126980900D3425E /* NearbyExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D462126980900D3425E /* NearbyExtensionViewController.swift */; };
+		7A068D4A2126980900D3425E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A068D482126980900D3425E /* MainInterface.storyboard */; };
+		7A068D4E2126980900D3425E /* MuniTrackerNearbyExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D432126980900D3425E /* MuniTrackerNearbyExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7A068D52212698B900D3425E /* MuniTrackerExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D04212646A700D3425E /* MuniTrackerExtensionViewController.swift */; };
+		7A068D53212698BA00D3425E /* MuniTrackerExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D04212646A700D3425E /* MuniTrackerExtensionViewController.swift */; };
+		7A068D54212698BA00D3425E /* MuniTrackerExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D04212646A700D3425E /* MuniTrackerExtensionViewController.swift */; };
 		7A0E8C6A20E0AAAC00C28465 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A0E8C6920E0AAAB00C28465 /* CoreLocation.framework */; };
 		7A0EF1FD20E80AC90039212B /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A0EF1FC20E80AC90039212B /* CloudKit.framework */; };
 		7A0EF1FF20E818500039212B /* CloudManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0EF1FE20E818500039212B /* CloudManager.swift */; };
@@ -20,6 +36,15 @@
 		7A71722B20D70943002144D5 /* RoutesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A71722A20D70943002144D5 /* RoutesTableViewController.swift */; };
 		7A7FE2B520DB4761005B654C /* MapState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7FE2B420DB4761005B654C /* MapState.swift */; };
 		7A9F21E72106B0B00000E971 /* FavoriteState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9F21E62106B0B00000E971 /* FavoriteState.swift */; };
+		7AD004612127586700DCB08E /* MuniTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1020D6E60C004BAB1E /* MuniTracker.xcdatamodeld */; };
+		7AD004622127586800DCB08E /* MuniTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1020D6E60C004BAB1E /* MuniTracker.xcdatamodeld */; };
+		7AD004632127586800DCB08E /* MuniTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1020D6E60C004BAB1E /* MuniTracker.xcdatamodeld */; };
+		7AD00464212758AD00DCB08E /* RouteDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */; };
+		7AD00465212758AD00DCB08E /* RouteDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */; };
+		7AD00466212758AE00DCB08E /* RouteDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */; };
+		7AD00467212758B000DCB08E /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D1421266AC400D3425E /* CoreDataStack.swift */; };
+		7AD00468212758B100DCB08E /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D1421266AC400D3425E /* CoreDataStack.swift */; };
+		7AD00469212758B100DCB08E /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D1421266AC400D3425E /* CoreDataStack.swift */; };
 		7AD81E0A20D6E60C004BAB1E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E0920D6E60C004BAB1E /* AppDelegate.swift */; };
 		7AD81E0C20D6E60C004BAB1E /* MainMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E0B20D6E60C004BAB1E /* MainMapViewController.swift */; };
 		7AD81E0F20D6E60C004BAB1E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AD81E0D20D6E60C004BAB1E /* Main.storyboard */; };
@@ -30,9 +55,66 @@
 		7AF50BE220E1B71E00E4BFD1 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF50BE120E1B71E00E4BFD1 /* SettingsViewController.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		7A068D26212697DA00D3425E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7AD81DFE20D6E60C004BAB1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7A068D1C212697DA00D3425E;
+			remoteInfo = MuniTrackerFavoritesExtension;
+		};
+		7A068D39212697F000D3425E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7AD81DFE20D6E60C004BAB1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7A068D2F212697F000D3425E;
+			remoteInfo = MuniTrackerRecentExtension;
+		};
+		7A068D4C2126980900D3425E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7AD81DFE20D6E60C004BAB1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7A068D422126980900D3425E;
+			remoteInfo = MuniTrackerNearbyExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7A068D10212646A700D3425E /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				7A068D4E2126980900D3425E /* MuniTrackerNearbyExtension.appex in Embed App Extensions */,
+				7A068D3B212697F000D3425E /* MuniTrackerRecentExtension.appex in Embed App Extensions */,
+				7A068D28212697DA00D3425E /* MuniTrackerFavoritesExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		7A0292E420ED8207006DFDF5 /* AppIcon-2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-2@2x.png"; sourceTree = "<group>"; };
 		7A0292E520ED8207006DFDF5 /* AppIcon-2@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-2@3x.png"; sourceTree = "<group>"; };
+		7A068D01212646A700D3425E /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
+		7A068D04212646A700D3425E /* MuniTrackerExtensionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuniTrackerExtensionViewController.swift; sourceTree = "<group>"; };
+		7A068D07212646A700D3425E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		7A068D1421266AC400D3425E /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		7A068D1721266F9B00D3425E /* RoutePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutePageViewController.swift; sourceTree = "<group>"; };
+		7A068D1D212697DA00D3425E /* MuniTrackerFavoritesExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MuniTrackerFavoritesExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A068D20212697DA00D3425E /* FavoritesExtensionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesExtensionViewController.swift; sourceTree = "<group>"; };
+		7A068D23212697DA00D3425E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		7A068D25212697DA00D3425E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7A068D30212697F000D3425E /* MuniTrackerRecentExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MuniTrackerRecentExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A068D33212697F000D3425E /* RecentExtensionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentExtensionViewController.swift; sourceTree = "<group>"; };
+		7A068D36212697F000D3425E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		7A068D38212697F000D3425E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7A068D432126980900D3425E /* MuniTrackerNearbyExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MuniTrackerNearbyExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A068D462126980900D3425E /* NearbyExtensionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyExtensionViewController.swift; sourceTree = "<group>"; };
+		7A068D492126980900D3425E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		7A068D4B2126980900D3425E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7A0E8C6920E0AAAB00C28465 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		7A0EF1FC20E80AC90039212B /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		7A0EF1FE20E818500039212B /* CloudManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudManager.swift; sourceTree = "<group>"; };
@@ -45,6 +127,9 @@
 		7A71722A20D70943002144D5 /* RoutesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutesTableViewController.swift; sourceTree = "<group>"; };
 		7A7FE2B420DB4761005B654C /* MapState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapState.swift; sourceTree = "<group>"; };
 		7A9F21E62106B0B00000E971 /* FavoriteState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteState.swift; sourceTree = "<group>"; };
+		7AA5601D212FCA8C00C6E47E /* MuniTrackerRecentExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MuniTrackerRecentExtension.entitlements; sourceTree = "<group>"; };
+		7AA5601E212FCAA200C6E47E /* MuniTrackerFavoritesExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MuniTrackerFavoritesExtension.entitlements; sourceTree = "<group>"; };
+		7AA5601F212FCAB300C6E47E /* MuniTrackerNearbyExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MuniTrackerNearbyExtension.entitlements; sourceTree = "<group>"; };
 		7AD81E0620D6E60C004BAB1E /* MuniTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MuniTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AD81E0920D6E60C004BAB1E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7AD81E0B20D6E60C004BAB1E /* MainMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapViewController.swift; sourceTree = "<group>"; };
@@ -58,6 +143,30 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		7A068D1A212697DA00D3425E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A068D1E212697DA00D3425E /* NotificationCenter.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A068D2D212697F000D3425E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A068D31212697F000D3425E /* NotificationCenter.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A068D402126980900D3425E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A068D442126980900D3425E /* NotificationCenter.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7AD81E0320D6E60C004BAB1E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -80,26 +189,70 @@
 			path = AppIcons;
 			sourceTree = "<group>";
 		};
-		7A1D113620E2003100C12DF5 /* Map */ = {
+		7A068D03212646A700D3425E /* MuniTrackerExtension */ = {
 			isa = PBXGroup;
 			children = (
+				7A068D04212646A700D3425E /* MuniTrackerExtensionViewController.swift */,
+				7A068D06212646A700D3425E /* MainInterface.storyboard */,
+				7A068D1721266F9B00D3425E /* RoutePageViewController.swift */,
+			);
+			path = MuniTrackerExtension;
+			sourceTree = "<group>";
+		};
+		7A068D11212646BB00D3425E /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */,
+				7AD81E1020D6E60C004BAB1E /* MuniTracker.xcdatamodeld */,
+				7A068D1421266AC400D3425E /* CoreDataStack.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		7A068D1F212697DA00D3425E /* MuniTrackerFavoritesExtension */ = {
+			isa = PBXGroup;
+			children = (
+				7AA5601E212FCAA200C6E47E /* MuniTrackerFavoritesExtension.entitlements */,
+				7A068D20212697DA00D3425E /* FavoritesExtensionViewController.swift */,
+				7A068D22212697DA00D3425E /* MainInterface.storyboard */,
+				7A068D25212697DA00D3425E /* Info.plist */,
+			);
+			path = MuniTrackerFavoritesExtension;
+			sourceTree = "<group>";
+		};
+		7A068D32212697F000D3425E /* MuniTrackerRecentExtension */ = {
+			isa = PBXGroup;
+			children = (
+				7AA5601D212FCA8C00C6E47E /* MuniTrackerRecentExtension.entitlements */,
+				7A068D33212697F000D3425E /* RecentExtensionViewController.swift */,
+				7A068D35212697F000D3425E /* MainInterface.storyboard */,
+				7A068D38212697F000D3425E /* Info.plist */,
+			);
+			path = MuniTrackerRecentExtension;
+			sourceTree = "<group>";
+		};
+		7A068D452126980900D3425E /* MuniTrackerNearbyExtension */ = {
+			isa = PBXGroup;
+			children = (
+				7AA5601F212FCAB300C6E47E /* MuniTrackerNearbyExtension.entitlements */,
+				7A068D462126980900D3425E /* NearbyExtensionViewController.swift */,
+				7A068D482126980900D3425E /* MainInterface.storyboard */,
+				7A068D4B2126980900D3425E /* Info.plist */,
+			);
+			path = MuniTrackerNearbyExtension;
+			sourceTree = "<group>";
+		};
+		7A1D113620E2003100C12DF5 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				7A71722A20D70943002144D5 /* RoutesTableViewController.swift */,
 				7AF50BE120E1B71E00E4BFD1 /* SettingsViewController.swift */,
 				7AD81E0B20D6E60C004BAB1E /* MainMapViewController.swift */,
 				7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */,
 				7A42C933210521090022FC96 /* DirectionsTableViewController.swift */,
 				7A7FE2B420DB4761005B654C /* MapState.swift */,
 			);
-			path = Map;
-			sourceTree = "<group>";
-		};
-		7A1D113920E201F800C12DF5 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */,
-				7A71722A20D70943002144D5 /* RoutesTableViewController.swift */,
-				7AD81E1020D6E60C004BAB1E /* MuniTracker.xcdatamodeld */,
-			);
-			path = Model;
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 		7A24528E20FA72FD0033E333 /* Favorites */ = {
@@ -116,7 +269,12 @@
 		7AD81DFD20D6E60C004BAB1E = {
 			isa = PBXGroup;
 			children = (
+				7A068D11212646BB00D3425E /* Shared */,
 				7AD81E0820D6E60C004BAB1E /* MuniTracker */,
+				7A068D03212646A700D3425E /* MuniTrackerExtension */,
+				7A068D1F212697DA00D3425E /* MuniTrackerFavoritesExtension */,
+				7A068D32212697F000D3425E /* MuniTrackerRecentExtension */,
+				7A068D452126980900D3425E /* MuniTrackerNearbyExtension */,
 				7AD81E0720D6E60C004BAB1E /* Products */,
 				BF88086283A00694C5C2DF7F /* Frameworks */,
 			);
@@ -126,6 +284,9 @@
 			isa = PBXGroup;
 			children = (
 				7AD81E0620D6E60C004BAB1E /* MuniTracker.app */,
+				7A068D1D212697DA00D3425E /* MuniTrackerFavoritesExtension.appex */,
+				7A068D30212697F000D3425E /* MuniTrackerRecentExtension.appex */,
+				7A068D432126980900D3425E /* MuniTrackerNearbyExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -134,8 +295,7 @@
 			isa = PBXGroup;
 			children = (
 				7A0292E320ED81D8006DFDF5 /* AppIcons */,
-				7A1D113920E201F800C12DF5 /* Model */,
-				7A1D113620E2003100C12DF5 /* Map */,
+				7A1D113620E2003100C12DF5 /* ViewControllers */,
 				7A24528E20FA72FD0033E333 /* Favorites */,
 				7AD81E0920D6E60C004BAB1E /* AppDelegate.swift */,
 				7AD81E0D20D6E60C004BAB1E /* Main.storyboard */,
@@ -153,6 +313,7 @@
 				7A0EF1FC20E80AC90039212B /* CloudKit.framework */,
 				7A0E8C6920E0AAAB00C28465 /* CoreLocation.framework */,
 				7A4930C320D788EA008208D1 /* MapKit.framework */,
+				7A068D01212646A700D3425E /* NotificationCenter.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -160,6 +321,57 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		7A068D1C212697DA00D3425E /* MuniTrackerFavoritesExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7A068D29212697DA00D3425E /* Build configuration list for PBXNativeTarget "MuniTrackerFavoritesExtension" */;
+			buildPhases = (
+				7A068D19212697DA00D3425E /* Sources */,
+				7A068D1A212697DA00D3425E /* Frameworks */,
+				7A068D1B212697DA00D3425E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MuniTrackerFavoritesExtension;
+			productName = MuniTrackerFavoritesExtension;
+			productReference = 7A068D1D212697DA00D3425E /* MuniTrackerFavoritesExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		7A068D2F212697F000D3425E /* MuniTrackerRecentExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7A068D3C212697F000D3425E /* Build configuration list for PBXNativeTarget "MuniTrackerRecentExtension" */;
+			buildPhases = (
+				7A068D2C212697F000D3425E /* Sources */,
+				7A068D2D212697F000D3425E /* Frameworks */,
+				7A068D2E212697F000D3425E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MuniTrackerRecentExtension;
+			productName = MuniTrackerRecentExtension;
+			productReference = 7A068D30212697F000D3425E /* MuniTrackerRecentExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		7A068D422126980900D3425E /* MuniTrackerNearbyExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7A068D4F2126980900D3425E /* Build configuration list for PBXNativeTarget "MuniTrackerNearbyExtension" */;
+			buildPhases = (
+				7A068D3F2126980900D3425E /* Sources */,
+				7A068D402126980900D3425E /* Frameworks */,
+				7A068D412126980900D3425E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MuniTrackerNearbyExtension;
+			productName = MuniTrackerNearbyExtension;
+			productReference = 7A068D432126980900D3425E /* MuniTrackerNearbyExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		7AD81E0520D6E60C004BAB1E /* MuniTracker */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7AD81E1B20D6E60D004BAB1E /* Build configuration list for PBXNativeTarget "MuniTracker" */;
@@ -167,10 +379,14 @@
 				7AD81E0220D6E60C004BAB1E /* Sources */,
 				7AD81E0320D6E60C004BAB1E /* Frameworks */,
 				7AD81E0420D6E60C004BAB1E /* Resources */,
+				7A068D10212646A700D3425E /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				7A068D27212697DA00D3425E /* PBXTargetDependency */,
+				7A068D3A212697F000D3425E /* PBXTargetDependency */,
+				7A068D4D2126980900D3425E /* PBXTargetDependency */,
 			);
 			name = MuniTracker;
 			productName = MuniTracker;
@@ -187,6 +403,30 @@
 				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = jackson;
 				TargetAttributes = {
+					7A068D1C212697DA00D3425E = {
+						CreatedOnToolsVersion = 10.0;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
+					7A068D2F212697F000D3425E = {
+						CreatedOnToolsVersion = 10.0;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
+					7A068D422126980900D3425E = {
+						CreatedOnToolsVersion = 10.0;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
 					7AD81E0520D6E60C004BAB1E = {
 						CreatedOnToolsVersion = 10.0;
 						SystemCapabilities = {
@@ -226,11 +466,38 @@
 			projectRoot = "";
 			targets = (
 				7AD81E0520D6E60C004BAB1E /* MuniTracker */,
+				7A068D1C212697DA00D3425E /* MuniTrackerFavoritesExtension */,
+				7A068D2F212697F000D3425E /* MuniTrackerRecentExtension */,
+				7A068D422126980900D3425E /* MuniTrackerNearbyExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		7A068D1B212697DA00D3425E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A068D24212697DA00D3425E /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A068D2E212697F000D3425E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A068D37212697F000D3425E /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A068D412126980900D3425E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A068D4A2126980900D3425E /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7AD81E0420D6E60C004BAB1E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -246,6 +513,42 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		7A068D19212697DA00D3425E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7AD00467212758B000DCB08E /* CoreDataStack.swift in Sources */,
+				7AD004612127586700DCB08E /* MuniTracker.xcdatamodeld in Sources */,
+				7AD00464212758AD00DCB08E /* RouteDataManager.swift in Sources */,
+				7A068D52212698B900D3425E /* MuniTrackerExtensionViewController.swift in Sources */,
+				7A068D21212697DA00D3425E /* FavoritesExtensionViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A068D2C212697F000D3425E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7AD00468212758B100DCB08E /* CoreDataStack.swift in Sources */,
+				7AD004622127586800DCB08E /* MuniTracker.xcdatamodeld in Sources */,
+				7AD00465212758AD00DCB08E /* RouteDataManager.swift in Sources */,
+				7A068D53212698BA00D3425E /* MuniTrackerExtensionViewController.swift in Sources */,
+				7A068D34212697F000D3425E /* RecentExtensionViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A068D3F2126980900D3425E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7AD00469212758B100DCB08E /* CoreDataStack.swift in Sources */,
+				7AD004632127586800DCB08E /* MuniTracker.xcdatamodeld in Sources */,
+				7AD00466212758AE00DCB08E /* RouteDataManager.swift in Sources */,
+				7A068D54212698BA00D3425E /* MuniTrackerExtensionViewController.swift in Sources */,
+				7A068D472126980900D3425E /* NearbyExtensionViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7AD81E0220D6E60C004BAB1E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -257,6 +560,7 @@
 				7AD81E1F20D6EEDB004BAB1E /* RouteDataManager.swift in Sources */,
 				7A24529020FA73170033E333 /* FavoritesTableViewController.swift in Sources */,
 				7A61EF8420D77BE100481037 /* RouteInfoPickerViewController.swift in Sources */,
+				7A068D1521266AC400D3425E /* CoreDataStack.swift in Sources */,
 				7AD81E0C20D6E60C004BAB1E /* MainMapViewController.swift in Sources */,
 				7A9F21E72106B0B00000E971 /* FavoriteState.swift in Sources */,
 				7AD81E0A20D6E60C004BAB1E /* AppDelegate.swift in Sources */,
@@ -268,7 +572,57 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		7A068D27212697DA00D3425E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7A068D1C212697DA00D3425E /* MuniTrackerFavoritesExtension */;
+			targetProxy = 7A068D26212697DA00D3425E /* PBXContainerItemProxy */;
+		};
+		7A068D3A212697F000D3425E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7A068D2F212697F000D3425E /* MuniTrackerRecentExtension */;
+			targetProxy = 7A068D39212697F000D3425E /* PBXContainerItemProxy */;
+		};
+		7A068D4D2126980900D3425E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7A068D422126980900D3425E /* MuniTrackerNearbyExtension */;
+			targetProxy = 7A068D4C2126980900D3425E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
+		7A068D06212646A700D3425E /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7A068D07212646A700D3425E /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+		7A068D22212697DA00D3425E /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7A068D23212697DA00D3425E /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+		7A068D35212697F000D3425E /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7A068D36212697F000D3425E /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+		7A068D482126980900D3425E /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7A068D492126980900D3425E /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
 		7AD81E0D20D6E60C004BAB1E /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -288,6 +642,126 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		7A068D2A212697DA00D3425E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = MuniTrackerFavoritesExtension/MuniTrackerFavoritesExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 26Y8AQV29F;
+				INFOPLIST_FILE = MuniTrackerFavoritesExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerFavoritesExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7A068D2B212697DA00D3425E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = MuniTrackerFavoritesExtension/MuniTrackerFavoritesExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 26Y8AQV29F;
+				INFOPLIST_FILE = MuniTrackerFavoritesExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerFavoritesExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		7A068D3D212697F000D3425E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = MuniTrackerRecentExtension/MuniTrackerRecentExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 26Y8AQV29F;
+				INFOPLIST_FILE = MuniTrackerRecentExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerRecentExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7A068D3E212697F000D3425E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = MuniTrackerRecentExtension/MuniTrackerRecentExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 26Y8AQV29F;
+				INFOPLIST_FILE = MuniTrackerRecentExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerRecentExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		7A068D502126980900D3425E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = MuniTrackerNearbyExtension/MuniTrackerNearbyExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 26Y8AQV29F;
+				INFOPLIST_FILE = MuniTrackerNearbyExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerNearbyExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7A068D512126980900D3425E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = MuniTrackerNearbyExtension/MuniTrackerNearbyExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 26Y8AQV29F;
+				INFOPLIST_FILE = MuniTrackerNearbyExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerNearbyExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		7AD81E1920D6E60D004BAB1E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -405,6 +879,7 @@
 		7AD81E1C20D6E60D004BAB1E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = MuniTracker/MuniTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -425,6 +900,7 @@
 		7AD81E1D20D6E60D004BAB1E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = MuniTracker/MuniTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -445,6 +921,33 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		7A068D29212697DA00D3425E /* Build configuration list for PBXNativeTarget "MuniTrackerFavoritesExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7A068D2A212697DA00D3425E /* Debug */,
+				7A068D2B212697DA00D3425E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7A068D3C212697F000D3425E /* Build configuration list for PBXNativeTarget "MuniTrackerRecentExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7A068D3D212697F000D3425E /* Debug */,
+				7A068D3E212697F000D3425E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7A068D4F2126980900D3425E /* Build configuration list for PBXNativeTarget "MuniTrackerNearbyExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7A068D502126980900D3425E /* Debug */,
+				7A068D512126980900D3425E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		7AD81E0120D6E60C004BAB1E /* Build configuration list for PBXProject "MuniTracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

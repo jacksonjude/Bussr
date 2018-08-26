@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14269.12" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="NFX-Mj-Ee9">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14252.5"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Muni Tracker Extension View Controller-->
+        <scene sceneID="wmO-kW-zyR">
+            <objects>
+                <tableViewController id="NFX-Mj-Ee9" customClass="MuniTrackerExtensionViewController" customModule="MuniTrackerFavoritesExtension" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="55" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="ybS-cF-lUo">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="110"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RouteCell" rowHeight="55" id="kxZ-cY-SVn">
+                                <rect key="frame" x="0.0" y="28" width="320" height="55"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="kxZ-cY-SVn" id="WR3-lU-4b3">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="54.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" tag="600" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Route Tag" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hNu-Nn-gi2">
+                                            <rect key="frame" x="16" y="5" width="86" height="23"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" tag="601" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stop Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IlQ-1e-NY8">
+                                            <rect key="frame" x="16" y="28" width="180" height="16"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="d7z-pr-kmX"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" tag="602" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y1d-Mz-SNu">
+                                            <rect key="frame" x="204" y="11" width="100" height="33"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="OZd-KR-u5E"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="Y1d-Mz-SNu" firstAttribute="trailing" secondItem="WR3-lU-4b3" secondAttribute="trailingMargin" id="2AQ-ga-qGW"/>
+                                        <constraint firstItem="Y1d-Mz-SNu" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="IlQ-1e-NY8" secondAttribute="trailing" constant="8" symbolic="YES" id="5LX-dh-dnK"/>
+                                        <constraint firstItem="Y1d-Mz-SNu" firstAttribute="top" secondItem="WR3-lU-4b3" secondAttribute="topMargin" id="83Q-2U-ru7"/>
+                                        <constraint firstItem="IlQ-1e-NY8" firstAttribute="top" secondItem="hNu-Nn-gi2" secondAttribute="bottom" id="9K7-AB-513"/>
+                                        <constraint firstItem="IlQ-1e-NY8" firstAttribute="leading" secondItem="hNu-Nn-gi2" secondAttribute="leading" id="LNN-mU-7OW"/>
+                                        <constraint firstItem="Y1d-Mz-SNu" firstAttribute="bottom" secondItem="WR3-lU-4b3" secondAttribute="bottomMargin" id="N2n-a3-FhY"/>
+                                        <constraint firstItem="hNu-Nn-gi2" firstAttribute="leading" secondItem="WR3-lU-4b3" secondAttribute="leading" constant="16" id="V5F-8y-8Or"/>
+                                        <constraint firstItem="hNu-Nn-gi2" firstAttribute="top" secondItem="WR3-lU-4b3" secondAttribute="top" constant="5" id="aJ2-7X-a01"/>
+                                        <constraint firstItem="Y1d-Mz-SNu" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="hNu-Nn-gi2" secondAttribute="trailing" constant="8" symbolic="YES" id="kzy-T7-axF"/>
+                                        <constraint firstItem="IlQ-1e-NY8" firstAttribute="bottom" secondItem="WR3-lU-4b3" secondAttribute="bottomMargin" id="pI1-h4-4g1"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="NFX-Mj-Ee9" id="YV6-FN-f1l"/>
+                            <outlet property="delegate" destination="NFX-Mj-Ee9" id="z5O-wn-pX0"/>
+                        </connections>
+                    </tableView>
+                    <size key="freeformSize" width="320" height="110"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="85h-IF-PRb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1601.5999999999999" y="92.653673163418304"/>
+        </scene>
+    </scenes>
+</document>

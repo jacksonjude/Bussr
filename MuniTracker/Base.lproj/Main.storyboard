@@ -218,7 +218,7 @@
                                 </constraints>
                                 <state key="normal" title="Update Routes"/>
                                 <connections>
-                                    <action selector="updateRoutes:" destination="GPV-yC-TYY" eventType="touchDragInside" id="QGg-3C-Vj3"/>
+                                    <action selector="updateRoutes:" destination="GPV-yC-TYY" eventType="touchUpInside" id="CaQ-Rw-Q5u"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zca-7o-oA7">

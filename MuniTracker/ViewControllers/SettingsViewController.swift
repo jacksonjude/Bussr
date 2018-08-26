@@ -92,7 +92,7 @@ class SettingsViewController: UIViewController
             self.progressView!.tintColor = UIColor.blue
             self.progressAlertView!.view.addSubview(self.progressView!)
             
-            appDelegate.saveContext()
+            CoreDataStack.saveContext()
             
             NotificationCenter.default.addObserver(self, selector: #selector(self.addToProgress(notification:)), name: NSNotification.Name("CompletedRoute"), object: nil)
             
@@ -133,11 +133,11 @@ class SettingsViewController: UIViewController
         
         for entityType in entityTypes
         {
-            if let objects = RouteDataManager.fetchLocalObjects(type: entityType, predicate: NSPredicate(format: "TRUEPREDICATE"), moc: appDelegate.persistentContainer.viewContext) as? [NSManagedObject]
+            if let objects = RouteDataManager.fetchLocalObjects(type: entityType, predicate: NSPredicate(format: "TRUEPREDICATE"), moc: CoreDataStack.persistentContainer.viewContext) as? [NSManagedObject]
             {
                 for object in objects
                 {
-                    appDelegate.persistentContainer.viewContext.delete(object)
+                    CoreDataStack.persistentContainer.viewContext.delete(object)
                 }
                 
                 deletionLogs += "Deleted " + String(objects.count) + " " + entityType + "\n"
@@ -150,13 +150,16 @@ class SettingsViewController: UIViewController
         
         deletionLogs = String(deletionLogs.dropLast())
         
-        appDelegate.saveContext()
+        CoreDataStack.saveContext()
         
         let deletionAlertView = UIAlertController(title: "Deleted All Data", message: deletionLogs, preferredStyle: .alert)
         deletionAlertView.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { (alert) in
             
         }))
         print(deletionLogs)
+        
+        UserDefaults.standard.set(nil, forKey: "LastServerChangeToken")
+        CloudManager.currentChangeToken = nil
         
         self.present(deletionAlertView, animated: true, completion: nil)
     }

@@ -353,7 +353,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             centerMapOnLocation(location: initialLocation, range: 15000)
             
-            if let direction = RouteDataManager.getCurrentDirection(), let location = self.mainMapView?.userLocation.location
+            if let direction = MapState.getCurrentDirection(), let location = self.mainMapView?.userLocation.location
             {
                 let sortedStops = RouteDataManager.sortStopsByDistanceFromLocation(stops: direction.stops!.array as! [Stop], locationToTest: location)
                 MapState.selectedStopTag = sortedStops[0].stopTag!
@@ -366,11 +366,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             showHidePickerButton.isEnabled = true
             
-            mainNavigationItem.title = RouteDataManager.getCurrentDirection()?.route?.routeTitle
+            mainNavigationItem.title = MapState.getCurrentDirection()?.route?.routeTitle
         case .stop:
             let changingRouteInfoShowing = notification?.userInfo?["ChangingRouteInfoShowing"] as? Bool ?? true
             
-            if let stop = RouteDataManager.getCurrentStop()
+            if let stop = MapState.getCurrentStop()
             {
                 let stopLocation = CLLocation(latitude: stop.stopLatitude, longitude: stop.stopLongitude)
                 
@@ -398,7 +398,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             showHidePickerButton.isEnabled = true
             
-            mainNavigationItem.title = RouteDataManager.getCurrentDirection()?.route?.routeTitle
+            mainNavigationItem.title = MapState.getCurrentDirection()?.route?.routeTitle
         case .otherDirections:
             reloadAllAnnotations()
             
@@ -406,11 +406,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             hidePredictionNavigationBar()
             
-            mainNavigationItem.title = RouteDataManager.getCurrentDirection()?.route?.routeTitle
+            mainNavigationItem.title = MapState.getCurrentDirection()?.route?.routeTitle
         case .vehicles:
             reloadPredictionTimesLabel()
             
-            mainNavigationItem.title = RouteDataManager.getCurrentDirection()?.route?.routeTitle
+            mainNavigationItem.title = MapState.getCurrentDirection()?.route?.routeTitle
             
             let darkBusIcon = UIImage(named: "BusAnnotationDark")
             for busAnnotation in busAnnotations
@@ -436,7 +436,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     {
         resetAnnotations()
         
-        if let direction = RouteDataManager.getCurrentDirection()
+        if let direction = MapState.getCurrentDirection()
         {
             for stop in direction.stops!.array
             {
@@ -492,7 +492,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             mainMapView.removeOverlay(directionPolyline!)
         }
         
-        if let direction = RouteDataManager.getCurrentDirection()
+        if let direction = MapState.getCurrentDirection()
         {
             var coordinates = Array<CLLocationCoordinate2D>()
             
@@ -521,7 +521,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     func calculateCurrentStopHeading() -> CGFloat
     {
-        if let stop = RouteDataManager.getCurrentStop(), let direction = RouteDataManager.getCurrentDirection(), let stopArray = direction.stops?.array as? [Stop], let stopIndex = stopArray.firstIndex(of: stop)
+        if let stop = MapState.getCurrentStop(), let direction = MapState.getCurrentDirection(), let stopArray = direction.stops?.array as? [Stop], let stopIndex = stopArray.firstIndex(of: stop)
         {
             if stopIndex+1 < stopArray.count
             {
@@ -540,7 +540,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let polylineRenderer = MKPolylineRenderer(overlay: overlay)
         polylineRenderer.strokeColor = UIColor(red: 0.972, green: 0.611, blue: 0.266, alpha: 1)
-        if let route = RouteDataManager.getCurrentDirection()?.route
+        if let route = MapState.getCurrentDirection()?.route
         {
             polylineRenderer.strokeColor = UIColor(hexString: route.routeColor!)
         }
@@ -561,7 +561,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 annotationView.image = UIImage(named: "BigDot")
             }
             
-            if let route = RouteDataManager.getCurrentDirection()?.route
+            if let route = MapState.getCurrentDirection()?.route
             {
                 var brightness: CGFloat = 0.0
                 UIColor(hexString: route.routeColor!).getHue(nil, saturation: nil, brightness: &brightness, alpha: nil)
@@ -633,7 +633,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             var headingValueToRotateBy = selectedStopHeadingAnnotation.headingValue
             
-            if let route = RouteDataManager.getCurrentDirection()?.route
+            if let route = MapState.getCurrentDirection()?.route
             {
                 var brightness: CGFloat = 0.0
                 UIColor(hexString: route.routeColor!).getHue(nil, saturation: nil, brightness: &brightness, alpha: nil)
@@ -719,7 +719,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         }
         
         MapState.selectedStopTag = annotationStopTag
-        if let selectedStop = RouteDataManager.getCurrentStop()
+        if let selectedStop = MapState.getCurrentStop()
         {
             MapState.routeInfoObject = selectedStop.direction?.allObjects
             self.performSegue(withIdentifier: "showOtherDirectionsTableView", sender: self)
@@ -728,7 +728,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     func updateSelectedStopAnnotation(stopTag: String)
     {
-        if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", stopTag), moc: appDelegate.persistentContainer.viewContext).object as? Stop
+        if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", stopTag), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
         {
             setAnnotationType(coordinate: CLLocationCoordinate2D(latitude: stop.stopLatitude, longitude: stop.stopLongitude).convertToString(), annotationType: .orange)
             
@@ -788,7 +788,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     @IBAction func unwindFromOtherDirectionsView(_ segue: UIStoryboardSegue)
     {
-        MapState.routeInfoObject = RouteDataManager.getCurrentDirection()
+        MapState.routeInfoObject = MapState.getCurrentDirection()
     }
     
     @IBAction func unwindFromStopsTableViewWithSelectedStop(_ segue: UIStoryboardSegue)
@@ -851,7 +851,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     {
         let predictionTimesReturnUUID = UUID().uuidString
         NotificationCenter.default.addObserver(self, selector: #selector(receivePredictionTimes(_:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
-        RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: RouteDataManager.getCurrentStop(), direction: RouteDataManager.getCurrentDirection())
+        RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: MapState.getCurrentStop(), direction: MapState.getCurrentDirection())
         
         OperationQueue.main.addOperation {
             self.refreshButton.isEnabled = false
@@ -865,7 +865,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         let vehicleLocationsReturnUUID = UUID().uuidString
         NotificationCenter.default.addObserver(self, selector: #selector(receiveVehicleLocations(_:)), name: NSNotification.Name("FoundVehicleLocations:" + vehicleLocationsReturnUUID), object: nil)
         
-        RouteDataManager.fetchVehicleLocations(returnUUID: vehicleLocationsReturnUUID, vehicleIDs: vehicleIDs)
+        RouteDataManager.fetchVehicleLocations(returnUUID: vehicleLocationsReturnUUID, vehicleIDs: vehicleIDs, direction: MapState.getCurrentDirection())
     }
     
     @objc func receivePredictionTimes(_ notification: Notification)
@@ -901,7 +901,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     func reloadPredictionTimesLabel()
     {
-        let predictionsFormatCallback = RouteDataManager.formatPredictions(predictions: self.predictions, vehicleIDs: self.vehicleIDs)
+        let predictionsFormatCallback = MapState.formatPredictions(predictions: self.predictions, vehicleIDs: self.vehicleIDs)
         let predictionsString = predictionsFormatCallback.predictionsString
         let selectedVehicleRange = predictionsFormatCallback.selectedVehicleRange
         
@@ -1012,7 +1012,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     {
         if MapState.selectedStopTag != nil
         {
-            if let stop = RouteDataManager.getCurrentStop(), let direction = RouteDataManager.getCurrentDirection()
+            if let stop = MapState.getCurrentStop(), let direction = MapState.getCurrentDirection()
             {
                 var stopIsFavorite = RouteDataManager.favoriteStopExists(stopTag: stop.stopTag!, directionTag: direction.directionTag!)
                 if inverse
@@ -1053,7 +1053,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         }
         else if MapState.routeInfoShowing == .vehicles
         {
-            MapState.routeInfoObject = RouteDataManager.getCurrentDirection()
+            MapState.routeInfoObject = MapState.getCurrentDirection()
             MapState.routeInfoShowing = .stop
         }
         

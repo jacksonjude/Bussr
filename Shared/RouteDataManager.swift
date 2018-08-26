@@ -51,7 +51,7 @@ class RouteDataManager
         let routeDictionary = fetchRoutes()
         print("Received Routes")
                 
-        appDelegate.persistentContainer.performBackgroundTask({ (backgroundMOC) in
+        CoreDataStack.persistentContainer.performBackgroundTask({ (backgroundMOC) in
             let agencyFetchCallback = fetchOrCreateObject(type: "Agency", predicate: NSPredicate(format: "agencyName == %@", agencyTag), moc: backgroundMOC)
             let agency = agencyFetchCallback.object as! Agency
             agency.agencyName = agencyTag
@@ -283,42 +283,6 @@ class RouteDataManager
         return (object!, justCreated)
     }
     
-    static func getCurrentDirection() -> Direction?
-    {
-        if let route = MapState.routeInfoObject as? Route
-        {
-            let direction: Direction?
-            if MapState.selectedDirectionTag != nil
-            {
-                direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", MapState.selectedDirectionTag!), moc: appDelegate.persistentContainer.viewContext).object as? Direction
-            }
-            else
-            {
-                direction = route.directions?.array[0] as? Direction
-            }
-            
-            return direction
-        }
-        else if MapState.selectedDirectionTag != nil
-        {
-            let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", MapState.selectedDirectionTag!), moc: appDelegate.persistentContainer.viewContext).object as? Direction
-            return direction
-        }
-        
-        return nil
-    }
-    
-    static func getCurrentStop() -> Stop?
-    {
-        if MapState.selectedStopTag != nil
-        {
-            let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", MapState.selectedStopTag!), moc: appDelegate.persistentContainer.viewContext).object as? Stop
-            return stop
-        }
-        
-        return nil
-    }
-    
     static func fetchFavoriteStops(directionTag: String, stopTag: String? = nil) -> [FavoriteStop]
     {
         let predicate: NSPredicate?
@@ -331,7 +295,7 @@ class RouteDataManager
             predicate = NSPredicate(format: "directionTag == %@", directionTag)
         }
         
-        if let favoriteStopCallback = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: predicate!, moc: appDelegate.persistentContainer.viewContext)
+        if let favoriteStopCallback = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: predicate!, moc: CoreDataStack.persistentContainer.viewContext)
         {
             return favoriteStopCallback as! [FavoriteStop]
         }
@@ -353,106 +317,62 @@ class RouteDataManager
     //MARK: - Data Fetch
     
     static let maxPredictions = 5
+    static var fetchPredictionTimesOperation: BlockOperation?
     
     static func fetchPredictionTimesForStop(returnUUID: String, stop: Stop?, direction: Direction?)
     {
-        DispatchQueue.global(qos: .background).async {
-            if let stop = stop, let direction = direction, let route = direction.route
-            {
-                getJSONFromSource("predictions", ["a":agencyTag,"s":stop.stopTag!,"r":route.routeTag!]) { (json) in
-                    if let json = json
-                    {
-                        let predictionsMain = json["predictions"] as? Dictionary<String,Any> ?? [:]
-                        
-                        var directionDictionary: Dictionary<String,Any>?
-                        
-                        if let directionDictionaryTmp = predictionsMain["direction"] as? Dictionary<String,Any>
+        fetchPredictionTimesOperation?.cancel()
+        fetchPredictionTimesOperation = BlockOperation()
+        fetchPredictionTimesOperation?.addExecutionBlock {
+            DispatchQueue.global(qos: .background).async {
+                if let stop = stop, let direction = direction, let route = direction.route
+                {
+                    getJSONFromSource("predictions", ["a":agencyTag,"s":stop.stopTag!,"r":route.routeTag!]) { (json) in
+                        if let json = json
                         {
-                            directionDictionary = directionDictionaryTmp
-                        }
-                        else if let directionArray = predictionsMain["direction"] as? Array<Dictionary<String,Any>>
-                        {
-                            for directionDictionaryTmp in directionArray
+                            let predictionsMain = json["predictions"] as? Dictionary<String,Any> ?? [:]
+                            
+                            var directionDictionary: Dictionary<String,Any>?
+                            
+                            if let directionDictionaryTmp = predictionsMain["direction"] as? Dictionary<String,Any>
                             {
-                                if directionDictionaryTmp["title"] as? String == direction.directionTitle
+                                directionDictionary = directionDictionaryTmp
+                            }
+                            else if let directionArray = predictionsMain["direction"] as? Array<Dictionary<String,Any>>
+                            {
+                                for directionDictionaryTmp in directionArray
                                 {
-                                    directionDictionary = directionDictionaryTmp
-                                    break
+                                    if directionDictionaryTmp["title"] as? String == direction.directionTitle
+                                    {
+                                        directionDictionary = directionDictionaryTmp
+                                        break
+                                    }
                                 }
                             }
+                            
+                            let predictionsDictionary = directionDictionary?["prediction"] as? Array<Dictionary<String,String>> ?? []
+                            
+                            var predictions = Array<String>()
+                            var vehicles = Array<String>()
+                            
+                            for prediction in predictionsDictionary
+                            {
+                                predictions.append(prediction["minutes"] ?? "nil")
+                                vehicles.append(prediction["vehicle"]!)
+                            }
+                            
+                            NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictions,"vehicleIDs":vehicles])
                         }
-                        
-                        let predictionsDictionary = directionDictionary?["prediction"] as? Array<Dictionary<String,String>> ?? []
-                        
-                        var predictions = Array<String>()
-                        var vehicles = Array<String>()
-                        
-                        for prediction in predictionsDictionary
+                        else
                         {
-                            predictions.append(prediction["minutes"] ?? "nil")
-                            vehicles.append(prediction["vehicle"]!)
+                            NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["error":"Connection Error"])
                         }
-                        
-                        NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictions,"vehicleIDs":vehicles])
-                    }
-                    else
-                    {
-                        NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["error":"Connection Error"])
                     }
                 }
             }
         }
-    }
-    
-    static func formatPredictions(predictions: Array<String>, vehicleIDs: Array<String>? = nil) -> (predictionsString: String, selectedVehicleRange: NSRange?)
-    {
-        var predictionsString = ""
-        var predictionOn = 0
         
-        var selectedVehicleRange: NSRange?
-        
-        for prediction in predictions
-        {
-            if predictionOn != 0
-            {
-                predictionsString += ", "
-            }
-            
-            if vehicleIDs != nil && vehicleIDs!.count > predictionOn && vehicleIDs![predictionOn] == MapState.selectedVehicleID && selectedVehicleRange == nil
-            {
-                selectedVehicleRange = NSRange(location: predictionsString.count, length: prediction.count)
-            }
-            
-            if prediction == "0"
-            {
-                if selectedVehicleRange?.location == predictionsString.count
-                {
-                    selectedVehicleRange?.length = "Now".count
-                }
-                
-                predictionsString += "Now"
-            }
-            else
-            {
-                predictionsString += prediction
-            }
-            
-            predictionOn += 1
-        }
-        
-        if predictions.count > 0
-        {
-            if predictions.count > 1 || predictions[0] != "0"
-            {
-                predictionsString += " mins"
-            }
-        }
-        else
-        {
-            predictionsString = "No Predictions"
-        }
-        
-        return (predictionsString, selectedVehicleRange)
+        fetchPredictionTimesOperation?.start()
     }
     
     static func sortStopsByDistanceFromLocation(stops: Array<Stop>, locationToTest: CLLocation) -> Array<Stop>
@@ -472,10 +392,10 @@ class RouteDataManager
     
     static var lastVehicleTime: String?
     
-    static func fetchVehicleLocations(returnUUID: String, vehicleIDs: [String])
+    static func fetchVehicleLocations(returnUUID: String, vehicleIDs: [String], direction: Direction?)
     {
         DispatchQueue.global(qos: .background).async {
-            if let direction = getCurrentDirection(), let route = direction.route
+            if let direction = direction, let route = direction.route
             {
                 getJSONFromSource("vehicleLocations", ["a":agencyTag,"r":route.routeTag!,"t":lastVehicleTime ?? "0"]) { (json) in
                     guard let json = json else { return }

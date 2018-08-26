@@ -15,6 +15,8 @@
 	<key>com.apple.developer.siri</key>
 	<true/>
 	<key>com.apple.security.application-groups</key>
-	<array/>
+	<array>
+		<string>group.com.jacksonjude.MuniTracker</string>
+	</array>
 </dict>
 </plist>
