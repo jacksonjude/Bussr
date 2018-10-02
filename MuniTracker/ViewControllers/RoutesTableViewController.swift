@@ -40,7 +40,7 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
         convertRouteObjectsToRouteTitleDictionary()
         convertRouteDictionaryToRouteTitles()
         
-        setupThemeElements()
+        setupThemeElements()        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -117,8 +117,11 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        MapState.routeInfoObject = selectedRouteObject
-        MapState.routeInfoShowing = .direction
+        if segue.identifier == "SelectedRouteUnwind"
+        {
+            MapState.routeInfoObject = selectedRouteObject
+            MapState.routeInfoShowing = .direction
+        }
     }
     
     //MARK: - Route Dictionary

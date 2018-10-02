@@ -317,17 +317,28 @@ class RouteDataManager
     //MARK: - Data Fetch
     
     static let maxPredictions = 5
-    static var fetchPredictionTimesOperation: BlockOperation?
+    static var fetchPredictionTimesOperations = Dictionary<String,BlockOperation>()
+    static var fetchPredictionTimesReturnUUIDS = Dictionary<String,Array<String>>()
     
-    static func fetchPredictionTimesForStop(returnUUID: String, stop: Stop?, direction: Direction?)
+    static func fetchPredictionTimesForStop(returnUUID currentReturnUUID: String, stop: Stop?, direction: Direction?)
     {
-        fetchPredictionTimesOperation?.cancel()
-        fetchPredictionTimesOperation = BlockOperation()
-        fetchPredictionTimesOperation?.addExecutionBlock {
+        let directionStopID = (stop?.stopTag ?? "") + "-" + (direction?.directionTag ?? "")
+        
+        if (fetchPredictionTimesReturnUUIDS[directionStopID] == nil)
+        {
+            fetchPredictionTimesReturnUUIDS[directionStopID] = []
+        }
+        fetchPredictionTimesReturnUUIDS[directionStopID]?.append(currentReturnUUID)
+        
+        fetchPredictionTimesOperations[directionStopID]?.cancel()
+        fetchPredictionTimesOperations[directionStopID] = BlockOperation()
+        fetchPredictionTimesOperations[directionStopID]?.addExecutionBlock {
             DispatchQueue.global(qos: .background).async {
                 if let stop = stop, let direction = direction, let route = direction.route
                 {
                     getJSONFromSource("predictions", ["a":agencyTag,"s":stop.stopTag!,"r":route.routeTag!]) { (json) in
+                        let directionStopID = (stop.stopTag ?? "") + "-" + (direction.directionTag ?? "")
+                        
                         if let json = json
                         {
                             let predictionsMain = json["predictions"] as? Dictionary<String,Any> ?? [:]
@@ -361,18 +372,28 @@ class RouteDataManager
                                 vehicles.append(prediction["vehicle"]!)
                             }
                             
-                            NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictions,"vehicleIDs":vehicles])
+                            for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
+                            {
+                                NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictions,"vehicleIDs":vehicles])
+                                                                
+                                fetchPredictionTimesReturnUUIDS[directionStopID]!.remove(at: fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID)!)
+                            }
                         }
                         else
                         {
-                            NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["error":"Connection Error"])
+                            for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
+                            {
+                                NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["error":"Connection Error"])
+                                
+                                fetchPredictionTimesReturnUUIDS[directionStopID]!.remove(at: fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID)!)
+                            }
                         }
                     }
                 }
             }
         }
         
-        fetchPredictionTimesOperation?.start()
+        fetchPredictionTimesOperations[directionStopID]?.start()
     }
     
     static func sortStopsByDistanceFromLocation(stops: Array<Stop>, locationToTest: CLLocation) -> Array<Stop>

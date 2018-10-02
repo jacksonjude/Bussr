@@ -177,7 +177,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             self.mainNavigationBar.barTintColor = offWhite
             self.mainNavigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
             self.mainToolbar.barTintColor = offWhite
-            self.activityIndicator.activityIndicatorViewStyle = .gray
+            self.activityIndicator.style = .gray
             self.vehicleSelectionButton.setImage(UIImage(named: "BusIcon" + darkImageAppend()), for: UIControl.State.normal)
         case .dark:
             self.view.backgroundColor = black
@@ -186,7 +186,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             self.mainNavigationBar.barTintColor = black
             self.mainNavigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
             self.mainToolbar.barTintColor = black
-            self.activityIndicator.activityIndicatorViewStyle = .white
+            self.activityIndicator.style = .white
             self.vehicleSelectionButton.setImage(UIImage(named: "BusIcon" + darkImageAppend()), for: UIControl.State.normal)
         }
     }

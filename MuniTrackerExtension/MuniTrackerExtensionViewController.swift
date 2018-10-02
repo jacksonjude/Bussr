@@ -134,6 +134,8 @@ class MuniTrackerExtensionViewController: UITableViewController, NCWidgetProvidi
     {
         NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
         
+        let indexRow = Int(notification.name.rawValue.split(separator: ";")[1]) ?? 0
+        
         if let predictions = notification.userInfo?["predictions"] as? Array<String>
         {
             var predictionOn = 0
@@ -158,19 +160,29 @@ class MuniTrackerExtensionViewController: UITableViewController, NCWidgetProvidi
             }
             //predictionsString += " mins"
             
-            let indexRow = Int(notification.name.rawValue.split(separator: ";")[1]) ?? 0
-            
-            OperationQueue.main.addOperation {
-                if let favoritesPredictionLabel = self.tableView.cellForRow(at: IndexPath(row: indexRow, section: 0))?.viewWithTag(602) as? UILabel
-                {
-                    favoritesPredictionLabel.text = predictionsString
-                }
-                
-                if self.tableView.cellForRow(at: IndexPath(row: indexRow, section: 0))?.isSelected ?? false
-                {
-                    self.tableView.deselectRow(at: IndexPath(row: indexRow, section: 0), animated: true)
+            if predictions.count > 0
+            {
+                OperationQueue.main.addOperation {
+                    if let favoritesPredictionLabel = self.tableView.cellForRow(at: IndexPath(row: indexRow, section: 0))?.viewWithTag(602) as? UILabel
+                    {
+                        favoritesPredictionLabel.text = predictionsString
+                    }
+                    
+                    if self.tableView.cellForRow(at: IndexPath(row: indexRow, section: 0))?.isSelected ?? false
+                    {
+                        self.tableView.deselectRow(at: IndexPath(row: indexRow, section: 0), animated: true)
+                    }
                 }
             }
+            /*else if favoriteStops?.count ?? 0 > indexRow
+            {
+                stops?.removeAll(where: { (stop) -> Bool in
+                    return favoriteStops?[indexRow].stopTag == stop.stopTag
+                })
+                favoriteStops?.remove(at: indexRow)
+                
+                tableView.reloadData()
+            }*/
         }
     }
 }
