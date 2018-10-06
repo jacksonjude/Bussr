@@ -29,6 +29,8 @@ class MapState: NSObject
     
     static var showingPickerView = false
     
+    static var currentRecentStopUUID: String? = nil
+    
     static func getCurrentDirection() -> Direction?
     {
         if let route = MapState.routeInfoObject as? Route
@@ -58,7 +60,8 @@ class MapState: NSObject
     {
         if MapState.selectedStopTag != nil
         {
-            let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", MapState.selectedStopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
+            //let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", MapState.selectedStopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
+            let stop = RouteDataManager.fetchStop(stopTag: MapState.selectedStopTag!)
             return stop
         }
         

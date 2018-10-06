@@ -93,7 +93,8 @@ class MuniTrackerExtensionViewController: UITableViewController, NCWidgetProvidi
         let routeTagLabel = cell.viewWithTag(600) as! UILabel
         let stopNameLabel = cell.viewWithTag(601) as! UILabel
         
-        if let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", favoriteStopObject.directionTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Direction, let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStopObject.stopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
+        //if let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", favoriteStopObject.directionTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Direction, let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStopObject.stopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
+        if let stop = RouteDataManager.fetchStop(stopTag: favoriteStopObject.stopTag!), let direction = RouteDataManager.fetchDirection(directionTag: favoriteStopObject.directionTag!)
         {
             routeTagLabel.text = direction.route?.routeTag
             stopNameLabel.text = stop.stopTitle
@@ -121,7 +122,8 @@ class MuniTrackerExtensionViewController: UITableViewController, NCWidgetProvidi
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let favoriteStopObject = favoriteStops![indexPath.row]
         
-        if let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", favoriteStopObject.directionTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Direction, let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStopObject.stopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
+        //if let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", favoriteStopObject.directionTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Direction, let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStopObject.stopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
+        if let stop = RouteDataManager.fetchStop(stopTag: favoriteStopObject.stopTag!), let direction = RouteDataManager.fetchDirection(directionTag: favoriteStopObject.directionTag!)
         {
             let predictionTimesReturnUUID = UUID().uuidString + ";" + String(indexPath.row)
             NotificationCenter.default.addObserver(self, selector: #selector(receivePredictionTime(notification:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)

@@ -110,7 +110,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var mainMapView: MKMapView!
     @IBOutlet weak var predictionTimesNavigationBar: UINavigationBar!
     @IBOutlet weak var predictionTimesLabel: UILabel!
-    @IBOutlet weak var addFavoriteButton: UIBarButtonItem!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var refreshButton: UIBarButtonItem!
     @IBOutlet weak var mainNavigationItem: UINavigationItem!
@@ -394,7 +393,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 reloadPolyline()
             }
             
-            setFavoriteButtonImage(inverse: false)
+            //setFavoriteButtonImage(inverse: false)
             
             showHidePickerButton.isEnabled = true
             
@@ -728,7 +727,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     func updateSelectedStopAnnotation(stopTag: String)
     {
-        if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", stopTag), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
+        //if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", stopTag), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
+        if let stop = RouteDataManager.fetchStop(stopTag: stopTag)
         {
             setAnnotationType(coordinate: CLLocationCoordinate2D(latitude: stop.stopLatitude, longitude: stop.stopLongitude).convertToString(), annotationType: .orange)
             
@@ -754,6 +754,18 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     @IBAction func favoritesButtonPressed(_ sender: Any) {
         self.performSegue(withIdentifier: "showFavoritesTableView", sender: self)
+    }
+    
+    @IBAction func historyButtonPressed(_ sender: Any) {
+        self.performSegue(withIdentifier: "showRecentStopTableView", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showRecentStopTableView"
+        {
+            let stopsTableView = segue.destination as! StopsTableViewController
+            stopsTableView.stopFetchType = .recent
+        }
     }
     
     @IBAction func unwindFromRouteTableViewWithSelectedRoute(_ segue: UIStoryboardSegue)
@@ -789,6 +801,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     @IBAction func unwindFromOtherDirectionsView(_ segue: UIStoryboardSegue)
     {
         MapState.routeInfoObject = MapState.getCurrentDirection()
+        showPickerView()
     }
     
     @IBAction func unwindFromStopsTableViewWithSelectedStop(_ segue: UIStoryboardSegue)
@@ -806,6 +819,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         reloadAllAnnotations()
         NotificationCenter.default.post(name: NSNotification.Name("EnableFilters"), object: nil)
         NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
+    }
+    
+    @IBAction func unwindFromStopTableView(_ segue: UIStoryboardSegue)
+    {
+        
     }
     
     //MARK: - Bus Predications
@@ -1000,7 +1018,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    //MARK: - Add Favorite
+    /*//MARK: - Add Favorite
     
     @IBAction func addFavoriteButtonPressed(_ sender: Any) {
         setFavoriteButtonImage(inverse: true)
@@ -1030,7 +1048,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 }
             }
         }
-    }
+    }*/
     
     //MARK: - Tracking
     

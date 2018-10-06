@@ -251,6 +251,7 @@
 				7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */,
 				7A42C933210521090022FC96 /* DirectionsTableViewController.swift */,
 				7A7FE2B420DB4761005B654C /* MapState.swift */,
+				7A50EECC2107DAE700B69B92 /* StopsTableViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -261,7 +262,6 @@
 				7A0EF1FE20E818500039212B /* CloudManager.swift */,
 				7A24528F20FA73170033E333 /* FavoritesTableViewController.swift */,
 				7A9F21E62106B0B00000E971 /* FavoriteState.swift */,
-				7A50EECC2107DAE700B69B92 /* StopsTableViewController.swift */,
 			);
 			path = Favorites;
 			sourceTree = "<group>";

@@ -243,10 +243,14 @@ class RouteDataManager
     
     //MARK: - Core Data
     
-    static func fetchLocalObjects(type: String, predicate: NSPredicate, moc: NSManagedObjectContext) -> [AnyObject]?
+    static func fetchLocalObjects(type: String, predicate: NSPredicate, moc: NSManagedObjectContext, sortDescriptors: [NSSortDescriptor]? = nil, fetchLimit: Int? = nil) -> [AnyObject]?
     {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: type)
         fetchRequest.predicate = predicate
+        
+        fetchRequest.sortDescriptors = sortDescriptors
+        
+        fetchRequest.fetchLimit = fetchLimit ?? fetchRequest.fetchLimit
         
         var fetchResults: [AnyObject]?
         var error: NSError? = nil
@@ -312,6 +316,16 @@ class RouteDataManager
         }
         
         return false
+    }
+    
+    static func fetchStop(stopTag: String) -> Stop?
+    {
+        return RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", stopTag), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
+    }
+    
+    static func fetchDirection(directionTag: String) -> Direction?
+    {
+        return RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", directionTag), moc: CoreDataStack.persistentContainer.viewContext).object as? Direction
     }
     
     //MARK: - Data Fetch

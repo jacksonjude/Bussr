@@ -42,7 +42,8 @@ class FavoritesExtensionViewController: MuniTrackerExtensionViewController, CLLo
         if let userLocation = self.currentUserLocation, var favoriteStops = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: NSPredicate(format: "TRUEPREDICATE"), moc: CoreDataStack.persistentContainer.viewContext) as? [FavoriteStop]
         {
             favoriteStops.sort { (favoriteStop1, favoriteStop2) -> Bool in
-                if let stop1 = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStop1.stopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop, let stop2 = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStop2.stopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
+                //if let stop1 = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStop1.stopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop, let stop2 = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStop2.stopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
+                if let stop1 = RouteDataManager.fetchStop(stopTag: favoriteStop1.stopTag!), let stop2 = RouteDataManager.fetchStop(stopTag: favoriteStop2.stopTag!)
                 {
                     let stop1Location = CLLocation(latitude: stop1.stopLatitude, longitude: stop1.stopLongitude)
                     let stop2Location = CLLocation(latitude: stop2.stopLatitude, longitude: stop2.stopLongitude)

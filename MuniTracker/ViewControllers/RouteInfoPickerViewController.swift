@@ -430,6 +430,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 if let stop = routeInfoToChange[row] as? Stop
                 {
                     MapState.selectedStopTag = stop.stopTag
+                    
+                    updateRecentStops()
                 }
             case .otherDirections:
                 if let direction = routeInfoToChange[row] as? Direction
@@ -447,6 +449,64 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 }
             default:
                 break
+            }
+        }
+    }
+    
+    func updateRecentStops()
+    {
+        CoreDataStack.persistentContainer.performBackgroundTask { (backgroundMOC) in
+            if let mapStateDirectionTag = MapState.selectedDirectionTag, let currentRecentStopUUID = MapState.currentRecentStopUUID, let currentRecentStopArray = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(format: "uuid == %@", currentRecentStopUUID), moc: backgroundMOC) as? [RecentStop], currentRecentStopArray.count > 0
+            {
+                let currentRecentStop = currentRecentStopArray[0]
+                
+                if currentRecentStop.directionTag != nil && RouteDataManager.fetchDirection(directionTag: currentRecentStop.directionTag!)?.route?.routeTag == RouteDataManager.fetchDirection(directionTag: mapStateDirectionTag)?.route?.routeTag
+                {
+                    currentRecentStop.directionTag = MapState.selectedDirectionTag
+                    currentRecentStop.stopTag = MapState.selectedStopTag
+                    currentRecentStop.timestamp = Date()
+                    
+                    self.findRecentStopDuplicates(currentRecentStop: currentRecentStop, backgroundMOC: backgroundMOC)
+                }
+                else
+                {
+                    self.findRecentStopDuplicates(currentRecentStop: currentRecentStop, backgroundMOC: backgroundMOC)
+                    
+                    let recentStop = NSEntityDescription.insertNewObject(forEntityName: "RecentStop", into: backgroundMOC) as! RecentStop
+                    recentStop.directionTag = mapStateDirectionTag
+                    recentStop.stopTag = MapState.selectedStopTag
+                    recentStop.timestamp = Date()
+                    recentStop.uuid = UUID().uuidString
+                    MapState.currentRecentStopUUID = recentStop.uuid
+                }
+            }
+            else
+            {
+                let recentStop = NSEntityDescription.insertNewObject(forEntityName: "RecentStop", into: backgroundMOC) as! RecentStop
+                recentStop.directionTag = MapState.selectedDirectionTag
+                recentStop.stopTag = MapState.selectedStopTag
+                recentStop.timestamp = Date()
+                recentStop.uuid = UUID().uuidString
+                MapState.currentRecentStopUUID = recentStop.uuid
+                
+                self.findRecentStopDuplicates(currentRecentStop: recentStop, backgroundMOC: backgroundMOC)
+            }
+            
+            try? backgroundMOC.save()
+        }
+    }
+    
+    func findRecentStopDuplicates(currentRecentStop: RecentStop, backgroundMOC: NSManagedObjectContext)
+    {
+        if var duplicateRecentStops = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(format: "(stopTag == %@) AND (directionTag == %@)", currentRecentStop.stopTag!, currentRecentStop.directionTag!), moc: backgroundMOC, sortDescriptors: [NSSortDescriptor(key: "timestamp", ascending: true)]) as? [RecentStop]
+        {
+            if duplicateRecentStops.count > 0
+            {
+                duplicateRecentStops.remove(at: 0)
+                for duplicateRecentStop in duplicateRecentStops
+                {
+                    backgroundMOC.delete(duplicateRecentStop)
+                }
             }
         }
     }
@@ -617,7 +677,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             let favoriteStopCallback = RouteDataManager.fetchFavoriteStops(directionTag: selectedDirection.directionTag!)
             for favoriteStop in favoriteStopCallback
             {
-                let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStop.stopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as! Stop
+                //let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStop.stopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as! Stop
+                let stop = RouteDataManager.fetchStop(stopTag: favoriteStop.stopTag!)!
                 favoriteStops.append(stop)
             }
             
@@ -701,27 +762,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     //MARK: - Other Directions
     
     @IBAction func otherDirectionsButtonPressed(_ sender: Any) {
-        /*if MapState.routeInfoShowing != .otherDirections
-        {
-            if let selectedStop = MapState.getCurrentStop()
-            {
-                MapState.routeInfoObject = selectedStop.direction?.allObjects
-                MapState.routeInfoShowing = .otherDirections
-                
-                reloadRouteData()
-            }
-        }
-        else
-        {
-            if let selectedDirection = MapState.getCurrentDirection()
-            {
-                MapState.routeInfoObject = selectedDirection
-                MapState.routeInfoShowing = .stop
-                
-                reloadRouteData()
-            }
-        }*/
-        
         if let selectedStop = MapState.getCurrentStop()
         {
             MapState.routeInfoObject = selectedStop.direction?.allObjects
