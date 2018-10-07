@@ -46,6 +46,13 @@
             <fetchIndexElement property="stopLongitude" type="Binary" order="ascending"/>
         </fetchIndex>
     </entity>
+    <entity name="StopNotification" representedClassName="StopNotification" syncable="YES" codeGenerationType="class">
+        <attribute name="daysOfWeek" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="directionTag" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hour" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="minute" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="stopTag" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <elements>
         <element name="Agency" positionX="-36" positionY="81" width="128" height="75"/>
         <element name="Direction" positionX="-45" positionY="63" width="128" height="120"/>
@@ -53,5 +60,6 @@
         <element name="RecentStop" positionX="-45" positionY="90" width="128" height="105"/>
         <element name="Route" positionX="-54" positionY="18" width="128" height="135"/>
         <element name="Stop" positionX="-36" positionY="27" width="128" height="150"/>
+        <element name="StopNotification" positionX="-45" positionY="90" width="128" height="120"/>
     </elements>
 </model>

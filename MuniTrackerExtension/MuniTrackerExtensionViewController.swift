@@ -57,7 +57,7 @@ extension UIColor
 }
 
 class MuniTrackerExtensionViewController: UITableViewController, NCWidgetProviding {
-    var favoriteStops: Array<FavoriteStop>?
+    var stopDirectionObjects: Array<(stopTag: String, directionTag: String)>?
     var stops: Array<Stop>?
     
     override func viewDidLoad() {
@@ -82,19 +82,19 @@ class MuniTrackerExtensionViewController: UITableViewController, NCWidgetProvidi
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return favoriteStops?.count ?? 0
+        return stopDirectionObjects?.count ?? 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "RouteCell")!
         
-        let favoriteStopObject = favoriteStops![indexPath.row]
+        let stopDirectionObject = stopDirectionObjects![indexPath.row]
         
         let routeTagLabel = cell.viewWithTag(600) as! UILabel
         let stopNameLabel = cell.viewWithTag(601) as! UILabel
         
         //if let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", favoriteStopObject.directionTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Direction, let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStopObject.stopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
-        if let stop = RouteDataManager.fetchStop(stopTag: favoriteStopObject.stopTag!), let direction = RouteDataManager.fetchDirection(directionTag: favoriteStopObject.directionTag!)
+        if let stop = RouteDataManager.fetchStop(stopTag: stopDirectionObject.stopTag), let direction = RouteDataManager.fetchDirection(directionTag: stopDirectionObject.directionTag)
         {
             routeTagLabel.text = direction.route?.routeTag
             stopNameLabel.text = stop.stopTitle
@@ -120,10 +120,10 @@ class MuniTrackerExtensionViewController: UITableViewController, NCWidgetProvidi
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let favoriteStopObject = favoriteStops![indexPath.row]
+        let stopDirectionObject = stopDirectionObjects![indexPath.row]
         
         //if let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", favoriteStopObject.directionTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Direction, let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStopObject.stopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
-        if let stop = RouteDataManager.fetchStop(stopTag: favoriteStopObject.stopTag!), let direction = RouteDataManager.fetchDirection(directionTag: favoriteStopObject.directionTag!)
+        if let stop = RouteDataManager.fetchStop(stopTag: stopDirectionObject.stopTag), let direction = RouteDataManager.fetchDirection(directionTag: stopDirectionObject.directionTag)
         {
             let predictionTimesReturnUUID = UUID().uuidString + ";" + String(indexPath.row)
             NotificationCenter.default.addObserver(self, selector: #selector(receivePredictionTime(notification:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)

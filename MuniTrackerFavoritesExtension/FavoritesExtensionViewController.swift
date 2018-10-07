@@ -53,7 +53,9 @@ class FavoritesExtensionViewController: MuniTrackerExtensionViewController, CLLo
                 return false
             }
             
-            self.favoriteStops = favoriteStops
+            self.stopDirectionObjects = favoriteStops.map({ (favoriteStop) -> (stopTag: String, directionTag: String) in
+                return (stopTag: favoriteStop.stopTag!, directionTag: favoriteStop.directionTag!)
+            })
             
             self.tableView.reloadData()
         }

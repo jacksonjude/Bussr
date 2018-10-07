@@ -153,6 +153,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         
         setupHidePickerButton()
         
+        self.pickerViewBottomConstraint.constant = -1*(self.view.viewWithTag(618)?.frame.size.height ?? 0)
+        
         if appDelegate.firstLaunch
         {
             downloadAllData = true
@@ -326,13 +328,13 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     {
         mainMapView.setRegion(MKCoordinateRegion(center: mainMapView.region.center, latitudinalMeters: range, longitudinalMeters: range), animated: false)
         
-        let offset = self.view.viewWithTag(618)?.frame.height ?? 0
+        //let offset = self.view.viewWithTag(618)?.frame.height ?? 0
         
-        var point = mainMapView.convert(location.coordinate, toPointTo: self.view)
-        point.y += offset/2
-        let offsetCoordinate = mainMapView.convert(point, toCoordinateFrom: self.view)
+        //var point = mainMapView.convert(location.coordinate, toPointTo: self.view)
+        //point.y += offset/2
+        //let offsetCoordinate = mainMapView.convert(point, toCoordinateFrom: self.view)
         
-        mainMapView.setRegion(MKCoordinateRegion(center: offsetCoordinate, latitudinalMeters: range, longitudinalMeters: range), animated: !willChangeRange)
+        mainMapView.setRegion(MKCoordinateRegion(center: location.coordinate, latitudinalMeters: range, longitudinalMeters: range), animated: !willChangeRange)
     }
     
     @objc func updateMap(notification: Notification?)
@@ -781,8 +783,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     @IBAction func unwindWithSelectedStop(_ segue: UIStoryboardSegue)
     {
-        MapState.showingPickerView = true
-        setupHidePickerButton()
+        showPickerView()
         reloadAllAnnotations()
         NotificationCenter.default.post(name: NSNotification.Name("DisableFilters"), object: nil)
         NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
@@ -806,8 +807,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     @IBAction func unwindFromStopsTableViewWithSelectedStop(_ segue: UIStoryboardSegue)
     {
-        MapState.showingPickerView = true
-        setupHidePickerButton()
+        showPickerView()
         reloadAllAnnotations()
         NotificationCenter.default.post(name: NSNotification.Name("DisableFilters"), object: nil)
         NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)

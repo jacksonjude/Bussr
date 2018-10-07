@@ -20,6 +20,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     @IBOutlet weak var directionButton: UIButton!
     @IBOutlet weak var otherDirectionsButton: UIButton!
     @IBOutlet weak var addFavoriteButton: UIButton!
+    @IBOutlet weak var addNotificationButton: UIButton!
     @IBOutlet weak var favoriteButtonLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var expandFiltersButton: UIButton!
     
@@ -72,6 +73,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             self.otherDirectionsButton.setImage(UIImage(named: "BusStopIcon"), for: UIControl.State.normal)
             //self.addFavoriteButton.setImage(UIImage(named: "FavoriteAddIcon"), for: UIControl.State.normal)
             self.expandFiltersButton.setImage(UIImage(named: "FilterIcon"), for: UIControl.State.normal)
+            self.addNotificationButton.setImage(UIImage(named: "BellAddIcon"), for: UIControl.State.normal)
         case .dark:
             self.routeInfoPicker.backgroundColor = black
             self.favoriteButton.setImage(UIImage(named: "Favorite" + favoriteFillAppend() + "IconDark"), for: UIControl.State.normal)
@@ -80,6 +82,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             self.otherDirectionsButton.setImage(UIImage(named: "BusStopIconDark"), for: UIControl.State.normal)
             //self.addFavoriteButton.setImage(UIImage(named: "FavoriteAddIconDark"), for: UIControl.State.normal)
             self.expandFiltersButton.setImage(UIImage(named: "FilterIconDark"), for: UIControl.State.normal)
+             self.addNotificationButton.setImage(UIImage(named: "BellAddIconDark"), for: UIControl.State.normal)
         }
     }
     
@@ -769,7 +772,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         }
     }
     
-    //Add Favorite
+    //MARK: - Add Favorite / Notification
     
     @IBAction func addFavoriteButtonPressed(_ sender: Any) {
         setFavoriteButtonImage(inverse: true)
@@ -799,5 +802,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 }
             }
         }
+    }
+    
+    @IBAction func addNotificationButtonPressed(_ sender: Any) {
     }
 }
