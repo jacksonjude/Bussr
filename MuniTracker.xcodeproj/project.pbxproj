@@ -28,6 +28,8 @@
 		7A0E8C6A20E0AAAC00C28465 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A0E8C6920E0AAAB00C28465 /* CoreLocation.framework */; };
 		7A0EF1FD20E80AC90039212B /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A0EF1FC20E80AC90039212B /* CloudKit.framework */; };
 		7A0EF1FF20E818500039212B /* CloudManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0EF1FE20E818500039212B /* CloudManager.swift */; };
+		7A193A26216AE4B6009D866A /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A193A25216AE4B6009D866A /* NotificationManager.swift */; };
+		7A193A29216AFA4F009D866A /* StopNotificationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A193A28216AFA4F009D866A /* StopNotificationTableViewController.swift */; };
 		7A24529020FA73170033E333 /* FavoritesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A24528F20FA73170033E333 /* FavoritesTableViewController.swift */; };
 		7A42C934210521090022FC96 /* DirectionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A42C933210521090022FC96 /* DirectionsTableViewController.swift */; };
 		7A4930C420D788EA008208D1 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A4930C320D788EA008208D1 /* MapKit.framework */; };
@@ -53,6 +55,7 @@
 		7AD81E1720D6E60D004BAB1E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AD81E1520D6E60D004BAB1E /* LaunchScreen.storyboard */; };
 		7AD81E1F20D6EEDB004BAB1E /* RouteDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */; };
 		7AF50BE220E1B71E00E4BFD1 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF50BE120E1B71E00E4BFD1 /* SettingsViewController.swift */; };
+		7AFB4752216DBD480043450B /* NotificationEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB4751216DBD480043450B /* NotificationEditorViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -118,6 +121,8 @@
 		7A0E8C6920E0AAAB00C28465 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		7A0EF1FC20E80AC90039212B /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		7A0EF1FE20E818500039212B /* CloudManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudManager.swift; sourceTree = "<group>"; };
+		7A193A25216AE4B6009D866A /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		7A193A28216AFA4F009D866A /* StopNotificationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopNotificationTableViewController.swift; sourceTree = "<group>"; };
 		7A24528F20FA73170033E333 /* FavoritesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesTableViewController.swift; sourceTree = "<group>"; };
 		7A42C933210521090022FC96 /* DirectionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsTableViewController.swift; sourceTree = "<group>"; };
 		7A4930C220D788BB008208D1 /* MuniTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MuniTracker.entitlements; sourceTree = "<group>"; };
@@ -140,6 +145,7 @@
 		7AD81E1820D6E60D004BAB1E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteDataManager.swift; sourceTree = "<group>"; };
 		7AF50BE120E1B71E00E4BFD1 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		7AFB4751216DBD480043450B /* NotificationEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEditorViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -242,28 +248,37 @@
 			path = MuniTrackerNearbyExtension;
 			sourceTree = "<group>";
 		};
-		7A1D113620E2003100C12DF5 /* ViewControllers */ = {
+		7A193A23216ADE79009D866A /* Selection */ = {
 			isa = PBXGroup;
 			children = (
 				7A71722A20D70943002144D5 /* RoutesTableViewController.swift */,
-				7AF50BE120E1B71E00E4BFD1 /* SettingsViewController.swift */,
-				7AD81E0B20D6E60C004BAB1E /* MainMapViewController.swift */,
-				7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */,
 				7A42C933210521090022FC96 /* DirectionsTableViewController.swift */,
-				7A7FE2B420DB4761005B654C /* MapState.swift */,
 				7A50EECC2107DAE700B69B92 /* StopsTableViewController.swift */,
-			);
-			path = ViewControllers;
-			sourceTree = "<group>";
-		};
-		7A24528E20FA72FD0033E333 /* Favorites */ = {
-			isa = PBXGroup;
-			children = (
-				7A0EF1FE20E818500039212B /* CloudManager.swift */,
 				7A24528F20FA73170033E333 /* FavoritesTableViewController.swift */,
 				7A9F21E62106B0B00000E971 /* FavoriteState.swift */,
 			);
-			path = Favorites;
+			path = Selection;
+			sourceTree = "<group>";
+		};
+		7A193A27216AF9F8009D866A /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				7AF50BE120E1B71E00E4BFD1 /* SettingsViewController.swift */,
+				7A193A25216AE4B6009D866A /* NotificationManager.swift */,
+				7A193A28216AFA4F009D866A /* StopNotificationTableViewController.swift */,
+				7AFB4751216DBD480043450B /* NotificationEditorViewController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		7A1D113620E2003100C12DF5 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				7AD81E0B20D6E60C004BAB1E /* MainMapViewController.swift */,
+				7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */,
+				7A7FE2B420DB4761005B654C /* MapState.swift */,
+			);
+			path = Map;
 			sourceTree = "<group>";
 		};
 		7AD81DFD20D6E60C004BAB1E = {
@@ -295,8 +310,10 @@
 			isa = PBXGroup;
 			children = (
 				7A0292E320ED81D8006DFDF5 /* AppIcons */,
-				7A1D113620E2003100C12DF5 /* ViewControllers */,
-				7A24528E20FA72FD0033E333 /* Favorites */,
+				7A1D113620E2003100C12DF5 /* Map */,
+				7A193A23216ADE79009D866A /* Selection */,
+				7A193A27216AF9F8009D866A /* Settings */,
+				7A0EF1FE20E818500039212B /* CloudManager.swift */,
 				7AD81E0920D6E60C004BAB1E /* AppDelegate.swift */,
 				7AD81E0D20D6E60C004BAB1E /* Main.storyboard */,
 				7AD81E1520D6E60D004BAB1E /* LaunchScreen.storyboard */,
@@ -561,10 +578,13 @@
 				7A24529020FA73170033E333 /* FavoritesTableViewController.swift in Sources */,
 				7A61EF8420D77BE100481037 /* RouteInfoPickerViewController.swift in Sources */,
 				7A068D1521266AC400D3425E /* CoreDataStack.swift in Sources */,
+				7A193A29216AFA4F009D866A /* StopNotificationTableViewController.swift in Sources */,
 				7AD81E0C20D6E60C004BAB1E /* MainMapViewController.swift in Sources */,
 				7A9F21E72106B0B00000E971 /* FavoriteState.swift in Sources */,
+				7AFB4752216DBD480043450B /* NotificationEditorViewController.swift in Sources */,
 				7AD81E0A20D6E60C004BAB1E /* AppDelegate.swift in Sources */,
 				7A71722B20D70943002144D5 /* RoutesTableViewController.swift in Sources */,
+				7A193A26216AE4B6009D866A /* NotificationManager.swift in Sources */,
 				7A7FE2B520DB4761005B654C /* MapState.swift in Sources */,
 				7AF50BE220E1B71E00E4BFD1 /* SettingsViewController.swift in Sources */,
 			);

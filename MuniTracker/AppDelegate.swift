@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import CoreLocation
 import CloudKit
+import UserNotifications
 
 enum ThemeType: Int
 {
@@ -18,7 +19,7 @@ enum ThemeType: Int
 }
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     var window: UIWindow?
     
@@ -37,6 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UserDefaults.standard.set(618, forKey: "firstLaunch")
             
             UserDefaults.standard.set(ThemeType.light.rawValue, forKey: "theme")
+            CloudManager.addFavoritesZone()
         }
         
         if let lastServerChangeToken = UserDefaults.standard.object(forKey: "LastServerChangeToken") as? Data
@@ -104,6 +106,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         default:
             break
         }
+    }
+    
+    func registerForPushNotifications() {
+        UNUserNotificationCenter.current().delegate = self
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
+            (granted, error) in
+            print("Permission granted: \(granted)")
+            guard granted else { return }
+            DispatchQueue.main.async {
+                UIApplication.shared.registerForRemoteNotifications()
+            }
+        }
+    }
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        // 1. Convert device token to string
+        let tokenParts = deviceToken.map { data -> String in
+            return String(format: "%02.2hhx", data)
+        }
+        let token = tokenParts.joined()
+        // 2. Print device token to use for PNs payloads
+        print("Device Token: \(token)")
+        
+        UserDefaults.standard.set(token, forKey: "deviceToken")
+    }
+    
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        // 1. Print out error if PNs registration not successful
+        print("Failed to register for remote notifications with error: \(error)")
     }
 
 }

@@ -166,4 +166,10 @@ class CloudManager
             }
         }
     }
+    
+    static func addFavoritesZone()
+    {
+        let modifyRecordZonesOperations = CKModifyRecordZonesOperation(recordZonesToSave: [favoriteStopZone], recordZoneIDsToDelete: nil)
+        privateDatabase.add(modifyRecordZonesOperations)
+    }
 }
