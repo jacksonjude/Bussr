@@ -235,6 +235,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 
                 addFavoriteButton.isHidden = true
                 addFavoriteButton.isEnabled = false
+                addNotificationButton.isHidden = true
+                addNotificationButton.isEnabled = false
                 
                 rowToSelect = (routeInfoToChange as! Array<Direction>).firstIndex(of: (routeInfoToChange as! Array<Direction>).filter({$0.directionTag == MapState.selectedDirectionTag}).first ?? (routeInfoToChange as! Array<Direction>)[0]) ?? 0
                 /*var directionOn = 0
@@ -264,6 +266,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 
                 addFavoriteButton.isHidden = false
                 addFavoriteButton.isEnabled = true
+                addNotificationButton.isHidden = false
+                addNotificationButton.isEnabled = true
                 
                 rowToSelect = (routeInfoToChange as! Array<Stop>).firstIndex(of: (routeInfoToChange as! Array<Stop>).filter({$0.stopTag == MapState.selectedStopTag}).first ?? (routeInfoToChange as! Array<Stop>)[0]) ?? 0
                 /*var stopOn = 0
@@ -290,6 +294,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 
                 addFavoriteButton.isHidden = true
                 addFavoriteButton.isEnabled = false
+                addNotificationButton.isHidden = true
+                addNotificationButton.isEnabled = false
                 
                 rowToSelect = (routeInfoToChange as! Array<Direction>).firstIndex(of: (routeInfoToChange as! Array<Direction>).filter({$0.directionTag == MapState.selectedDirectionTag}).first ?? (routeInfoToChange as! Array<Direction>)[0]) ?? 0
                 /*var directionOn = 0
@@ -319,6 +325,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 
                 addFavoriteButton.isHidden = true
                 addFavoriteButton.isEnabled = false
+                addNotificationButton.isHidden = true
+                addNotificationButton.isEnabled = false
                 
                 var vehicleOn = 0
                 for vehicle in routeInfoToChange as! Array<(vehicleID: String, prediction: String)>
@@ -362,6 +370,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 {
                     self.addFavoriteButton.isHidden = true
                     self.addFavoriteButton.isEnabled = false
+                    self.addNotificationButton.isHidden = true
+                    self.addNotificationButton.isEnabled = false
                 }
                 
                 NotificationCenter.default.post(name: NSNotification.Name("UpdateRouteMap"), object: nil, userInfo: ["ChangingRouteInfoShowing":true])
@@ -805,5 +815,14 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     }
     
     @IBAction func addNotificationButtonPressed(_ sender: Any) {
+        let newNotification = NSEntityDescription.insertNewObject(forEntityName: "StopNotification", into: CoreDataStack.persistentContainer.viewContext) as! StopNotification
+        newNotification.daysOfWeek = try? JSONSerialization.data(withJSONObject: [true, true, true, true, true, true, true], options: JSONSerialization.WritingOptions.prettyPrinted)
+        newNotification.directionTag = MapState.selectedDirectionTag
+        newNotification.stopTag = MapState.selectedStopTag
+        newNotification.hour = 12
+        newNotification.minute = 0
+        newNotification.notificationUUID = UUID().uuidString
+        
+        CoreDataStack.saveContext()
     }
 }

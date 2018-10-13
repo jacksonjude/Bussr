@@ -29,7 +29,8 @@
 		7A0EF1FD20E80AC90039212B /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A0EF1FC20E80AC90039212B /* CloudKit.framework */; };
 		7A0EF1FF20E818500039212B /* CloudManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0EF1FE20E818500039212B /* CloudManager.swift */; };
 		7A193A26216AE4B6009D866A /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A193A25216AE4B6009D866A /* NotificationManager.swift */; };
-		7A193A29216AFA4F009D866A /* StopNotificationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A193A28216AFA4F009D866A /* StopNotificationTableViewController.swift */; };
+		7A193A29216AFA4F009D866A /* NotificationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A193A28216AFA4F009D866A /* NotificationTableViewController.swift */; };
+		7A23176A2171212F00D12F21 /* NotificationEditorState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2317692171212F00D12F21 /* NotificationEditorState.swift */; };
 		7A24529020FA73170033E333 /* FavoritesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A24528F20FA73170033E333 /* FavoritesTableViewController.swift */; };
 		7A42C934210521090022FC96 /* DirectionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A42C933210521090022FC96 /* DirectionsTableViewController.swift */; };
 		7A4930C420D788EA008208D1 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A4930C320D788EA008208D1 /* MapKit.framework */; };
@@ -38,6 +39,8 @@
 		7A71722B20D70943002144D5 /* RoutesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A71722A20D70943002144D5 /* RoutesTableViewController.swift */; };
 		7A7FE2B520DB4761005B654C /* MapState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7FE2B420DB4761005B654C /* MapState.swift */; };
 		7A9F21E72106B0B00000E971 /* FavoriteState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9F21E62106B0B00000E971 /* FavoriteState.swift */; };
+		7A9F7E79216FA40200DF093D /* NotificationRepeatTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9F7E78216FA40200DF093D /* NotificationRepeatTableViewController.swift */; };
+		7A9F7E7B216FA49E00DF093D /* NotificationTimePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9F7E7A216FA49E00DF093D /* NotificationTimePickerViewController.swift */; };
 		7AD004612127586700DCB08E /* MuniTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1020D6E60C004BAB1E /* MuniTracker.xcdatamodeld */; };
 		7AD004622127586800DCB08E /* MuniTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1020D6E60C004BAB1E /* MuniTracker.xcdatamodeld */; };
 		7AD004632127586800DCB08E /* MuniTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1020D6E60C004BAB1E /* MuniTracker.xcdatamodeld */; };
@@ -122,7 +125,8 @@
 		7A0EF1FC20E80AC90039212B /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		7A0EF1FE20E818500039212B /* CloudManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudManager.swift; sourceTree = "<group>"; };
 		7A193A25216AE4B6009D866A /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
-		7A193A28216AFA4F009D866A /* StopNotificationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopNotificationTableViewController.swift; sourceTree = "<group>"; };
+		7A193A28216AFA4F009D866A /* NotificationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableViewController.swift; sourceTree = "<group>"; };
+		7A2317692171212F00D12F21 /* NotificationEditorState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEditorState.swift; sourceTree = "<group>"; };
 		7A24528F20FA73170033E333 /* FavoritesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesTableViewController.swift; sourceTree = "<group>"; };
 		7A42C933210521090022FC96 /* DirectionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsTableViewController.swift; sourceTree = "<group>"; };
 		7A4930C220D788BB008208D1 /* MuniTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MuniTracker.entitlements; sourceTree = "<group>"; };
@@ -132,6 +136,8 @@
 		7A71722A20D70943002144D5 /* RoutesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutesTableViewController.swift; sourceTree = "<group>"; };
 		7A7FE2B420DB4761005B654C /* MapState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapState.swift; sourceTree = "<group>"; };
 		7A9F21E62106B0B00000E971 /* FavoriteState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteState.swift; sourceTree = "<group>"; };
+		7A9F7E78216FA40200DF093D /* NotificationRepeatTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRepeatTableViewController.swift; sourceTree = "<group>"; };
+		7A9F7E7A216FA49E00DF093D /* NotificationTimePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTimePickerViewController.swift; sourceTree = "<group>"; };
 		7AA5601D212FCA8C00C6E47E /* MuniTrackerRecentExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MuniTrackerRecentExtension.entitlements; sourceTree = "<group>"; };
 		7AA5601E212FCAA200C6E47E /* MuniTrackerFavoritesExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MuniTrackerFavoritesExtension.entitlements; sourceTree = "<group>"; };
 		7AA5601F212FCAB300C6E47E /* MuniTrackerNearbyExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MuniTrackerNearbyExtension.entitlements; sourceTree = "<group>"; };
@@ -264,9 +270,6 @@
 			isa = PBXGroup;
 			children = (
 				7AF50BE120E1B71E00E4BFD1 /* SettingsViewController.swift */,
-				7A193A25216AE4B6009D866A /* NotificationManager.swift */,
-				7A193A28216AFA4F009D866A /* StopNotificationTableViewController.swift */,
-				7AFB4751216DBD480043450B /* NotificationEditorViewController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -279,6 +282,19 @@
 				7A7FE2B420DB4761005B654C /* MapState.swift */,
 			);
 			path = Map;
+			sourceTree = "<group>";
+		};
+		7A9F7E77216FA2C600DF093D /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				7A193A25216AE4B6009D866A /* NotificationManager.swift */,
+				7A193A28216AFA4F009D866A /* NotificationTableViewController.swift */,
+				7AFB4751216DBD480043450B /* NotificationEditorViewController.swift */,
+				7A9F7E78216FA40200DF093D /* NotificationRepeatTableViewController.swift */,
+				7A9F7E7A216FA49E00DF093D /* NotificationTimePickerViewController.swift */,
+				7A2317692171212F00D12F21 /* NotificationEditorState.swift */,
+			);
+			path = Notification;
 			sourceTree = "<group>";
 		};
 		7AD81DFD20D6E60C004BAB1E = {
@@ -311,6 +327,7 @@
 			children = (
 				7A0292E320ED81D8006DFDF5 /* AppIcons */,
 				7A1D113620E2003100C12DF5 /* Map */,
+				7A9F7E77216FA2C600DF093D /* Notification */,
 				7A193A23216ADE79009D866A /* Selection */,
 				7A193A27216AF9F8009D866A /* Settings */,
 				7A0EF1FE20E818500039212B /* CloudManager.swift */,
@@ -577,15 +594,18 @@
 				7AD81E1F20D6EEDB004BAB1E /* RouteDataManager.swift in Sources */,
 				7A24529020FA73170033E333 /* FavoritesTableViewController.swift in Sources */,
 				7A61EF8420D77BE100481037 /* RouteInfoPickerViewController.swift in Sources */,
+				7A9F7E79216FA40200DF093D /* NotificationRepeatTableViewController.swift in Sources */,
 				7A068D1521266AC400D3425E /* CoreDataStack.swift in Sources */,
-				7A193A29216AFA4F009D866A /* StopNotificationTableViewController.swift in Sources */,
+				7A193A29216AFA4F009D866A /* NotificationTableViewController.swift in Sources */,
 				7AD81E0C20D6E60C004BAB1E /* MainMapViewController.swift in Sources */,
 				7A9F21E72106B0B00000E971 /* FavoriteState.swift in Sources */,
 				7AFB4752216DBD480043450B /* NotificationEditorViewController.swift in Sources */,
 				7AD81E0A20D6E60C004BAB1E /* AppDelegate.swift in Sources */,
 				7A71722B20D70943002144D5 /* RoutesTableViewController.swift in Sources */,
+				7A23176A2171212F00D12F21 /* NotificationEditorState.swift in Sources */,
 				7A193A26216AE4B6009D866A /* NotificationManager.swift in Sources */,
 				7A7FE2B520DB4761005B654C /* MapState.swift in Sources */,
+				7A9F7E7B216FA49E00DF093D /* NotificationTimePickerViewController.swift in Sources */,
 				7AF50BE220E1B71E00E4BFD1 /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

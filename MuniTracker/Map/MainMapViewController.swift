@@ -826,6 +826,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         
     }
     
+    @IBAction func unwindFromStopNotificationTableView(_ segue: UIStoryboardSegue)
+    {
+        
+    }
+    
     //MARK: - Bus Predications
     
     func showPredictionNavigationBar()
