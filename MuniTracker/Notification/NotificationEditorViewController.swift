@@ -58,7 +58,7 @@ class NotificationEditorViewController: UIViewController
     {
         stopNotification?.hour = NotificationEditorState.notificationHour ?? 0
         stopNotification?.minute = NotificationEditorState.notificationMinute ?? 0
-        stopNotification?.daysOfWeek = try? JSONSerialization.data(withJSONObject: NotificationEditorState.notificationRepeatArray ?? [], options: JSONSerialization.WritingOptions.prettyPrinted)
+        stopNotification?.daysOfWeek = try? JSONSerialization.data(withJSONObject: NotificationEditorState.notificationRepeatArray ?? [], options: JSONSerialization.WritingOptions.sortedKeys)
         
         CoreDataStack.saveContext()
     }

@@ -816,7 +816,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     
     @IBAction func addNotificationButtonPressed(_ sender: Any) {
         let newNotification = NSEntityDescription.insertNewObject(forEntityName: "StopNotification", into: CoreDataStack.persistentContainer.viewContext) as! StopNotification
-        newNotification.daysOfWeek = try? JSONSerialization.data(withJSONObject: [true, true, true, true, true, true, true], options: JSONSerialization.WritingOptions.prettyPrinted)
+        newNotification.daysOfWeek = try? JSONSerialization.data(withJSONObject: [true, true, true, true, true, true, true], options: JSONSerialization.WritingOptions.sortedKeys)
         newNotification.directionTag = MapState.selectedDirectionTag
         newNotification.stopTag = MapState.selectedStopTag
         newNotification.hour = 12
