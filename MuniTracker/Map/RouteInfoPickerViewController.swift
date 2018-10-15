@@ -190,22 +190,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         }
     }
     
-    /*func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-        let pickerRowView = UIView(frame: CGRect(x: 0, y: 0, width: 110, height: 60))
-        switch MapState.routeInfoShowing
-        {
-        case .stop:
-            if let stops = routeInfoToChange as? [Stop], RouteDataManager.favoriteStopExists(stopTag: stops[row].stopTag!, directionTag: (stops[row].direction!.allObjects[0] as! Direction).directionTag!)
-            {
-                
-            }
-        default:
-            break
-        }
-        
-        return pickerRowView
-    }*/
-    
     //MARK: - Data Reload
     
     @objc func reloadRouteData()
@@ -239,18 +223,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 addNotificationButton.isEnabled = false
                 
                 rowToSelect = (routeInfoToChange as! Array<Direction>).firstIndex(of: (routeInfoToChange as! Array<Direction>).filter({$0.directionTag == MapState.selectedDirectionTag}).first ?? (routeInfoToChange as! Array<Direction>)[0]) ?? 0
-                /*var directionOn = 0
-                for direction in routeInfoToChange as! Array<Direction>
-                {
-                    if direction.directionTag == MapState.selectedDirectionTag
-                    {
-                        rowToSelect = directionOn
-                        
-                        break
-                    }
-                    
-                    directionOn += 1
-                }*/
             case .stop:
                 self.view.superview!.isHidden = false
                 
@@ -270,18 +242,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 addNotificationButton.isEnabled = true
                 
                 rowToSelect = (routeInfoToChange as! Array<Stop>).firstIndex(of: (routeInfoToChange as! Array<Stop>).filter({$0.stopTag == MapState.selectedStopTag}).first ?? (routeInfoToChange as! Array<Stop>)[0]) ?? 0
-                /*var stopOn = 0
-                for stop in routeInfoToChange as! Array<Stop>
-                {
-                    if stop.stopTag == MapState.selectedStopTag
-                    {
-                        rowToSelect = stopOn
-                        
-                        break
-                    }
-                    
-                    stopOn += 1
-                }*/
             case .otherDirections:
                 self.view.superview!.isHidden = false
                 
@@ -298,18 +258,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 addNotificationButton.isEnabled = false
                 
                 rowToSelect = (routeInfoToChange as! Array<Direction>).firstIndex(of: (routeInfoToChange as! Array<Direction>).filter({$0.directionTag == MapState.selectedDirectionTag}).first ?? (routeInfoToChange as! Array<Direction>)[0]) ?? 0
-                /*var directionOn = 0
-                for direction in routeInfoToChange as! Array<Direction>
-                {
-                    if direction.directionTag == MapState.selectedDirectionTag
-                    {
-                        rowToSelect = directionOn
-                        
-                        break
-                    }
-                    
-                    directionOn += 1
-                }*/
             case .vehicles:
                 self.view.superview!.isHidden = false
                 
@@ -824,5 +772,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         newNotification.notificationUUID = UUID().uuidString
         
         CoreDataStack.saveContext()
+        
+        appDelegate.mainMapViewController?.newStopNotification = newNotification
+        appDelegate.mainMapViewController?.performSegue(withIdentifier: "openNewNotificationEditor", sender: self)
     }
 }

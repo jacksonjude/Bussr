@@ -185,6 +185,7 @@
                         <segue destination="KmL-hK-Kfh" kind="show" identifier="showFavoritesTableView" id="PR7-AH-Kk1"/>
                         <segue destination="m3x-Re-5zf" kind="show" identifier="showOtherDirectionsTableView" id="UJx-fY-8v6"/>
                         <segue destination="xzQ-6I-qok" kind="show" identifier="showRecentStopTableView" id="TfM-V3-OSE"/>
+                        <segue destination="1er-42-KIJ" kind="show" identifier="openNewNotificationEditor" id="IdA-st-vvj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -563,11 +564,7 @@
                                 <rect key="frame" x="0.0" y="20" width="375" height="58"/>
                                 <items>
                                     <navigationItem title="Notification" id="4Jh-18-dwn">
-                                        <barButtonItem key="leftBarButtonItem" title="Back" id="akV-c3-HDQ">
-                                            <connections>
-                                                <segue destination="NuP-pN-7SS" kind="unwind" identifier="unwindFromNotificationEditor" unwindAction="unwindFromNotificationEditorTableView:" id="8ui-mY-ePW"/>
-                                            </connections>
-                                        </barButtonItem>
+                                        <barButtonItem key="leftBarButtonItem" title="Back" id="akV-c3-HDQ"/>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -606,7 +603,10 @@
                         <viewLayoutGuide key="safeArea" id="7eI-s2-J3S"/>
                     </view>
                     <connections>
+                        <outlet property="backButton" destination="akV-c3-HDQ" id="r4I-FO-Anz"/>
                         <outlet property="notificationEditorNavigationBar" destination="yk0-aH-neE" id="Acy-if-7EP"/>
+                        <segue destination="NuP-pN-7SS" kind="unwind" identifier="unwindFromNewNotificationEditor" unwindAction="unwindFromStopNotificationTableView:" id="MKt-6H-EBm"/>
+                        <segue destination="NuP-pN-7SS" kind="unwind" identifier="unwindFromNotificationEditor" unwindAction="unwindFromNotificationEditorTableView:" id="z2G-PF-Ijj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lnm-oY-afV" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -788,7 +788,7 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="553"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteStopCell" rowHeight="90" id="H6x-ms-Rnq">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteRouteCell" rowHeight="90" id="H6x-ms-Rnq">
                                         <rect key="frame" x="0.0" y="28" width="375" height="90"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="H6x-ms-Rnq" id="t4p-fh-tlg">
@@ -847,6 +847,44 @@
                                                 <constraint firstItem="4Kp-B0-9Pf" firstAttribute="bottom" secondItem="t4p-fh-tlg" secondAttribute="bottomMargin" id="oVU-5y-QkU"/>
                                                 <constraint firstItem="xJi-yL-hYn" firstAttribute="trailing" secondItem="t4p-fh-tlg" secondAttribute="trailingMargin" id="uM1-G3-8wb"/>
                                                 <constraint firstItem="XSY-H3-ebN" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="t4p-fh-tlg" secondAttribute="leadingMargin" id="wgS-Zj-F4S"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteStopCell" rowHeight="90" id="1ho-1E-ANp">
+                                        <rect key="frame" x="0.0" y="118" width="375" height="90"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="1ho-1E-ANp" id="dCI-Nq-rks">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="89.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" tag="600" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="38R" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hwX-gq-N1n">
+                                                    <rect key="frame" x="15" y="11" width="345" height="36"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="345" id="0Oj-tH-FFX"/>
+                                                        <constraint firstAttribute="height" constant="36" id="OZv-mh-kRs"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="27"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" tag="601" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Inbound" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EXC-hY-hgZ">
+                                                    <rect key="frame" x="15" y="55" width="189" height="24"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="189" id="xZf-7e-xOR"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="hwX-gq-N1n" secondAttribute="trailing" constant="15" id="1qc-6k-rK5"/>
+                                                <constraint firstItem="hwX-gq-N1n" firstAttribute="top" secondItem="dCI-Nq-rks" secondAttribute="topMargin" id="BeI-um-xlA"/>
+                                                <constraint firstItem="EXC-hY-hgZ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="dCI-Nq-rks" secondAttribute="leadingMargin" id="EpF-Qk-iQz"/>
+                                                <constraint firstAttribute="trailing" secondItem="EXC-hY-hgZ" secondAttribute="trailing" constant="171" id="FEc-OF-XmU"/>
+                                                <constraint firstItem="hwX-gq-N1n" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="dCI-Nq-rks" secondAttribute="leadingMargin" id="JGV-Kx-Rka"/>
+                                                <constraint firstItem="EXC-hY-hgZ" firstAttribute="top" secondItem="hwX-gq-N1n" secondAttribute="bottom" constant="8" id="LUP-do-Pbt"/>
+                                                <constraint firstItem="EXC-hY-hgZ" firstAttribute="bottom" secondItem="dCI-Nq-rks" secondAttribute="bottomMargin" id="caL-Vf-KSq"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -911,7 +949,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t08-D3-rdH" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="8je-80-YeV" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="948" y="787"/>
+            <point key="canvasLocation" x="948" y="786.65667166416802"/>
         </scene>
         <!--Directions Table View Controller-->
         <scene sceneID="lnt-in-fXq">
@@ -1236,5 +1274,6 @@
     <inferredMetricsTieBreakers>
         <segue reference="TfM-V3-OSE"/>
         <segue reference="UJx-fY-8v6"/>
+        <segue reference="IdA-st-vvj"/>
     </inferredMetricsTieBreakers>
 </document>

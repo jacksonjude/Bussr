@@ -76,6 +76,19 @@ class NotificationTableViewController: UIViewController, UITableViewDelegate, UI
         {
             (cell.viewWithTag(600) as! UILabel).text = direction.route?.routeTag
             (cell.viewWithTag(601) as! UILabel).text = direction.directionName
+            
+            if let route = direction.route
+            {
+                let routeColor = UIColor(hexString: route.routeColor ?? "000000")
+                let routeOppositeColor = UIColor(hexString: route.routeOppositeColor ?? "000000")
+                
+                cell.backgroundColor = routeColor
+                
+                (cell.viewWithTag(600) as! UILabel).textColor = routeOppositeColor
+                (cell.viewWithTag(601) as! UILabel).textColor = routeOppositeColor
+                (cell.viewWithTag(602) as! UILabel).textColor = routeOppositeColor
+                (cell.viewWithTag(603) as! UILabel).textColor = routeOppositeColor
+            }
         }
         
         if let stop = RouteDataManager.fetchStop(stopTag: notificationObjects?[indexPath.row].stopTag ?? "")

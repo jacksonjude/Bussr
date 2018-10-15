@@ -112,32 +112,6 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
                 })
                 
             }
-            
-            
-            /*let stopTags = stopDirectionObjects.map {$0.stop.stopTag!}
-            
-            if let location = appDelegate.mainMapViewController?.mainMapView.userLocation.location, let stopObjects = RouteDataManager.fetchLocalObjects(type: "Stop", predicate: NSPredicate(format: "stopTag IN %@", stopTags), moc: CoreDataStack.persistentContainer.viewContext) as? Array<Stop>
-            {
-                let sortedStopObjects = RouteDataManager.sortStopsByDistanceFromLocation(stops: stopObjects, locationToTest: location)
-                
-                let sortedStopTags = sortedStopObjects.map {$0.stopTag}
-                self.stopObjects.sort(by: {
-                    return (sortedStopTags.firstIndex(of: $0.stopTag) ?? 0) < (sortedStopTags.firstIndex(of: $1.stopTag) ?? 0)
-                })
-            }
-            else
-            {
-                stopObjects.sort(by: {
-                    if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", $0.stopTag ?? ""), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop, let stop2 = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", $1.stopTag ?? ""), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
-                    {
-                        return stop.stopTitle!.compare(stop2.stopTitle!) == .orderedAscending
-                    }
-                    
-                    return true
-                })
-            }
-            
-            self.stopObjects = stopObjects*/
         }
     }
     

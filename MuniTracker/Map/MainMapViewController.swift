@@ -729,7 +729,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     func updateSelectedStopAnnotation(stopTag: String)
     {
-        //if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", stopTag), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
         if let stop = RouteDataManager.fetchStop(stopTag: stopTag)
         {
             setAnnotationType(coordinate: CLLocationCoordinate2D(latitude: stop.stopLatitude, longitude: stop.stopLongitude).convertToString(), annotationType: .orange)
@@ -762,11 +761,19 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         self.performSegue(withIdentifier: "showRecentStopTableView", sender: self)
     }
     
+    var newStopNotification: StopNotification?
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showRecentStopTableView"
         {
             let stopsTableView = segue.destination as! StopsTableViewController
             stopsTableView.stopFetchType = .recent
+        }
+        else if segue.identifier == "openNewNotificationEditor"
+        {
+            let notificationEditorView = segue.destination as! NotificationEditorViewController
+            notificationEditorView.stopNotification = self.newStopNotification
+            notificationEditorView.newNotification = true
         }
     }
     

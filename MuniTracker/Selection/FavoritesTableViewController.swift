@@ -164,7 +164,6 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         
         for favoriteStop in favoriteStopObjects!
         {
-            //if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStop.stopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
             if let stop = RouteDataManager.fetchStop(stopTag: favoriteStop.stopTag!)
             {
                 if favoriteStopSet?.firstIndex(of: stop) == nil
@@ -200,7 +199,6 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         
         for favoriteStop in favoriteStopObjects!
         {
-            //if let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", favoriteStop.directionTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Direction
             if let direction = RouteDataManager.fetchDirection(directionTag: favoriteStop.directionTag!)
             {
                 if favoriteRouteSet?.firstIndex(of: direction.route!) == nil
@@ -231,7 +229,6 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             var favoriteStopObjects = Array<FavoriteStop>()
             for favoriteStop in favoriteStops
             {
-                //if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStop.stopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop, let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", favoriteStop.directionTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Direction
                 if let stop = RouteDataManager.fetchStop(stopTag: favoriteStop.stopTag!), let direction = RouteDataManager.fetchDirection(directionTag: favoriteStop.directionTag!)
                 {
                     if favoriteRouteStops.firstIndex(of: stop) == nil && direction.route == route
@@ -257,7 +254,6 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
                 let index = favoriteStops.firstIndex(of: favoriteStop)!
                 let predictionTimesReturnUUID = UUID().uuidString + ";" + String(index)
                 NotificationCenter.default.addObserver(self, selector: #selector(receiveFavoritesPrediction(_:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
-                //if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStop.stopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop, let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", favoriteStop.directionTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Direction
                 if let stop = RouteDataManager.fetchStop(stopTag: favoriteStop.stopTag!), let direction = RouteDataManager.fetchDirection(directionTag: favoriteStop.directionTag!)
                 {
                     RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: stop, direction: direction)
@@ -292,7 +288,6 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             let predictionTimesReturnUUID = UUID().uuidString + ";" + String(indexPath.row)
             let favoriteStop = favoriteStopObjects![indexPath.row]
             NotificationCenter.default.addObserver(self, selector: #selector(receiveFavoritesPrediction(_:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
-            //if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStop.stopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop, let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", favoriteStop.directionTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Direction
             if let stop = RouteDataManager.fetchStop(stopTag: favoriteStop.stopTag!), let direction = RouteDataManager.fetchDirection(directionTag: favoriteStop.directionTag!)
             {
                 RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: stop, direction: direction)
@@ -314,41 +309,44 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let favoriteStopCell = tableView.dequeueReusableCell(withIdentifier: "FavoriteStopCell")!
-        
         var textColor = UIColor.black
         
         switch FavoriteState.favoritesOrganizeType
         {
         case .list:
+            let favoriteRouteCell = tableView.dequeueReusableCell(withIdentifier: "FavoriteRouteCell")!
             let favoriteStopObject = favoriteStopObjects![indexPath.row]
             
-            //if let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", favoriteStopObject.directionTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Direction
             if let direction = RouteDataManager.fetchDirection(directionTag: favoriteStopObject.directionTag!)
             {
                 if let routeColor = direction.route?.routeColor, let routeOppositeColor = direction.route?.routeOppositeColor
                 {
-                    favoriteStopCell.backgroundColor = UIColor(hexString: routeColor)
+                    favoriteRouteCell.backgroundColor = UIColor(hexString: routeColor)
                     
                     textColor = UIColor(hexString: routeOppositeColor)
                 }
                 
-                (favoriteStopCell.viewWithTag(601) as! UILabel).text = direction.directionTitle
-                (favoriteStopCell.viewWithTag(600) as! UILabel).text = direction.route?.routeTag
+                (favoriteRouteCell.viewWithTag(601) as! UILabel).text = direction.directionTitle
+                (favoriteRouteCell.viewWithTag(600) as! UILabel).text = direction.route?.routeTag
             }
             
-            //if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStopObject.stopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
             if let stop = RouteDataManager.fetchStop(stopTag: favoriteStopObject.stopTag!)
             {
-                (favoriteStopCell.viewWithTag(602) as! UILabel).text = stop.stopTitle
+                (favoriteRouteCell.viewWithTag(602) as! UILabel).text = stop.stopTitle
             }
+            
+            (favoriteRouteCell.viewWithTag(600) as! UILabel).textColor = textColor
+            (favoriteRouteCell.viewWithTag(601) as! UILabel).textColor = textColor
+            (favoriteRouteCell.viewWithTag(602) as! UILabel).textColor = textColor
+            (favoriteRouteCell.viewWithTag(603) as! UILabel).textColor = textColor
+            
+            return favoriteRouteCell
         case .stop:
+            let favoriteStopCell = tableView.dequeueReusableCell(withIdentifier: "FavoriteStopCell")!
             let stopObject = favoriteStopSet![indexPath.row]
             
             (favoriteStopCell.viewWithTag(600) as! UILabel).text = stopObject.stopTitle
             (favoriteStopCell.viewWithTag(601) as! UILabel).text = (stopObject.direction?.allObjects.first as? Direction)?.directionName
-            (favoriteStopCell.viewWithTag(602) as! UILabel).text = ""
-            (favoriteStopCell.viewWithTag(603) as! UILabel).text = ""
             
             textColor = UIColor.white
             
@@ -360,35 +358,41 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             {
                 favoriteStopCell.backgroundColor = UIColor(red: 0, green: 0.3, blue: 0.7, alpha: 1)
             }
+            
+            (favoriteStopCell.viewWithTag(600) as! UILabel).textColor = textColor
+            (favoriteStopCell.viewWithTag(601) as! UILabel).textColor = textColor
+            
+            return favoriteStopCell
         case .route:
+            let favoriteRouteCell = tableView.dequeueReusableCell(withIdentifier: "FavoriteRouteCell")!
             let routeObject = favoriteRouteSet![indexPath.row]
             
             if let routeColor = routeObject.routeColor, let routeOppositeColor = routeObject.routeOppositeColor
             {
-                favoriteStopCell.backgroundColor = UIColor(hexString: routeColor)
+                favoriteRouteCell.backgroundColor = UIColor(hexString: routeColor)
                 textColor = UIColor(hexString: routeOppositeColor)
             }
             
-            (favoriteStopCell.viewWithTag(600) as! UILabel).text = routeObject.routeTag
+            (favoriteRouteCell.viewWithTag(600) as! UILabel).text = routeObject.routeTag
             let favoritedStopsFromRoute = getFavoritedStopsFromRoute(route: routeObject)?.stops
             if favoritedStopsFromRoute?.count == 1
             {
-                (favoriteStopCell.viewWithTag(601) as! UILabel).text = String(favoritedStopsFromRoute?.count ?? 0) + " favorite stop"
+                (favoriteRouteCell.viewWithTag(601) as! UILabel).text = String(favoritedStopsFromRoute?.count ?? 0) + " favorite stop"
             }
             else
             {
-                (favoriteStopCell.viewWithTag(601) as! UILabel).text = String(favoritedStopsFromRoute?.count ?? 0) + " favorite stops"
+                (favoriteRouteCell.viewWithTag(601) as! UILabel).text = String(favoritedStopsFromRoute?.count ?? 0) + " favorite stops"
             }
-            (favoriteStopCell.viewWithTag(602) as! UILabel).text = ""
-            (favoriteStopCell.viewWithTag(603) as! UILabel).text = ""
+            (favoriteRouteCell.viewWithTag(602) as! UILabel).text = ""
+            (favoriteRouteCell.viewWithTag(603) as! UILabel).text = ""
+            
+            (favoriteRouteCell.viewWithTag(600) as! UILabel).textColor = textColor
+            (favoriteRouteCell.viewWithTag(601) as! UILabel).textColor = textColor
+            (favoriteRouteCell.viewWithTag(602) as! UILabel).textColor = textColor
+            (favoriteRouteCell.viewWithTag(603) as! UILabel).textColor = textColor
+            
+            return favoriteRouteCell
         }
-        
-        (favoriteStopCell.viewWithTag(600) as! UILabel).textColor = textColor
-        (favoriteStopCell.viewWithTag(601) as! UILabel).textColor = textColor
-        (favoriteStopCell.viewWithTag(602) as! UILabel).textColor = textColor
-        (favoriteStopCell.viewWithTag(603) as! UILabel).textColor = textColor
-        
-        return favoriteStopCell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -423,11 +427,6 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
                     self.performSegue(withIdentifier: "UnwindFromFavoritesViewWithSelectedRoute", sender: self)
                 }
             }
-            
-            /*FavoriteState.selectedRouteTag = routeObject.routeTag
-            FavoriteState.favoriteObject = getFavoritedStopsFromRoute(route: routeObject)?.favoriteStops
-            
-            self.performSegue(withIdentifier: "showStopsTableView", sender: self)*/
         }
     }
     

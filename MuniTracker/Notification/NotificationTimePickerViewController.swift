@@ -119,9 +119,13 @@ class NotificationTimePickerViewController: UIViewController, UIPickerViewDataSo
     func updateNotificationHour(notificationHour: String, pickerView: UIPickerView)
     {
         var formattedNotificationHour = Int16(notificationHour)!
-        if timeValues[2][pickerView.selectedRow(inComponent: 2)] == "PM"
+        if timeValues[2][pickerView.selectedRow(inComponent: 2)] == "PM" && notificationHour != "12"
         {
             formattedNotificationHour += 12
+        }
+        else if timeValues[2][pickerView.selectedRow(inComponent: 2)] == "PM" && notificationHour == "12"
+        {
+            formattedNotificationHour = 12
         }
         else if notificationHour == "12"
         {

@@ -29,64 +29,6 @@ extension StopNotification
 
 class NotificationManager
 {
-    /*static func addNotification(stopNotification: StopNotification)
-    {
-        let todayDate = Date()
-        let calendar = Calendar(identifier: .gregorian)
-        let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: todayDate))!
-        
-        let busStopNotificationContent = UNMutableNotificationContent()
-        busStopNotificationContent.title = "Bus Times"
-        
-        let stop = RouteDataManager.fetchStop(stopTag: stopNotification.stopTag!)
-        let direction = RouteDataManager.fetchDirection(directionTag: stopNotification.directionTag!)
-        let routeTag = direction?.route?.routeTag ?? ""
-        let directionName = direction?.directionName ?? ""
-        let stopTitle = stop?.stopShortTitle ?? ""
-        busStopNotificationContent.body = routeTag + " - " + directionName + " - " + stopTitle
-        
-        let notificationHour = stopNotification.hour
-        let notificationMinute = stopNotification.minute
-        
-        let notificationDaysOfWeekJSONObject = try? JSONSerialization.jsonObject(with: stopNotification.daysOfWeek!, options: .allowFragments)
-        
-        if let notificationDaysOfWeek = notificationDaysOfWeekJSONObject as? [Bool]
-        {
-            let dayOfWeekOn = 0
-            while dayOfWeekOn < notificationDaysOfWeek.count
-            {
-                if notificationDaysOfWeek[dayOfWeekOn]
-                {
-                    var triggerDateComponents = calendar.dateComponents([.year, .month, .day], from: startOfWeek.addingTimeInterval(TimeInterval(dayOfWeekOn*60*60*24)))
-                    
-                    triggerDateComponents.hour = Int(notificationHour)
-                    triggerDateComponents.minute = Int(notificationMinute)
-                    
-                    let stopNotificationTrigger = UNCalendarNotificationTrigger(dateMatching: triggerDateComponents, repeats: false)
-                    
-                    let stopNotificationRequest = UNNotificationRequest(identifier: stopNotification.notificationUUID!, content: busStopNotificationContent, trigger: stopNotificationTrigger)
-                    
-                    UNUserNotificationCenter.current().add(stopNotificationRequest) { (error) in
-                        print(error.debugDescription)
-                    }
-                }
-            }
-        }
-    }
-    
-    static func refreshNotifications()
-    {
-        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-        
-        if let stopNotifications = RouteDataManager.fetchLocalObjects(type: "StopNotification", predicate: NSPredicate(format: "TRUEPREDICATE"), moc: CoreDataStack.persistentContainer.viewContext) as? [StopNotification]
-        {
-            for stopNotification in stopNotifications
-            {
-                addNotification(stopNotification: stopNotification)
-            }
-        }
-    }*/
-    
     static let notificationDatabaseSource = "http://munitracker.herokuapp.com"
     
     static func addObservationNotifications()
@@ -114,7 +56,13 @@ class NotificationManager
                 guard let deviceToken = UserDefaults.standard.object(forKey: "deviceToken") as? String else { return }
                 guard let routeTag = RouteDataManager.fetchDirection(directionTag: stopNotification.directionTag!)?.route?.routeTag else { return }
                 guard let stopTitle = RouteDataManager.fetchStop(stopTag: stopNotification.stopTag!)?.stopTitle?.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else { return }
-                var queryString = "devicetoken=" + deviceToken + "&hour=" + String(stopNotification.hour) + "&minute=" + String(stopNotification.minute)
+                
+                let notificationDateString = String(stopNotification.hour) + ":" + ((stopNotification.minute < 10) ? "0" : "") +  String(stopNotification.minute)
+                let UTCNotificationDateString = convertToUTCFromLocalDate(dateStr: notificationDateString)
+                let notificationHour = Int(UTCNotificationDateString.split(separator: ":")[0]) ?? 0
+                let notificationMinute = Int(UTCNotificationDateString.split(separator: ":")[1]) ?? 0
+                
+                var queryString = "devicetoken=" + deviceToken + "&hour=" + String(notificationHour) + "&minute=" + String(notificationMinute)
                 queryString += "&daysofweek=" + String(data: stopNotification.daysOfWeek!, encoding: String.Encoding.utf8)!.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                 queryString += "&routetag=" + routeTag + "&stoptag=" + stopNotification.stopTag! + "&stoptitle=" + stopTitle + "&uuid=" + stopNotification.notificationUUID!
                 let addTask = (URLSession.shared.dataTask(with: URL(string: self.notificationDatabaseSource + "/addnotification/?" + queryString)!) { data, response, error in
@@ -123,7 +71,20 @@ class NotificationManager
                 addTask.resume()
             }
         }
-        
+    }
+    
+    static func convertToUTCFromLocalDate(dateStr : String) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        let utc = NSTimeZone(abbreviation: "UTC")
+        formatter.timeZone = utc! as TimeZone
+        formatter.dateFormat = "HH:mm"
+        let localDate: Date? = formatter.date(from: dateStr)
+        let timeZoneOffset: TimeInterval = TimeInterval(NSTimeZone.default.secondsFromGMT())
+        let utcTimeInterval: TimeInterval? = (localDate?.timeIntervalSinceReferenceDate)! - timeZoneOffset
+        let utcCurrentDate = Date(timeIntervalSinceReferenceDate: utcTimeInterval!)
+        //print(formatter.string(from: utcCurrentDate))
+        return formatter.string(from: utcCurrentDate)
     }
     
     static func deleteNotification(stopNotificationUUID: String, callback: (() -> Void)? = nil)

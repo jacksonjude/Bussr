@@ -260,7 +260,7 @@ class RouteDataManager
         } catch let error1 as NSError {
             error = error1
             fetchResults = nil
-            print("An Error Occored: " + error!.localizedDescription)
+            print("An Error Occured: " + error!.localizedDescription)
         } catch {
             fatalError()
         }

@@ -10,11 +10,22 @@ import UIKit
 
 class NotificationEditorViewController: UIViewController
 {
+    @IBOutlet weak var backButton: UIBarButtonItem!
     @IBOutlet weak var notificationEditorNavigationBar: UINavigationBar!
     var stopNotification: StopNotification?
+    var newNotification = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if newNotification
+        {
+            backButton.action = #selector(exitNewNotificationEditor)
+        }
+        else
+        {
+            backButton.action = #selector(exitNotificationEditor)
+        }
         
         setupThemeElements()
         
@@ -61,6 +72,16 @@ class NotificationEditorViewController: UIViewController
         stopNotification?.daysOfWeek = try? JSONSerialization.data(withJSONObject: NotificationEditorState.notificationRepeatArray ?? [], options: JSONSerialization.WritingOptions.sortedKeys)
         
         CoreDataStack.saveContext()
+    }
+    
+    @objc func exitNewNotificationEditor()
+    {
+        self.performSegue(withIdentifier: "unwindFromNewNotificationEditor", sender: self)
+    }
+    
+    @IBAction func exitNotificationEditor()
+    {
+        self.performSegue(withIdentifier: "unwindFromNotificationEditor", sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

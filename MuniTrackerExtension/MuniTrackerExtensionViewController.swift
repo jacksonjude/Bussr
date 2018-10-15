@@ -93,7 +93,6 @@ class MuniTrackerExtensionViewController: UITableViewController, NCWidgetProvidi
         let routeTagLabel = cell.viewWithTag(600) as! UILabel
         let stopNameLabel = cell.viewWithTag(601) as! UILabel
         
-        //if let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", favoriteStopObject.directionTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Direction, let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStopObject.stopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
         if let stop = RouteDataManager.fetchStop(stopTag: stopDirectionObject.stopTag), let direction = RouteDataManager.fetchDirection(directionTag: stopDirectionObject.directionTag)
         {
             routeTagLabel.text = direction.route?.routeTag
@@ -122,7 +121,6 @@ class MuniTrackerExtensionViewController: UITableViewController, NCWidgetProvidi
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let stopDirectionObject = stopDirectionObjects![indexPath.row]
         
-        //if let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", favoriteStopObject.directionTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Direction, let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", favoriteStopObject.stopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
         if let stop = RouteDataManager.fetchStop(stopTag: stopDirectionObject.stopTag), let direction = RouteDataManager.fetchDirection(directionTag: stopDirectionObject.directionTag)
         {
             let predictionTimesReturnUUID = UUID().uuidString + ";" + String(indexPath.row)

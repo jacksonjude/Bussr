@@ -98,7 +98,6 @@ class DirectionsTableViewController: UIViewController, UITableViewDelegate, UITa
     {
         let predictionTimesReturnUUID = UUID().uuidString + ";" + String(index)
         NotificationCenter.default.addObserver(self, selector: #selector(receivePrediction(_:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
-        //if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", MapState.selectedStopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
         if let stop = RouteDataManager.fetchStop(stopTag: MapState.selectedStopTag!)
         {
             RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: stop, direction: direction)
@@ -157,7 +156,6 @@ class DirectionsTableViewController: UIViewController, UITableViewDelegate, UITa
         (directionCell.viewWithTag(601) as! UILabel).textColor = textColor
         (directionCell.viewWithTag(600) as! UILabel).textColor = textColor
         
-        //if let stop = RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", MapState.selectedStopTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
         if let stop = RouteDataManager.fetchStop(stopTag: MapState.selectedStopTag!)
         {
             mainNavigationItem.title = stop.stopTitle
