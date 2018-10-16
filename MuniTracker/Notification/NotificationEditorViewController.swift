@@ -85,7 +85,7 @@ class NotificationEditorViewController: UIViewController
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "unwindFromNotificationEditor"
+        if segue.identifier == "unwindFromNotificationEditor" || segue.identifier == "unwindFromNewNotificationEditor"
         {
             saveNotificationData()
         }

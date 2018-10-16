@@ -30,6 +30,11 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
     override func viewDidLoad() {
         reloadTableView()
         
+        if stopFetchType == .recent
+        {
+            self.mainNavigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.refresh, target: self, action: #selector(clearRecentStops))
+        }
+        
         setupThemeElements()
     }
     
@@ -207,5 +212,27 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
         MapState.routeInfoObject = MapState.getCurrentDirection()
         
         self.performSegue(withIdentifier: "SelectedStopUnwind", sender: self)
+    }
+    
+    @objc func clearRecentStops()
+    {
+        if let recentStops = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(format: "TRUEPREDICATE"), moc: CoreDataStack.persistentContainer.viewContext) as? [RecentStop]
+        {
+            for recentStop in recentStops
+            {
+                CoreDataStack.persistentContainer.viewContext.delete(recentStop)
+            }
+        }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadTableViewAfterRecentStopClear(_:)), name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
+        
+        CoreDataStack.saveContext()
+    }
+    
+    @objc func reloadTableViewAfterRecentStopClear(_ notification: Notification)
+    {
+        NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
+        
+        stopsTableView.reloadData()
     }
 }

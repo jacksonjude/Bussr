@@ -423,53 +423,71 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 
                 if currentRecentStop.directionTag != nil && RouteDataManager.fetchDirection(directionTag: currentRecentStop.directionTag!)?.route?.routeTag == RouteDataManager.fetchDirection(directionTag: mapStateDirectionTag)?.route?.routeTag
                 {
-                    currentRecentStop.directionTag = MapState.selectedDirectionTag
-                    currentRecentStop.stopTag = MapState.selectedStopTag
-                    currentRecentStop.timestamp = Date()
-                    
-                    self.findRecentStopDuplicates(currentRecentStop: currentRecentStop, backgroundMOC: backgroundMOC)
+                    if self.checkForDuplicateRecentStop(backgroundMOC: backgroundMOC, uuidToNotMatch: currentRecentStop.uuid!)
+                    {
+                        backgroundMOC.delete(currentRecentStop)
+                    }
+                    else
+                    {
+                        currentRecentStop.directionTag = MapState.selectedDirectionTag
+                        currentRecentStop.stopTag = MapState.selectedStopTag
+                        currentRecentStop.timestamp = Date()
+                    }
                 }
                 else
                 {
-                    self.findRecentStopDuplicates(currentRecentStop: currentRecentStop, backgroundMOC: backgroundMOC)
-                    
-                    let recentStop = NSEntityDescription.insertNewObject(forEntityName: "RecentStop", into: backgroundMOC) as! RecentStop
-                    recentStop.directionTag = mapStateDirectionTag
-                    recentStop.stopTag = MapState.selectedStopTag
-                    recentStop.timestamp = Date()
-                    recentStop.uuid = UUID().uuidString
-                    MapState.currentRecentStopUUID = recentStop.uuid
+                    if !self.checkForDuplicateRecentStop(backgroundMOC: backgroundMOC, uuidToNotMatch: currentRecentStop.uuid!)
+                    {
+                        self.insertNewRecentStop(backgroundMOC: backgroundMOC)
+                    }
                 }
             }
-            else
+            else if MapState.selectedDirectionTag != nil && MapState.selectedStopTag != nil
             {
-                let recentStop = NSEntityDescription.insertNewObject(forEntityName: "RecentStop", into: backgroundMOC) as! RecentStop
-                recentStop.directionTag = MapState.selectedDirectionTag
-                recentStop.stopTag = MapState.selectedStopTag
-                recentStop.timestamp = Date()
-                recentStop.uuid = UUID().uuidString
-                MapState.currentRecentStopUUID = recentStop.uuid
-                
-                self.findRecentStopDuplicates(currentRecentStop: recentStop, backgroundMOC: backgroundMOC)
+                if !self.checkForDuplicateRecentStop(backgroundMOC: backgroundMOC)
+                {
+                    self.insertNewRecentStop(backgroundMOC: backgroundMOC)
+                }
             }
             
             try? backgroundMOC.save()
         }
     }
     
-    func findRecentStopDuplicates(currentRecentStop: RecentStop, backgroundMOC: NSManagedObjectContext)
+    func insertNewRecentStop(backgroundMOC: NSManagedObjectContext)
     {
-        if var duplicateRecentStops = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(format: "(stopTag == %@) AND (directionTag == %@)", currentRecentStop.stopTag!, currentRecentStop.directionTag!), moc: backgroundMOC, sortDescriptors: [NSSortDescriptor(key: "timestamp", ascending: true)]) as? [RecentStop]
+        let recentStop = NSEntityDescription.insertNewObject(forEntityName: "RecentStop", into: backgroundMOC) as! RecentStop
+        recentStop.directionTag = MapState.selectedDirectionTag
+        recentStop.stopTag = MapState.selectedStopTag
+        recentStop.timestamp = Date()
+        recentStop.uuid = UUID().uuidString
+        MapState.currentRecentStopUUID = recentStop.uuid
+    }
+    
+    func checkForDuplicateRecentStop(backgroundMOC: NSManagedObjectContext, uuidToNotMatch: String? = nil) -> Bool
+    {
+        var predicateFormat = "directionTag == %@ AND stopTag == %@"
+        if uuidToNotMatch != nil
         {
-            if duplicateRecentStops.count > 0
-            {
-                duplicateRecentStops.remove(at: 0)
-                for duplicateRecentStop in duplicateRecentStops
-                {
-                    backgroundMOC.delete(duplicateRecentStop)
-                }
-            }
+            predicateFormat += " AND uuid != %@"
         }
+        if let duplicateRecentStopArray = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(format: predicateFormat, MapState.selectedDirectionTag!, MapState.selectedStopTag!, uuidToNotMatch ?? ""), moc: backgroundMOC) as? [RecentStop]
+        {
+            if duplicateRecentStopArray.count > 0
+            {
+                let recentStopToBringToFront = duplicateRecentStopArray[0]
+                recentStopToBringToFront.timestamp = Date()
+                MapState.currentRecentStopUUID = recentStopToBringToFront.uuid
+                
+                //backgroundMOC.delete(currentRecentStop)
+                
+                return true
+            }
+            
+            return false
+        }
+        
+        return false
     }
     
     @objc func selectCurrentStop()
