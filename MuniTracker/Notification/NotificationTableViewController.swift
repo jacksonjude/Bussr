@@ -97,7 +97,7 @@ class NotificationTableViewController: UIViewController, UITableViewDelegate, UI
         }
         
         let notificationHourFormatted =  String(((notificationObjects?[indexPath.row].hour ?? 0) > 12) ? (notificationObjects?[indexPath.row].hour ?? 0) - 12 : notificationObjects?[indexPath.row].hour ?? 0)
-        let notificationStopFormatted = ((notificationObjects?[indexPath.row].minute ?? 0) < 10) ? String(notificationObjects?[indexPath.row].minute ?? 0) + "0" : String(notificationObjects?[indexPath.row].minute ?? 0)
+        let notificationStopFormatted = ((notificationObjects?[indexPath.row].minute ?? 0) < 10) ? "0" + String(notificationObjects?[indexPath.row].minute ?? 0) : String(notificationObjects?[indexPath.row].minute ?? 0)
         
         (cell.viewWithTag(603) as! UILabel).text = notificationHourFormatted + ":" + notificationStopFormatted + ((notificationObjects?[indexPath.row].hour ?? 0 >= 12) ? "PM" : "AM")
     }

@@ -318,14 +318,14 @@ class RouteDataManager
         return false
     }
     
-    static func fetchStop(stopTag: String) -> Stop?
+    static func fetchStop(stopTag: String, moc: NSManagedObjectContext? = nil) -> Stop?
     {
-        return RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", stopTag), moc: CoreDataStack.persistentContainer.viewContext).object as? Stop
+        return RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", stopTag), moc: moc ?? CoreDataStack.persistentContainer.viewContext).object as? Stop
     }
     
-    static func fetchDirection(directionTag: String) -> Direction?
+    static func fetchDirection(directionTag: String, moc: NSManagedObjectContext? = nil) -> Direction?
     {
-        return RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", directionTag), moc: CoreDataStack.persistentContainer.viewContext).object as? Direction
+        return RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", directionTag), moc: moc ?? CoreDataStack.persistentContainer.viewContext).object as? Direction
     }
     
     //MARK: - Data Fetch

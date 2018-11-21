@@ -64,7 +64,7 @@ class NotificationTimePickerViewController: UIViewController, UIPickerViewDataSo
         var notificationMinuteFormatted = String(NotificationEditorState.notificationMinute ?? 0)
         if NotificationEditorState.notificationMinute ?? 0 < 10
         {
-            notificationMinuteFormatted += "0"
+            notificationMinuteFormatted = "0" + notificationMinuteFormatted
         }
         
         notificationTimePickerView.selectRow(timeValues[0].firstIndex(of: String(notificationHour))!, inComponent: 0, animated: true)

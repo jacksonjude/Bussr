@@ -8,6 +8,7 @@
 
 import Foundation
 import UserNotifications
+import CoreData
 
 extension StopNotification
 {
@@ -53,11 +54,11 @@ class NotificationManager
         syncNotificationChangesToServer()
     }
     
-    static func updateNotification(stopNotification: StopNotification, callback: ((_ error: Error?) -> Void)? = nil)
+    static func updateNotification(stopNotification: StopNotification, moc: NSManagedObjectContext, callback: ((_ error: Error?) -> Void)? = nil)
     {
         guard let deviceToken = UserDefaults.standard.object(forKey: "deviceToken") as? String else { return }
-        guard let routeTag = RouteDataManager.fetchDirection(directionTag: stopNotification.directionTag!)?.route?.routeTag else { return }
-        guard let stopTitle = RouteDataManager.fetchStop(stopTag: stopNotification.stopTag!)?.stopTitle?.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else { return }
+        guard let routeTag = RouteDataManager.fetchDirection(directionTag: stopNotification.directionTag!, moc: moc)?.route?.routeTag else { return }
+        guard let stopTitle = RouteDataManager.fetchStop(stopTag: stopNotification.stopTag!, moc: moc)?.stopTitle?.addingPercentEncoding(withAllowedCharacters: .alphanumerics) else { return }
         
         let notificationDateString = String(stopNotification.hour) + ":" + ((stopNotification.minute < 10) ? "0" : "") +  String(stopNotification.minute)
         let UTCNotificationDateString = convertToUTCFromLocalDate(dateStr: notificationDateString)
@@ -108,7 +109,7 @@ class NotificationManager
     
     static func syncNotificationChangesToServer()
     {
-        print("↑ Syncing Notifications to Cloud")
+        print("↑ - Syncing Notifications to Cloud")
         CoreDataStack.persistentContainer.performBackgroundTask { (backgroundMOC) in
             for change in notificationChanges
             {
@@ -117,7 +118,7 @@ class NotificationManager
                 case 0:
                     if let stopNotification = RouteDataManager.fetchLocalObjects(type: "StopNotification", predicate: NSPredicate(format: "notificationUUID == %@", change.key), moc: backgroundMOC) as? [StopNotification], stopNotification.count > 0
                     {
-                        updateNotification(stopNotification: stopNotification[0], callback: { (error) in
+                        updateNotification(stopNotification: stopNotification[0], moc: backgroundMOC, callback: { (error) in
                             if error == nil
                             {
                                 notificationChanges.removeValue(forKey: change.key)
