@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.15" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.9"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -778,7 +778,7 @@
                                     <navigationItem title="Favorites" id="FQa-5l-6be">
                                         <barButtonItem key="leftBarButtonItem" title="Back" id="9HD-wD-MsZ">
                                             <connections>
-                                                <segue destination="8je-80-YeV" kind="unwind" unwindAction="unwindFromFavoritesView:" id="i7Z-mT-gFC"/>
+                                                <action selector="backButtonPressed:" destination="KmL-hK-Kfh" id="2bU-Gp-ELU"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
@@ -888,6 +888,48 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteStopGroupCell" rowHeight="90" id="znb-ly-GW4">
+                                        <rect key="frame" x="0.0" y="208" width="375" height="90"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="znb-ly-GW4" id="f38-kk-Rwe">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="89.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" tag="600" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Work" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XnZ-sf-I2S">
+                                                    <rect key="frame" x="15" y="11" width="128" height="33"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="33" id="YtK-J5-xfd"/>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="128" id="etD-KC-lv8"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="27"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" tag="601" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4 Stops, 2 Groups" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9ZX-nu-roC">
+                                                    <rect key="frame" x="15" y="63" width="221" height="16"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="16" id="Ywi-OG-a1K"/>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="221" id="ruR-vM-Ccu"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="XnZ-sf-I2S" secondAttribute="trailing" constant="232" id="1bc-j8-8a7"/>
+                                                <constraint firstItem="XnZ-sf-I2S" firstAttribute="top" secondItem="f38-kk-Rwe" secondAttribute="topMargin" id="ECq-Vh-rvc"/>
+                                                <constraint firstItem="9ZX-nu-roC" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="f38-kk-Rwe" secondAttribute="leadingMargin" id="Is7-mH-Tm2"/>
+                                                <constraint firstItem="9ZX-nu-roC" firstAttribute="top" secondItem="XnZ-sf-I2S" secondAttribute="bottom" constant="19" id="PI7-vb-fpN"/>
+                                                <constraint firstItem="9ZX-nu-roC" firstAttribute="bottom" secondItem="f38-kk-Rwe" secondAttribute="bottomMargin" id="VOM-9J-zXg"/>
+                                                <constraint firstItem="XnZ-sf-I2S" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="f38-kk-Rwe" secondAttribute="leadingMargin" id="ks9-O6-HhN"/>
+                                                <constraint firstAttribute="trailing" secondItem="9ZX-nu-roC" secondAttribute="trailing" constant="139" id="vYN-dO-vOY"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="KmL-hK-Kfh" kind="show" identifier="openFavoriteStopGroup" id="pXC-tX-YG8"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </prototypes>
                                 <connections>
                                     <outlet property="dataSource" destination="KmL-hK-Kfh" id="tHj-Ye-ZlA"/>
@@ -898,14 +940,15 @@
                                 <rect key="frame" x="0.0" y="617" width="375" height="50"/>
                                 <subviews>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="yqP-N5-7gV">
-                                        <rect key="frame" x="74.5" y="11" width="226" height="29"/>
+                                        <rect key="frame" x="52" y="11" width="271" height="29"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="226" id="Nxb-kb-36H"/>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="271" id="Nxb-kb-36H"/>
                                         </constraints>
                                         <segments>
                                             <segment title="Route"/>
                                             <segment title="Stop"/>
                                             <segment title="List"/>
+                                            <segment title="Group"/>
                                         </segments>
                                         <connections>
                                             <action selector="listStopSegmentPressed:" destination="KmL-hK-Kfh" eventType="valueChanged" id="bWx-pw-wzS"/>
@@ -939,11 +982,14 @@
                     <connections>
                         <outlet property="favoriteStopsTableView" destination="Aoi-Fd-ggc" id="be3-12-9aJ"/>
                         <outlet property="mainNavigationBar" destination="v1g-9E-6Iw" id="8ZR-FY-4nM"/>
+                        <outlet property="mainNavigationItem" destination="FQa-5l-6be" id="gyG-cZ-UKM"/>
                         <outlet property="organizeSegmentControl" destination="yqP-N5-7gV" id="fOH-ke-2Wg"/>
                         <segue destination="8je-80-YeV" kind="unwind" identifier="SelectedFavoriteUnwind" unwindAction="unwindWithSelectedStop:" id="DHM-hx-RjC"/>
                         <segue destination="m3x-Re-5zf" kind="show" identifier="showDirectionStopTableView" id="FM7-3T-SSq"/>
                         <segue destination="xzQ-6I-qok" kind="show" identifier="showStopsTableView" id="coT-D9-Khz"/>
                         <segue destination="8je-80-YeV" kind="unwind" identifier="UnwindFromFavoritesViewWithSelectedRoute" unwindAction="unwindFromFavoritesViewWithSelectedRoute:" id="SXI-BW-pCX"/>
+                        <segue destination="8je-80-YeV" kind="unwind" identifier="UnwindFromFavoritesView" unwindAction="unwindFromFavoritesView:" id="TSZ-Y6-Prt"/>
+                        <segue destination="8je-80-YeV" kind="unwind" identifier="UnwindFromFavoriteGroupView" unwindAction="unwindFromFavoriteGroupView:" id="33k-Wk-n5R"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t08-D3-rdH" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1272,8 +1318,8 @@
         <image name="SettingsIcon" width="12" height="12"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="TfM-V3-OSE"/>
-        <segue reference="UJx-fY-8v6"/>
+        <segue reference="coT-D9-Khz"/>
+        <segue reference="FM7-3T-SSq"/>
         <segue reference="IdA-st-vvj"/>
     </inferredMetricsTieBreakers>
 </document>

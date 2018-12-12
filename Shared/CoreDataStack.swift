@@ -49,6 +49,25 @@ class CoreDataStack {
         return container
     }()
     
+    static func decodeArrayFromJSON(object: NSManagedObject, field: String) -> Array<Any>?
+    {
+        if let JSONdata = object.value(forKey: field) as? Data
+        {
+            do
+            {
+                let array = try JSONSerialization.jsonObject(with: JSONdata, options: .allowFragments) as? Array<Any>
+                return array
+            }
+            catch
+            {
+                print(error)
+                return nil
+            }
+        }
+        
+        return nil
+    }
+    
     // MARK: - Core Data Saving support
     
     static func saveContext () {

@@ -41,6 +41,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             CloudManager.addFavoritesZone()
         }
         
+        if RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", "0"), moc: CoreDataStack.persistentContainer.viewContext)?.count == 0
+        {
+            let newGroup = NSEntityDescription.insertNewObject(forEntityName: "FavoriteStopGroup", into: CoreDataStack.persistentContainer.viewContext) as! FavoriteStopGroup
+            newGroup.groupName = "Groups"
+            newGroup.uuid = "0"
+            newGroup.favoriteStopUUIDs = try? JSONSerialization.data(withJSONObject: Array<String>(), options: JSONSerialization.WritingOptions.prettyPrinted)
+            
+            CoreDataStack.saveContext()
+        }
+        
+        FavoriteState.selectedGroupUUID = "0"
+        
         if let lastServerChangeToken = UserDefaults.standard.object(forKey: "LastServerChangeToken") as? Data
         {
             CloudManager.currentChangeToken = NSKeyedUnarchiver.unarchiveObject(with: lastServerChangeToken) as? CKServerChangeToken

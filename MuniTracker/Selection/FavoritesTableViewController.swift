@@ -62,18 +62,26 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
     var loadedPredictions = Array<Bool>()
     var favoriteStopSet: Array<Stop>?
     var favoriteRouteSet: Array<Route>?
+    var favoriteStopGroupSet: Array<NSManagedObject>?
+    var favoriteStopsToAddToGroup: Array<String>?
+    var refreshControl: UIRefreshControl?
     @IBOutlet weak var organizeSegmentControl: UISegmentedControl!
     @IBOutlet weak var favoriteStopsTableView: UITableView!
     @IBOutlet weak var mainNavigationBar: UINavigationBar!
+    @IBOutlet weak var mainNavigationItem: UINavigationItem!
     
     override func viewDidLoad() {        
-        reloadTableView()
-        NotificationCenter.default.addObserver(self, selector: #selector(finishedCloudFetch(_:)), name: NSNotification.Name("FinishedFetchingFromCloud"), object: nil)
-        CloudManager.fetchChangesFromCloud()
+        if FavoriteState.favoritesOrganizeType != .group && FavoriteState.favoritesOrganizeType != .addingToGroup
+        {
+            reloadTableView()
+            NotificationCenter.default.addObserver(self, selector: #selector(finishedCloudFetch(_:)), name: NSNotification.Name("FinishedFetchingFromCloud"), object: nil)
+            CloudManager.fetchChangesFromCloud()
+        }
         
         organizeSegmentControl.selectedSegmentIndex = FavoriteState.favoritesOrganizeType.rawValue
         
         setupThemeElements()
+        setupOrganizeTypeStuff()
     }
     
     @objc func finishedCloudFetch(_ notification: Notification)
@@ -89,7 +97,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         
         switch FavoriteState.favoritesOrganizeType
         {
-        case .list:
+        case .list, .addingToGroup:
             break
         case .stop:
             fetchStopSet()
@@ -97,6 +105,9 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         case .route:
             fetchRouteSet()
             sortRouteSet()
+        case .group:
+            fetchGroupSet()
+            sortGroupSet()
         }
         
         favoriteStopsTableView.reloadData()
@@ -104,6 +115,54 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
     
     override func viewDidAppear(_ animated: Bool) {
         setupThemeElements()
+        
+        setupOrganizeTypeStuff()
+    }
+    
+    func setupOrganizeTypeStuff()
+    {
+        if FavoriteState.favoritesOrganizeType == .group
+        {
+            reloadTableView()
+            self.mainNavigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addToGroupButtonPressed)), animated: false)
+            if FavoriteState.selectedGroupUUID != "0", let currentGroup = RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStopGroup
+            {
+                mainNavigationItem.title = currentGroup.groupName
+            }
+            else
+            {
+                mainNavigationItem.title = "Favorites"
+            }
+        }
+        else if FavoriteState.favoritesOrganizeType == .addingToGroup
+        {
+            favoriteStopsToAddToGroup = Array<String>()
+            reloadTableView()
+            self.mainNavigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneAddingToGroup)), animated: false)
+            
+            organizeSegmentControl.selectedSegmentIndex = FavoriteState.FavoritesOrganizeType.list.rawValue
+            organizeSegmentControl.isEnabled = false
+            
+            if let currentGroup = RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStopGroup
+            {
+                mainNavigationItem.title = "Add to " + (currentGroup.groupName ?? "")
+            }
+        }
+        else
+        {
+            mainNavigationItem.title = "Favorites"
+            mainNavigationItem.setRightBarButton(nil, animated: false)
+        }
+        
+        if FavoriteState.favoritesOrganizeType == .addingToGroup
+        {
+            favoriteStopsTableView.allowsMultipleSelection = true
+        }
+        
+        refreshControl = UIRefreshControl()
+        favoriteStopsTableView.refreshControl = refreshControl
+        refreshControl?.addTarget(self, action: #selector(reloadGroupPredictions), for: UIControl.Event.valueChanged)
+        refreshControl?.tintColor = UIColor.black
     }
     
     func setupThemeElements()
@@ -245,6 +304,51 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         return nil
     }
     
+    func fetchGroupSet()
+    {
+        favoriteStopObjects = []
+        favoriteStopGroupSet = []
+        
+        if let currentGroup = RouteDataManager.fetchOrCreateObject(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext).object as? FavoriteStopGroup, let childObjects = currentGroup.childGroups?.allObjects as? [FavoriteStopGroup], let favoriteStopUUIDs = CoreDataStack.decodeArrayFromJSON(object: currentGroup, field: "favoriteStopUUIDs") as? [String]
+        {
+            favoriteStopGroupSet = childObjects
+            for favoriteStopUUID in favoriteStopUUIDs
+            {
+                if let favoriteStop = RouteDataManager.fetchOrCreateObject(type: "FavoriteStop", predicate: NSPredicate(format: "uuid == %@", favoriteStopUUID), moc: CoreDataStack.persistentContainer.viewContext).object as? FavoriteStop
+                {
+                    favoriteStopGroupSet?.append(favoriteStop)
+                }
+            }
+        }
+    }
+    
+    func sortGroupSet()
+    {
+        if var favoriteStopGroups = favoriteStopGroupSet
+        {
+            favoriteStopGroups.sort {
+                if $0 is FavoriteStopGroup && $1 is FavoriteStopGroup
+                {
+                    return ($0 as! FavoriteStopGroup).openCount > ($1 as! FavoriteStopGroup).openCount
+                }
+                else if $0 is FavoriteStopGroup && !($1 is FavoriteStopGroup)
+                {
+                    return true
+                }
+                else if !($0 is FavoriteStopGroup) && $1 is FavoriteStopGroup
+                {
+                    return false
+                }
+                else if $0 is FavoriteStop && $1 is FavoriteStop, let direction1 = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", ($0 as! FavoriteStop).directionTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Direction, let direction2 = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", ($1 as! FavoriteStop).directionTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Direction
+                {
+                    return direction1.route!.routeTag!.compare(direction2.route!.routeTag!, options: .numeric) == .orderedAscending
+                }
+                
+                return false
+            }
+        }
+    }
+    
     func fetchFavoritesPredictionTimes()
     {
         if let favoriteStops = favoriteStopObjects
@@ -267,7 +371,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
     {
         NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
         
-        if let predictions = notification.userInfo!["predictions"] as? [String], FavoriteState.favoritesOrganizeType == .list
+        if let predictions = notification.userInfo!["predictions"] as? [String], FavoriteState.favoritesOrganizeType == .list || FavoriteState.favoritesOrganizeType == .group
         {
             OperationQueue.main.addOperation {
                 let predictionsString = MapState.formatPredictions(predictions: predictions).predictionsString
@@ -278,32 +382,58 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
                     self.loadedPredictions[indexRow] = true
                     favoritesPredictionLabel.text = predictionsString
                 }
+                
+                if self.refreshingStopsLeft > 0
+                {
+                    self.refreshingStopsLeft -= 1
+                    if self.refreshingStopsLeft == 0
+                    {
+                        self.refreshControl?.endRefreshing()
+                    }
+                }
             }
         }
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let predictionTimesReturnUUID = UUID().uuidString + ";" + String(indexPath.row)
+        var favoriteStop: FavoriteStop?
         if FavoriteState.favoritesOrganizeType == .list && !loadedPredictions[indexPath.row]
         {
-            let predictionTimesReturnUUID = UUID().uuidString + ";" + String(indexPath.row)
-            let favoriteStop = favoriteStopObjects![indexPath.row]
-            NotificationCenter.default.addObserver(self, selector: #selector(receiveFavoritesPrediction(_:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
-            if let stop = RouteDataManager.fetchStop(stopTag: favoriteStop.stopTag!), let direction = RouteDataManager.fetchDirection(directionTag: favoriteStop.directionTag!)
-            {
-                RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: stop, direction: direction)
-            }
+            favoriteStop = favoriteStopObjects![indexPath.row]
+        }
+        
+        if FavoriteState.favoritesOrganizeType == .group && favoriteStopGroupSet![indexPath.row] is FavoriteStop
+        {
+            favoriteStop = favoriteStopGroupSet![indexPath.row] as? FavoriteStop
+        }
+        
+        if favoriteStop != nil
+        {
+            fetchPredictionTime(favoriteStop: favoriteStop!, predictionTimesReturnUUID: predictionTimesReturnUUID)
+        }
+    }
+    
+    func fetchPredictionTime(favoriteStop: FavoriteStop, predictionTimesReturnUUID: String)
+    {
+        NotificationCenter.default.addObserver(self, selector: #selector(receiveFavoritesPrediction(_:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
+        if let stop = RouteDataManager.fetchStop(stopTag: favoriteStop.stopTag!), let direction = RouteDataManager.fetchDirection(directionTag: favoriteStop.directionTag!)
+        {
+            RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: stop, direction: direction)
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch FavoriteState.favoritesOrganizeType
         {
-        case .list:
+        case .list, .addingToGroup:
             return favoriteStopObjects?.count ?? 0
         case .stop:
             return favoriteStopSet?.count ?? 0
         case .route:
             return favoriteRouteSet?.count ?? 0
+        case .group:
+            return favoriteStopGroupSet?.count ?? 0
         }
         
     }
@@ -313,34 +443,10 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         
         switch FavoriteState.favoritesOrganizeType
         {
-        case .list:
-            let favoriteRouteCell = tableView.dequeueReusableCell(withIdentifier: "FavoriteRouteCell")!
+        case .list, .addingToGroup:
             let favoriteStopObject = favoriteStopObjects![indexPath.row]
             
-            if let direction = RouteDataManager.fetchDirection(directionTag: favoriteStopObject.directionTag!)
-            {
-                if let routeColor = direction.route?.routeColor, let routeOppositeColor = direction.route?.routeOppositeColor
-                {
-                    favoriteRouteCell.backgroundColor = UIColor(hexString: routeColor)
-                    
-                    textColor = UIColor(hexString: routeOppositeColor)
-                }
-                
-                (favoriteRouteCell.viewWithTag(601) as! UILabel).text = direction.directionTitle
-                (favoriteRouteCell.viewWithTag(600) as! UILabel).text = direction.route?.routeTag
-            }
-            
-            if let stop = RouteDataManager.fetchStop(stopTag: favoriteStopObject.stopTag!)
-            {
-                (favoriteRouteCell.viewWithTag(602) as! UILabel).text = stop.stopTitle
-            }
-            
-            (favoriteRouteCell.viewWithTag(600) as! UILabel).textColor = textColor
-            (favoriteRouteCell.viewWithTag(601) as! UILabel).textColor = textColor
-            (favoriteRouteCell.viewWithTag(602) as! UILabel).textColor = textColor
-            (favoriteRouteCell.viewWithTag(603) as! UILabel).textColor = textColor
-            
-            return favoriteRouteCell
+            return createFavoriteStopCell(favoriteStopObject: favoriteStopObject, tableView: tableView)
         case .stop:
             let favoriteStopCell = tableView.dequeueReusableCell(withIdentifier: "FavoriteStopCell")!
             let stopObject = favoriteStopSet![indexPath.row]
@@ -392,7 +498,101 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             (favoriteRouteCell.viewWithTag(603) as! UILabel).textColor = textColor
             
             return favoriteRouteCell
+        case .group:
+            let groupObject = favoriteStopGroupSet![indexPath.row]
+            
+            if groupObject is FavoriteStopGroup
+            {
+                let groupCell = tableView.dequeueReusableCell(withIdentifier: "FavoriteStopGroupCell")!
+                
+                let favoriteStopCount = getFavoriteStopCount(group: groupObject as! FavoriteStopGroup)
+                let childGroupCount = countChildGroups(group: groupObject as! FavoriteStopGroup)
+                
+                (groupCell.viewWithTag(601) as! UILabel).text = String(favoriteStopCount) + " favorite stop" + (favoriteStopCount != 1 ? "s" : "") + ", " + String(childGroupCount) + " child group" + (childGroupCount != 1 ? "s" : "")
+                
+                (groupCell.viewWithTag(600) as! UILabel).text = (groupObject as! FavoriteStopGroup).groupName
+                
+                return groupCell
+            }
+            else if groupObject is FavoriteStop
+            {
+                return createFavoriteStopCell(favoriteStopObject: groupObject as! FavoriteStop, tableView: tableView)
+            }
+            
+            return tableView.dequeueReusableCell(withIdentifier: "FavoriteStopGroupCell")!
         }
+    }
+    
+    func createFavoriteStopCell(favoriteStopObject: FavoriteStop, tableView: UITableView) -> UITableViewCell
+    {
+        var textColor = UIColor.black
+        let favoriteRouteCell = tableView.dequeueReusableCell(withIdentifier: "FavoriteRouteCell")!
+
+        if let direction = RouteDataManager.fetchDirection(directionTag: favoriteStopObject.directionTag!)
+        {
+            if let routeColor = direction.route?.routeColor, let routeOppositeColor = direction.route?.routeOppositeColor
+            {
+                favoriteRouteCell.backgroundColor = UIColor(hexString: routeColor)
+                
+                textColor = UIColor(hexString: routeOppositeColor)
+            }
+            
+            (favoriteRouteCell.viewWithTag(601) as! UILabel).text = direction.directionTitle
+            (favoriteRouteCell.viewWithTag(600) as! UILabel).text = direction.route?.routeTag
+        }
+        
+        if let stop = RouteDataManager.fetchStop(stopTag: favoriteStopObject.stopTag!)
+        {
+            (favoriteRouteCell.viewWithTag(602) as! UILabel).text = stop.stopTitle
+        }
+        
+        (favoriteRouteCell.viewWithTag(600) as! UILabel).textColor = textColor
+        (favoriteRouteCell.viewWithTag(601) as! UILabel).textColor = textColor
+        (favoriteRouteCell.viewWithTag(602) as! UILabel).textColor = textColor
+        (favoriteRouteCell.viewWithTag(603) as! UILabel).textColor = textColor
+        
+        return favoriteRouteCell
+    }
+    
+    func countChildGroups(group: FavoriteStopGroup) -> Int
+    {
+        let childGroups = group.childGroups?.allObjects as? [FavoriteStopGroup] ?? []
+        var childGroupCount = childGroups.count
+        for childGroup in childGroups
+        {
+            childGroupCount += countChildGroups(group: childGroup)
+        }
+        
+        return childGroupCount
+    }
+    
+    func getFavoriteStopCount(group: FavoriteStopGroup) -> Int
+    {
+        var favoriteStopCount = (try? JSONSerialization.jsonObject(with: group.favoriteStopUUIDs!, options: JSONSerialization.ReadingOptions.allowFragments) as? [String] ?? [])?.count ?? 0
+        let childGroups = group.childGroups?.allObjects as? [FavoriteStopGroup] ?? []
+        for childGroup in childGroups
+        {
+            favoriteStopCount += getFavoriteStopCount(group: childGroup)
+        }
+        
+        return favoriteStopCount
+    }
+    
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        if FavoriteState.favoritesOrganizeType == .group
+        {
+            let selectedObject = favoriteStopGroupSet![indexPath.row]
+            if selectedObject is FavoriteStopGroup
+            {
+                openFavoriteGroup(groupObject: selectedObject as! FavoriteStopGroup)
+            }
+            else if selectedObject is FavoriteStop
+            {
+                openFavoriteStop(favoriteStop: selectedObject as! FavoriteStop)
+            }
+        }
+        
+        return indexPath
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -401,12 +601,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         case .list:
             let favoriteStop = favoriteStopObjects![indexPath.row]
             
-            MapState.selectedDirectionTag = favoriteStop.directionTag
-            MapState.selectedStopTag = favoriteStop.stopTag
-            MapState.routeInfoShowing = .stop
-            MapState.routeInfoObject = MapState.getCurrentDirection()
-            
-            self.performSegue(withIdentifier: "SelectedFavoriteUnwind", sender: self)
+            openFavoriteStop(favoriteStop: favoriteStop)
         case .stop:
             let stopObject = favoriteStopSet![indexPath.row]
             
@@ -427,6 +622,89 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
                     self.performSegue(withIdentifier: "UnwindFromFavoritesViewWithSelectedRoute", sender: self)
                 }
             }
+        case .group:
+            let selectedObject = favoriteStopGroupSet![indexPath.row]
+            if selectedObject is FavoriteStopGroup
+            {
+                openFavoriteGroup(groupObject: selectedObject as! FavoriteStopGroup)
+            }
+            else if selectedObject is FavoriteStop
+            {
+                openFavoriteStop(favoriteStop: selectedObject as! FavoriteStop)
+            }
+        case .addingToGroup:
+            let selectedObject = favoriteStopObjects![indexPath.row]
+            favoriteStopsToAddToGroup?.append(selectedObject.uuid ?? "")
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        switch FavoriteState.favoritesOrganizeType
+        {
+        case .addingToGroup:
+            let selectedObject = favoriteStopObjects![indexPath.row]
+            if let index = favoriteStopsToAddToGroup?.index(of: selectedObject.uuid ?? "")
+            {
+                favoriteStopsToAddToGroup?.remove(at: index)
+            }
+        default:
+            break
+        }
+    }
+    
+    func openFavoriteGroup(groupObject: FavoriteStopGroup)
+    {
+        groupObject.openCount += 1
+        CoreDataStack.saveContext()
+        FavoriteState.selectedGroupUUID = groupObject.uuid
+        self.performSegue(withIdentifier: "openFavoriteStopGroup", sender: self)
+    }
+    
+    func openFavoriteStop(favoriteStop: FavoriteStop)
+    {
+        MapState.selectedDirectionTag = favoriteStop.directionTag
+        MapState.selectedStopTag = favoriteStop.stopTag
+        MapState.routeInfoShowing = .stop
+        MapState.routeInfoObject = MapState.getCurrentDirection()
+        
+        self.performSegue(withIdentifier: "SelectedFavoriteUnwind", sender: self)
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        if FavoriteState.favoritesOrganizeType == .group
+        {
+            let delete = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
+                if let groupObject = self.favoriteStopGroupSet?[indexPath.row]
+                {
+                    if groupObject is FavoriteStopGroup
+                    {
+                        self.deleteFavoriteGroupChildren(groupObject: groupObject as! FavoriteStopGroup)
+                        CoreDataStack.persistentContainer.viewContext.delete(groupObject)
+                    }
+                    else if groupObject is FavoriteStop, let currentGroup = RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStopGroup, var favoriteStopUUIDs = try? JSONSerialization.jsonObject(with: currentGroup.favoriteStopUUIDs!, options: JSONSerialization.ReadingOptions.allowFragments) as? [String], let favoriteStopIndex = favoriteStopUUIDs?.index(of: (groupObject as! FavoriteStop).uuid!)
+                    {
+                        favoriteStopUUIDs?.remove(at: favoriteStopIndex)
+                        currentGroup.favoriteStopUUIDs = try? JSONSerialization.data(withJSONObject: favoriteStopUUIDs ?? [], options: JSONSerialization.WritingOptions.prettyPrinted)
+                    }
+                    
+                    self.favoriteStopGroupSet?.remove(at: indexPath.row)
+                    tableView.deleteRows(at: [indexPath], with: .fade)
+                    
+                    CoreDataStack.saveContext()
+                }
+            }
+            
+            return [delete]
+        }
+        
+        return nil
+    }
+    
+    func deleteFavoriteGroupChildren(groupObject: FavoriteStopGroup)
+    {
+        for childGroup in (groupObject.childGroups?.allObjects as! [FavoriteStopGroup])
+        {
+            CoreDataStack.persistentContainer.viewContext.delete(childGroup)
         }
     }
     
@@ -435,6 +713,10 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         {
             directionStopViewController.unwindSegueID = "UnwindFromDirectionStop"
         }
+        else if segue.identifier == "openFavoriteStopGroup"
+        {
+            
+        }
     }
     
     @IBAction func listStopSegmentPressed(_ sender: Any) {
@@ -442,11 +724,136 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         
         FavoriteState.favoritesOrganizeType = FavoriteState.FavoritesOrganizeType(rawValue: segmentControl.selectedSegmentIndex) ?? .list
         
+        if FavoriteState.favoritesOrganizeType == .group
+        {
+            self.mainNavigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addToGroupButtonPressed)), animated: true)
+        }
+        else
+        {
+            self.mainNavigationItem.setRightBarButton(nil, animated: true)
+        }
+        
         reloadTableView()
+    }
+    
+    @objc func addToGroupButtonPressed()
+    {
+        let alertViewController = UIAlertController(title: "Add Groups", message: nil, preferredStyle: .actionSheet)
+        alertViewController.addAction(UIAlertAction(title: "Add Group", style: .default, handler: { (action) in
+            self.displayAddGroupAlert()
+        }))
+        alertViewController.addAction(UIAlertAction(title: "Add To Group", style: .default, handler: { (action) in
+            FavoriteState.favoritesOrganizeType = .addingToGroup
+            self.performSegue(withIdentifier: "openFavoriteStopGroup", sender: self)
+        }))
+        alertViewController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+            
+        }))
+        
+        self.present(alertViewController, animated: true, completion: nil)
+    }
+    
+    var refreshingStopsLeft = 0
+    
+    @objc func reloadGroupPredictions()
+    {
+        for object in favoriteStopGroupSet!
+        {
+            let predictionTimesReturnUUID = UUID().uuidString + ";" + String(favoriteStopGroupSet!.index(of: object) ?? 0)
+            if object is FavoriteStop
+            {
+                refreshingStopsLeft += 1
+                fetchPredictionTime(favoriteStop: object as! FavoriteStop, predictionTimesReturnUUID: predictionTimesReturnUUID)
+            }
+        }
+        
+        if refreshingStopsLeft == 0
+        {
+            self.refreshControl?.endRefreshing()
+        }
+    }
+    
+    func displayAddGroupAlert()
+    {
+        let newGroupAlert = UIAlertController(title: "New Group", message: nil, preferredStyle: .alert)
+        newGroupAlert.addTextField { (textField) in
+            textField.placeholder = "New Group"
+        }
+        newGroupAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+            
+        }))
+        newGroupAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            let groupTitle = newGroupAlert.textFields![0].text ?? "New Group"
+            self.createNewGroup(title: groupTitle)
+        }))
+        
+        self.present(newGroupAlert, animated: true, completion: nil)
     }
     
     @IBAction func unwindFromDirectionStop(_ segue: UIStoryboardSegue)
     {
         self.favoriteStopsTableView.reloadData()
+    }
+    
+    func createNewGroup(title: String)
+    {
+        let newGroup = NSEntityDescription.insertNewObject(forEntityName: "FavoriteStopGroup", into: CoreDataStack.persistentContainer.viewContext) as! FavoriteStopGroup
+        newGroup.groupName = title
+        if let parentGroup = RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStopGroup
+        {
+            newGroup.parentGroup = parentGroup
+        }
+        newGroup.uuid = UUID().uuidString
+        newGroup.favoriteStopUUIDs = try? JSONSerialization.data(withJSONObject: Array<String>(), options: JSONSerialization.WritingOptions.prettyPrinted)
+        
+        CoreDataStack.saveContext()
+        
+        openFavoriteGroup(groupObject: newGroup)
+    }
+    
+    @IBAction func backButtonPressed(_ sender: Any) {
+        switch FavoriteState.favoritesOrganizeType
+        {
+        case .addingToGroup:
+            self.performSegue(withIdentifier: "UnwindFromFavoriteGroupView", sender: self)
+        case .group:
+            if FavoriteState.selectedGroupUUID != "0"
+            {
+                if let currentGroup = RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStopGroup
+                {
+                    FavoriteState.selectedGroupUUID = currentGroup.parentGroup?.uuid
+                }
+                self.performSegue(withIdentifier: "UnwindFromFavoriteGroupView", sender: self)
+            }
+            else
+            {
+                self.performSegue(withIdentifier: "UnwindFromFavoritesView", sender: self)
+            }
+        case .list, .route, .stop:
+            self.performSegue(withIdentifier: "UnwindFromFavoritesView", sender: self)
+        }
+    }
+    
+    @objc func doneAddingToGroup()
+    {
+        if let favoriteStopsToAddToGroup = favoriteStopsToAddToGroup, let currentGroup = RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStopGroup
+        {
+            if var currentFavoriteStops = try? JSONSerialization.jsonObject(with: currentGroup.favoriteStopUUIDs!, options: JSONSerialization.ReadingOptions.allowFragments) as? Array<String>
+            {
+                currentFavoriteStops?.append(contentsOf: favoriteStopsToAddToGroup)
+                currentGroup.favoriteStopUUIDs = try? JSONSerialization.data(withJSONObject: currentFavoriteStops ?? [], options: JSONSerialization.WritingOptions.prettyPrinted)
+            }
+        }
+        
+        CoreDataStack.saveContext()
+        
+        FavoriteState.favoritesOrganizeType = .group
+        
+        self.performSegue(withIdentifier: "UnwindFromFavoriteGroupView", sender: self)
+    }
+    
+    @IBAction func unwindFromFavoriteGroupView(_ segue: UIStoryboardSegue)
+    {
+        
     }
 }

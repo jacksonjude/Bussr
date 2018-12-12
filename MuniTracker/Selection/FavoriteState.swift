@@ -15,6 +15,8 @@ class FavoriteState: NSObject
         case route
         case stop
         case list
+        case group
+        case addingToGroup
     }
     
     static var favoritesOrganizeType: FavoritesOrganizeType = .route
@@ -25,6 +27,6 @@ class FavoriteState: NSObject
         }
     }
     static var favoriteObject: Any?
-    
     static var selectedRouteTag: String?
+    static var selectedGroupUUID: String?
 }
