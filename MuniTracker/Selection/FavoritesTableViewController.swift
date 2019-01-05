@@ -131,7 +131,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             }
             else
             {
-                mainNavigationItem.title = "Favorites"
+                mainNavigationItem.title = "Groups"
             }
         }
         else if FavoriteState.favoritesOrganizeType == .addingToGroup
@@ -623,15 +623,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
                 }
             }
         case .group:
-            let selectedObject = favoriteStopGroupSet![indexPath.row]
-            if selectedObject is FavoriteStopGroup
-            {
-                openFavoriteGroup(groupObject: selectedObject as! FavoriteStopGroup)
-            }
-            else if selectedObject is FavoriteStop
-            {
-                openFavoriteStop(favoriteStop: selectedObject as! FavoriteStop)
-            }
+            break
         case .addingToGroup:
             let selectedObject = favoriteStopObjects![indexPath.row]
             favoriteStopsToAddToGroup?.append(selectedObject.uuid ?? "")
@@ -717,6 +709,11 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         {
             
         }
+        
+        if segue.identifier == "SelectedFavoriteUnwind" || segue.identifier == "showDirectionStopTableView" || segue.identifier == "UnwindFromFavoritesViewWithSelectedRoute"
+        {
+            FavoriteState.selectedGroupUUID = "0"
+        }
     }
     
     @IBAction func listStopSegmentPressed(_ sender: Any) {
@@ -738,11 +735,11 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
     
     @objc func addToGroupButtonPressed()
     {
-        let alertViewController = UIAlertController(title: "Add Groups", message: nil, preferredStyle: .actionSheet)
-        alertViewController.addAction(UIAlertAction(title: "Add Group", style: .default, handler: { (action) in
+        let alertViewController = UIAlertController(title: "Add \(FavoriteState.selectedGroupUUID ?? "0" == "0" ? "Group" : "Group")", message: nil, preferredStyle: .actionSheet)
+        alertViewController.addAction(UIAlertAction(title: "Add \(FavoriteState.selectedGroupUUID ?? "0" == "0" ? "Group" : "Group")", style: .default, handler: { (action) in
             self.displayAddGroupAlert()
         }))
-        alertViewController.addAction(UIAlertAction(title: "Add To Group", style: .default, handler: { (action) in
+        alertViewController.addAction(UIAlertAction(title: "Add To \(FavoriteState.selectedGroupUUID ?? "0" == "0" ? "Group" : "Group")", style: .default, handler: { (action) in
             FavoriteState.favoritesOrganizeType = .addingToGroup
             self.performSegue(withIdentifier: "openFavoriteStopGroup", sender: self)
         }))
@@ -775,15 +772,15 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
     
     func displayAddGroupAlert()
     {
-        let newGroupAlert = UIAlertController(title: "New Group", message: nil, preferredStyle: .alert)
+        let newGroupAlert = UIAlertController(title: "New \(FavoriteState.selectedGroupUUID ?? "0" == "0" ? "Group" : "Group")", message: nil, preferredStyle: .alert)
         newGroupAlert.addTextField { (textField) in
-            textField.placeholder = "New Group"
+            textField.placeholder = "New \(FavoriteState.selectedGroupUUID ?? "0" == "0" ? "Group" : "Group")"
         }
         newGroupAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
             
         }))
         newGroupAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
-            let groupTitle = newGroupAlert.textFields![0].text ?? "New Group"
+            let groupTitle = newGroupAlert.textFields![0].text ?? "New \(FavoriteState.selectedGroupUUID ?? "0" == "0" ? "Group" : "Group")"
             self.createNewGroup(title: groupTitle)
         }))
         
