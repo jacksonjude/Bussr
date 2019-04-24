@@ -714,6 +714,11 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         {
             FavoriteState.selectedGroupUUID = "0"
         }
+        
+        if segue.identifier == "UnwindFromFavoriteGroupView" && FavoriteState.favoritesOrganizeType == .addingToGroup
+        {
+            FavoriteState.favoritesOrganizeType = .group
+        }
     }
     
     @IBAction func listStopSegmentPressed(_ sender: Any) {
@@ -844,7 +849,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         
         CoreDataStack.saveContext()
         
-        FavoriteState.favoritesOrganizeType = .group
+        //FavoriteState.favoritesOrganizeType = .group
         
         self.performSegue(withIdentifier: "UnwindFromFavoriteGroupView", sender: self)
     }

@@ -41,6 +41,7 @@
 		7A9F21E72106B0B00000E971 /* FavoriteState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9F21E62106B0B00000E971 /* FavoriteState.swift */; };
 		7A9F7E79216FA40200DF093D /* NotificationRepeatTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9F7E78216FA40200DF093D /* NotificationRepeatTableViewController.swift */; };
 		7A9F7E7B216FA49E00DF093D /* NotificationTimePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9F7E7A216FA49E00DF093D /* NotificationTimePickerViewController.swift */; };
+		7AA5E4B821E2D28E0039CCDD /* FilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5E4B721E2D28E0039CCDD /* FilterButton.swift */; };
 		7AD004612127586700DCB08E /* MuniTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1020D6E60C004BAB1E /* MuniTracker.xcdatamodeld */; };
 		7AD004622127586800DCB08E /* MuniTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1020D6E60C004BAB1E /* MuniTracker.xcdatamodeld */; };
 		7AD004632127586800DCB08E /* MuniTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1020D6E60C004BAB1E /* MuniTracker.xcdatamodeld */; };
@@ -141,6 +142,7 @@
 		7AA5601D212FCA8C00C6E47E /* MuniTrackerRecentExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MuniTrackerRecentExtension.entitlements; sourceTree = "<group>"; };
 		7AA5601E212FCAA200C6E47E /* MuniTrackerFavoritesExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MuniTrackerFavoritesExtension.entitlements; sourceTree = "<group>"; };
 		7AA5601F212FCAB300C6E47E /* MuniTrackerNearbyExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MuniTrackerNearbyExtension.entitlements; sourceTree = "<group>"; };
+		7AA5E4B721E2D28E0039CCDD /* FilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterButton.swift; sourceTree = "<group>"; };
 		7AD81E0620D6E60C004BAB1E /* MuniTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MuniTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AD81E0920D6E60C004BAB1E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7AD81E0B20D6E60C004BAB1E /* MainMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapViewController.swift; sourceTree = "<group>"; };
@@ -280,6 +282,7 @@
 				7AD81E0B20D6E60C004BAB1E /* MainMapViewController.swift */,
 				7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */,
 				7A7FE2B420DB4761005B654C /* MapState.swift */,
+				7AA5E4B721E2D28E0039CCDD /* FilterButton.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -600,6 +603,7 @@
 				7AD81E0C20D6E60C004BAB1E /* MainMapViewController.swift in Sources */,
 				7A9F21E72106B0B00000E971 /* FavoriteState.swift in Sources */,
 				7AFB4752216DBD480043450B /* NotificationEditorViewController.swift in Sources */,
+				7AA5E4B821E2D28E0039CCDD /* FilterButton.swift in Sources */,
 				7AD81E0A20D6E60C004BAB1E /* AppDelegate.swift in Sources */,
 				7A71722B20D70943002144D5 /* RoutesTableViewController.swift in Sources */,
 				7A23176A2171212F00D12F21 /* NotificationEditorState.swift in Sources */,

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="5DO-YH-hPg">
-                                <rect key="frame" x="0.0" y="64" width="375" height="381"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="397"/>
                             </mapView>
                             <navigationBar hidden="YES" alpha="0.80000000000000004" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ea2-9E-S1F">
                                 <rect key="frame" x="0.0" y="64" width="375" height="44"/>
@@ -104,7 +104,7 @@
                                 </connections>
                             </button>
                             <containerView hidden="YES" opaque="NO" tag="618" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yev-Ge-C71">
-                                <rect key="frame" x="0.0" y="445" width="375" height="162"/>
+                                <rect key="frame" x="0.0" y="461" width="375" height="162"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="162" id="Vug-BW-GB8"/>
                                 </constraints>
@@ -113,7 +113,7 @@
                                 </connections>
                             </containerView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Gt-Fk-FGB">
-                                <rect key="frame" x="0.0" y="607" width="375" height="60"/>
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                                 <items>
                                     <barButtonItem image="RouteListIcon" id="Mj2-Nd-wGo">
                                         <connections>
@@ -638,7 +638,7 @@
                                 <rect key="frame" x="272" y="0.0" width="103" height="50"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BOi-xL-bko">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BOi-xL-bko">
                                 <rect key="frame" x="330" y="5" width="40" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="40" id="Io0-mI-Nm3"/>
@@ -649,7 +649,7 @@
                                     <action selector="locationFilterButtonPressed:" destination="4Mg-kq-ULL" eventType="touchUpInside" id="RjB-Lu-hrH"/>
                                 </connections>
                             </button>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kk3-pr-5iQ">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kk3-pr-5iQ">
                                 <rect key="frame" x="282" y="5" width="40" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="40" id="NV8-m9-6i9"/>
@@ -752,9 +752,6 @@
                         <outlet property="addNotificationButton" destination="Ca3-us-lKS" id="Oyb-9H-nug"/>
                         <outlet property="directionButton" destination="7ze-eL-qKp" id="Akc-uS-dXf"/>
                         <outlet property="expandFiltersButton" destination="7CU-sp-HUo" id="hJZ-84-EDR"/>
-                        <outlet property="favoriteButton" destination="kk3-pr-5iQ" id="byc-zT-Vn3"/>
-                        <outlet property="favoriteButtonLeadingConstraint" destination="di1-4Q-rgW" id="Ahw-Vj-CeI"/>
-                        <outlet property="locationButton" destination="BOi-xL-bko" id="T33-6g-qar"/>
                         <outlet property="otherDirectionsButton" destination="Nba-YH-9qK" id="MyU-2d-O7N"/>
                         <outlet property="routeInfoPicker" destination="Ltc-3h-TBo" id="yHy-in-jYX"/>
                     </connections>
@@ -1303,19 +1300,19 @@
         </scene>
     </scenes>
     <resources>
-        <image name="BellAddIcon" width="60" height="60"/>
-        <image name="BellIcon" width="50" height="50"/>
-        <image name="BusIcon" width="90" height="90"/>
-        <image name="BusStopIcon" width="128" height="128"/>
-        <image name="CurrentLocationIcon" width="128" height="128"/>
-        <image name="DirectionIcon" width="128" height="128"/>
-        <image name="FavoriteAddIcon" width="60" height="60"/>
-        <image name="FavoriteIcon" width="30.719999313354492" height="30.719999313354492"/>
-        <image name="FavoriteMenuIcon" width="12.239999771118164" height="16.319999694824219"/>
-        <image name="FilterIcon" width="128" height="117"/>
-        <image name="HistoryIcon" width="54" height="60"/>
-        <image name="RouteListIcon" width="40.5" height="45"/>
-        <image name="SettingsIcon" width="12" height="12"/>
+        <image name="BellAddIcon" width="30" height="30"/>
+        <image name="BellIcon" width="25" height="25"/>
+        <image name="BusIcon" width="60" height="60"/>
+        <image name="BusStopIcon" width="64" height="64"/>
+        <image name="CurrentLocationIcon" width="64" height="64"/>
+        <image name="DirectionIcon" width="64" height="64"/>
+        <image name="FavoriteAddIcon" width="30" height="30"/>
+        <image name="FavoriteIcon" width="64" height="64"/>
+        <image name="FavoriteMenuIcon" width="25.5" height="34"/>
+        <image name="FilterIcon" width="64" height="58.5"/>
+        <image name="HistoryIcon" width="27" height="30"/>
+        <image name="RouteListIcon" width="27" height="30"/>
+        <image name="SettingsIcon" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="coT-D9-Khz"/>
