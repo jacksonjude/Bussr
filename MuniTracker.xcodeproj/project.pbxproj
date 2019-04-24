@@ -442,6 +442,7 @@
 				TargetAttributes = {
 					7A068D1C212697DA00D3425E = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1020;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -450,6 +451,7 @@
 					};
 					7A068D2F212697F000D3425E = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1020;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -458,6 +460,7 @@
 					};
 					7A068D422126980900D3425E = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1020;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -466,6 +469,7 @@
 					};
 					7AD81E0520D6E60C004BAB1E = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1020;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -701,7 +705,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerFavoritesExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -721,7 +725,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerFavoritesExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -741,7 +745,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerRecentExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -761,7 +765,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerRecentExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -781,7 +785,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerNearbyExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -801,7 +805,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerNearbyExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -936,7 +940,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -957,7 +961,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

@@ -635,7 +635,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         {
         case .addingToGroup:
             let selectedObject = favoriteStopObjects![indexPath.row]
-            if let index = favoriteStopsToAddToGroup?.index(of: selectedObject.uuid ?? "")
+            if let index = favoriteStopsToAddToGroup?.firstIndex(of: selectedObject.uuid ?? "")
             {
                 favoriteStopsToAddToGroup?.remove(at: index)
             }
@@ -673,10 +673,10 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
                         self.deleteFavoriteGroupChildren(groupObject: groupObject as! FavoriteStopGroup)
                         CoreDataStack.persistentContainer.viewContext.delete(groupObject)
                     }
-                    else if groupObject is FavoriteStop, let currentGroup = RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStopGroup, var favoriteStopUUIDs = try? JSONSerialization.jsonObject(with: currentGroup.favoriteStopUUIDs!, options: JSONSerialization.ReadingOptions.allowFragments) as? [String], let favoriteStopIndex = favoriteStopUUIDs?.index(of: (groupObject as! FavoriteStop).uuid!)
+                    else if groupObject is FavoriteStop, let currentGroup = RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStopGroup, var favoriteStopUUIDs = try? JSONSerialization.jsonObject(with: currentGroup.favoriteStopUUIDs!, options: JSONSerialization.ReadingOptions.allowFragments) as? [String], let favoriteStopIndex = favoriteStopUUIDs.firstIndex(of: (groupObject as! FavoriteStop).uuid!)
                     {
-                        favoriteStopUUIDs?.remove(at: favoriteStopIndex)
-                        currentGroup.favoriteStopUUIDs = try? JSONSerialization.data(withJSONObject: favoriteStopUUIDs ?? [], options: JSONSerialization.WritingOptions.prettyPrinted)
+                        favoriteStopUUIDs.remove(at: favoriteStopIndex)
+                        currentGroup.favoriteStopUUIDs = try? JSONSerialization.data(withJSONObject: favoriteStopUUIDs, options: JSONSerialization.WritingOptions.prettyPrinted)
                     }
                     
                     self.favoriteStopGroupSet?.remove(at: indexPath.row)
@@ -761,7 +761,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
     {
         for object in favoriteStopGroupSet!
         {
-            let predictionTimesReturnUUID = UUID().uuidString + ";" + String(favoriteStopGroupSet!.index(of: object) ?? 0)
+            let predictionTimesReturnUUID = UUID().uuidString + ";" + String(favoriteStopGroupSet!.firstIndex(of: object) ?? 0)
             if object is FavoriteStop
             {
                 refreshingStopsLeft += 1
@@ -842,8 +842,8 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         {
             if var currentFavoriteStops = try? JSONSerialization.jsonObject(with: currentGroup.favoriteStopUUIDs!, options: JSONSerialization.ReadingOptions.allowFragments) as? Array<String>
             {
-                currentFavoriteStops?.append(contentsOf: favoriteStopsToAddToGroup)
-                currentGroup.favoriteStopUUIDs = try? JSONSerialization.data(withJSONObject: currentFavoriteStops ?? [], options: JSONSerialization.WritingOptions.prettyPrinted)
+                currentFavoriteStops.append(contentsOf: favoriteStopsToAddToGroup)
+                currentGroup.favoriteStopUUIDs = try? JSONSerialization.data(withJSONObject: currentFavoriteStops, options: JSONSerialization.WritingOptions.prettyPrinted)
             }
         }
         

@@ -59,7 +59,7 @@ class NotificationEditorViewController: UIViewController
         
         if let repeatArrayData = stopNotification?.daysOfWeek
         {
-            NotificationEditorState.notificationRepeatArray = try? JSONSerialization.jsonObject(with: repeatArrayData, options: JSONSerialization.ReadingOptions.allowFragments) as! Array<Bool>
+            NotificationEditorState.notificationRepeatArray = try? JSONSerialization.jsonObject(with: repeatArrayData, options: JSONSerialization.ReadingOptions.allowFragments) as? Array<Bool>
         }
         
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "ReloadNotificationEditorViews"), object: nil)
