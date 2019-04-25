@@ -144,26 +144,13 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let stopCell = tableView.dequeueReusableCell(withIdentifier: "StopCell")!
+        let stopCell = tableView.dequeueReusableCell(withIdentifier: "StopCell") as! DirectionStopCell
         
         let stopDirectionObject = stopDirectionObjects![indexPath.row]
+        stopCell.directionObject = stopDirectionObject.direction
+        stopCell.stopObject = stopDirectionObject.stop
         
-        var textColor = UIColor.black
-        
-        if let routeColor = stopDirectionObject.direction.route?.routeColor, let routeOppositeColor = stopDirectionObject.direction.route?.routeOppositeColor
-        {
-            stopCell.backgroundColor = UIColor(hexString: routeColor)
-            textColor = UIColor(hexString: routeOppositeColor)
-        }
-        
-        (stopCell.viewWithTag(600) as! UILabel).textColor = textColor
-        (stopCell.viewWithTag(601) as! UILabel).textColor = textColor
-        (stopCell.viewWithTag(602) as! UILabel).textColor = textColor
-        (stopCell.viewWithTag(603) as! UILabel).textColor = textColor
-        
-        (stopCell.viewWithTag(600) as! UILabel).text = stopDirectionObject.direction.route?.routeTag
-        (stopCell.viewWithTag(601) as! UILabel).text = stopDirectionObject.direction.directionTitle
-        (stopCell.viewWithTag(602) as! UILabel).text = stopDirectionObject.stop.stopTitle
+        stopCell.updateCellText()
         
         return stopCell
     }
@@ -197,9 +184,8 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if !loadedPredictions[indexPath.row]
         {
-            let stopDirectionObject = stopDirectionObjects![indexPath.row]
-            
-            fetchPrediction(stopObject: stopDirectionObject.stop, directionObject: stopDirectionObject.direction, index: indexPath.row)
+            (cell as! DirectionStopCell).refreshTimes()
+            loadedPredictions[indexPath.row] = true
         }
     }
     

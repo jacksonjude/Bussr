@@ -31,6 +31,11 @@ class DirectionsTableViewController: UIViewController, UITableViewDelegate, UITa
         fetchDirectionObjects()
         sortDirectionObjects()
         directionsTableView.reloadData()
+        
+        if let stop = RouteDataManager.fetchStop(stopTag: MapState.selectedStopTag!)
+        {
+            mainNavigationItem.title = stop.stopTitle
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -89,7 +94,11 @@ class DirectionsTableViewController: UIViewController, UITableViewDelegate, UITa
             for direction in directions
             {
                 let index = directions.firstIndex(of: direction)!
-                fetchPrediction(direction: direction, index: index)
+                if let directionCell = directionsTableView.cellForRow(at: IndexPath(row: index, section: 0)) as? DirectionStopCell, let stop = RouteDataManager.fetchStop(stopTag: MapState.selectedStopTag!)
+                {
+                    directionCell.fetchPrediction(stopObject: stop, directionObject: direction)
+                    self.loadedPredictions[index] = true
+                }
             }
         }
     }
@@ -137,31 +146,16 @@ class DirectionsTableViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let directionCell = tableView.dequeueReusableCell(withIdentifier: "OtherDirectionCell")!
+        let directionCell = tableView.dequeueReusableCell(withIdentifier: "OtherDirectionCell") as! DirectionStopCell
         
         let direction = directionObjects![indexPath.row]
-        
-        var textColor = UIColor.black
-        
-        if let routeColor = direction.route?.routeColor, let routeOppositeColor = direction.route?.routeOppositeColor
-        {
-            directionCell.backgroundColor = UIColor(hexString: routeColor)
-            
-            textColor = UIColor(hexString: routeOppositeColor)
-        }
-        
-        (directionCell.viewWithTag(601) as! UILabel).text = direction.directionTitle
-        (directionCell.viewWithTag(600) as! UILabel).text = direction.route?.routeTag
-        
-        (directionCell.viewWithTag(601) as! UILabel).textColor = textColor
-        (directionCell.viewWithTag(600) as! UILabel).textColor = textColor
-        
         if let stop = RouteDataManager.fetchStop(stopTag: MapState.selectedStopTag!)
         {
-            mainNavigationItem.title = stop.stopTitle
+            directionCell.directionObject = direction
+            directionCell.stopObject = stop
+            
+            directionCell.updateCellText()
         }
-        
-        (directionCell.viewWithTag(603) as! UILabel).textColor = textColor
         
         return directionCell
     }

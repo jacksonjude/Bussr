@@ -58,6 +58,7 @@
 		7AD81E1420D6E60D004BAB1E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7AD81E1320D6E60D004BAB1E /* Assets.xcassets */; };
 		7AD81E1720D6E60D004BAB1E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AD81E1520D6E60D004BAB1E /* LaunchScreen.storyboard */; };
 		7AD81E1F20D6EEDB004BAB1E /* RouteDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */; };
+		7AE57F8C2270D17600F1B42B /* DirectionStopCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE57F8B2270D17600F1B42B /* DirectionStopCell.swift */; };
 		7AF50BE220E1B71E00E4BFD1 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF50BE120E1B71E00E4BFD1 /* SettingsViewController.swift */; };
 		7AFB4752216DBD480043450B /* NotificationEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB4751216DBD480043450B /* NotificationEditorViewController.swift */; };
 /* End PBXBuildFile section */
@@ -152,6 +153,7 @@
 		7AD81E1620D6E60D004BAB1E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7AD81E1820D6E60D004BAB1E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteDataManager.swift; sourceTree = "<group>"; };
+		7AE57F8B2270D17600F1B42B /* DirectionStopCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionStopCell.swift; sourceTree = "<group>"; };
 		7AF50BE120E1B71E00E4BFD1 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		7AFB4751216DBD480043450B /* NotificationEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEditorViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -264,6 +266,7 @@
 				7A50EECC2107DAE700B69B92 /* StopsTableViewController.swift */,
 				7A24528F20FA73170033E333 /* FavoritesTableViewController.swift */,
 				7A9F21E62106B0B00000E971 /* FavoriteState.swift */,
+				7AE57F8B2270D17600F1B42B /* DirectionStopCell.swift */,
 			);
 			path = Selection;
 			sourceTree = "<group>";
@@ -599,6 +602,7 @@
 				7A50EECD2107DAE700B69B92 /* StopsTableViewController.swift in Sources */,
 				7A42C934210521090022FC96 /* DirectionsTableViewController.swift in Sources */,
 				7AD81E1F20D6EEDB004BAB1E /* RouteDataManager.swift in Sources */,
+				7AE57F8C2270D17600F1B42B /* DirectionStopCell.swift in Sources */,
 				7A24529020FA73170033E333 /* FavoritesTableViewController.swift in Sources */,
 				7A61EF8420D77BE100481037 /* RouteInfoPickerViewController.swift in Sources */,
 				7A9F7E79216FA40200DF093D /* NotificationRepeatTableViewController.swift in Sources */,

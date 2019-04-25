@@ -634,32 +634,11 @@
                                 <rect key="frame" x="0.0" y="0.0" width="103" height="50"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V1K-Xu-PoB">
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V1K-Xu-PoB">
                                 <rect key="frame" x="272" y="0.0" width="103" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BOi-xL-bko">
-                                <rect key="frame" x="330" y="5" width="40" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="40" id="Io0-mI-Nm3"/>
-                                    <constraint firstAttribute="height" constant="40" id="Xvd-FR-f9c"/>
-                                </constraints>
-                                <state key="normal" image="CurrentLocationIcon"/>
-                                <connections>
-                                    <action selector="locationFilterButtonPressed:" destination="4Mg-kq-ULL" eventType="touchUpInside" id="RjB-Lu-hrH"/>
-                                </connections>
-                            </button>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kk3-pr-5iQ">
-                                <rect key="frame" x="282" y="5" width="40" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="40" id="NV8-m9-6i9"/>
-                                    <constraint firstAttribute="height" constant="40" id="WvX-dc-bfr"/>
-                                </constraints>
-                                <state key="normal" image="FavoriteIcon"/>
-                                <connections>
-                                    <action selector="favoriteFilterButtonPressed:" destination="4Mg-kq-ULL" eventType="touchUpInside" id="isE-v7-yYe"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ze-eL-qKp">
                                 <rect key="frame" x="5" y="5" width="40" height="40"/>
                                 <constraints>
@@ -719,27 +698,19 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="7CU-sp-HUo" firstAttribute="top" secondItem="gV6-YZ-kOr" secondAttribute="top" constant="5" id="1mP-K4-cW7"/>
-                            <constraint firstItem="BOi-xL-bko" firstAttribute="top" secondItem="gV6-YZ-kOr" secondAttribute="top" constant="5" id="3Pk-wq-AvP"/>
                             <constraint firstItem="C5X-qZ-I5R" firstAttribute="leading" secondItem="7ze-eL-qKp" secondAttribute="leading" constant="-5" id="978-B0-TB9"/>
                             <constraint firstItem="Ca3-us-lKS" firstAttribute="centerY" secondItem="5Ew-Yb-9GC" secondAttribute="centerY" id="AIW-cG-Amx"/>
-                            <constraint firstItem="kk3-pr-5iQ" firstAttribute="top" secondItem="gV6-YZ-kOr" secondAttribute="top" constant="5" id="Aqj-RF-IBO"/>
                             <constraint firstAttribute="trailing" secondItem="BJ7-Gc-wPu" secondAttribute="trailing" constant="5" id="C1N-Mj-Qo9"/>
                             <constraint firstItem="Ltc-3h-TBo" firstAttribute="top" secondItem="5Ew-Yb-9GC" secondAttribute="top" id="G2Z-St-PxX"/>
-                            <constraint firstItem="BOi-xL-bko" firstAttribute="bottom" secondItem="V1K-Xu-PoB" secondAttribute="bottom" constant="-5" id="GlN-1Q-bba"/>
                             <constraint firstItem="Nba-YH-9qK" firstAttribute="trailing" secondItem="C5X-qZ-I5R" secondAttribute="trailing" constant="-10" id="JnR-SW-xxv"/>
                             <constraint firstAttribute="bottom" secondItem="Ltc-3h-TBo" secondAttribute="bottom" id="Kbz-kz-fAq"/>
-                            <constraint firstItem="V1K-Xu-PoB" firstAttribute="top" secondItem="kk3-pr-5iQ" secondAttribute="top" constant="-5" id="LKH-rF-B8f"/>
                             <constraint firstAttribute="trailing" secondItem="Ltc-3h-TBo" secondAttribute="trailing" id="U0q-pU-BXn"/>
                             <constraint firstItem="Nba-YH-9qK" firstAttribute="top" secondItem="gV6-YZ-kOr" secondAttribute="top" constant="5" id="URn-Hc-tF4"/>
                             <constraint firstItem="gV6-YZ-kOr" firstAttribute="trailing" secondItem="7CU-sp-HUo" secondAttribute="trailing" constant="5" id="W68-8K-3rX"/>
-                            <constraint firstItem="gV6-YZ-kOr" firstAttribute="trailing" secondItem="BOi-xL-bko" secondAttribute="trailing" constant="5" id="X6u-aF-s9A"/>
                             <constraint firstItem="BJ7-Gc-wPu" firstAttribute="centerY" secondItem="5Ew-Yb-9GC" secondAttribute="centerY" id="ZNb-Xp-QCU"/>
-                            <constraint firstItem="V1K-Xu-PoB" firstAttribute="leading" secondItem="kk3-pr-5iQ" secondAttribute="leading" constant="-10" id="Zju-Ts-kTN"/>
                             <constraint firstItem="Ltc-3h-TBo" firstAttribute="leading" secondItem="5Ew-Yb-9GC" secondAttribute="leading" id="cg0-xa-M52"/>
-                            <constraint firstItem="BOi-xL-bko" firstAttribute="leading" secondItem="kk3-pr-5iQ" secondAttribute="trailing" constant="8" id="di1-4Q-rgW"/>
                             <constraint firstItem="7ze-eL-qKp" firstAttribute="leading" secondItem="gV6-YZ-kOr" secondAttribute="leading" constant="5" id="iVI-qj-qre"/>
                             <constraint firstItem="C5X-qZ-I5R" firstAttribute="top" secondItem="7ze-eL-qKp" secondAttribute="top" constant="-5" id="m22-IF-nhx"/>
-                            <constraint firstItem="V1K-Xu-PoB" firstAttribute="trailing" secondItem="BOi-xL-bko" secondAttribute="trailing" constant="5" id="oLg-i8-gy9"/>
                             <constraint firstItem="Nba-YH-9qK" firstAttribute="leading" secondItem="7ze-eL-qKp" secondAttribute="trailing" constant="8" id="qrd-mS-cUr"/>
                             <constraint firstItem="Ca3-us-lKS" firstAttribute="leading" secondItem="gV6-YZ-kOr" secondAttribute="leading" constant="5" id="usT-Oy-2Lq"/>
                             <constraint firstItem="Nba-YH-9qK" firstAttribute="bottom" secondItem="C5X-qZ-I5R" secondAttribute="bottom" constant="-5" id="vh4-ZQ-SAf"/>
@@ -1019,7 +990,7 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="OtherDirectionCell" rowHeight="90" id="35Y-8f-aWk">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="OtherDirectionCell" rowHeight="90" id="35Y-8f-aWk" customClass="DirectionStopCell" customModule="MuniTracker" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="90"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="35Y-8f-aWk" id="4Nm-XF-yaT">
@@ -1127,7 +1098,7 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="StopCell" rowHeight="90" id="cKD-3F-zgV">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="StopCell" rowHeight="90" id="cKD-3F-zgV" customClass="DirectionStopCell" customModule="MuniTracker" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="90"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="cKD-3F-zgV" id="XbU-Z7-PiT">
@@ -1304,10 +1275,8 @@
         <image name="BellIcon" width="25" height="25"/>
         <image name="BusIcon" width="60" height="60"/>
         <image name="BusStopIcon" width="64" height="64"/>
-        <image name="CurrentLocationIcon" width="64" height="64"/>
         <image name="DirectionIcon" width="64" height="64"/>
         <image name="FavoriteAddIcon" width="30" height="30"/>
-        <image name="FavoriteIcon" width="64" height="64"/>
         <image name="FavoriteMenuIcon" width="25.5" height="34"/>
         <image name="FilterIcon" width="64" height="58.5"/>
         <image name="HistoryIcon" width="27" height="30"/>

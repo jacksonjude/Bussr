@@ -23,7 +23,7 @@ class FilterButton: UIButton
     init(imagePath: String, superview: UIView)
     {
         self.imagePath = imagePath
-        super.init(frame: CGRect(x: 0, y: 0, width: imageSize, height: imageSize))
+        super.init(frame: CGRect(x: superview.frame.width-imageSize-8, y: 8, width: imageSize, height: imageSize))
         
         superview.addSubview(self)
         
@@ -40,6 +40,28 @@ class FilterButton: UIButton
         self.disableButton()
         
         superview.layoutSubviews()
+        
+        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(buttonDoubleTap))
+        doubleTap.numberOfTapsRequired = 2
+        self.addGestureRecognizer(doubleTap)
+        
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(buttonDoubleTap))
+        self.addGestureRecognizer(longPress)
+        
+        let singleTap = UITapGestureRecognizer(target: self, action: #selector(buttonSingleTap))
+        self.addGestureRecognizer(singleTap)
+    }
+    
+    @objc func buttonSingleTap()
+    {
+        singleTapHandler?()
+        setFilterImage()
+    }
+    
+    @objc func buttonDoubleTap()
+    {
+        doubleTapHandler?()
+        setFilterImage()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -47,20 +69,7 @@ class FilterButton: UIButton
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if self.isEnabled
-        {
-            switch touches.first?.tapCount
-            {
-            case 1:
-                singleTapHandler?()
-            case 2:
-                doubleTapHandler?()
-            default:
-                break
-            }
-            
-            setFilterImage()
-        }
+        setFilterImage()
     }
     
     func disableButton()
