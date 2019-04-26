@@ -710,23 +710,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    @objc func openOtherDirectionsView(_ sender: UIGestureRecognizer)
-    {
-        let annotationStopTag = ((sender.view as? MKAnnotationView)?.annotation as? StopAnnotation)?.stopTag
-        
-        if MapState.selectedStopTag != annotationStopTag
-        {
-            return
-        }
-        
-        MapState.selectedStopTag = annotationStopTag
-        if let selectedStop = MapState.getCurrentStop()
-        {
-            MapState.routeInfoObject = selectedStop.direction?.allObjects
-            self.performSegue(withIdentifier: "showOtherDirectionsTableView", sender: self)
-        }
-    }
-    
     func updateSelectedStopAnnotation(stopTag: String)
     {
         if let stop = RouteDataManager.fetchStop(stopTag: stopTag)
@@ -758,11 +741,41 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     }
     
     @IBAction func nearbyButtonPressed(_ sender: Any) {
+        locationToUse = self.mainMapView.userLocation.location
         self.performSegue(withIdentifier: "showNearbyStopTableView", sender: self)
     }
     
     @IBAction func historyButtonPressed(_ sender: Any) {
         self.performSegue(withIdentifier: "showRecentStopTableView", sender: self)
+    }
+    
+    @objc func openOtherDirectionsView(_ sender: UIGestureRecognizer)
+    {
+        let annotationStopTag = ((sender.view as? MKAnnotationView)?.annotation as? StopAnnotation)?.stopTag
+        
+        if MapState.selectedStopTag != annotationStopTag
+        {
+            return
+        }
+        
+        MapState.selectedStopTag = annotationStopTag
+        if let selectedStop = MapState.getCurrentStop()
+        {
+            MapState.routeInfoObject = selectedStop.direction?.allObjects
+            self.performSegue(withIdentifier: "showOtherDirectionsTableView", sender: self)
+        }
+    }
+    
+    var locationToUse: CLLocation?
+    @objc func openNearbyStopViewFromSelectedStop(_ sender: Any)
+    {
+        if let currentStop = MapState.getCurrentStop()
+        {
+            let latitude = currentStop.stopLatitude
+            let longitude = currentStop.stopLongitude
+            locationToUse = CLLocation(latitude: latitude, longitude: longitude)
+            self.performSegue(withIdentifier: "showNearbyStopTableView", sender: self)
+        }
     }
     
     var newStopNotification: StopNotification?
@@ -777,6 +790,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         {
             let stopsTableView = segue.destination as! StopsTableViewController
             stopsTableView.stopFetchType = .nearby
+            stopsTableView.locationToFetchFrom = locationToUse
         }
         else if segue.identifier == "openNewNotificationEditor"
         {

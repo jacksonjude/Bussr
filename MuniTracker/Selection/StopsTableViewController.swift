@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import CoreData
+import MapKit
 
 enum StopFetchType
 {
@@ -26,6 +27,7 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
     var stopDirectionObjects: Array<(stop: Stop, direction: Direction)>?
     var loadedPredictions = Array<Bool>()
     var stopFetchType: StopFetchType = .nearby
+    var locationToFetchFrom: CLLocation?
     
     override func viewDidLoad() {
         reloadTableView()
@@ -55,7 +57,7 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
         switch stopFetchType
         {
         case .nearby:
-            if let currentLocation = appDelegate.mainMapViewController?.mainMapView.userLocation.location
+            if let currentLocation = locationToFetchFrom ?? appDelegate.mainMapViewController?.mainMapView.userLocation.location
             {
                 let latitude = currentLocation.coordinate.latitude
                 let longitude = currentLocation.coordinate.longitude

@@ -659,6 +659,7 @@
                             </button>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nba-YH-9qK">
                                 <rect key="frame" x="53" y="5" width="40" height="40"/>
+                                <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="GGl-Oj-ufb"/>
                                     <constraint firstAttribute="width" constant="40" id="di9-3X-5XT"/>
@@ -666,6 +667,7 @@
                                 <state key="normal" image="BusStopIcon"/>
                                 <connections>
                                     <action selector="otherDirectionsButtonPressed:" destination="4Mg-kq-ULL" eventType="touchUpInside" id="R6i-GQ-ujl"/>
+                                    <outletCollection property="gestureRecognizers" destination="YUd-VC-dC9" appends="YES" id="aa5-vo-MmK"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BJ7-Gc-wPu">
@@ -735,6 +737,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G6y-H5-O0s" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer numberOfTapsRequired="2" id="YUd-VC-dC9">
+                    <connections>
+                        <action selector="stopButtonDoubleTapPressed:" destination="4Mg-kq-ULL" id="wHJ-Cb-PXY"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="29.600000000000001" y="559.52023988005999"/>
         </scene>
@@ -1292,7 +1299,7 @@
         <image name="SettingsIcon" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="TfM-V3-OSE"/>
+        <segue reference="6fX-oF-13I"/>
         <segue reference="UJx-fY-8v6"/>
         <segue reference="IdA-st-vvj"/>
     </inferredMetricsTieBreakers>

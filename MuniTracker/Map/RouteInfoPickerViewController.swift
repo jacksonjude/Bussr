@@ -872,4 +872,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         appDelegate.mainMapViewController?.newStopNotification = newNotification
         appDelegate.mainMapViewController?.performSegue(withIdentifier: "openNewNotificationEditor", sender: self)
     }
+    
+    @IBAction func stopButtonDoubleTapPressed(_ sender: Any) {
+        appDelegate.mainMapViewController?.openNearbyStopViewFromSelectedStop(sender)
+    }
 }
