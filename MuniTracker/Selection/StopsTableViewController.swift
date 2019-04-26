@@ -55,16 +55,31 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
         switch stopFetchType
         {
         case .nearby:
-            /*if let currentLocation = appDelegate.mainMapViewController?.mainMapView.userLocation.coordinate
+            if let currentLocation = appDelegate.mainMapViewController?.mainMapView.userLocation.location
             {
-                let latitude = currentLocation.latitude
-                let longitude = currentLocation.longitude
+                let latitude = currentLocation.coordinate.latitude
+                let longitude = currentLocation.coordinate.longitude
+                let halfMileDegree = 0.007245
                 
-                if let nearbyStops = RouteDataManager.fetchLocalObjects(type: "Stop", predicate: NSPredicate(format: "stopLatitude >= %d AND stopLatitude <= %d AND stopLongitude >= %d AND stopLongitude <= %d", ), moc: CoreDataStack.persistentContainer.viewContext) as? [Stop]
+                if let nearbyStops = RouteDataManager.fetchLocalObjects(type: "Stop", predicate: NSPredicate(format: "stopLatitude >= %f AND stopLatitude <= %f AND stopLongitude >= %f AND stopLongitude <= %f", latitude - halfMileDegree, latitude + halfMileDegree, longitude - halfMileDegree, longitude + halfMileDegree), moc: CoreDataStack.persistentContainer.viewContext) as? [Stop]
                 {
-                    
+                    var defaultCut = 20
+                    if nearbyStops.count < defaultCut
+                    {
+                        defaultCut = nearbyStops.count
+                    }
+                    let sortedNearbyStops = RouteDataManager.sortStopsByDistanceFromLocation(stops: nearbyStops, locationToTest: currentLocation)[0...defaultCut-1]
+                    for stop in sortedNearbyStops
+                    {
+                        for direction in stop.direction!.allObjects
+                        {
+                            stopDirectionObjects?.append((stop: stop, direction: direction as! Direction))
+                        }
+                    }
                 }
-            }*/
+            }
+            
+            self.mainNavigationItem.title = "Nearby Stops"
             break
         case .favorite:
             if let favoriteStops = FavoriteState.favoriteObject as? Array<FavoriteStop>

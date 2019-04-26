@@ -757,6 +757,10 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         self.performSegue(withIdentifier: "showFavoritesTableView", sender: self)
     }
     
+    @IBAction func nearbyButtonPressed(_ sender: Any) {
+        self.performSegue(withIdentifier: "showNearbyStopTableView", sender: self)
+    }
+    
     @IBAction func historyButtonPressed(_ sender: Any) {
         self.performSegue(withIdentifier: "showRecentStopTableView", sender: self)
     }
@@ -768,6 +772,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         {
             let stopsTableView = segue.destination as! StopsTableViewController
             stopsTableView.stopFetchType = .recent
+        }
+        else if segue.identifier == "showNearbyStopTableView"
+        {
+            let stopsTableView = segue.destination as! StopsTableViewController
+            stopsTableView.stopFetchType = .nearby
         }
         else if segue.identifier == "openNewNotificationEditor"
         {

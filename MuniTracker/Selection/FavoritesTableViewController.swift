@@ -159,10 +159,13 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             favoriteStopsTableView.allowsMultipleSelection = true
         }
         
-        refreshControl = UIRefreshControl()
-        favoriteStopsTableView.refreshControl = refreshControl
-        refreshControl?.addTarget(self, action: #selector(reloadGroupPredictions), for: UIControl.Event.valueChanged)
-        refreshControl?.tintColor = UIColor.black
+        if FavoriteState.favoritesOrganizeType == .group
+        {
+            refreshControl = UIRefreshControl()
+            favoriteStopsTableView.refreshControl = refreshControl
+            refreshControl?.addTarget(self, action: #selector(reloadGroupPredictions), for: UIControl.Event.valueChanged)
+            refreshControl?.tintColor = UIColor.black
+        }
     }
     
     func setupThemeElements()
@@ -362,7 +365,6 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
                 {
                     RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: stop, direction: direction)
                 }
-                
             }
         }
     }
@@ -435,7 +437,6 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         case .group:
             return favoriteStopGroupSet?.count ?? 0
         }
-        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -452,7 +453,27 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             let stopObject = favoriteStopSet![indexPath.row]
             
             (favoriteStopCell.viewWithTag(600) as! UILabel).text = stopObject.stopTitle
-            (favoriteStopCell.viewWithTag(601) as! UILabel).text = (stopObject.direction?.allObjects.first as? Direction)?.directionName
+            
+            //(favoriteStopCell.viewWithTag(601) as! UILabel).text = (stopObject.direction?.allObjects.first as? Direction)?.directionName
+            var stopCellRoutesText = ""
+            var directionNames = Dictionary<String,Int>()
+            for direction in stopObject.direction!.allObjects
+            {
+                let direction = direction as! Direction
+                stopCellRoutesText += direction.route!.routeTag! + ", "
+                
+                if !directionNames.keys.contains(direction.directionName!)
+                {
+                    directionNames[direction.directionName!] = 0
+                }
+                directionNames[direction.directionName!] = directionNames[direction.directionName!]! + 1
+            }
+            let sortedDirectionNames = directionNames.sorted(by: { (keyvalue1, keyvalue2) -> Bool in
+                return keyvalue1.value > keyvalue2.value
+            })
+            stopCellRoutesText = sortedDirectionNames[0].key + " - " + String(stopCellRoutesText.dropLast().dropLast())
+            
+            (favoriteStopCell.viewWithTag(601) as! UILabel).text = stopCellRoutesText
             
             textColor = UIColor.white
             
@@ -525,8 +546,12 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
     
     func createFavoriteStopCell(favoriteStopObject: FavoriteStop, tableView: UITableView) -> UITableViewCell
     {
-        var textColor = UIColor.black
-        let favoriteRouteCell = tableView.dequeueReusableCell(withIdentifier: "FavoriteRouteCell")!
+        let favoriteRouteCell = tableView.dequeueReusableCell(withIdentifier: "FavoriteRouteCell") as! DirectionStopCell
+        favoriteRouteCell.directionObject = RouteDataManager.fetchDirection(directionTag: favoriteStopObject.directionTag!)
+        favoriteRouteCell.stopObject = RouteDataManager.fetchStop(stopTag: favoriteStopObject.stopTag!)
+        favoriteRouteCell.updateCellText()
+        
+        /*var textColor = UIColor.black
 
         if let direction = RouteDataManager.fetchDirection(directionTag: favoriteStopObject.directionTag!)
         {
@@ -549,7 +574,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         (favoriteRouteCell.viewWithTag(600) as! UILabel).textColor = textColor
         (favoriteRouteCell.viewWithTag(601) as! UILabel).textColor = textColor
         (favoriteRouteCell.viewWithTag(602) as! UILabel).textColor = textColor
-        (favoriteRouteCell.viewWithTag(603) as! UILabel).textColor = textColor
+        (favoriteRouteCell.viewWithTag(603) as! UILabel).textColor = textColor*/
         
         return favoriteRouteCell
     }

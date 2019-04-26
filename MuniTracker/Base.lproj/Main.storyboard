@@ -126,7 +126,13 @@
                                             <action selector="favoritesButtonPressed:" destination="BYZ-38-t0r" id="VL2-N4-wQ1"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem width="11" style="plain" systemItem="fixedSpace" id="NfO-F4-X54"/>
+                                    <barButtonItem width="9" style="plain" systemItem="fixedSpace" id="UKe-jm-k0S"/>
+                                    <barButtonItem image="NearbyMenuIcon" id="hBe-bV-1n2">
+                                        <connections>
+                                            <action selector="nearbyButtonPressed:" destination="BYZ-38-t0r" id="21A-SN-evK"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem width="7" style="plain" systemItem="fixedSpace" id="NfO-F4-X54"/>
                                     <barButtonItem image="HistoryIcon" id="Van-Mc-Urh">
                                         <connections>
                                             <action selector="historyButtonPressed:" destination="BYZ-38-t0r" id="PdF-CP-sy3"/>
@@ -186,6 +192,7 @@
                         <segue destination="m3x-Re-5zf" kind="show" identifier="showOtherDirectionsTableView" id="UJx-fY-8v6"/>
                         <segue destination="xzQ-6I-qok" kind="show" identifier="showRecentStopTableView" id="TfM-V3-OSE"/>
                         <segue destination="1er-42-KIJ" kind="show" identifier="openNewNotificationEditor" id="IdA-st-vvj"/>
+                        <segue destination="xzQ-6I-qok" kind="show" identifier="showNearbyStopTableView" id="6fX-oF-13I"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -756,7 +763,7 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="553"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteRouteCell" rowHeight="90" id="H6x-ms-Rnq">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteRouteCell" rowHeight="90" id="H6x-ms-Rnq" customClass="DirectionStopCell" customModule="MuniTracker" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="90"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="H6x-ms-Rnq" id="t4p-fh-tlg">
@@ -1280,12 +1287,13 @@
         <image name="FavoriteMenuIcon" width="25.5" height="34"/>
         <image name="FilterIcon" width="64" height="58.5"/>
         <image name="HistoryIcon" width="27" height="30"/>
+        <image name="NearbyMenuIcon" width="28.5" height="33"/>
         <image name="RouteListIcon" width="27" height="30"/>
         <image name="SettingsIcon" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="coT-D9-Khz"/>
-        <segue reference="FM7-3T-SSq"/>
+        <segue reference="TfM-V3-OSE"/>
+        <segue reference="UJx-fY-8v6"/>
         <segue reference="IdA-st-vvj"/>
     </inferredMetricsTieBreakers>
 </document>
