@@ -10,52 +10,6 @@ import Foundation
 import UIKit
 import CoreData
 
-extension UIColor
-{
-    convenience init(hexString: String)
-    {
-        let redIndex = hexString.startIndex
-        let greenIndex = hexString.index(hexString.startIndex, offsetBy: 2)
-        let blueIndex = hexString.index(hexString.startIndex, offsetBy: 4)
-        
-        let redColor = UIColor.convertHexStringToInt(hex: String(hexString[redIndex]) + String(hexString[hexString.index(after: redIndex)]))
-        let greenColor = UIColor.convertHexStringToInt(hex: String(hexString[greenIndex]) + String(hexString[hexString.index(after: greenIndex)]))
-        let blueColor = UIColor.convertHexStringToInt(hex: String(hexString[blueIndex]) + String(hexString[hexString.index(after: blueIndex)]))
-        
-        self.init(red: CGFloat(redColor)/255, green: CGFloat(greenColor)/255, blue: CGFloat(blueColor)/255, alpha: 1)
-    }
-    
-    class func convertHexStringToInt(hex: String) -> Int
-    {
-        let hexDigit1 = hexToInt(hex: hex[hex.startIndex])
-        let hexDigit2 = hexToInt(hex: hex[hex.index(after: hex.startIndex)])
-        
-        return (hexDigit1*16)+hexDigit2
-    }
-    
-    class func hexToInt(hex: Character) -> Int
-    {
-        let lowerHex = String(hex).lowercased()
-        switch lowerHex
-        {
-        case "a":
-            return 10
-        case "b":
-            return 11
-        case "c":
-            return 12
-        case "d":
-            return 13
-        case "e":
-            return 14
-        case "f":
-            return 15
-        default:
-            return Int(lowerHex) ?? 0
-        }
-    }
-}
-
 class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource
 {
     var favoriteStopObjects: Array<FavoriteStop>?
@@ -352,23 +306,6 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         }
     }
     
-    func fetchFavoritesPredictionTimes()
-    {
-        if let favoriteStops = favoriteStopObjects
-        {
-            for favoriteStop in favoriteStops
-            {
-                let index = favoriteStops.firstIndex(of: favoriteStop)!
-                let predictionTimesReturnUUID = UUID().uuidString + ";" + String(index)
-                NotificationCenter.default.addObserver(self, selector: #selector(receiveFavoritesPrediction(_:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
-                if let stop = RouteDataManager.fetchStop(stopTag: favoriteStop.stopTag!), let direction = RouteDataManager.fetchDirection(directionTag: favoriteStop.directionTag!)
-                {
-                    RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: stop, direction: direction)
-                }
-            }
-        }
-    }
-    
     @objc func receiveFavoritesPrediction(_ notification: Notification)
     {
         NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
@@ -376,7 +313,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         if let predictions = notification.userInfo!["predictions"] as? [String], FavoriteState.favoritesOrganizeType == .list || FavoriteState.favoritesOrganizeType == .group
         {
             OperationQueue.main.addOperation {
-                let predictionsString = MapState.formatPredictions(predictions: predictions).predictionsString
+                let predictionsString = RouteDataManager.formatPredictions(predictions: predictions).predictionsString
                 let indexRow = Int(notification.name.rawValue.split(separator: ";")[1]) ?? 0
                 
                 if let favoritesPredictionLabel = self.favoriteStopsTableView.cellForRow(at: IndexPath(row: indexRow, section: 0))?.viewWithTag(603) as? UILabel
@@ -550,31 +487,6 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         favoriteRouteCell.directionObject = RouteDataManager.fetchDirection(directionTag: favoriteStopObject.directionTag!)
         favoriteRouteCell.stopObject = RouteDataManager.fetchStop(stopTag: favoriteStopObject.stopTag!)
         favoriteRouteCell.updateCellText()
-        
-        /*var textColor = UIColor.black
-
-        if let direction = RouteDataManager.fetchDirection(directionTag: favoriteStopObject.directionTag!)
-        {
-            if let routeColor = direction.route?.routeColor, let routeOppositeColor = direction.route?.routeOppositeColor
-            {
-                favoriteRouteCell.backgroundColor = UIColor(hexString: routeColor)
-                
-                textColor = UIColor(hexString: routeOppositeColor)
-            }
-            
-            (favoriteRouteCell.viewWithTag(601) as! UILabel).text = direction.directionTitle
-            (favoriteRouteCell.viewWithTag(600) as! UILabel).text = direction.route?.routeTag
-        }
-        
-        if let stop = RouteDataManager.fetchStop(stopTag: favoriteStopObject.stopTag!)
-        {
-            (favoriteRouteCell.viewWithTag(602) as! UILabel).text = stop.stopTitle
-        }
-        
-        (favoriteRouteCell.viewWithTag(600) as! UILabel).textColor = textColor
-        (favoriteRouteCell.viewWithTag(601) as! UILabel).textColor = textColor
-        (favoriteRouteCell.viewWithTag(602) as! UILabel).textColor = textColor
-        (favoriteRouteCell.viewWithTag(603) as! UILabel).textColor = textColor*/
         
         return favoriteRouteCell
     }

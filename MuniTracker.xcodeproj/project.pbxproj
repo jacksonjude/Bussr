@@ -33,6 +33,12 @@
 		7A23176A2171212F00D12F21 /* NotificationEditorState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2317692171212F00D12F21 /* NotificationEditorState.swift */; };
 		7A24529020FA73170033E333 /* FavoritesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A24528F20FA73170033E333 /* FavoritesTableViewController.swift */; };
 		7A42C934210521090022FC96 /* DirectionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A42C933210521090022FC96 /* DirectionsTableViewController.swift */; };
+		7A46D8622273CBB7008A41C1 /* DirectionStopCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE57F8B2270D17600F1B42B /* DirectionStopCell.swift */; };
+		7A46D8632273CBB8008A41C1 /* DirectionStopCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE57F8B2270D17600F1B42B /* DirectionStopCell.swift */; };
+		7A46D8642273CBB8008A41C1 /* DirectionStopCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE57F8B2270D17600F1B42B /* DirectionStopCell.swift */; };
+		7A46D8652273CCF9008A41C1 /* MapState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7FE2B420DB4761005B654C /* MapState.swift */; };
+		7A46D8662273CCF9008A41C1 /* MapState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7FE2B420DB4761005B654C /* MapState.swift */; };
+		7A46D8672273CCF9008A41C1 /* MapState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7FE2B420DB4761005B654C /* MapState.swift */; };
 		7A4930C420D788EA008208D1 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A4930C320D788EA008208D1 /* MapKit.framework */; };
 		7A50EECD2107DAE700B69B92 /* StopsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A50EECC2107DAE700B69B92 /* StopsTableViewController.swift */; };
 		7A61EF8420D77BE100481037 /* RouteInfoPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */; };
@@ -221,6 +227,7 @@
 				7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */,
 				7AD81E1020D6E60C004BAB1E /* MuniTracker.xcdatamodeld */,
 				7A068D1421266AC400D3425E /* CoreDataStack.swift */,
+				7AE57F8B2270D17600F1B42B /* DirectionStopCell.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -266,7 +273,6 @@
 				7A50EECC2107DAE700B69B92 /* StopsTableViewController.swift */,
 				7A24528F20FA73170033E333 /* FavoritesTableViewController.swift */,
 				7A9F21E62106B0B00000E971 /* FavoriteState.swift */,
-				7AE57F8B2270D17600F1B42B /* DirectionStopCell.swift */,
 			);
 			path = Selection;
 			sourceTree = "<group>";
@@ -566,6 +572,8 @@
 				7AD00464212758AD00DCB08E /* RouteDataManager.swift in Sources */,
 				7A068D52212698B900D3425E /* MuniTrackerExtensionViewController.swift in Sources */,
 				7A068D21212697DA00D3425E /* FavoritesExtensionViewController.swift in Sources */,
+				7A46D8622273CBB7008A41C1 /* DirectionStopCell.swift in Sources */,
+				7A46D8652273CCF9008A41C1 /* MapState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -578,6 +586,8 @@
 				7AD00465212758AD00DCB08E /* RouteDataManager.swift in Sources */,
 				7A068D53212698BA00D3425E /* MuniTrackerExtensionViewController.swift in Sources */,
 				7A068D34212697F000D3425E /* RecentExtensionViewController.swift in Sources */,
+				7A46D8632273CBB8008A41C1 /* DirectionStopCell.swift in Sources */,
+				7A46D8662273CCF9008A41C1 /* MapState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -590,6 +600,8 @@
 				7AD00466212758AE00DCB08E /* RouteDataManager.swift in Sources */,
 				7A068D54212698BA00D3425E /* MuniTrackerExtensionViewController.swift in Sources */,
 				7A068D472126980900D3425E /* NearbyExtensionViewController.swift in Sources */,
+				7A46D8642273CBB8008A41C1 /* DirectionStopCell.swift in Sources */,
+				7A46D8672273CCF9008A41C1 /* MapState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

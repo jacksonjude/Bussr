@@ -954,7 +954,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     func reloadPredictionTimesLabel()
     {
-        let predictionsFormatCallback = MapState.formatPredictions(predictions: self.predictions, vehicleIDs: self.vehicleIDs)
+        let predictionsFormatCallback = RouteDataManager.formatPredictions(predictions: self.predictions, vehicleIDs: self.vehicleIDs)
         let predictionsString = predictionsFormatCallback.predictionsString
         let selectedVehicleRange = predictionsFormatCallback.selectedVehicleRange
         

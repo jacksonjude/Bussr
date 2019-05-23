@@ -458,6 +458,57 @@ class RouteDataManager
             }
         }
     }
+    
+    static func formatPredictions(predictions: Array<String>, vehicleIDs: Array<String>? = nil) -> (predictionsString: String, selectedVehicleRange: NSRange?)
+    {
+        var predictionsString = ""
+        var predictionOn = 0
+        
+        var selectedVehicleRange: NSRange?
+        
+        for prediction in predictions
+        {
+            if predictionOn != 0
+            {
+                predictionsString += ", "
+            }
+            
+            if vehicleIDs != nil && vehicleIDs!.count > predictionOn && vehicleIDs![predictionOn] == MapState.selectedVehicleID && selectedVehicleRange == nil
+            {
+                selectedVehicleRange = NSRange(location: predictionsString.count, length: prediction.count)
+            }
+            
+            if prediction == "0"
+            {
+                if selectedVehicleRange?.location == predictionsString.count
+                {
+                    selectedVehicleRange?.length = "Now".count
+                }
+                
+                predictionsString += "Now"
+            }
+            else
+            {
+                predictionsString += prediction
+            }
+            
+            predictionOn += 1
+        }
+        
+        if predictions.count > 0
+        {
+            if predictions.count > 1 || predictions[0] != "0"
+            {
+                predictionsString += " mins"
+            }
+        }
+        else
+        {
+            predictionsString = "No Predictions"
+        }
+        
+        return (predictionsString, selectedVehicleRange)
+    }
 }
 
 extension Dictionary

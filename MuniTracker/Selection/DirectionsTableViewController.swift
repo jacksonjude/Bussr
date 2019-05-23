@@ -103,41 +103,14 @@ class DirectionsTableViewController: UIViewController, UITableViewDelegate, UITa
         }
     }
     
-    func fetchPrediction(direction: Direction, index: Int)
-    {
-        let predictionTimesReturnUUID = UUID().uuidString + ";" + String(index)
-        NotificationCenter.default.addObserver(self, selector: #selector(receivePrediction(_:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
-        if let stop = RouteDataManager.fetchStop(stopTag: MapState.selectedStopTag!)
-        {
-            RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: stop, direction: direction)
-        }
-    }
-    
-    @objc func receivePrediction(_ notification: Notification)
-    {
-        NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
-        
-        if let predictions = notification.userInfo!["predictions"] as? [String]
-        {
-            OperationQueue.main.addOperation {
-                let predictionsString = MapState.formatPredictions(predictions: predictions).predictionsString
-                let indexRow = Int(notification.name.rawValue.split(separator: ";")[1]) ?? 0
-                
-                if let directionPredictionLabel = self.directionsTableView.cellForRow(at: IndexPath(row: indexRow, section: 0))?.viewWithTag(603) as? UILabel
-                {
-                    self.loadedPredictions[indexRow] = true
-                    directionPredictionLabel.text = predictionsString
-                }
-            }
-        }
-    }
-    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if !loadedPredictions[indexPath.row]
         {
             let direction = directionObjects![indexPath.row]
-            
-            fetchPrediction(direction: direction, index: indexPath.row)
+            if let stop = MapState.getCurrentStop()
+            {
+                (cell as! DirectionStopCell).fetchPrediction(stopObject: stop, directionObject: direction)
+            }            
         }
     }
     

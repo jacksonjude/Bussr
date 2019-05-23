@@ -485,6 +485,15 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 }
             }
             
+            if var oldRecentStops = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(value: true), moc: backgroundMOC, sortDescriptors: [NSSortDescriptor(key: "timestamp", ascending: false)]) as? [RecentStop], oldRecentStops.count > 20
+            {
+                oldRecentStops = Array<RecentStop>(oldRecentStops[20...oldRecentStops.count-1])
+                for oldStop in oldRecentStops
+                {
+                    backgroundMOC.delete(oldStop)
+                }
+            }
+            
             try? backgroundMOC.save()
         }
     }

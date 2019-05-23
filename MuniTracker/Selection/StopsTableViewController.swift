@@ -95,7 +95,7 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
                 }
             }
         case .recent:
-            if let recentStops = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(format: "TRUEPREDICATE"), moc: CoreDataStack.persistentContainer.viewContext, sortDescriptors: [NSSortDescriptor(key: "timestamp", ascending: false)], fetchLimit: 10) as? [RecentStop]
+            if let recentStops = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(format: "TRUEPREDICATE"), moc: CoreDataStack.persistentContainer.viewContext, sortDescriptors: [NSSortDescriptor(key: "timestamp", ascending: false)], fetchLimit: 20) as? [RecentStop]
             {
                 for recentStop in recentStops
                 {
@@ -170,32 +170,6 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
         stopCell.updateCellText()
         
         return stopCell
-    }
-    
-    func fetchPrediction(stopObject: Stop, directionObject: Direction, index: Int)
-    {
-        let predictionTimesReturnUUID = UUID().uuidString + ";" + String(index)
-        NotificationCenter.default.addObserver(self, selector: #selector(receivePrediction(_:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
-        RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: stopObject, direction: directionObject)
-    }
-    
-    @objc func receivePrediction(_ notification: Notification)
-    {
-        NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
-        
-        if let predictions = notification.userInfo!["predictions"] as? [String]
-        {
-            OperationQueue.main.addOperation {
-                let predictionsString = MapState.formatPredictions(predictions: predictions).predictionsString
-                let indexRow = Int(notification.name.rawValue.split(separator: ";")[1]) ?? 0
-                
-                if let stopPredictionLabel = self.stopsTableView.cellForRow(at: IndexPath(row: indexRow, section: 0))?.viewWithTag(603) as? UILabel
-                {
-                    self.loadedPredictions[indexRow] = true
-                    stopPredictionLabel.text = predictionsString
-                }
-            }
-        }
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

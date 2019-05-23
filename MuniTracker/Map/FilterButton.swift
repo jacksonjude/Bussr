@@ -38,9 +38,7 @@ class FilterButton: UIButton
         
         self.setFilterImage()
         self.disableButton()
-        
-        superview.layoutSubviews()
-        
+                
         let doubleTap = UITapGestureRecognizer(target: self, action: #selector(buttonDoubleTap))
         doubleTap.numberOfTapsRequired = 2
         self.addGestureRecognizer(doubleTap)

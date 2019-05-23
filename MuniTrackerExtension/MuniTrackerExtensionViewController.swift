@@ -10,51 +10,6 @@ import UIKit
 import NotificationCenter
 import CoreLocation
 
-extension UIColor
-{
-    convenience init(hexString: String)
-    {
-        let redIndex = hexString.startIndex
-        let greenIndex = hexString.index(hexString.startIndex, offsetBy: 2)
-        let blueIndex = hexString.index(hexString.startIndex, offsetBy: 4)
-        
-        let redColor = UIColor.convertHexStringToInt(hex: String(hexString[redIndex]) + String(hexString[hexString.index(after: redIndex)]))
-        let greenColor = UIColor.convertHexStringToInt(hex: String(hexString[greenIndex]) + String(hexString[hexString.index(after: greenIndex)]))
-        let blueColor = UIColor.convertHexStringToInt(hex: String(hexString[blueIndex]) + String(hexString[hexString.index(after: blueIndex)]))
-        
-        self.init(red: CGFloat(redColor)/255, green: CGFloat(greenColor)/255, blue: CGFloat(blueColor)/255, alpha: 1)
-    }
-    
-    class func convertHexStringToInt(hex: String) -> Int
-    {
-        let hexDigit1 = hexToInt(hex: hex[hex.startIndex])
-        let hexDigit2 = hexToInt(hex: hex[hex.index(after: hex.startIndex)])
-        
-        return (hexDigit1*16)+hexDigit2
-    }
-    
-    class func hexToInt(hex: Character) -> Int
-    {
-        let lowerHex = String(hex).lowercased()
-        switch lowerHex
-        {
-        case "a":
-            return 10
-        case "b":
-            return 11
-        case "c":
-            return 12
-        case "d":
-            return 13
-        case "e":
-            return 14
-        case "f":
-            return 15
-        default:
-            return Int(lowerHex) ?? 0
-        }
-    }
-}
 
 class MuniTrackerExtensionViewController: UITableViewController, NCWidgetProviding {
     var stopDirectionObjects: Array<(stopTag: String, directionTag: String)>?
@@ -86,16 +41,16 @@ class MuniTrackerExtensionViewController: UITableViewController, NCWidgetProvidi
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "RouteCell")!
+        let cell = tableView.dequeueReusableCell(withIdentifier: "RouteCell") as! DirectionStopCell
         
         let stopDirectionObject = stopDirectionObjects![indexPath.row]
         
-        let routeTagLabel = cell.viewWithTag(600) as! UILabel
-        let stopNameLabel = cell.viewWithTag(601) as! UILabel
+        //let routeTagLabel = cell.viewWithTag(600) as! UILabel
+        //let stopNameLabel = cell.viewWithTag(601) as! UILabel
         
         if let stop = RouteDataManager.fetchStop(stopTag: stopDirectionObject.stopTag), let direction = RouteDataManager.fetchDirection(directionTag: stopDirectionObject.directionTag)
         {
-            routeTagLabel.text = direction.route?.routeTag
+            /*routeTagLabel.text = direction.route?.routeTag
             stopNameLabel.text = stop.stopTitle
             
             if let routeColor = direction.route?.routeColor
@@ -106,20 +61,26 @@ class MuniTrackerExtensionViewController: UITableViewController, NCWidgetProvidi
             {
                 routeTagLabel.textColor = UIColor(hexString: routeOppositeColor)
                 stopNameLabel.textColor = UIColor(hexString: routeOppositeColor)
-                (cell.viewWithTag(602) as! UILabel).textColor = UIColor(hexString: routeOppositeColor)
+                (cell.viewWithTag(603) as! UILabel).textColor = UIColor(hexString: routeOppositeColor)
             }
             
             let predictionTimesReturnUUID = UUID().uuidString + ";" + String(indexPath.row)
             NotificationCenter.default.addObserver(self, selector: #selector(receivePredictionTime(notification:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
             
-            RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: stop, direction: direction)
+            RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: stop, direction: direction)*/
+            
+            cell.directionObject = direction
+            cell.stopObject = stop
+            cell.updateCellText()
+            
+            cell.refreshTimes()
         }
         
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let stopDirectionObject = stopDirectionObjects![indexPath.row]
+        /*let stopDirectionObject = stopDirectionObjects![indexPath.row]
         
         if let stop = RouteDataManager.fetchStop(stopTag: stopDirectionObject.stopTag), let direction = RouteDataManager.fetchDirection(directionTag: stopDirectionObject.directionTag)
         {
@@ -127,10 +88,12 @@ class MuniTrackerExtensionViewController: UITableViewController, NCWidgetProvidi
             NotificationCenter.default.addObserver(self, selector: #selector(receivePredictionTime(notification:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
             
             RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: stop, direction: direction)
-        }
+        }*/
+        
+        (tableView.cellForRow(at: indexPath) as? DirectionStopCell)?.refreshTimes()
     }
     
-    @objc func receivePredictionTime(notification: Notification)
+    /*@objc func receivePredictionTime(notification: Notification)
     {
         NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
         
@@ -163,7 +126,7 @@ class MuniTrackerExtensionViewController: UITableViewController, NCWidgetProvidi
             if predictions.count > 0
             {
                 OperationQueue.main.addOperation {
-                    if let favoritesPredictionLabel = self.tableView.cellForRow(at: IndexPath(row: indexRow, section: 0))?.viewWithTag(602) as? UILabel
+                    if let favoritesPredictionLabel = self.tableView.cellForRow(at: IndexPath(row: indexRow, section: 0))?.viewWithTag(603) as? UILabel
                     {
                         favoritesPredictionLabel.text = predictionsString
                     }
@@ -184,5 +147,5 @@ class MuniTrackerExtensionViewController: UITableViewController, NCWidgetProvidi
                 tableView.reloadData()
             }*/
         }
-    }
+    }*/
 }
