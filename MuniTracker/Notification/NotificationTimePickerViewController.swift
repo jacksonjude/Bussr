@@ -21,30 +21,11 @@ class NotificationTimePickerViewController: UIViewController, UIPickerViewDataSo
         
         setTimeValues()
         
-        switch appDelegate.getCurrentTheme()
-        {
-        case .light:
-            notificationTimePickerView.backgroundColor = UIColor.white
-        case .dark:
-            notificationTimePickerView.backgroundColor = UIColor.black
-        }
-        
         NotificationCenter.default.addObserver(self, selector: #selector(reloadPickerView), name: NSNotification.Name("ReloadNotificationEditorViews"), object: nil)
     }
     
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
-        return NSAttributedString(string: timeValues[component][row], attributes: [NSAttributedString.Key.foregroundColor: inverseThemeColor()])
-    }
-    
-    func inverseThemeColor() -> UIColor
-    {
-        switch appDelegate.getCurrentTheme()
-        {
-        case .light:
-            return UIColor.black
-        case .dark:
-            return UIColor.white
-        }
+        return NSAttributedString(string: timeValues[component][row], attributes: [:])
     }
     
     @objc func reloadPickerView()

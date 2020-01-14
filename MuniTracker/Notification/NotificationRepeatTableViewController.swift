@@ -36,20 +36,6 @@ class NotificationRepeatTableViewController: UIViewController, UITableViewDataSo
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NotificationRepeatCell")!
         
-        switch appDelegate.getCurrentTheme()
-        {
-        case .light:
-            cell.backgroundColor = UIColor.white
-            cell.textLabel?.textColor = UIColor.black
-        case .dark:
-            cell.backgroundColor = UIColor.black
-            cell.textLabel?.textColor = UIColor.white
-            
-            let cellSelectedBackgroundView = UIView()
-            cellSelectedBackgroundView.backgroundColor = UIColor(white: 0.5, alpha: 1)
-            cell.selectedBackgroundView = cellSelectedBackgroundView
-        }
-        
         var dayTitle = "Repeats every "
         
         switch indexPath.row

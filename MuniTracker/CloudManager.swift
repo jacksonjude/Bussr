@@ -23,7 +23,7 @@ class CloudManager
     {
         didSet
         {
-            UserDefaults.standard.set(NSKeyedArchiver.archivedData(withRootObject: self.currentChangeToken as Any), forKey: "LastServerChangeToken")
+            UserDefaults.standard.set(try? NSKeyedArchiver.archivedData(withRootObject: self.currentChangeToken as Any, requiringSecureCoding: false), forKey: "LastServerChangeToken")
         }
     }
     static var isReceivingFromServer = false
@@ -36,10 +36,10 @@ class CloudManager
         
         isReceivingFromServer = true
         
-        let zoneChangeoptions = CKFetchRecordZoneChangesOperation.ZoneOptions()
+        let zoneChangeoptions = CKFetchRecordZoneChangesOperation.ZoneConfiguration()
         zoneChangeoptions.previousServerChangeToken = currentChangeToken
-        
-        let fetchRecordChangesOperation = CKFetchRecordZoneChangesOperation(recordZoneIDs: [favoriteStopZone.zoneID], optionsByRecordZoneID: [favoriteStopZone.zoneID:zoneChangeoptions])
+                
+        let fetchRecordChangesOperation = CKFetchRecordZoneChangesOperation(recordZoneIDs: [favoriteStopZone.zoneID], configurationsByRecordZoneID: [favoriteStopZone.zoneID:zoneChangeoptions])
         fetchRecordChangesOperation.fetchAllChanges = true
         
         fetchRecordChangesOperation.recordChangedBlock = {(record) in
@@ -84,7 +84,7 @@ class CloudManager
             else
             {
                 self.currentChangeToken = serverChangeToken
-                UserDefaults.standard.set(NSKeyedArchiver.archivedData(withRootObject: self.currentChangeToken as Any), forKey: "currentChangeToken")
+                UserDefaults.standard.set(try? NSKeyedArchiver.archivedData(withRootObject: self.currentChangeToken as Any, requiringSecureCoding: false), forKey: "currentChangeToken")
             }
             
             OperationQueue.main.addOperation {

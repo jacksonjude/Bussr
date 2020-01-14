@@ -38,7 +38,7 @@ class MapState: NSObject
             let direction: Direction?
             if MapState.selectedDirectionTag != nil
             {
-                direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", MapState.selectedDirectionTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Direction
+                direction = RouteDataManager.fetchObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", MapState.selectedDirectionTag!), moc: CoreDataStack.persistentContainer.viewContext) as? Direction
             }
             else
             {
@@ -49,7 +49,7 @@ class MapState: NSObject
         }
         else if MapState.selectedDirectionTag != nil
         {
-            let direction = RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", MapState.selectedDirectionTag!), moc: CoreDataStack.persistentContainer.viewContext).object as? Direction
+            let direction = RouteDataManager.fetchObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", MapState.selectedDirectionTag!), moc: CoreDataStack.persistentContainer.viewContext) as? Direction
             return direction
         }
         

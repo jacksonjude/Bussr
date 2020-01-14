@@ -67,7 +67,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     
     override func viewDidAppear(_ animated: Bool) {
         setupThemeElements()
-        
         if !viewDidJustAppear
         {
             reloadRouteData()
@@ -75,40 +74,34 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         }
     }
     
+    override func viewWillLayoutSubviews() {
+        setupThemeElements()
+    }
+    
     func setupThemeElements()
     {
-        let offWhite = UIColor(white: 0.97647, alpha: 1)
-        //let white = UIColor(white: 1, alpha: 1)
-        let black = UIColor(white: 0, alpha: 1)
-        
         switch appDelegate.getCurrentTheme()
         {
         case .light:
-            self.routeInfoPicker.backgroundColor = offWhite
             for filterButton in filterButtons
             {
                 filterButton.setFilterImage()
             }
-            /*self.favoriteButton.setImage(UIImage(named: "Favorite" + favoriteFillAppend() + "Icon"), for: UIControl.State.normal)
-            self.locationButton.setImage(UIImage(named: "CurrentLocation" + locationFillAppend() + "Icon"), for: UIControl.State.normal)*/
             self.directionButton.setImage(UIImage(named: "DirectionIcon"), for: UIControl.State.normal)
             self.otherDirectionsButton.setImage(UIImage(named: "BusStopIcon"), for: UIControl.State.normal)
-            //self.addFavoriteButton.setImage(UIImage(named: "FavoriteAddIcon"), for: UIControl.State.normal)
             self.expandFiltersButton.setImage(UIImage(named: "FilterIcon"), for: UIControl.State.normal)
             self.addNotificationButton.setImage(UIImage(named: "BellAddIcon"), for: UIControl.State.normal)
+            setFavoriteButtonImage(inverse: false)
         case .dark:
-            self.routeInfoPicker.backgroundColor = black
             for filterButton in filterButtons
             {
                 filterButton.setFilterImage()
             }
-            /*self.favoriteButton.setImage(UIImage(named: "Favorite" + favoriteFillAppend() + "IconDark"), for: UIControl.State.normal)
-            self.locationButton.setImage(UIImage(named: "CurrentLocation" + locationFillAppend() + "IconDark"), for: UIControl.State.normal)*/
             self.directionButton.setImage(UIImage(named: "DirectionIconDark"), for: UIControl.State.normal)
             self.otherDirectionsButton.setImage(UIImage(named: "BusStopIconDark"), for: UIControl.State.normal)
-            //self.addFavoriteButton.setImage(UIImage(named: "FavoriteAddIconDark"), for: UIControl.State.normal)
             self.expandFiltersButton.setImage(UIImage(named: "FilterIconDark"), for: UIControl.State.normal)
              self.addNotificationButton.setImage(UIImage(named: "BellAddIconDark"), for: UIControl.State.normal)
+            setFavoriteButtonImage(inverse: false)
         }
     }
     
@@ -120,17 +113,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             return ""
         case .dark:
             return "Dark"
-        }
-    }
-    
-    func inverseThemeColor() -> UIColor
-    {
-        switch appDelegate.getCurrentTheme()
-        {
-        case .light:
-            return UIColor.black
-        case .dark:
-            return UIColor.white
         }
     }
     
@@ -203,7 +185,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             }
         }
         
-        return NSAttributedString(string: title ?? "", attributes: [NSAttributedString.Key.foregroundColor: inverseThemeColor()])
+        return NSAttributedString(string: title ?? "", attributes: [:])
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {

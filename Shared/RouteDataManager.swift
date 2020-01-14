@@ -287,6 +287,16 @@ class RouteDataManager
         return (object!, justCreated)
     }
     
+    static func fetchObject(type: String, predicate: NSPredicate, moc: NSManagedObjectContext) -> NSManagedObject?
+    {
+        let objectFetchResults = fetchLocalObjects(type: type, predicate: predicate, moc: moc)
+        if objectFetchResults != nil && objectFetchResults!.count > 0
+        {
+            return objectFetchResults?.first as? NSManagedObject
+        }
+        return nil
+    }
+    
     static func fetchFavoriteStops(directionTag: String, stopTag: String? = nil) -> [FavoriteStop]
     {
         let predicate: NSPredicate?
@@ -320,12 +330,12 @@ class RouteDataManager
     
     static func fetchStop(stopTag: String, moc: NSManagedObjectContext? = nil) -> Stop?
     {
-        return RouteDataManager.fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", stopTag), moc: moc ?? CoreDataStack.persistentContainer.viewContext).object as? Stop
+        return RouteDataManager.fetchObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", stopTag), moc: moc ?? CoreDataStack.persistentContainer.viewContext) as? Stop
     }
     
     static func fetchDirection(directionTag: String, moc: NSManagedObjectContext? = nil) -> Direction?
     {
-        return RouteDataManager.fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", directionTag), moc: moc ?? CoreDataStack.persistentContainer.viewContext).object as? Direction
+        return RouteDataManager.fetchObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", directionTag), moc: moc ?? CoreDataStack.persistentContainer.viewContext) as? Direction
     }
     
     //MARK: - Data Fetch

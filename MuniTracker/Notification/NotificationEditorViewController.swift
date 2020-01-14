@@ -34,22 +34,13 @@ class NotificationEditorViewController: UIViewController
     
     func setupThemeElements()
     {
-        let offWhite = UIColor(white: 0.97647, alpha: 1)
-        //let white = UIColor(white: 1, alpha: 1)
-        let black = UIColor(white: 0, alpha: 1)
-        
         switch appDelegate.getCurrentTheme()
         {
         case .light:
-            notificationEditorNavigationBar.barTintColor = nil
-            notificationEditorNavigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
-            self.view.backgroundColor = offWhite
+            break
         case .dark:
-            notificationEditorNavigationBar.barTintColor = black
-            notificationEditorNavigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
-            self.view.backgroundColor = black
+            break
         }
-        
     }
     
     func loadNotificationData()

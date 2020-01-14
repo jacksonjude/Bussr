@@ -424,6 +424,7 @@
 			buildPhases = (
 				7AD81E0220D6E60C004BAB1E /* Sources */,
 				7AD81E0320D6E60C004BAB1E /* Frameworks */,
+				7A85E89B23CD638400EC11B9 /* ShellScript */,
 				7AD81E0420D6E60C004BAB1E /* Resources */,
 				7A068D10212646A700D3425E /* Embed App Extensions */,
 			);
@@ -561,6 +562,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7A85E89B23CD638400EC11B9 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nsed -i .bak -e \"/userLabel=\\\"APP_VERSION\\\"/s/text=\\\"[^\\\"]*\\\"/text=\\\"Version: $MARKETING_VERSION Build: $CURRENT_PROJECT_VERSION\\\"/\" \"$PROJECT_DIR/$PROJECT_NAME/Base.lproj/LaunchScreen.storyboard\"\ntouch \"$PROJECT_DIR/$PROJECT_NAME/Base.lproj/LaunchScreen.storyboard\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7A068D19212697DA00D3425E /* Sources */ = {
@@ -711,6 +732,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerFavoritesExtension/MuniTrackerFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20200113;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerFavoritesExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -731,6 +753,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerFavoritesExtension/MuniTrackerFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20200113;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerFavoritesExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -751,6 +774,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerRecentExtension/MuniTrackerRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20200113;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerRecentExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -771,6 +795,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerRecentExtension/MuniTrackerRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20200113;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerRecentExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -791,6 +816,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerNearbyExtension/MuniTrackerNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20200113;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerNearbyExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -811,6 +837,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerNearbyExtension/MuniTrackerNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20200113;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerNearbyExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -947,13 +974,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = MuniTracker/MuniTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20200113;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTracker/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -968,13 +997,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = MuniTracker/MuniTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20200113;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTracker/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

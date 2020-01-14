@@ -37,7 +37,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             firstLaunch = true
             UserDefaults.standard.set(618, forKey: "firstLaunch")
             
-            UserDefaults.standard.set(ThemeType.light.rawValue, forKey: "theme")
             CloudManager.addFavoritesZone()
         }
         
@@ -55,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         if let lastServerChangeToken = UserDefaults.standard.object(forKey: "LastServerChangeToken") as? Data
         {
-            CloudManager.currentChangeToken = NSKeyedUnarchiver.unarchiveObject(with: lastServerChangeToken) as? CKServerChangeToken
+            CloudManager.currentChangeToken = try? NSKeyedUnarchiver.unarchivedObject(ofClass: CKServerChangeToken.self, from: lastServerChangeToken)
         }
         
         CloudManager.fetchChangesFromCloud()
@@ -69,7 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         if let notificationChangesData = UserDefaults.standard.object(forKey: "notificationChanges") as? Data
         {
-            let notificationChanges = NSKeyedUnarchiver.unarchiveObject(with: notificationChangesData) as? Dictionary<String,Int> ?? [:]
+            let notificationChanges = (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(notificationChangesData) as? Dictionary<String,Int>) ?? [:]
             NotificationManager.notificationChanges = notificationChanges
         }
         
@@ -88,7 +87,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         NotificationManager.syncNotificationChangesToServer()
         
-        let notificationChangesData = NSKeyedArchiver.archivedData(withRootObject: NotificationManager.notificationChanges)
+        let notificationChangesData = try? NSKeyedArchiver.archivedData(withRootObject: NotificationManager.notificationChanges, requiringSecureCoding: false)
         UserDefaults.standard.set(notificationChangesData, forKey: "notificationChanges")
     }
 
@@ -105,14 +104,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Saves changes in the application's managed object context before the application terminates.
         
         CoreDataStack.saveContext()
-        
-        let notificationChangesData = NSKeyedArchiver.archivedData(withRootObject: NotificationManager.notificationChanges)
+                
+        let notificationChangesData = try? NSKeyedArchiver.archivedData(withRootObject: NotificationManager.notificationChanges, requiringSecureCoding: false)
         UserDefaults.standard.set(notificationChangesData, forKey: "notificationChanges")
     }
     
     func getCurrentTheme() -> ThemeType
     {
-        return (UserDefaults.standard.object(forKey: "theme") as? Int).map { ThemeType(rawValue: $0) ?? .light } ?? .light
+        let themeType: ThemeType = (UIScreen.main.traitCollection.userInterfaceStyle == .dark) ? .dark : .light
+        return themeType
     }
     
     func updateAppIcon()
