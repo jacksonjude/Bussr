@@ -39,7 +39,7 @@ class FavoritesExtensionViewController: MuniTrackerExtensionViewController, CLLo
     
     func loadClosestFavoriteStops()
     {
-        if let userLocation = self.currentUserLocation, var favoriteStops = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: NSPredicate(format: "TRUEPREDICATE"), moc: CoreDataStack.persistentContainer.viewContext) as? [FavoriteStop]
+        if let userLocation = self.currentUserLocation, var favoriteStops = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: NSPredicate(format: "TRUEPREDICATE"), moc: CoreDataStack.persistentContainer.viewContext, fetchLimit: numStopsToDisplay) as? [FavoriteStop]
         {
             favoriteStops.sort { (favoriteStop1, favoriteStop2) -> Bool in
                 if let stop1 = RouteDataManager.fetchStop(stopTag: favoriteStop1.stopTag!), let stop2 = RouteDataManager.fetchStop(stopTag: favoriteStop2.stopTag!)

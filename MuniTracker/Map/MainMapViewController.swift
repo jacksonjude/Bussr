@@ -163,6 +163,10 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         setupThemeElements()
     }
     
+    override func viewWillLayoutSubviews() {
+        setupThemeElements()
+    }
+    
     func setupThemeElements()
     {
         switch appDelegate.getCurrentTheme()
@@ -599,7 +603,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             annotationView.isEnabled = false
             
-            self.busAnnotations[headingAnnotation.id]!.headingAnnotationView = annotationView
+            self.busAnnotations[headingAnnotation.id]?.headingAnnotationView = annotationView
             
             return annotationView
         }

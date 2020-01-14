@@ -57,6 +57,7 @@ extension UIColor
 
 class DirectionStopCell: UITableViewCell
 {
+    var includeMins = true
     var directionObject: Direction?
     var stopObject: Stop?
     
@@ -104,7 +105,12 @@ class DirectionStopCell: UITableViewCell
         if let predictions = notification.userInfo!["predictions"] as? [String]
         {
             OperationQueue.main.addOperation {
-                let predictionsString = RouteDataManager.formatPredictions(predictions: predictions).predictionsString
+                var predictionsString = RouteDataManager.formatPredictions(predictions: predictions).predictionsString
+                
+                if !self.includeMins && predictionsString.contains(" mins")
+                {
+                    predictionsString.removeSubrange(Range<String.Index>(NSRange(location: predictionsString.count-5, length: 5), in: predictionsString)!)
+                }
                 
                 if let stopPredictionLabel = self.viewWithTag(603) as? UILabel
                 {

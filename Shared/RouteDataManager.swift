@@ -309,7 +309,7 @@ class RouteDataManager
             predicate = NSPredicate(format: "directionTag == %@", directionTag)
         }
         
-        if let favoriteStopCallback = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: predicate!, moc: CoreDataStack.persistentContainer.viewContext)
+        if let favoriteStopCallback = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: predicate!, moc: CoreDataStack.persistentContainer.viewContext) //123 sort this by something
         {
             return favoriteStopCallback as! [FavoriteStop]
         }

@@ -502,11 +502,11 @@
                                                 <constraint firstAttribute="bottomMargin" secondItem="TOw-rs-p5G" secondAttribute="bottom" id="Tsd-so-hhd"/>
                                                 <constraint firstItem="KsM-hc-sbq" firstAttribute="top" secondItem="1zL-ny-sHm" secondAttribute="topMargin" id="WGT-Xr-CdN"/>
                                                 <constraint firstItem="vUm-1k-DnC" firstAttribute="leading" secondItem="1zL-ny-sHm" secondAttribute="leadingMargin" id="bWW-4i-RJk"/>
-                                                <constraint firstItem="KsM-hc-sbq" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="1zL-ny-sHm" secondAttribute="leadingMargin" id="m4f-g1-hxj"/>
+                                                <constraint firstItem="KsM-hc-sbq" firstAttribute="leading" secondItem="1zL-ny-sHm" secondAttribute="leadingMargin" id="m4f-g1-hxj"/>
                                                 <constraint firstItem="q3W-KL-vWT" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="1zL-ny-sHm" secondAttribute="leading" constant="20" symbolic="YES" id="ree-T9-1NF"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="vUm-1k-DnC" secondAttribute="bottom" id="rkh-6i-fUb"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="TOw-rs-p5G" secondAttribute="trailing" id="vO5-d0-xrA"/>
-                                                <constraint firstAttribute="trailing" secondItem="KsM-hc-sbq" secondAttribute="trailing" constant="138" id="zRM-k3-eGw"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="KsM-hc-sbq" secondAttribute="trailing" symbolic="YES" id="zRM-k3-eGw"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -802,9 +802,9 @@
                                             <constraints>
                                                 <constraint firstItem="bn1-BU-Sfw" firstAttribute="leading" secondItem="4Kp-B0-9Pf" secondAttribute="trailing" constant="-2" id="5zs-uI-vOp"/>
                                                 <constraint firstItem="bn1-BU-Sfw" firstAttribute="trailing" secondItem="t4p-fh-tlg" secondAttribute="trailingMargin" id="EGg-aa-PZ8"/>
-                                                <constraint firstItem="4Kp-B0-9Pf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="t4p-fh-tlg" secondAttribute="leadingMargin" symbolic="YES" id="EIX-qy-QM3"/>
+                                                <constraint firstItem="4Kp-B0-9Pf" firstAttribute="leading" secondItem="t4p-fh-tlg" secondAttribute="leadingMargin" symbolic="YES" id="EIX-qy-QM3"/>
                                                 <constraint firstItem="bn1-BU-Sfw" firstAttribute="top" secondItem="4Kp-B0-9Pf" secondAttribute="top" id="KPm-sb-RsD"/>
-                                                <constraint firstAttribute="trailing" secondItem="XSY-H3-ebN" secondAttribute="trailing" constant="138" id="Vlh-Is-LGX"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="XSY-H3-ebN" secondAttribute="trailing" constant="20" symbolic="YES" id="Vlh-Is-LGX"/>
                                                 <constraint firstItem="xJi-yL-hYn" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="t4p-fh-tlg" secondAttribute="leading" constant="20" symbolic="YES" id="YbC-29-STp"/>
                                                 <constraint firstItem="4Kp-B0-9Pf" firstAttribute="top" secondItem="XSY-H3-ebN" secondAttribute="bottom" constant="8" id="aAq-oN-Vp8"/>
                                                 <constraint firstItem="4Kp-B0-9Pf" firstAttribute="bottom" secondItem="bn1-BU-Sfw" secondAttribute="bottom" id="c7L-sr-Hi1"/>
@@ -812,7 +812,7 @@
                                                 <constraint firstItem="XSY-H3-ebN" firstAttribute="top" secondItem="t4p-fh-tlg" secondAttribute="topMargin" id="jwX-ad-WWR"/>
                                                 <constraint firstItem="4Kp-B0-9Pf" firstAttribute="bottom" secondItem="t4p-fh-tlg" secondAttribute="bottomMargin" id="oVU-5y-QkU"/>
                                                 <constraint firstItem="xJi-yL-hYn" firstAttribute="trailing" secondItem="t4p-fh-tlg" secondAttribute="trailingMargin" id="uM1-G3-8wb"/>
-                                                <constraint firstItem="XSY-H3-ebN" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="t4p-fh-tlg" secondAttribute="leadingMargin" id="wgS-Zj-F4S"/>
+                                                <constraint firstItem="XSY-H3-ebN" firstAttribute="leading" secondItem="t4p-fh-tlg" secondAttribute="leadingMargin" id="wgS-Zj-F4S"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -846,9 +846,9 @@
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="hwX-gq-N1n" secondAttribute="trailing" constant="15" id="1qc-6k-rK5"/>
                                                 <constraint firstItem="hwX-gq-N1n" firstAttribute="top" secondItem="dCI-Nq-rks" secondAttribute="topMargin" id="BeI-um-xlA"/>
-                                                <constraint firstItem="EXC-hY-hgZ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="dCI-Nq-rks" secondAttribute="leadingMargin" id="EpF-Qk-iQz"/>
-                                                <constraint firstAttribute="trailing" secondItem="EXC-hY-hgZ" secondAttribute="trailing" constant="171" id="FEc-OF-XmU"/>
-                                                <constraint firstItem="hwX-gq-N1n" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="dCI-Nq-rks" secondAttribute="leadingMargin" id="JGV-Kx-Rka"/>
+                                                <constraint firstItem="EXC-hY-hgZ" firstAttribute="leading" secondItem="dCI-Nq-rks" secondAttribute="leadingMargin" id="EpF-Qk-iQz"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="EXC-hY-hgZ" secondAttribute="trailing" symbolic="YES" id="FEc-OF-XmU"/>
+                                                <constraint firstItem="hwX-gq-N1n" firstAttribute="leading" secondItem="dCI-Nq-rks" secondAttribute="leadingMargin" id="JGV-Kx-Rka"/>
                                                 <constraint firstItem="EXC-hY-hgZ" firstAttribute="top" secondItem="hwX-gq-N1n" secondAttribute="bottom" constant="8" id="LUP-do-Pbt"/>
                                                 <constraint firstItem="EXC-hY-hgZ" firstAttribute="bottom" secondItem="dCI-Nq-rks" secondAttribute="bottomMargin" id="caL-Vf-KSq"/>
                                             </constraints>
@@ -883,13 +883,13 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="XnZ-sf-I2S" secondAttribute="trailing" constant="232" id="1bc-j8-8a7"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="XnZ-sf-I2S" secondAttribute="trailing" symbolic="YES" id="1bc-j8-8a7"/>
                                                 <constraint firstItem="XnZ-sf-I2S" firstAttribute="top" secondItem="f38-kk-Rwe" secondAttribute="topMargin" id="ECq-Vh-rvc"/>
-                                                <constraint firstItem="9ZX-nu-roC" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="f38-kk-Rwe" secondAttribute="leadingMargin" id="Is7-mH-Tm2"/>
+                                                <constraint firstItem="9ZX-nu-roC" firstAttribute="leading" secondItem="f38-kk-Rwe" secondAttribute="leadingMargin" id="Is7-mH-Tm2"/>
                                                 <constraint firstItem="9ZX-nu-roC" firstAttribute="top" secondItem="XnZ-sf-I2S" secondAttribute="bottom" constant="19" id="PI7-vb-fpN"/>
                                                 <constraint firstItem="9ZX-nu-roC" firstAttribute="bottom" secondItem="f38-kk-Rwe" secondAttribute="bottomMargin" id="VOM-9J-zXg"/>
-                                                <constraint firstItem="XnZ-sf-I2S" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="f38-kk-Rwe" secondAttribute="leadingMargin" id="ks9-O6-HhN"/>
-                                                <constraint firstAttribute="trailing" secondItem="9ZX-nu-roC" secondAttribute="trailing" constant="139" id="vYN-dO-vOY"/>
+                                                <constraint firstItem="XnZ-sf-I2S" firstAttribute="leading" secondItem="f38-kk-Rwe" secondAttribute="leadingMargin" id="ks9-O6-HhN"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="9ZX-nu-roC" secondAttribute="trailing" constant="20" symbolic="YES" id="vYN-dO-vOY"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -1140,7 +1140,7 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="1F2-A2-aOH" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="XbU-Z7-PiT" secondAttribute="leadingMargin" id="212-sy-Wjx"/>
+                                                <constraint firstItem="1F2-A2-aOH" firstAttribute="leading" secondItem="XbU-Z7-PiT" secondAttribute="leadingMargin" id="212-sy-Wjx"/>
                                                 <constraint firstItem="xgH-ST-nUl" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="XbU-Z7-PiT" secondAttribute="leading" constant="15" id="Acp-9f-qVB"/>
                                                 <constraint firstItem="xgH-ST-nUl" firstAttribute="bottom" secondItem="Oa5-ID-hpd" secondAttribute="bottom" id="SVT-me-Opt"/>
                                                 <constraint firstItem="xgH-ST-nUl" firstAttribute="top" secondItem="1F2-A2-aOH" secondAttribute="bottom" constant="8" id="Xzi-WJ-ELx"/>
@@ -1151,7 +1151,7 @@
                                                 <constraint firstItem="Oa5-ID-hpd" firstAttribute="top" secondItem="xgH-ST-nUl" secondAttribute="top" id="gsg-Bj-i9i"/>
                                                 <constraint firstItem="13C-t2-28I" firstAttribute="top" secondItem="XbU-Z7-PiT" secondAttribute="topMargin" constant="3" id="qjp-fr-9tP"/>
                                                 <constraint firstItem="13C-t2-28I" firstAttribute="trailing" secondItem="XbU-Z7-PiT" secondAttribute="trailingMargin" id="rWN-fu-D8t"/>
-                                                <constraint firstAttribute="trailing" secondItem="1F2-A2-aOH" secondAttribute="trailing" constant="138" id="yvT-7r-iJg"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="1F2-A2-aOH" secondAttribute="trailing" symbolic="YES" id="yvT-7r-iJg"/>
                                                 <constraint firstItem="Oa5-ID-hpd" firstAttribute="leading" secondItem="xgH-ST-nUl" secondAttribute="trailing" constant="-2" id="zid-I7-JtR"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -1281,8 +1281,8 @@
         <image name="SettingsIcon" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="6fX-oF-13I"/>
-        <segue reference="UJx-fY-8v6"/>
+        <segue reference="coT-D9-Khz"/>
+        <segue reference="FM7-3T-SSq"/>
         <segue reference="S68-UZ-wHD"/>
     </inferredMetricsTieBreakers>
 </document>
