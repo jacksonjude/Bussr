@@ -734,6 +734,16 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 favoriteStops.append(stop)
             }
             
+            if let directionStopArray = selectedDirection.stops?.array as? [Stop]
+            {
+                let directionStopTagArray = directionStopArray.map({ (stop) -> String in
+                    return stop.stopTag!
+                })
+                favoriteStops.sort { (stop1, stop2) -> Bool in
+                    return (directionStopTagArray.firstIndex(of: stop1.stopTag!) ?? 0) < (directionStopTagArray.firstIndex(of: stop2.stopTag!) ?? 0)
+                }
+            }
+            
             routeInfoToChange = favoriteStops
             
             OperationQueue.main.addOperation {
