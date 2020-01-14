@@ -163,8 +163,15 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         setupThemeElements()
     }
     
-    override func viewWillLayoutSubviews() {
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        guard UIApplication.shared.applicationState == .inactive else {
+            return
+        }
+        
         setupThemeElements()
+        reloadAllAnnotations() //For header annotation update
     }
     
     func setupThemeElements()
@@ -435,7 +442,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             reloadPolyline()
             
-            fetchVehicleLocations()
+            NotificationCenter.default.addObserver(self, selector: #selector(fetchVehicleLocations), name: NSNotification.Name("FetchVehicleLocations"), object: nil)
+            fetchPredictionTimes()
         }
     }
     
@@ -592,7 +600,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         }
         else if let headingAnnotation = annotation as? HeadingAnnotation
         {
-            let headingImage = UIImage(named: "HeadingIndicator")!
+            let headingImage = UIImage(named: "HeadingIndicator" + darkImageAppend())!
             let busImageSize = headingAnnotation.busAnnotationViewImageSize ?? UIImage(named: "BusAnnotation")!.size
             
             let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "HeadingAnnotation")
@@ -903,6 +911,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     @objc func fetchVehicleLocations()
     {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("FetchVehicleLocations"), object: nil)
+        
         let vehicleLocationsReturnUUID = UUID().uuidString
         NotificationCenter.default.addObserver(self, selector: #selector(receiveVehicleLocations(_:)), name: NSNotification.Name("FoundVehicleLocations:" + vehicleLocationsReturnUUID), object: nil)
         
@@ -1002,7 +1012,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                     
                     if let headingAnnotationView = self.busAnnotations[vehicleLocation.id]!.headingAnnotationView
                     {
-                        let headingImage = UIImage(named: "HeadingIndicator")!
+                        let headingImage = UIImage(named: "HeadingIndicator" + self.darkImageAppend())!
                         let busImageSize = headingAnnotation.busAnnotationViewImageSize ?? UIImage(named: "BusAnnotation")!.size
                         
                         UIView.animate(withDuration: 1, animations: {

@@ -348,6 +348,8 @@ class RouteDataManager
     {
         let directionStopID = (stop?.stopTag ?? "") + "-" + (direction?.directionTag ?? "")
         
+        print("↓ - Fetching " + directionStopID + " Prediction Times")
+        
         if (fetchPredictionTimesReturnUUIDS[directionStopID] == nil)
         {
             fetchPredictionTimesReturnUUIDS[directionStopID] = []
@@ -439,6 +441,7 @@ class RouteDataManager
     
     static func fetchVehicleLocations(returnUUID: String, vehicleIDs: [String], direction: Direction?)
     {
+        print("↓ - Fetching " + (direction?.directionTag ?? "") + " Locations")
         DispatchQueue.global(qos: .background).async {
             if let direction = direction, let route = direction.route
             {
