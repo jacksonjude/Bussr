@@ -15,13 +15,10 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
 {
     var routeInfoToChange = Array<Any>()
     @IBOutlet weak var routeInfoPicker: UIPickerView!
-    //@IBOutlet weak var favoriteButton: UIButton!
-    //@IBOutlet weak var locationButton: UIButton!
     @IBOutlet weak var directionButton: UIButton!
     @IBOutlet weak var otherDirectionsButton: UIButton!
     @IBOutlet weak var addFavoriteButton: UIButton!
     @IBOutlet weak var addNotificationButton: UIButton!
-    //@IBOutlet weak var favoriteButtonLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var expandFiltersButton: UIButton!
     
     var favoriteFilterEnabled = false
@@ -326,7 +323,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 {
                     self.routeInfoPicker.reloadAllComponents()
                     
-                    if let currentLocation = appDelegate.mainMapViewController?.mainMapView.userLocation.location
+                    if let currentLocation = appDelegate.mainMapViewController?.mainMapView?.userLocation.location
                     {
                         self.sortStopsByCurrentLocation(location: currentLocation)
                     }
@@ -534,6 +531,16 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             {
                 self.routeInfoPicker.selectRow(stops.firstIndex(of: stops.first(where: {$0.stopTag == MapState.selectedStopTag})!) ?? 0, inComponent: 0, animated: true)
                 
+                locationFilterEnabled = false
+                for filterButton in filterButtons
+                {
+                    if filterButton.imagePath == "CurrentLocation"
+                    {
+                        filterButton.filterIsEnabled = locationFilterEnabled
+                        filterButton.setFilterImage()
+                    }
+                }
+                
                 pickerSelectedRow()
             }
         }
@@ -680,14 +687,10 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         
         if favoriteFilterEnabled
         {
-            //favoriteButton.setImage(UIImage(named: "FavoriteFillIcon" + darkImageAppend()), for: UIControl.State.normal)
-            
             filterByFavorites()
         }
         else
         {
-            //favoriteButton.setImage(UIImage(named: "FavoriteIcon" + darkImageAppend()), for: UIControl.State.normal)
-            
             reloadRouteData()
         }
     }
@@ -696,14 +699,19 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     {
         if MapState.routeInfoShowing == .stop
         {
-            if let selectedStop = MapState.getCurrentStop(), let selectedDirection = MapState.getCurrentDirection()//routeInfoToChange[routeInfoPicker.selectedRow(inComponent: 0)] as? Stop
+            if let selectedStop = MapState.getCurrentStop(), let selectedDirection = MapState.getCurrentDirection()
             {
                 let favoriteStopCallback = RouteDataManager.fetchFavoriteStops(directionTag: selectedDirection.directionTag!, stopTag: selectedStop.stopTag)
                 if favoriteStopCallback.count > 0
                 {
                     CoreDataStack.persistentContainer.viewContext.delete(favoriteStopCallback[0])
                     
-                    CloudManager.addToLocalChanges(type: ManagedObjectChangeType.delete, uuid: favoriteStopCallback[0].uuid!)
+                    if #available(iOS 13.0, *) {}
+                    else
+                    {
+                        CloudManager.addToLocalChanges(type: ManagedObjectChangeType.delete, uuid: favoriteStopCallback[0].uuid!)
+                    }
+                    
                     NotificationCenter.default.addObserver(self, selector: #selector(didSaveFavoriteStop), name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
                 }
                 else
@@ -713,7 +721,12 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                     newFavoriteStop.stopTag = selectedStop.stopTag
                     newFavoriteStop.uuid = UUID().uuidString
                     
-                    CloudManager.addToLocalChanges(type: ManagedObjectChangeType.insert, uuid: newFavoriteStop.uuid!)
+                    if #available(iOS 13.0, *) {}
+                    else
+                    {
+                        CloudManager.addToLocalChanges(type: ManagedObjectChangeType.insert, uuid: newFavoriteStop.uuid!)
+                    }
+                    
                     NotificationCenter.default.addObserver(self, selector: #selector(didSaveFavoriteStop), name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
                 }
                 
@@ -725,7 +738,12 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     @objc func didSaveFavoriteStop(notification: Notification)
     {
         NotificationCenter.default.removeObserver(self, name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
-        CloudManager.syncToCloud()
+        
+        if #available(iOS 13.0, *) {}
+        else
+        {
+            CloudManager.syncToCloud()
+        }
     }
     
     func filterByFavorites()
@@ -757,7 +775,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 
                 if self.locationFilterEnabled
                 {
-                    if let currentLocation = appDelegate.mainMapViewController?.mainMapView.userLocation.location
+                    if let currentLocation = appDelegate.mainMapViewController?.mainMapView?.userLocation.location
                     {
                         self.sortStopsByCurrentLocation(location: currentLocation)
                     }
@@ -783,18 +801,13 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         
         if locationFilterEnabled
         {
-            //locationButton.setImage(UIImage(named: "CurrentLocationFillIcon" + darkImageAppend()), for: UIControl.State.normal)
-            
-            if let currentLocation = appDelegate.mainMapViewController?.mainMapView.userLocation.location
+            if let currentLocation = appDelegate.mainMapViewController?.mainMapView?.userLocation.location
             {
                 sortStopsByCurrentLocation(location: currentLocation)
             }
-            
         }
         else
         {
-            //locationButton.setImage(UIImage(named: "CurrentLocationIcon" + darkImageAppend()), for: UIControl.State.normal)
-            
             reloadRouteData()
         }
     }

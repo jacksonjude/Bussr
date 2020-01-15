@@ -37,7 +37,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             firstLaunch = true
             UserDefaults.standard.set(618, forKey: "firstLaunch")
             
-            CloudManager.addFavoritesZone()
+            if #available(iOS 13.0, *)
+            {
+                UserDefaults.standard.set(618, forKey: "transitionedToCD-CloudKit")
+            }
+            else
+            {
+                CloudManager.addFavoritesZone()
+            }
+        }
+        
+        if #available(iOS 13.0, *), UserDefaults.standard.object(forKey: "transitionedToCD-CloudKit") == nil
+        {
+            if let favoriteStops = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: NSPredicate(format: "TRUEPREDICATE"), moc: CoreDataStack.persistentContainer.viewContext) as? [NSManagedObject]
+            {
+                for favoriteStop in favoriteStops
+                {
+                    CoreDataStack.persistentContainer.viewContext.delete(favoriteStop)
+                }
+            }
+            
+            CloudManager.currentChangeToken = nil
+            CloudManager.fetchChangesFromCloud()
+            
+            UserDefaults.standard.set(618, forKey: "transitionedToCD-CloudKit")
         }
         
         if RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", "0"), moc: CoreDataStack.persistentContainer.viewContext)?.count == 0
@@ -52,12 +75,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         FavoriteState.selectedGroupUUID = "0"
         
-        if let lastServerChangeToken = UserDefaults.standard.object(forKey: "LastServerChangeToken") as? Data
+        if #available(iOS 13.0, *) {}
+        else
         {
-            CloudManager.currentChangeToken = try? NSKeyedUnarchiver.unarchivedObject(ofClass: CKServerChangeToken.self, from: lastServerChangeToken)
+            if let lastServerChangeToken = UserDefaults.standard.object(forKey: "LastServerChangeToken") as? Data
+            {
+                CloudManager.currentChangeToken = try? NSKeyedUnarchiver.unarchivedObject(ofClass: CKServerChangeToken.self, from: lastServerChangeToken)
+            }
+            
+            CloudManager.fetchChangesFromCloud()
         }
-        
-        CloudManager.fetchChangesFromCloud()
         
         if let favoritesOrganizeTypeInt = UserDefaults.standard.object(forKey: "FavoritesOrganizeType") as? Int
         {

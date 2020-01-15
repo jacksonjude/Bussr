@@ -119,6 +119,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var vehicleSelectionButton: UIButton!
     @IBOutlet weak var pickerViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var predictionBarTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var predictionTimesProgressView: UIProgressView!
+    @IBOutlet weak var predictionTimesProgressViewConstraint: NSLayoutConstraint!
     
     //37.773972
     //37.738802
@@ -137,6 +139,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     var selectedStopHeading: SelectedStopHeadingAnnotation?
     
     var locationManager = CLLocationManager()
+    
+    var predictionRefreshTimer: Timer?
     
     //MARK: - View
 
@@ -181,9 +185,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         case .light:
             self.activityIndicator.style = .gray
             self.vehicleSelectionButton.setImage(UIImage(named: "BusIcon" + darkImageAppend()), for: UIControl.State.normal)
+            self.predictionTimesLabel.textColor = UIColor.black
         case .dark:
             self.activityIndicator.style = .white
             self.vehicleSelectionButton.setImage(UIImage(named: "BusIcon" + darkImageAppend()), for: UIControl.State.normal)
+            self.predictionTimesLabel.textColor = UIColor.white
         }
     }
     
@@ -237,6 +243,17 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         }
         
         setupThemeElements()
+        
+        if MapState.routeInfoShowing == .stop
+        {
+            self.setupPredictionRefreshTimer()
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        
+        self.predictionRefreshTimer?.invalidate()
     }
     
     //MARK: - Update Routes
@@ -777,6 +794,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     var newStopNotification: StopNotification?
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        self.predictionRefreshTimer?.invalidate()
+        
         if segue.identifier == "showRecentStopTableView"
         {
             let stopsTableView = segue.destination as! StopsTableViewController
@@ -867,10 +886,27 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             self.predictionTimesNavigationBar.isHidden = false
             self.vehicleSelectionButton.isEnabled = true
             self.vehicleSelectionButton.isHidden = false
+            //self.predictionTimesProgressView.isHidden = false
             
             UIView.animate(withDuration: 0.5) {
                 self.view.layoutSubviews()
             }
+            
+            self.setupPredictionRefreshTimer()
+        }
+    }
+    
+    var predictionNavigationBarShowing: Bool
+    {
+        return !self.predictionTimesNavigationBar.isHidden
+    }
+    
+    func setupPredictionRefreshTimer()
+    {
+        if let refreshTime = UserDefaults.standard.object(forKey: "predictionRefreshTime") as? TimeInterval, refreshTime > 0.0
+        {
+            self.predictionRefreshTimer?.invalidate()
+            self.predictionRefreshTimer = Timer.scheduledTimer(timeInterval: refreshTime, target: self, selector: #selector(self.refreshPredictionNavigationBar), userInfo: nil, repeats: true)
         }
     }
     
@@ -885,19 +921,37 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 self.predictionTimesNavigationBar.isHidden = true
                 self.vehicleSelectionButton.isEnabled = false
                 self.vehicleSelectionButton.isHidden = true
+                self.predictionTimesProgressView.isHidden = true
             }
+                        
+            self.predictionRefreshTimer?.invalidate()
+            self.activityIndicator.stopAnimating()
         }
     }
     
-    @IBAction func refreshPredictionNavigationBar()
+    @objc @IBAction func refreshPredictionNavigationBar()
     {
         NotificationCenter.default.addObserver(self, selector: #selector(fetchVehicleLocations), name: NSNotification.Name("FetchVehicleLocations"), object: nil)
+        
+        OperationQueue.main.addOperation {
+            self.predictionTimesProgressView.setProgress(0, animated: false)
+            self.predictionTimesProgressView.isHidden = false
+            self.predictionTimesProgressViewConstraint.constant = 0
+            
+            UIView.animate(withDuration: 0.5, animations: {
+                self.view.layoutSubviews()
+            })
+        }
         
         fetchPredictionTimes()
     }
     
     func fetchPredictionTimes()
     {
+        OperationQueue.main.addOperation {
+            self.predictionTimesProgressView.setProgress(0.33, animated: true)
+        }
+        
         let predictionTimesReturnUUID = UUID().uuidString
         NotificationCenter.default.addObserver(self, selector: #selector(receivePredictionTimes(_:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
         RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: MapState.getCurrentStop(), direction: MapState.getCurrentDirection())
@@ -905,12 +959,20 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         OperationQueue.main.addOperation {
             self.refreshButton.isEnabled = false
             self.refreshButton.tintColor = .clear
-            self.activityIndicator.startAnimating()
+            
+            if self.predictionNavigationBarShowing
+            {
+                self.activityIndicator.startAnimating()
+            }
         }
     }
     
     @objc func fetchVehicleLocations()
     {
+        OperationQueue.main.addOperation {
+            self.predictionTimesProgressView.setProgress(0.66, animated: true)
+        }
+        
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("FetchVehicleLocations"), object: nil)
         
         let vehicleLocationsReturnUUID = UUID().uuidString
@@ -976,6 +1038,15 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
         
         OperationQueue.main.addOperation {
+            self.predictionTimesProgressView.setProgress(1, animated: true)
+            self.predictionTimesProgressViewConstraint.constant = -self.predictionTimesProgressView.frame.size.height
+            
+            UIView.animate(withDuration: 0.75, animations: {
+                self.view.layoutSubviews()
+            }) { (bool) in
+                self.predictionTimesProgressView.isHidden = true
+            }
+            
             var annotationsToSave = Dictionary<String,(annotation: BusAnnotation, annotationView: MKAnnotationView?, headingAnnotationView: MKAnnotationView?)>()
             
             let vehicleLocations = notification.userInfo!["vehicleLocations"] as! Array<(id: String, location: CLLocation, heading: Int)>

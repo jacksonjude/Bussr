@@ -29,7 +29,12 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         {
             reloadTableView()
             NotificationCenter.default.addObserver(self, selector: #selector(finishedCloudFetch(_:)), name: NSNotification.Name("FinishedFetchingFromCloud"), object: nil)
-            CloudManager.fetchChangesFromCloud()
+            
+            if #available(iOS 13.0, *) {}
+            else
+            {
+                CloudManager.fetchChangesFromCloud()
+            }
         }
         
         organizeSegmentControl.selectedSegmentIndex = FavoriteState.favoritesOrganizeType.rawValue
@@ -186,7 +191,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
     {
         if var stopSet = favoriteStopSet
         {
-            if let location = appDelegate.mainMapViewController?.mainMapView.userLocation.location
+            if let location = appDelegate.mainMapViewController?.mainMapView?.userLocation.location
             {
                 stopSet = RouteDataManager.sortStopsByDistanceFromLocation(stops: stopSet, locationToTest: location)
             }
@@ -788,6 +793,6 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
     
     @IBAction func unwindFromFavoriteGroupView(_ segue: UIStoryboardSegue)
     {
-        
+        setupOrganizeTypeStuff()
     }
 }

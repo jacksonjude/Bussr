@@ -82,7 +82,9 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>MuniTracker would like to use your current location to find the bus stops nearest to you</string>
 	<key>UIBackgroundModes</key>
-	<array/>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

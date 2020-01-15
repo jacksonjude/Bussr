@@ -1,67 +1,79 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14460.32" systemVersion="18A384a" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19C57" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Agency" representedClassName="Agency" syncable="YES" codeGenerationType="class">
-        <attribute name="agencyName" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="routes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Route" inverseName="agency" inverseEntity="Route" syncable="YES"/>
+        <attribute name="agencyName" optional="YES" attributeType="String"/>
+        <relationship name="routes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Route" inverseName="agency" inverseEntity="Route"/>
     </entity>
     <entity name="Direction" representedClassName="Direction" syncable="YES" codeGenerationType="class">
-        <attribute name="directionName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="directionTag" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="directionTitle" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="route" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Route" inverseName="directions" inverseEntity="Route" syncable="YES"/>
-        <relationship name="stops" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Stop" inverseName="direction" inverseEntity="Stop" syncable="YES"/>
+        <attribute name="directionName" optional="YES" attributeType="String"/>
+        <attribute name="directionTag" optional="YES" attributeType="String"/>
+        <attribute name="directionTitle" optional="YES" attributeType="String"/>
+        <relationship name="route" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Route" inverseName="directions" inverseEntity="Route"/>
+        <relationship name="stops" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Stop" inverseName="direction" inverseEntity="Stop"/>
         <fetchIndex name="byDirectionTagIndex">
             <fetchIndexElement property="directionTag" type="Binary" order="ascending"/>
         </fetchIndex>
     </entity>
     <entity name="FavoriteStop" representedClassName="FavoriteStop" syncable="YES" codeGenerationType="class">
-        <attribute name="directionTag" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="stopTag" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="directionTag" optional="YES" attributeType="String"/>
+        <attribute name="stopTag" optional="YES" attributeType="String"/>
+        <attribute name="uuid" optional="YES" attributeType="String"/>
     </entity>
     <entity name="FavoriteStopGroup" representedClassName="FavoriteStopGroup" syncable="YES" codeGenerationType="class">
-        <attribute name="favoriteStopUUIDs" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="groupName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="openCount" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="childGroups" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FavoriteStopGroup" inverseName="parentGroup" inverseEntity="FavoriteStopGroup" syncable="YES"/>
-        <relationship name="parentGroup" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FavoriteStopGroup" inverseName="childGroups" inverseEntity="FavoriteStopGroup" syncable="YES"/>
+        <attribute name="favoriteStopUUIDs" optional="YES" attributeType="Binary"/>
+        <attribute name="groupName" optional="YES" attributeType="String"/>
+        <attribute name="openCount" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String"/>
+        <relationship name="childGroups" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FavoriteStopGroup" inverseName="parentGroup" inverseEntity="FavoriteStopGroup"/>
+        <relationship name="parentGroup" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FavoriteStopGroup" inverseName="childGroups" inverseEntity="FavoriteStopGroup"/>
     </entity>
     <entity name="RecentStop" representedClassName="RecentStop" syncable="YES" codeGenerationType="class">
-        <attribute name="directionTag" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="stopTag" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="directionTag" optional="YES" attributeType="String"/>
+        <attribute name="stopTag" optional="YES" attributeType="String"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="uuid" optional="YES" attributeType="String"/>
     </entity>
     <entity name="Route" representedClassName="Route" syncable="YES" codeGenerationType="class">
-        <attribute name="routeColor" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="routeOppositeColor" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="routeTag" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="routeTitle" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="agency" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Agency" inverseName="routes" inverseEntity="Agency" syncable="YES"/>
-        <relationship name="directions" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Direction" inverseName="route" inverseEntity="Direction" syncable="YES"/>
+        <attribute name="routeColor" optional="YES" attributeType="String"/>
+        <attribute name="routeOppositeColor" optional="YES" attributeType="String"/>
+        <attribute name="routeTag" optional="YES" attributeType="String"/>
+        <attribute name="routeTitle" optional="YES" attributeType="String"/>
+        <relationship name="agency" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Agency" inverseName="routes" inverseEntity="Agency"/>
+        <relationship name="directions" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Direction" inverseName="route" inverseEntity="Direction"/>
     </entity>
     <entity name="Stop" representedClassName="Stop" syncable="YES" codeGenerationType="class">
-        <attribute name="stopID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="stopLatitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="stopLongitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="stopShortTitle" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="stopTag" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="stopTitle" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="direction" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Direction" inverseName="stops" inverseEntity="Direction" syncable="YES"/>
+        <attribute name="stopID" optional="YES" attributeType="String"/>
+        <attribute name="stopLatitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="stopLongitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="stopShortTitle" optional="YES" attributeType="String"/>
+        <attribute name="stopTag" optional="YES" attributeType="String"/>
+        <attribute name="stopTitle" optional="YES" attributeType="String"/>
+        <relationship name="direction" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Direction" inverseName="stops" inverseEntity="Direction"/>
         <fetchIndex name="byLocation">
             <fetchIndexElement property="stopLatitude" type="Binary" order="ascending"/>
             <fetchIndexElement property="stopLongitude" type="Binary" order="ascending"/>
         </fetchIndex>
     </entity>
     <entity name="StopNotification" representedClassName="StopNotification" syncable="YES" codeGenerationType="class">
-        <attribute name="daysOfWeek" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="directionTag" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="hour" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="minute" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="notificationUUID" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="stopTag" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="daysOfWeek" optional="YES" attributeType="Binary"/>
+        <attribute name="directionTag" optional="YES" attributeType="String"/>
+        <attribute name="hour" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="minute" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="notificationUUID" optional="YES" attributeType="String"/>
+        <attribute name="stopTag" optional="YES" attributeType="String"/>
     </entity>
+    <configuration name="Cloud" usedWithCloudKit="YES">
+        <memberEntity name="FavoriteStop"/>
+        <memberEntity name="FavoriteStopGroup"/>
+        <memberEntity name="RecentStop"/>
+        <memberEntity name="StopNotification"/>
+    </configuration>
+    <configuration name="Local">
+        <memberEntity name="Agency"/>
+        <memberEntity name="Direction"/>
+        <memberEntity name="Route"/>
+        <memberEntity name="Stop"/>
+    </configuration>
     <elements>
         <element name="Agency" positionX="-36" positionY="81" width="128" height="75"/>
         <element name="Direction" positionX="-45" positionY="63" width="128" height="120"/>

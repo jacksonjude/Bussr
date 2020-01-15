@@ -57,7 +57,7 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
         switch stopFetchType
         {
         case .nearby:
-            if let currentLocation = locationToFetchFrom ?? appDelegate.mainMapViewController?.mainMapView.userLocation.location
+            if let currentLocation = locationToFetchFrom ?? appDelegate.mainMapViewController?.mainMapView?.userLocation.location
             {
                 let latitude = currentLocation.coordinate.latitude
                 let longitude = currentLocation.coordinate.longitude
@@ -120,7 +120,7 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
     {
         if var stopDirectionObjects = self.stopDirectionObjects
         {
-            if let location = appDelegate.mainMapViewController?.mainMapView.userLocation.location
+            if let location = appDelegate.mainMapViewController?.mainMapView?.userLocation.location
             {
                 let sortedStopObjects = RouteDataManager.sortStopsByDistanceFromLocation(stops: stopDirectionObjects.map {$0.stop}, locationToTest: location)
                 stopDirectionObjects.sort(by: {

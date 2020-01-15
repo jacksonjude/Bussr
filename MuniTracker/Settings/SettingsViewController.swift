@@ -26,6 +26,7 @@ class SettingsViewController: UIViewController
     @IBOutlet weak var favoritesSortedByButton: UIButton!
     @IBOutlet weak var locationSortTypeButton: UIButton!
     @IBOutlet weak var appIconButton: UIButton!
+    @IBOutlet weak var predictionRefreshTimeButton: UIButton!
     
     @IBOutlet weak var mainNavigationBar: UINavigationBar!
     
@@ -49,6 +50,9 @@ class SettingsViewController: UIViewController
         
         let appIcon = UserDefaults.standard.object(forKey: "AppIcon") as? Int ?? 1
         setAppIconButtonTitle(appIcon: appIcon)
+        
+        let refreshTime = UserDefaults.standard.object(forKey: "predictionRefreshTime") as? Double ?? 60.0
+        setPredictionRefreshTimeButtonTitle(refreshTime: refreshTime)
     }
     
     func setupThemeElements()
@@ -195,14 +199,31 @@ class SettingsViewController: UIViewController
         appDelegate.updateAppIcon()
     }
     
+    @IBAction func setPredictionRefreshTime(_ sender: Any) {
+        var refreshTime = UserDefaults.standard.object(forKey: "predictionRefreshTime") as? Double ?? 60.0
+        
+        let possibleRefreshTimes = [0.0, 15.0, 30.0, 60.0]
+        if let refreshTimeIndex = possibleRefreshTimes.firstIndex(of: refreshTime), refreshTimeIndex+1 < possibleRefreshTimes.count
+        {
+            refreshTime = possibleRefreshTimes[refreshTimeIndex+1]
+        }
+        else
+        {
+            refreshTime = possibleRefreshTimes[0]
+        }
+        UserDefaults.standard.set(refreshTime, forKey: "predictionRefreshTime")
+        
+        setPredictionRefreshTimeButtonTitle(refreshTime: refreshTime)
+    }
+    
     func setFavoritesSortedByButtonTitle(favoritesSortType: FavoritesSortType)
     {
         switch favoritesSortType
         {
         case .location:
-            favoritesSortedByButton.setTitle("Favorites Sorted By - " + "Location", for: UIControl.State.normal)
+            favoritesSortedByButton.setTitle("Favorites Sorted By – " + "Location", for: UIControl.State.normal)
         case .list:
-            favoritesSortedByButton.setTitle("Favorites Sorted By - " + "List", for: UIControl.State.normal)
+            favoritesSortedByButton.setTitle("Favorites Sorted By – " + "List", for: UIControl.State.normal)
         }
     }
     
@@ -211,14 +232,19 @@ class SettingsViewController: UIViewController
         switch locationSortType
         {
         case .fullSort:
-            locationSortTypeButton.setTitle("Location - " + "Full Sort", for: UIControl.State.normal)
+            locationSortTypeButton.setTitle("Location – " + "Full Sort", for: UIControl.State.normal)
         case .selectClosest:
-            locationSortTypeButton.setTitle("Location - " + "Select Closest", for: UIControl.State.normal)
+            locationSortTypeButton.setTitle("Location – " + "Select Closest", for: UIControl.State.normal)
         }
     }
     
     func setAppIconButtonTitle(appIcon: Int)
     {
-        appIconButton.setTitle("AppIcon - " + String(appIcon), for: UIControl.State.normal)
+        appIconButton.setTitle("AppIcon – " + String(appIcon), for: UIControl.State.normal)
+    }
+    
+    func setPredictionRefreshTimeButtonTitle(refreshTime: Double)
+    {
+        predictionRefreshTimeButton.setTitle("Prediction Refresh – " + String(Int(refreshTime)) + "s", for: UIControl.State.normal)
     }
 }

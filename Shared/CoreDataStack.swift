@@ -19,16 +19,30 @@ class CoreDataStack {
          application to it. This property is optional since there are legitimate
          error conditions that could cause the creation of the store to fail.
          */
-        let container = NSPersistentContainer(name: "MuniTracker")
+        var container: NSPersistentContainer
         
-        let storeUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.MuniTracker")!.appendingPathComponent("MuniTracker.sqlite")
+        if #available(iOS 13.0, *) {
+            container = NSPersistentCloudKitContainer(name: "MuniTracker")
+        } else {
+            container = NSPersistentContainer(name: "MuniTracker")
+        }
         
-        let description = NSPersistentStoreDescription()
-        description.shouldInferMappingModelAutomatically = true
-        description.shouldMigrateStoreAutomatically = true
-        description.url = storeUrl
+        let cloudStoreDescription = NSPersistentStoreDescription()
+        cloudStoreDescription.configuration = "Cloud"
+        cloudStoreDescription.shouldInferMappingModelAutomatically = true
+        cloudStoreDescription.shouldMigrateStoreAutomatically = true
+        cloudStoreDescription.url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.MuniTracker")!.appendingPathComponent("MuniTracker_Cloud.sqlite")
+        if #available(iOS 13.0, *) {
+            cloudStoreDescription.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.com.jacksonjude.MuniTracker")
+        }
         
-        container.persistentStoreDescriptions = [description]
+        let localStoreDescription = NSPersistentStoreDescription()
+        localStoreDescription.configuration = "Local"
+        localStoreDescription.shouldInferMappingModelAutomatically = true
+        localStoreDescription.shouldMigrateStoreAutomatically = true
+        localStoreDescription.url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.MuniTracker")!.appendingPathComponent("MuniTracker.sqlite")
+        
+        container.persistentStoreDescriptions = [localStoreDescription, cloudStoreDescription]
         
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
