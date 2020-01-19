@@ -54,31 +54,31 @@ class RouteDataManager
         CoreDataStack.persistentContainer.performBackgroundTask({ (backgroundMOC) in
             let agencyFetchCallback = fetchOrCreateObject(type: "Agency", predicate: NSPredicate(format: "agencyName == %@", agencyTag), moc: backgroundMOC)
             let agency = agencyFetchCallback.object as! Agency
-            agency.agencyName = agencyTag
+            agency.name = agencyTag
         
             for routeTitle in routeDictionary
             {
                 let routeFetchCallback = fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "routeTag == %@", routeTitle.key), moc: backgroundMOC)
                 let route = routeFetchCallback.object as! Route
-                route.routeTag = routeTitle.key
-                route.routeTitle = routeTitle.value
+                route.tag = routeTitle.key
+                route.title = routeTitle.value
                 
                 let routeConfig = fetchRouteInfo(routeTag: routeTitle.key)
                 
                 print(routeTitle.key)
             
                 let generalRouteConfig = routeConfig["general"]
-                route.routeColor = generalRouteConfig!["color"]!["color"] as? String
-                route.routeOppositeColor = generalRouteConfig!["color"]!["oppositeColor"] as? String
+                route.color = generalRouteConfig!["color"]!["color"] as? String
+                route.oppositeColor = generalRouteConfig!["color"]!["oppositeColor"] as? String
             
                 for directionInfo in routeConfig["directions"]!
                 {
                     let directionFetchCallback = fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", directionInfo.key), moc: backgroundMOC)
                     let direction = directionFetchCallback.object as! Direction
                     
-                    direction.directionTag = directionInfo.key
-                    direction.directionName = directionInfo.value["name"] as? String
-                    direction.directionTitle = directionInfo.value["title"] as? String
+                    direction.tag = directionInfo.key
+                    direction.name = directionInfo.value["name"] as? String
+                    direction.title = directionInfo.value["title"] as? String
                     
                     for directionStopTag in directionInfo.value["stops"] as! Array<String>
                     {
@@ -86,12 +86,12 @@ class RouteDataManager
                         
                         let stopFetchCallback = fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", directionStopTag), moc: backgroundMOC)
                         let stop = stopFetchCallback.object as! Stop
-                        stop.stopTag = directionStopTag
-                        stop.stopLatitude = Double(stopConfig!["lat"] as! String)!
-                        stop.stopLongitude = Double(stopConfig!["lon"] as! String)!
-                        stop.stopID = stopConfig!["stopId"] as? String
-                        stop.stopTitle = stopConfig!["title"] as? String
-                        stop.stopShortTitle = stopConfig!["shortTitle"] as? String
+                        stop.tag = directionStopTag
+                        stop.latitude = Double(stopConfig!["lat"] as! String)!
+                        stop.longitude = Double(stopConfig!["lon"] as! String)!
+                        stop.id = stopConfig!["stopId"] as? String
+                        stop.title = stopConfig!["title"] as? String
+                        stop.shortTitle = stopConfig!["shortTitle"] as? String
                         
                         direction.addToStops(stop)
                     }
@@ -346,7 +346,7 @@ class RouteDataManager
     
     static func fetchPredictionTimesForStop(returnUUID currentReturnUUID: String, stop: Stop?, direction: Direction?)
     {
-        let directionStopID = (stop?.stopTag ?? "") + "-" + (direction?.directionTag ?? "")
+        let directionStopID = (stop?.tag ?? "") + "-" + (direction?.tag ?? "")
         
         print("↓ - Fetching " + directionStopID + " Prediction Times")
         
@@ -362,8 +362,8 @@ class RouteDataManager
             DispatchQueue.global(qos: .background).async {
                 if let stop = stop, let direction = direction, let route = direction.route
                 {
-                    getJSONFromSource("predictions", ["a":agencyTag,"s":stop.stopTag!,"r":route.routeTag!]) { (json) in
-                        let directionStopID = (stop.stopTag ?? "") + "-" + (direction.directionTag ?? "")
+                    getJSONFromSource("predictions", ["a":agencyTag,"s":stop.tag!,"r":route.tag!]) { (json) in
+                        let directionStopID = (stop.tag ?? "") + "-" + (direction.tag ?? "")
                         
                         if let json = json
                         {
@@ -379,7 +379,7 @@ class RouteDataManager
                             {
                                 for directionDictionaryTmp in directionArray
                                 {
-                                    if directionDictionaryTmp["title"] as? String == direction.directionTitle
+                                    if directionDictionaryTmp["title"] as? String == direction.title
                                     {
                                         directionDictionary = directionDictionaryTmp
                                         break
@@ -428,7 +428,7 @@ class RouteDataManager
         
         for stop in stops
         {
-            let stopLocation = CLLocation(latitude: stop.stopLatitude, longitude: stop.stopLongitude)
+            let stopLocation = CLLocation(latitude: stop.latitude, longitude: stop.longitude)
             distanceDictionary[stop] = locationToTest.distance(from: stopLocation)
         }
         
@@ -441,11 +441,11 @@ class RouteDataManager
     
     static func fetchVehicleLocations(returnUUID: String, vehicleIDs: [String], direction: Direction?)
     {
-        print("↓ - Fetching " + (direction?.directionTag ?? "") + " Locations")
+        print("↓ - Fetching " + (direction?.tag ?? "") + " Locations")
         DispatchQueue.global(qos: .background).async {
             if let direction = direction, let route = direction.route
             {
-                getJSONFromSource("vehicleLocations", ["a":agencyTag,"r":route.routeTag!,"t":lastVehicleTime ?? "0"]) { (json) in
+                getJSONFromSource("vehicleLocations", ["a":agencyTag,"r":route.tag!,"t":lastVehicleTime ?? "0"]) { (json) in
                     guard let json = json else { return }
                     
                     let vehicles = json["vehicle"] as? Array<Dictionary<String,String>> ?? []

@@ -167,12 +167,12 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         case .none:
             title = nil
         case .direction:
-            title = (routeInfoToChange[row] as? Direction)?.directionTitle
+            title = (routeInfoToChange[row] as? Direction)?.title
         case .stop:
-            title = (routeInfoToChange[row] as? Stop)?.stopTitle
+            title = (routeInfoToChange[row] as? Stop)?.title
         case .otherDirections:
-            let routeTitle = (routeInfoToChange[row] as? Direction)?.route?.routeTitle ?? ""
-            let directionName = (routeInfoToChange[row] as? Direction)?.directionName ?? ""
+            let routeTitle = (routeInfoToChange[row] as? Direction)?.route?.title ?? ""
+            let directionName = (routeInfoToChange[row] as? Direction)?.name ?? ""
             
             title = routeTitle + " - " + directionName
         case .vehicles:
@@ -246,7 +246,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 addNotificationButton.isHidden = true
                 addNotificationButton.isEnabled = false
                 
-                rowToSelect = (routeInfoToChange as! Array<Direction>).firstIndex(of: (routeInfoToChange as! Array<Direction>).filter({$0.directionTag == MapState.selectedDirectionTag}).first ?? (routeInfoToChange as! Array<Direction>)[0]) ?? 0
+                rowToSelect = (routeInfoToChange as! Array<Direction>).firstIndex(of: (routeInfoToChange as! Array<Direction>).filter({$0.tag == MapState.selectedDirectionTag}).first ?? (routeInfoToChange as! Array<Direction>)[0]) ?? 0
             case .stop:
                 self.view.superview!.isHidden = false
                 
@@ -265,7 +265,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 addNotificationButton.isHidden = false
                 addNotificationButton.isEnabled = true
                 
-                rowToSelect = (routeInfoToChange as! Array<Stop>).firstIndex(of: (routeInfoToChange as! Array<Stop>).filter({$0.stopTag == MapState.selectedStopTag}).first ?? (routeInfoToChange as! Array<Stop>)[0]) ?? 0
+                rowToSelect = (routeInfoToChange as! Array<Stop>).firstIndex(of: (routeInfoToChange as! Array<Stop>).filter({$0.tag == MapState.selectedStopTag}).first ?? (routeInfoToChange as! Array<Stop>)[0]) ?? 0
             case .otherDirections:
                 self.view.superview!.isHidden = false
                 
@@ -281,7 +281,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 addNotificationButton.isHidden = true
                 addNotificationButton.isEnabled = false
                 
-                rowToSelect = (routeInfoToChange as! Array<Direction>).firstIndex(of: (routeInfoToChange as! Array<Direction>).filter({$0.directionTag == MapState.selectedDirectionTag}).first ?? (routeInfoToChange as! Array<Direction>)[0]) ?? 0
+                rowToSelect = (routeInfoToChange as! Array<Direction>).firstIndex(of: (routeInfoToChange as! Array<Direction>).filter({$0.tag == MapState.selectedDirectionTag}).first ?? (routeInfoToChange as! Array<Direction>)[0]) ?? 0
             case .vehicles:
                 self.view.superview!.isHidden = false
                 
@@ -369,12 +369,12 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 var directionArray = route!.directions!.array as! [Direction]
                 directionArray.remove(at: directionArray.firstIndex(of: (MapState.routeInfoObject as! Direction))!)
                 MapState.routeInfoObject = directionArray[0]
-                MapState.selectedDirectionTag = directionArray[0].directionTag
+                MapState.selectedDirectionTag = directionArray[0].tag
                 
                 if let selectedStop = MapState.getCurrentStop(), let stops = directionArray[0].stops?.array as? [Stop]
                 {
-                    let sortedStops = RouteDataManager.sortStopsByDistanceFromLocation(stops: stops, locationToTest: CLLocation(latitude: selectedStop.stopLatitude, longitude: selectedStop.stopLongitude))
-                    MapState.selectedStopTag = sortedStops[0].stopTag
+                    let sortedStops = RouteDataManager.sortStopsByDistanceFromLocation(stops: stops, locationToTest: CLLocation(latitude: selectedStop.latitude, longitude: selectedStop.longitude))
+                    MapState.selectedStopTag = sortedStops[0].tag
                 }
                 
                 NotificationCenter.default.post(name: NSNotification.Name("ReloadAnnotations"), object: nil)
@@ -409,19 +409,19 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             case .direction:
                 if let direction = routeInfoToChange[row] as? Direction
                 {
-                    MapState.selectedDirectionTag = direction.directionTag
+                    MapState.selectedDirectionTag = direction.tag
                 }
             case .stop:
                 if let stop = routeInfoToChange[row] as? Stop
                 {
-                    MapState.selectedStopTag = stop.stopTag
+                    MapState.selectedStopTag = stop.tag
                     
                     updateRecentStops()
                 }
             case .otherDirections:
                 if let direction = routeInfoToChange[row] as? Direction
                 {
-                    MapState.selectedDirectionTag = direction.directionTag
+                    MapState.selectedDirectionTag = direction.tag
                 }
             case .vehicles:
                 if row == 0
@@ -445,7 +445,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             {
                 let currentRecentStop = currentRecentStopArray[0]
                 
-                if currentRecentStop.directionTag != nil && RouteDataManager.fetchDirection(directionTag: currentRecentStop.directionTag!)?.route?.routeTag == RouteDataManager.fetchDirection(directionTag: mapStateDirectionTag)?.route?.routeTag
+                if currentRecentStop.directionTag != nil && RouteDataManager.fetchDirection(directionTag: currentRecentStop.directionTag!)?.route?.tag == RouteDataManager.fetchDirection(directionTag: mapStateDirectionTag)?.route?.tag
                 {
                     if self.checkForDuplicateRecentStop(backgroundMOC: backgroundMOC, uuidToNotMatch: currentRecentStop.uuid!)
                     {
@@ -529,7 +529,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         {
             if MapState.routeInfoShowing == .stop, let stops = routeInfoToChange as? Array<Stop>
             {
-                self.routeInfoPicker.selectRow(stops.firstIndex(of: stops.first(where: {$0.stopTag == MapState.selectedStopTag})!) ?? 0, inComponent: 0, animated: true)
+                self.routeInfoPicker.selectRow(stops.firstIndex(of: stops.first(where: {$0.tag == MapState.selectedStopTag})!) ?? 0, inComponent: 0, animated: true)
                 
                 locationFilterEnabled = false
                 for filterButton in filterButtons
@@ -701,7 +701,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         {
             if let selectedStop = MapState.getCurrentStop(), let selectedDirection = MapState.getCurrentDirection()
             {
-                let favoriteStopCallback = RouteDataManager.fetchFavoriteStops(directionTag: selectedDirection.directionTag!, stopTag: selectedStop.stopTag)
+                let favoriteStopCallback = RouteDataManager.fetchFavoriteStops(directionTag: selectedDirection.tag!, stopTag: selectedStop.tag)
                 if favoriteStopCallback.count > 0
                 {
                     CoreDataStack.persistentContainer.viewContext.delete(favoriteStopCallback[0])
@@ -717,8 +717,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 else
                 {
                     let newFavoriteStop = FavoriteStop(context: CoreDataStack.persistentContainer.viewContext)
-                    newFavoriteStop.directionTag = selectedDirection.directionTag
-                    newFavoriteStop.stopTag = selectedStop.stopTag
+                    newFavoriteStop.directionTag = selectedDirection.tag
+                    newFavoriteStop.stopTag = selectedStop.tag
                     newFavoriteStop.uuid = UUID().uuidString
                     
                     if #available(iOS 13.0, *) {}
@@ -751,7 +751,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         if let selectedDirection = MapState.getCurrentDirection()
         {
             var favoriteStops = Array<Stop>()
-            let favoriteStopCallback = RouteDataManager.fetchFavoriteStops(directionTag: selectedDirection.directionTag!)
+            let favoriteStopCallback = RouteDataManager.fetchFavoriteStops(directionTag: selectedDirection.tag!)
             for favoriteStop in favoriteStopCallback
             {
                 let stop = RouteDataManager.fetchStop(stopTag: favoriteStop.stopTag!)!
@@ -761,10 +761,10 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             if let directionStopArray = selectedDirection.stops?.array as? [Stop]
             {
                 let directionStopTagArray = directionStopArray.map({ (stop) -> String in
-                    return stop.stopTag!
+                    return stop.tag!
                 })
                 favoriteStops.sort { (stop1, stop2) -> Bool in
-                    return (directionStopTagArray.firstIndex(of: stop1.stopTag!) ?? 0) < (directionStopTagArray.firstIndex(of: stop2.stopTag!) ?? 0)
+                    return (directionStopTagArray.firstIndex(of: stop1.tag!) ?? 0) < (directionStopTagArray.firstIndex(of: stop2.tag!) ?? 0)
                 }
             }
             
@@ -864,7 +864,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         {
             if let stop = MapState.getCurrentStop(), let direction = MapState.getCurrentDirection()
             {
-                var stopIsFavorite = RouteDataManager.favoriteStopExists(stopTag: stop.stopTag!, directionTag: direction.directionTag!)
+                var stopIsFavorite = RouteDataManager.favoriteStopExists(stopTag: stop.tag!, directionTag: direction.tag!)
                 if inverse
                 {
                     stopIsFavorite = !stopIsFavorite

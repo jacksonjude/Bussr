@@ -66,13 +66,13 @@ class NotificationTableViewController: UIViewController, UITableViewDelegate, UI
     {
         if let direction = RouteDataManager.fetchDirection(directionTag: notificationObjects?[indexPath.row].directionTag ?? "")
         {
-            (cell.viewWithTag(600) as! UILabel).text = direction.route?.routeTag
-            (cell.viewWithTag(601) as! UILabel).text = direction.directionName
+            (cell.viewWithTag(600) as! UILabel).text = direction.route?.tag
+            (cell.viewWithTag(601) as! UILabel).text = direction.name
             
             if let route = direction.route
             {
-                let routeColor = UIColor(hexString: route.routeColor ?? "000000")
-                let routeOppositeColor = UIColor(hexString: route.routeOppositeColor ?? "000000")
+                let routeColor = UIColor(hexString: route.color ?? "000000")
+                let routeOppositeColor = UIColor(hexString: route.oppositeColor ?? "000000")
                 
                 cell.backgroundColor = routeColor
                 
@@ -85,7 +85,7 @@ class NotificationTableViewController: UIViewController, UITableViewDelegate, UI
         
         if let stop = RouteDataManager.fetchStop(stopTag: notificationObjects?[indexPath.row].stopTag ?? "")
         {
-            (cell.viewWithTag(602) as! UILabel).text = stop.stopTitle
+            (cell.viewWithTag(602) as! UILabel).text = stop.title
         }
         
         let notificationHourFormatted =  String(((notificationObjects?[indexPath.row].hour ?? 0) > 12) ? (notificationObjects?[indexPath.row].hour ?? 0) - 12 : notificationObjects?[indexPath.row].hour ?? 0)

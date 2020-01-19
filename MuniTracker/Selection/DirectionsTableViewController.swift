@@ -34,7 +34,7 @@ class DirectionsTableViewController: UIViewController, UITableViewDelegate, UITa
         
         if let stop = RouteDataManager.fetchStop(stopTag: MapState.selectedStopTag!)
         {
-            mainNavigationItem.title = stop.stopTitle
+            mainNavigationItem.title = stop.title
         }
     }
     
@@ -72,7 +72,7 @@ class DirectionsTableViewController: UIViewController, UITableViewDelegate, UITa
         if var directionObjects = self.directionObjects
         {
             directionObjects.sort(by: {
-                return $0.route!.routeTag!.compare($1.route!.routeTag!, options: .numeric) == .orderedAscending
+                return $0.route!.tag!.compare($1.route!.tag!, options: .numeric) == .orderedAscending
             })
             
             self.directionObjects = directionObjects
@@ -128,7 +128,7 @@ class DirectionsTableViewController: UIViewController, UITableViewDelegate, UITa
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let direction = directionObjects![indexPath.row]
         
-        MapState.selectedDirectionTag = direction.directionTag
+        MapState.selectedDirectionTag = direction.tag
         MapState.routeInfoShowing = .stop
         MapState.routeInfoObject = MapState.getCurrentDirection()
         

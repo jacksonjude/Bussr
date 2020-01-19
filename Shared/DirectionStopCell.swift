@@ -65,7 +65,7 @@ class DirectionStopCell: UITableViewCell
     {
         var textColor = UIColor.black
         
-        if let routeColor = directionObject?.route?.routeColor, let routeOppositeColor = directionObject?.route?.routeOppositeColor
+        if let routeColor = directionObject?.route?.color, let routeOppositeColor = directionObject?.route?.oppositeColor
         {
             self.backgroundColor = UIColor(hexString: routeColor)
             textColor = UIColor(hexString: routeOppositeColor)
@@ -77,10 +77,10 @@ class DirectionStopCell: UITableViewCell
         (self.viewWithTag(603) as? UILabel)?.textColor = textColor
         (self.viewWithTag(604) as? UILabel)?.textColor = textColor
         
-        (self.viewWithTag(600) as? UILabel)?.text = directionObject?.route?.routeTag
-        (self.viewWithTag(601) as? UILabel)?.text = directionObject?.directionTitle
-        (self.viewWithTag(602) as? UILabel)?.text = stopObject?.stopTitle
-        (self.viewWithTag(604) as? UILabel)?.text = directionObject?.directionName
+        (self.viewWithTag(600) as? UILabel)?.text = directionObject?.route?.tag
+        (self.viewWithTag(601) as? UILabel)?.text = directionObject?.title
+        (self.viewWithTag(602) as? UILabel)?.text = stopObject?.title
+        (self.viewWithTag(604) as? UILabel)?.text = directionObject?.name
     }
     
     func refreshTimes()

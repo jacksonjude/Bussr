@@ -159,7 +159,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             favoriteStops.sort(by: {
                 if let directionTag1 = $0.directionTag, let directionTag2 = $1.directionTag, let direction1 = RouteDataManager.fetchObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", directionTag1), moc: CoreDataStack.persistentContainer.viewContext) as? Direction, let direction2 = RouteDataManager.fetchObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", directionTag2), moc: CoreDataStack.persistentContainer.viewContext) as? Direction
                 {
-                    return direction1.route!.routeTag!.compare(direction2.route!.routeTag!, options: .numeric) == .orderedAscending
+                    return direction1.route!.tag!.compare(direction2.route!.tag!, options: .numeric) == .orderedAscending
                 }
                 else
                 {
@@ -198,7 +198,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             else
             {
                 stopSet.sort {
-                    return $0.stopTitle!.compare($1.stopTitle!, options: .numeric) == .orderedAscending
+                    return $0.title!.compare($1.title!, options: .numeric) == .orderedAscending
                 }
             }
             
@@ -227,7 +227,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         if var routeSet = favoriteRouteSet
         {
             routeSet.sort {
-                return $0.routeTag!.compare($1.routeTag!, options: .numeric) == .orderedAscending
+                return $0.tag!.compare($1.tag!, options: .numeric) == .orderedAscending
             }
             
             favoriteRouteSet = routeSet
@@ -283,7 +283,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             favoriteStopGroups.sort {
                 if $0 is FavoriteStopGroup && $1 is FavoriteStopGroup
                 {
-                    return ($0 as! FavoriteStopGroup).openCount > ($1 as! FavoriteStopGroup).openCount
+                    return ($0 as! FavoriteStopGroup).groupName ?? "" > ($1 as! FavoriteStopGroup).groupName ?? ""
                 }
                 else if $0 is FavoriteStopGroup && !($1 is FavoriteStopGroup)
                 {
@@ -295,7 +295,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
                 }
                 else if $0 is FavoriteStop && $1 is FavoriteStop, let directionTag1 = ($0 as! FavoriteStop).directionTag, let directionTag2 = ($1 as! FavoriteStop).directionTag, let direction1 = RouteDataManager.fetchObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", directionTag1), moc: CoreDataStack.persistentContainer.viewContext) as? Direction, let direction2 = RouteDataManager.fetchObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", directionTag2), moc: CoreDataStack.persistentContainer.viewContext) as? Direction
                 {
-                    return direction1.route!.routeTag!.compare(direction2.route!.routeTag!, options: .numeric) == .orderedAscending
+                    return direction1.route!.tag!.compare(direction2.route!.tag!, options: .numeric) == .orderedAscending
                 }
                 
                 return false
@@ -389,7 +389,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             let favoriteStopCell = tableView.dequeueReusableCell(withIdentifier: "FavoriteStopCell")!
             let stopObject = favoriteStopSet![indexPath.row]
             
-            (favoriteStopCell.viewWithTag(600) as! UILabel).text = stopObject.stopTitle
+            (favoriteStopCell.viewWithTag(600) as! UILabel).text = stopObject.title
             
             //(favoriteStopCell.viewWithTag(601) as! UILabel).text = (stopObject.direction?.allObjects.first as? Direction)?.directionName
             var stopCellRoutesText = ""
@@ -397,13 +397,13 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             for direction in stopObject.direction!.allObjects
             {
                 let direction = direction as! Direction
-                stopCellRoutesText += direction.route!.routeTag! + ", "
+                stopCellRoutesText += direction.route!.tag! + ", "
                 
-                if !directionNames.keys.contains(direction.directionName!)
+                if !directionNames.keys.contains(direction.name!)
                 {
-                    directionNames[direction.directionName!] = 0
+                    directionNames[direction.name!] = 0
                 }
-                directionNames[direction.directionName!] = directionNames[direction.directionName!]! + 1
+                directionNames[direction.name!] = directionNames[direction.name!]! + 1
             }
             let sortedDirectionNames = directionNames.sorted(by: { (keyvalue1, keyvalue2) -> Bool in
                 return keyvalue1.value > keyvalue2.value
@@ -431,13 +431,13 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             let favoriteRouteCell = tableView.dequeueReusableCell(withIdentifier: "FavoriteRouteCell")!
             let routeObject = favoriteRouteSet![indexPath.row]
             
-            if let routeColor = routeObject.routeColor, let routeOppositeColor = routeObject.routeOppositeColor
+            if let routeColor = routeObject.color, let routeOppositeColor = routeObject.oppositeColor
             {
                 favoriteRouteCell.backgroundColor = UIColor(hexString: routeColor)
                 textColor = UIColor(hexString: routeOppositeColor)
             }
             
-            (favoriteRouteCell.viewWithTag(600) as! UILabel).text = routeObject.routeTag
+            (favoriteRouteCell.viewWithTag(600) as! UILabel).text = routeObject.tag
             let favoritedStopsFromRoute = getFavoritedStopsFromRoute(route: routeObject)?.stops
             if favoritedStopsFromRoute?.count == 1
             {
@@ -542,7 +542,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         case .stop:
             let stopObject = favoriteStopSet![indexPath.row]
             
-            MapState.selectedStopTag = stopObject.stopTag
+            MapState.selectedStopTag = stopObject.tag
             MapState.routeInfoObject = stopObject.direction?.allObjects
             
             self.performSegue(withIdentifier: "showDirectionStopTableView", sender: self)
@@ -553,9 +553,9 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             {
                 if favoriteRouteStops.count > 0
                 {
-                    MapState.routeInfoObject = favoriteRouteStops[0].direction?.allObjects.filter({ ($0 as? Direction)?.route?.routeTag == routeObject.routeTag })[0]
+                    MapState.routeInfoObject = favoriteRouteStops[0].direction?.allObjects.filter({ ($0 as? Direction)?.route?.tag == routeObject.tag })[0]
                     MapState.routeInfoShowing = .stop
-                    MapState.selectedDirectionTag = (MapState.routeInfoObject as? Direction)?.directionTag
+                    MapState.selectedDirectionTag = (MapState.routeInfoObject as? Direction)?.tag
                     self.performSegue(withIdentifier: "UnwindFromFavoritesViewWithSelectedRoute", sender: self)
                 }
             }
@@ -583,8 +583,6 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
     
     func openFavoriteGroup(groupObject: FavoriteStopGroup)
     {
-        groupObject.openCount += 1
-        CoreDataStack.saveContext()
         FavoriteState.selectedGroupUUID = groupObject.uuid
         self.performSegue(withIdentifier: "openFavoriteStopGroup", sender: self)
     }

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19C57" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Agency" representedClassName="Agency" syncable="YES" codeGenerationType="class">
-        <attribute name="agencyName" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="routes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Route" inverseName="agency" inverseEntity="Route"/>
     </entity>
     <entity name="Direction" representedClassName="Direction" syncable="YES" codeGenerationType="class">
-        <attribute name="directionName" optional="YES" attributeType="String"/>
-        <attribute name="directionTag" optional="YES" attributeType="String"/>
-        <attribute name="directionTitle" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="tag" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="route" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Route" inverseName="directions" inverseEntity="Route"/>
         <relationship name="stops" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Stop" inverseName="direction" inverseEntity="Stop"/>
-        <fetchIndex name="byDirectionTagIndex">
-            <fetchIndexElement property="directionTag" type="Binary" order="ascending"/>
+        <fetchIndex name="byTagIndex">
+            <fetchIndexElement property="tag" type="Binary" order="ascending"/>
         </fetchIndex>
     </entity>
     <entity name="FavoriteStop" representedClassName="FavoriteStop" syncable="YES" codeGenerationType="class">
@@ -22,7 +22,6 @@
     <entity name="FavoriteStopGroup" representedClassName="FavoriteStopGroup" syncable="YES" codeGenerationType="class">
         <attribute name="favoriteStopUUIDs" optional="YES" attributeType="Binary"/>
         <attribute name="groupName" optional="YES" attributeType="String"/>
-        <attribute name="openCount" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="uuid" optional="YES" attributeType="String"/>
         <relationship name="childGroups" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FavoriteStopGroup" inverseName="parentGroup" inverseEntity="FavoriteStopGroup"/>
         <relationship name="parentGroup" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FavoriteStopGroup" inverseName="childGroups" inverseEntity="FavoriteStopGroup"/>
@@ -34,24 +33,25 @@
         <attribute name="uuid" optional="YES" attributeType="String"/>
     </entity>
     <entity name="Route" representedClassName="Route" syncable="YES" codeGenerationType="class">
-        <attribute name="routeColor" optional="YES" attributeType="String"/>
-        <attribute name="routeOppositeColor" optional="YES" attributeType="String"/>
-        <attribute name="routeTag" optional="YES" attributeType="String"/>
-        <attribute name="routeTitle" optional="YES" attributeType="String"/>
+        <attribute name="color" optional="YES" attributeType="String"/>
+        <attribute name="oppositeColor" optional="YES" attributeType="String"/>
+        <attribute name="serverHash" optional="YES" attributeType="String"/>
+        <attribute name="tag" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="agency" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Agency" inverseName="routes" inverseEntity="Agency"/>
         <relationship name="directions" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Direction" inverseName="route" inverseEntity="Direction"/>
     </entity>
     <entity name="Stop" representedClassName="Stop" syncable="YES" codeGenerationType="class">
-        <attribute name="stopID" optional="YES" attributeType="String"/>
-        <attribute name="stopLatitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="stopLongitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="stopShortTitle" optional="YES" attributeType="String"/>
-        <attribute name="stopTag" optional="YES" attributeType="String"/>
-        <attribute name="stopTitle" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="shortTitle" optional="YES" attributeType="String"/>
+        <attribute name="tag" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="direction" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Direction" inverseName="stops" inverseEntity="Direction"/>
         <fetchIndex name="byLocation">
-            <fetchIndexElement property="stopLatitude" type="Binary" order="ascending"/>
-            <fetchIndexElement property="stopLongitude" type="Binary" order="ascending"/>
+            <fetchIndexElement property="latitude" type="Binary" order="ascending"/>
+            <fetchIndexElement property="longitude" type="Binary" order="ascending"/>
         </fetchIndex>
     </entity>
     <entity name="StopNotification" representedClassName="StopNotification" syncable="YES" codeGenerationType="class">
@@ -75,13 +75,13 @@
         <memberEntity name="Stop"/>
     </configuration>
     <elements>
-        <element name="Agency" positionX="-326.08203125" positionY="-43.22265625" width="128" height="75"/>
-        <element name="Direction" positionX="-23.19140625" positionY="-61.2109375" width="128" height="120"/>
+        <element name="Agency" positionX="-326.08203125" positionY="-43.22265625" width="128" height="73"/>
+        <element name="Direction" positionX="-23.19140625" positionY="-61.2109375" width="128" height="118"/>
         <element name="FavoriteStop" positionX="-181.19140625" positionY="129.7265625" width="128" height="90"/>
-        <element name="FavoriteStopGroup" positionX="-33.3359375" positionY="128.07421875" width="128" height="135"/>
+        <element name="FavoriteStopGroup" positionX="-33.3359375" positionY="128.07421875" width="128" height="118"/>
         <element name="RecentStop" positionX="-323.39453125" positionY="127.953125" width="128" height="105"/>
-        <element name="Route" positionX="-177.62890625" positionY="-55.05078125" width="128" height="133"/>
-        <element name="Stop" positionX="139.30859375" positionY="-59.54296875" width="128" height="150"/>
+        <element name="Route" positionX="-177.62890625" positionY="-55.05078125" width="128" height="148"/>
+        <element name="Stop" positionX="139.30859375" positionY="-59.54296875" width="128" height="148"/>
         <element name="StopNotification" positionX="133.44921875" positionY="128.21484375" width="128" height="135"/>
     </elements>
 </model>

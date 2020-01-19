@@ -44,8 +44,8 @@ class FavoritesExtensionViewController: MuniTrackerExtensionViewController, CLLo
             favoriteStops.sort { (favoriteStop1, favoriteStop2) -> Bool in
                 if let stop1 = RouteDataManager.fetchStop(stopTag: favoriteStop1.stopTag!), let stop2 = RouteDataManager.fetchStop(stopTag: favoriteStop2.stopTag!)
                 {
-                    let stop1Location = CLLocation(latitude: stop1.stopLatitude, longitude: stop1.stopLongitude)
-                    let stop2Location = CLLocation(latitude: stop2.stopLatitude, longitude: stop2.stopLongitude)
+                    let stop1Location = CLLocation(latitude: stop1.latitude, longitude: stop1.longitude)
+                    let stop2Location = CLLocation(latitude: stop2.latitude, longitude: stop2.longitude)
                     return stop1Location.distance(from: userLocation) < stop2Location.distance(from: userLocation)
                 }
                 

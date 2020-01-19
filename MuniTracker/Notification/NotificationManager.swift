@@ -57,8 +57,8 @@ class NotificationManager
     static func updateNotification(stopNotification: StopNotification, moc: NSManagedObjectContext, callback: ((_ error: Error?) -> Void)? = nil)
     {
         guard let deviceToken = UserDefaults.standard.object(forKey: "deviceToken") as? String else { return }
-        guard let routeTag = RouteDataManager.fetchDirection(directionTag: stopNotification.directionTag!, moc: moc)?.route?.routeTag else { return }
-        guard let stopTitle = RouteDataManager.fetchStop(stopTag: stopNotification.stopTag!, moc: moc)?.stopTitle?.addingPercentEncoding(withAllowedCharacters: .alphanumerics) else { return }
+        guard let routeTag = RouteDataManager.fetchDirection(directionTag: stopNotification.directionTag!, moc: moc)?.route?.tag else { return }
+        guard let stopTitle = RouteDataManager.fetchStop(stopTag: stopNotification.stopTag!, moc: moc)?.title?.addingPercentEncoding(withAllowedCharacters: .alphanumerics) else { return }
         
         let notificationDateString = String(stopNotification.hour) + ":" + ((stopNotification.minute < 10) ? "0" : "") +  String(stopNotification.minute)
         let UTCNotificationDateString = convertToUTCFromLocalDate(dateStr: notificationDateString)

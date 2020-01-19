@@ -369,8 +369,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             if let direction = MapState.getCurrentDirection(), let location = self.mainMapView?.userLocation.location
             {
                 let sortedStops = RouteDataManager.sortStopsByDistanceFromLocation(stops: direction.stops!.array as! [Stop], locationToTest: location)
-                MapState.selectedStopTag = sortedStops[0].stopTag!
-                updateSelectedStopAnnotation(stopTag: sortedStops[0].stopTag!)
+                MapState.selectedStopTag = sortedStops[0].tag!
+                updateSelectedStopAnnotation(stopTag: sortedStops[0].tag!)
                 
                 bringSelectedStopHeaderToFront()
             }
@@ -379,13 +379,13 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             showHidePickerButton.isEnabled = true
             
-            mainNavigationItem.title = MapState.getCurrentDirection()?.route?.routeTitle
+            mainNavigationItem.title = MapState.getCurrentDirection()?.route?.title
         case .stop:
             let changingRouteInfoShowing = notification?.userInfo?["ChangingRouteInfoShowing"] as? Bool ?? true
             
             if let stop = MapState.getCurrentStop()
             {
-                let stopLocation = CLLocation(latitude: stop.stopLatitude, longitude: stop.stopLongitude)
+                let stopLocation = CLLocation(latitude: stop.latitude, longitude: stop.longitude)
                 
                 centerMapOnLocation(location: stopLocation, range: 1000, willChangeRange: changingRouteInfoShowing)
                 
@@ -411,7 +411,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             showHidePickerButton.isEnabled = true
             
-            mainNavigationItem.title = MapState.getCurrentDirection()?.route?.routeTitle
+            mainNavigationItem.title = MapState.getCurrentDirection()?.route?.title
         case .otherDirections:
             reloadAllAnnotations()
             
@@ -419,11 +419,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             
             hidePredictionNavigationBar()
             
-            mainNavigationItem.title = MapState.getCurrentDirection()?.route?.routeTitle
+            mainNavigationItem.title = MapState.getCurrentDirection()?.route?.title
         case .vehicles:
             reloadPredictionTimesLabel()
             
-            mainNavigationItem.title = MapState.getCurrentDirection()?.route?.routeTitle
+            mainNavigationItem.title = MapState.getCurrentDirection()?.route?.title
             
             let darkBusIcon = UIImage(named: "BusAnnotationDark")
             for busAnnotation in busAnnotations
@@ -454,7 +454,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             for stop in direction.stops!.array
             {
                 let stop = stop as! Stop
-                addAnnotation(coordinate: CLLocationCoordinate2D(latitude: stop.stopLatitude, longitude: stop.stopLongitude), stopTag: stop.stopTag!)
+                addAnnotation(coordinate: CLLocationCoordinate2D(latitude: stop.latitude, longitude: stop.longitude), stopTag: stop.tag!)
             }
             
             reloadPolyline()
@@ -514,7 +514,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             {
                 if let stop = stop as? Stop
                 {
-                    coordinates.append(CLLocationCoordinate2D(latitude: stop.stopLatitude, longitude: stop.stopLongitude))
+                    coordinates.append(CLLocationCoordinate2D(latitude: stop.latitude, longitude: stop.longitude))
                 }
             }
             
@@ -541,8 +541,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             {
                 let nextStopObject = stopArray[stopIndex+1]
                 
-                let nextStopCoordinate = CLLocationCoordinate2D(latitude: nextStopObject.stopLatitude, longitude: nextStopObject.stopLongitude)
-                let currentStopCoordinate = CLLocationCoordinate2D(latitude: stop.stopLatitude, longitude: stop.stopLongitude)
+                let nextStopCoordinate = CLLocationCoordinate2D(latitude: nextStopObject.latitude, longitude: nextStopObject.longitude)
+                let currentStopCoordinate = CLLocationCoordinate2D(latitude: stop.latitude, longitude: stop.longitude)
                 
                 return CGFloat(currentStopCoordinate.heading(to: nextStopCoordinate))
             }
@@ -556,7 +556,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         polylineRenderer.strokeColor = UIColor(red: 0.972, green: 0.611, blue: 0.266, alpha: 1)
         if let route = MapState.getCurrentDirection()?.route
         {
-            polylineRenderer.strokeColor = UIColor(hexString: route.routeColor!)
+            polylineRenderer.strokeColor = UIColor(hexString: route.color!)
         }
         polylineRenderer.lineWidth = 5
         return polylineRenderer
@@ -578,11 +578,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             if let route = MapState.getCurrentDirection()?.route
             {
                 var brightness: CGFloat = 0.0
-                UIColor(hexString: route.routeColor!).getHue(nil, saturation: nil, brightness: &brightness, alpha: nil)
+                UIColor(hexString: route.color!).getHue(nil, saturation: nil, brightness: &brightness, alpha: nil)
                 
                 if brightness > 0.6
                 {
-                    annotationView.image = annotationView.image?.colorized(color: UIColor(hexString: route.routeColor!))
+                    annotationView.image = annotationView.image?.colorized(color: UIColor(hexString: route.color!))
                 }
             }
             
@@ -650,11 +650,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             if let route = MapState.getCurrentDirection()?.route
             {
                 var brightness: CGFloat = 0.0
-                UIColor(hexString: route.routeColor!).getHue(nil, saturation: nil, brightness: &brightness, alpha: nil)
+                UIColor(hexString: route.color!).getHue(nil, saturation: nil, brightness: &brightness, alpha: nil)
                 
                 if brightness > 0.6
                 {
-                    annotationView.image = annotationView.image?.colorized(color: UIColor(hexString: route.routeColor!))
+                    annotationView.image = annotationView.image?.colorized(color: UIColor(hexString: route.color!))
                     
                     headingValueToRotateBy -= 180
                 }
@@ -727,9 +727,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     {
         if let stop = RouteDataManager.fetchStop(stopTag: stopTag)
         {
-            setAnnotationType(coordinate: CLLocationCoordinate2D(latitude: stop.stopLatitude, longitude: stop.stopLongitude).convertToString(), annotationType: .orange)
+            setAnnotationType(coordinate: CLLocationCoordinate2D(latitude: stop.latitude, longitude: stop.longitude).convertToString(), annotationType: .orange)
             
-            reloadCurrentStopHeader(stopLocation: CLLocation(latitude: stop.stopLatitude, longitude: stop.stopLongitude))
+            reloadCurrentStopHeader(stopLocation: CLLocation(latitude: stop.latitude, longitude: stop.longitude))
             
             bringSelectedStopHeaderToFront()
         }
@@ -784,8 +784,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     {
         if let currentStop = MapState.getCurrentStop()
         {
-            let latitude = currentStop.stopLatitude
-            let longitude = currentStop.stopLongitude
+            let latitude = currentStop.latitude
+            let longitude = currentStop.longitude
             locationToUse = CLLocation(latitude: latitude, longitude: longitude)
             self.performSegue(withIdentifier: "showNearbyStopTableView", sender: self)
         }

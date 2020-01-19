@@ -130,7 +130,7 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
             else
             {
                 stopDirectionObjects.sort(by: {
-                    return $0.stop.stopTitle!.compare($1.stop.stopTitle!) == .orderedAscending
+                    return $0.stop.title!.compare($1.stop.title!) == .orderedAscending
                 })
                 
             }
@@ -175,8 +175,8 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let stopDirectionObject = stopDirectionObjects![indexPath.row]
         
-        MapState.selectedDirectionTag = stopDirectionObject.direction.directionTag
-        MapState.selectedStopTag = stopDirectionObject.stop.stopTag
+        MapState.selectedDirectionTag = stopDirectionObject.direction.tag
+        MapState.selectedStopTag = stopDirectionObject.stop.tag
         MapState.routeInfoShowing = .stop
         MapState.routeInfoObject = MapState.getCurrentDirection()
         

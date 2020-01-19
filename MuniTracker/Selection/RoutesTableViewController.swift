@@ -136,9 +136,9 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
         
         for route in agencyRoutes
         {
-            if route.routeTag != nil
+            if route.tag != nil
             {
-                routeTitleDictionary[route.routeTag!] = route.routeTitle!
+                routeTitleDictionary[route.tag!] = route.title!
             }
         }
     }
