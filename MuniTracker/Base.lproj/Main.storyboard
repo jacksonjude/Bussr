@@ -1304,8 +1304,8 @@
         <image name="SettingsIcon" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="TfM-V3-OSE"/>
-        <segue reference="UJx-fY-8v6"/>
-        <segue reference="IdA-st-vvj"/>
+        <segue reference="coT-D9-Khz"/>
+        <segue reference="FM7-3T-SSq"/>
+        <segue reference="S68-UZ-wHD"/>
     </inferredMetricsTieBreakers>
 </document>

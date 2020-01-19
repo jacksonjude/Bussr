@@ -18,12 +18,13 @@
         <attribute name="directionTag" optional="YES" attributeType="String"/>
         <attribute name="stopTag" optional="YES" attributeType="String"/>
         <attribute name="uuid" optional="YES" attributeType="String"/>
+        <relationship name="favoriteStopGroup" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FavoriteStopGroup" inverseName="favoriteStops" inverseEntity="FavoriteStopGroup"/>
     </entity>
     <entity name="FavoriteStopGroup" representedClassName="FavoriteStopGroup" syncable="YES" codeGenerationType="class">
-        <attribute name="favoriteStopUUIDs" optional="YES" attributeType="Binary"/>
         <attribute name="groupName" optional="YES" attributeType="String"/>
         <attribute name="uuid" optional="YES" attributeType="String"/>
         <relationship name="childGroups" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FavoriteStopGroup" inverseName="parentGroup" inverseEntity="FavoriteStopGroup"/>
+        <relationship name="favoriteStops" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="FavoriteStop" inverseName="favoriteStopGroup" inverseEntity="FavoriteStop"/>
         <relationship name="parentGroup" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FavoriteStopGroup" inverseName="childGroups" inverseEntity="FavoriteStopGroup"/>
     </entity>
     <entity name="RecentStop" representedClassName="RecentStop" syncable="YES" codeGenerationType="class">
@@ -77,7 +78,7 @@
     <elements>
         <element name="Agency" positionX="-326.08203125" positionY="-43.22265625" width="128" height="73"/>
         <element name="Direction" positionX="-23.19140625" positionY="-61.2109375" width="128" height="118"/>
-        <element name="FavoriteStop" positionX="-181.19140625" positionY="129.7265625" width="128" height="90"/>
+        <element name="FavoriteStop" positionX="-181.19140625" positionY="129.7265625" width="128" height="103"/>
         <element name="FavoriteStopGroup" positionX="-33.3359375" positionY="128.07421875" width="128" height="118"/>
         <element name="RecentStop" positionX="-323.39453125" positionY="127.953125" width="128" height="105"/>
         <element name="Route" positionX="-177.62890625" positionY="-55.05078125" width="128" height="148"/>
