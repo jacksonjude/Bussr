@@ -63,7 +63,7 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
                 let longitude = currentLocation.coordinate.longitude
                 let halfMileDegree = 0.007245
                 
-                if let nearbyStops = RouteDataManager.fetchLocalObjects(type: "Stop", predicate: NSPredicate(format: "stopLatitude >= %f AND stopLatitude <= %f AND stopLongitude >= %f AND stopLongitude <= %f", latitude - halfMileDegree, latitude + halfMileDegree, longitude - halfMileDegree, longitude + halfMileDegree), moc: CoreDataStack.persistentContainer.viewContext) as? [Stop]
+                if let nearbyStops = RouteDataManager.fetchLocalObjects(type: "Stop", predicate: NSPredicate(format: "latitude >= %f AND latitude <= %f AND longitude >= %f AND longitude <= %f", latitude - halfMileDegree, latitude + halfMileDegree, longitude - halfMileDegree, longitude + halfMileDegree), moc: CoreDataStack.persistentContainer.viewContext) as? [Stop]
                 {
                     var defaultCut = 20
                     if nearbyStops.count < defaultCut

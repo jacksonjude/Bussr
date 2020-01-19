@@ -52,13 +52,13 @@ class RouteDataManager
         print("Received Routes")
                 
         CoreDataStack.persistentContainer.performBackgroundTask({ (backgroundMOC) in
-            let agencyFetchCallback = fetchOrCreateObject(type: "Agency", predicate: NSPredicate(format: "agencyName == %@", agencyTag), moc: backgroundMOC)
+            let agencyFetchCallback = fetchOrCreateObject(type: "Agency", predicate: NSPredicate(format: "name == %@", agencyTag), moc: backgroundMOC)
             let agency = agencyFetchCallback.object as! Agency
             agency.name = agencyTag
         
             for routeTitle in routeDictionary
             {
-                let routeFetchCallback = fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "routeTag == %@", routeTitle.key), moc: backgroundMOC)
+                let routeFetchCallback = fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "tag == %@", routeTitle.key), moc: backgroundMOC)
                 let route = routeFetchCallback.object as! Route
                 route.tag = routeTitle.key
                 route.title = routeTitle.value
@@ -73,7 +73,7 @@ class RouteDataManager
             
                 for directionInfo in routeConfig["directions"]!
                 {
-                    let directionFetchCallback = fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", directionInfo.key), moc: backgroundMOC)
+                    let directionFetchCallback = fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "tag == %@", directionInfo.key), moc: backgroundMOC)
                     let direction = directionFetchCallback.object as! Direction
                     
                     direction.tag = directionInfo.key
@@ -84,7 +84,7 @@ class RouteDataManager
                     {
                         let stopConfig = routeConfig["stops"]![directionStopTag]
                         
-                        let stopFetchCallback = fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", directionStopTag), moc: backgroundMOC)
+                        let stopFetchCallback = fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "tag == %@", directionStopTag), moc: backgroundMOC)
                         let stop = stopFetchCallback.object as! Stop
                         stop.tag = directionStopTag
                         stop.latitude = Double(stopConfig!["lat"] as! String)!
@@ -309,7 +309,7 @@ class RouteDataManager
             predicate = NSPredicate(format: "directionTag == %@", directionTag)
         }
         
-        if let favoriteStopCallback = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: predicate!, moc: CoreDataStack.persistentContainer.viewContext) //123 sort this by something
+        if let favoriteStopCallback = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: predicate!, moc: CoreDataStack.persistentContainer.viewContext)
         {
             return favoriteStopCallback as! [FavoriteStop]
         }
@@ -330,12 +330,12 @@ class RouteDataManager
     
     static func fetchStop(stopTag: String, moc: NSManagedObjectContext? = nil) -> Stop?
     {
-        return RouteDataManager.fetchObject(type: "Stop", predicate: NSPredicate(format: "stopTag == %@", stopTag), moc: moc ?? CoreDataStack.persistentContainer.viewContext) as? Stop
+        return RouteDataManager.fetchObject(type: "Stop", predicate: NSPredicate(format: "tag == %@", stopTag), moc: moc ?? CoreDataStack.persistentContainer.viewContext) as? Stop
     }
     
     static func fetchDirection(directionTag: String, moc: NSManagedObjectContext? = nil) -> Direction?
     {
-        return RouteDataManager.fetchObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", directionTag), moc: moc ?? CoreDataStack.persistentContainer.viewContext) as? Direction
+        return RouteDataManager.fetchObject(type: "Direction", predicate: NSPredicate(format: "tag == %@", directionTag), moc: moc ?? CoreDataStack.persistentContainer.viewContext) as? Direction
     }
     
     //MARK: - Data Fetch

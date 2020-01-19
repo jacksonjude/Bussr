@@ -29,7 +29,7 @@ class CoreDataStack {
         
         let cloudStoreDescription = NSPersistentStoreDescription()
         cloudStoreDescription.configuration = "Cloud"
-        cloudStoreDescription.shouldInferMappingModelAutomatically = true
+        cloudStoreDescription.shouldInferMappingModelAutomatically = false
         cloudStoreDescription.shouldMigrateStoreAutomatically = true
         cloudStoreDescription.url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.MuniTracker")!.appendingPathComponent("MuniTracker_Cloud.sqlite")
         if #available(iOS 13.0, *) {
@@ -38,7 +38,7 @@ class CoreDataStack {
         
         let localStoreDescription = NSPersistentStoreDescription()
         localStoreDescription.configuration = "Local"
-        localStoreDescription.shouldInferMappingModelAutomatically = true
+        localStoreDescription.shouldInferMappingModelAutomatically = false
         localStoreDescription.shouldMigrateStoreAutomatically = true
         localStoreDescription.url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.MuniTracker")!.appendingPathComponent("MuniTracker.sqlite")
         

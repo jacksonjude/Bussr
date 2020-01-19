@@ -157,7 +157,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         if var favoriteStops = favoriteStopObjects
         {
             favoriteStops.sort(by: {
-                if let directionTag1 = $0.directionTag, let directionTag2 = $1.directionTag, let direction1 = RouteDataManager.fetchObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", directionTag1), moc: CoreDataStack.persistentContainer.viewContext) as? Direction, let direction2 = RouteDataManager.fetchObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", directionTag2), moc: CoreDataStack.persistentContainer.viewContext) as? Direction
+                if let directionTag1 = $0.directionTag, let directionTag2 = $1.directionTag, let direction1 = RouteDataManager.fetchObject(type: "Direction", predicate: NSPredicate(format: "tag == %@", directionTag1), moc: CoreDataStack.persistentContainer.viewContext) as? Direction, let direction2 = RouteDataManager.fetchObject(type: "Direction", predicate: NSPredicate(format: "tag == %@", directionTag2), moc: CoreDataStack.persistentContainer.viewContext) as? Direction
                 {
                     return direction1.route!.tag!.compare(direction2.route!.tag!, options: .numeric) == .orderedAscending
                 }
@@ -293,7 +293,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
                 {
                     return false
                 }
-                else if $0 is FavoriteStop && $1 is FavoriteStop, let directionTag1 = ($0 as! FavoriteStop).directionTag, let directionTag2 = ($1 as! FavoriteStop).directionTag, let direction1 = RouteDataManager.fetchObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", directionTag1), moc: CoreDataStack.persistentContainer.viewContext) as? Direction, let direction2 = RouteDataManager.fetchObject(type: "Direction", predicate: NSPredicate(format: "directionTag == %@", directionTag2), moc: CoreDataStack.persistentContainer.viewContext) as? Direction
+                else if $0 is FavoriteStop && $1 is FavoriteStop, let directionTag1 = ($0 as! FavoriteStop).directionTag, let directionTag2 = ($1 as! FavoriteStop).directionTag, let direction1 = RouteDataManager.fetchObject(type: "Direction", predicate: NSPredicate(format: "tag == %@", directionTag1), moc: CoreDataStack.persistentContainer.viewContext) as? Direction, let direction2 = RouteDataManager.fetchObject(type: "Direction", predicate: NSPredicate(format: "tag == %@", directionTag2), moc: CoreDataStack.persistentContainer.viewContext) as? Direction
                 {
                     return direction1.route!.tag!.compare(direction2.route!.tag!, options: .numeric) == .orderedAscending
                 }

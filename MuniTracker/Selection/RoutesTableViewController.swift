@@ -102,7 +102,7 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
         
         let selectedRouteTag = String(routeFullTitle[0].dropLast())
         
-        selectedRouteObject = RouteDataManager.fetchObject(type: "Route", predicate: NSPredicate(format: "routeTag == %@", selectedRouteTag), moc: CoreDataStack.persistentContainer.viewContext) as? Route
+        selectedRouteObject = RouteDataManager.fetchObject(type: "Route", predicate: NSPredicate(format: "tag == %@", selectedRouteTag), moc: CoreDataStack.persistentContainer.viewContext) as? Route
         
         performSegue(withIdentifier: "SelectedRouteUnwind", sender: self)
     }
@@ -131,7 +131,7 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     func convertRouteObjectsToRouteTitleDictionary()
     {
-        let agency = RouteDataManager.fetchObject(type: "Agency", predicate: NSPredicate(format: "agencyName == %@", agencyTag), moc: CoreDataStack.persistentContainer.viewContext) as! Agency
+        let agency = RouteDataManager.fetchObject(type: "Agency", predicate: NSPredicate(format: "name == %@", agencyTag), moc: CoreDataStack.persistentContainer.viewContext) as! Agency
         let agencyRoutes = (agency.routes?.allObjects) as! [Route]
         
         for route in agencyRoutes
