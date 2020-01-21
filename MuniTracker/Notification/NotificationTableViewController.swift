@@ -56,8 +56,11 @@ class NotificationTableViewController: UIViewController, UITableViewDelegate, UI
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "StopNotificationCell")!
         
-        //cell.textLabel?.text = notificationObjects?[indexPath.row].
         configureCell(cell: cell, indexPath: indexPath)
+        
+        let selectedCellBackground = UIView()
+        selectedCellBackground.backgroundColor = UIColor(white: 0.7, alpha: 0.4)
+        cell.selectedBackgroundView = selectedCellBackground
         
         return cell
     }

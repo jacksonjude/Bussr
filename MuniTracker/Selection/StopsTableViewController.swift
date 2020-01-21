@@ -155,6 +155,10 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let stopCell = tableView.dequeueReusableCell(withIdentifier: "StopCell") as! DirectionStopCell
         
+        let stopCellBackground = UIView()
+        stopCellBackground.backgroundColor = UIColor(white: 0.7, alpha: 0.4)
+        stopCell.selectedBackgroundView = stopCellBackground
+        
         let stopDirectionObject = stopDirectionObjects![indexPath.row]
         stopCell.directionObject = stopDirectionObject.direction
         stopCell.stopObject = stopDirectionObject.stop

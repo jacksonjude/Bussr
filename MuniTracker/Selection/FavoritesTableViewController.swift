@@ -428,6 +428,8 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             (favoriteStopCell.viewWithTag(600) as! UILabel).textColor = textColor
             (favoriteStopCell.viewWithTag(601) as! UILabel).textColor = textColor
             
+            favoriteStopCell.selectedBackgroundView = selectedCellBackground
+            
             return favoriteStopCell
         case .route:
             let favoriteRouteCell = tableView.dequeueReusableCell(withIdentifier: "FavoriteRouteCell")!
@@ -457,6 +459,8 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             (favoriteRouteCell.viewWithTag(602) as! UILabel).textColor = textColor
             (favoriteRouteCell.viewWithTag(603) as! UILabel).textColor = textColor
             
+            favoriteRouteCell.selectedBackgroundView = selectedCellBackground
+            
             return favoriteRouteCell
         case .group:
             let groupObject = favoriteStopGroupSet![indexPath.row]
@@ -472,11 +476,16 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
                 
                 (groupCell.viewWithTag(600) as! UILabel).text = (groupObject as! FavoriteStopGroup).groupName
                 
+                groupCell.selectedBackgroundView = selectedCellBackground
+                
                 return groupCell
             }
             else if groupObject is FavoriteStop
             {
-                return createFavoriteStopCell(favoriteStopObject: groupObject as! FavoriteStop, tableView: tableView)
+                let favoriteStopCell = createFavoriteStopCell(favoriteStopObject: groupObject as! FavoriteStop, tableView: tableView)
+                favoriteStopCell.selectedBackgroundView = selectedCellBackground
+                
+                return favoriteStopCell
             }
             
             return tableView.dequeueReusableCell(withIdentifier: "FavoriteStopGroupCell")!

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -1296,16 +1296,16 @@
         <image name="BusStopIcon" width="64" height="64"/>
         <image name="DirectionIcon" width="64" height="64"/>
         <image name="FavoriteAddIcon" width="30" height="30"/>
-        <image name="FavoriteMenuIcon" width="25.5" height="34"/>
+        <image name="FavoriteMenuIcon" width="33" height="31.5"/>
         <image name="FilterIcon" width="64" height="58.5"/>
-        <image name="HistoryIcon" width="27" height="30"/>
-        <image name="NearbyMenuIcon" width="28.5" height="33"/>
-        <image name="RouteListIcon" width="27" height="30"/>
+        <image name="HistoryIcon" width="40" height="40"/>
+        <image name="NearbyMenuIcon" width="33" height="33"/>
+        <image name="RouteListIcon" width="33" height="33"/>
         <image name="SettingsIcon" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="coT-D9-Khz"/>
-        <segue reference="FM7-3T-SSq"/>
-        <segue reference="S68-UZ-wHD"/>
+        <segue reference="TfM-V3-OSE"/>
+        <segue reference="UJx-fY-8v6"/>
+        <segue reference="IdA-st-vvj"/>
     </inferredMetricsTieBreakers>
 </document>

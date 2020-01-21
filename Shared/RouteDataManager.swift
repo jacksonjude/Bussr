@@ -26,9 +26,10 @@ class RouteDataManager
         {
             commandString += "&" + commandArgument.key + "=" + commandArgument.value
         }
+                
+        let url = URL(string: jsonFeedSource + "?_=" + String(Date().timeIntervalSince1970) + "&command=" + command + commandString)!
         
-        let task = (URLSession.shared.dataTask(with: URL(string: jsonFeedSource + "?command=" + command + commandString)!) { data, response, error in
-            
+        let task = (URLSession.shared.dataTask(with: url) { data, response, error in
             if data != nil, let json = try? JSONSerialization.jsonObject(with: data!) as? [String:Any]
             {
                 callback(json)

@@ -113,6 +113,10 @@ class DirectionsTableViewController: UIViewController, UITableViewDelegate, UITa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let directionCell = tableView.dequeueReusableCell(withIdentifier: "OtherDirectionCell") as! DirectionStopCell
         
+        let directionCellBackground = UIView()
+        directionCellBackground.backgroundColor = UIColor(white: 0.7, alpha: 0.4)
+        directionCell.selectedBackgroundView = directionCellBackground
+        
         let direction = directionObjects![indexPath.row]
         if let stop = RouteDataManager.fetchStop(stopTag: MapState.selectedStopTag!)
         {
