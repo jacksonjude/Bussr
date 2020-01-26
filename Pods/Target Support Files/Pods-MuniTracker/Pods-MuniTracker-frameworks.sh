@@ -161,10 +161,10 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "${BUILT_PRODUCTS_DIR}/SlideUpPanel/SlideUpPanel.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/CloudCore/CloudCore.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework "${BUILT_PRODUCTS_DIR}/SlideUpPanel/SlideUpPanel.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/CloudCore/CloudCore.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then
   wait

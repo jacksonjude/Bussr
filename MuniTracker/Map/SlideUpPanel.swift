@@ -17,7 +17,7 @@ public class SlideUpPanel: UIViewController {
     public var isCornerRadiusAnimatorOn = true
     public var handleArea = UIView()
     public var handleAreaHeight : CGFloat = 65
-    public var handleAreaColor : UIColor = UIColor.groupTableViewBackground
+    public var handleAreaColor : UIColor = UIColor.black
     public var vc : UIViewController!
     public var contentArea = UIView()
     public var visualEffectView:UIVisualEffectView!
@@ -71,6 +71,8 @@ public class SlideUpPanel: UIViewController {
         vc.view.addSubview(visualEffectView)
         self.view.frame = CGRect(x: 0, y: vc.view.frame.height - handleAreaHeight, width: vc.view.bounds.width, height: cardHeight)
         self.view.clipsToBounds = true
+        
+        print(self.view.frame)
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SlideUpPanel.handleCardTap(recognzier:)))
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(SlideUpPanel.handleCardPan(recognizer:)))

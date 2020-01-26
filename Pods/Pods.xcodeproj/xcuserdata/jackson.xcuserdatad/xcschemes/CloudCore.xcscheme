@@ -14,9 +14,9 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B1E6ADDBC7C1822064667BE0996874F2"
-               BuildableName = "SlideUpPanel.framework"
-               BlueprintName = "SlideUpPanel"
+               BlueprintIdentifier = "343A3DCB4BCF9740B74B47D4F570D735"
+               BuildableName = "CloudCore.framework"
+               BlueprintName = "CloudCore"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

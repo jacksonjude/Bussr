@@ -6,7 +6,7 @@ target 'MuniTracker' do
   use_frameworks!
 
   # Pods for MuniTracker
-  pod 'SlideUpPanel'
+  pod 'CloudCore'
 
 end
 

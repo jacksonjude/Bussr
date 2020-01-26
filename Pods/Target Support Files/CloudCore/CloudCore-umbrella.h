@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double SlideUpPanelVersionNumber;
-FOUNDATION_EXPORT const unsigned char SlideUpPanelVersionString[];
+FOUNDATION_EXPORT double CloudCoreVersionNumber;
+FOUNDATION_EXPORT const unsigned char CloudCoreVersionString[];
 
