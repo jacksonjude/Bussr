@@ -47,6 +47,16 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
         setupThemeElements()
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        guard UIApplication.shared.applicationState == .inactive else {
+            return
+        }
+
+        routesTableView.reloadData()
+    }
+    
     func setupThemeElements()
     {
         switch appDelegate.getCurrentTheme()
@@ -69,8 +79,26 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let routeFullTitle = sortedRouteDictionary[indexPath.section]![indexPath.row]
+        let routeTag = String(routeFullTitle.split(separator: "-")[0].dropLast())
+        let routeObject = RouteDataManager.fetchObject(type: "Route", predicate: NSPredicate(format: "tag == %@", routeTag), moc: CoreDataStack.persistentContainer.viewContext) as? Route
+        
         let routeCell = tableView.dequeueReusableCell(withIdentifier: "RouteCell")!
-        routeCell.textLabel?.text = sortedRouteDictionary[indexPath.section]?[indexPath.row]
+        
+        routeCell.textLabel?.text = routeFullTitle
+        routeCell.textLabel?.textColor = UIColor(hexString: routeObject?.oppositeColor ?? "#FFFFFF")
+        
+        var routeCellColor = UIColor(hexString: routeObject?.color ?? "#000000")
+        let hsba = routeCellColor.hsba
+        routeCellColor = UIColor(hue: hsba.h, saturation: hsba.s, brightness: hsba.b, alpha: 1)
+
+        routeCell.backgroundColor = (appDelegate.getCurrentTheme() == .dark) ? UIColor.black : UIColor.white
+        routeCell.backgroundView = UIView()
+        routeCell.backgroundView?.backgroundColor = routeCellColor
+        
+        let selectedCellBackground = UIView()
+        selectedCellBackground.backgroundColor = UIColor(white: 0.7, alpha: 0.4)
+        routeCell.selectedBackgroundView = selectedCellBackground
         
         return routeCell
     }
@@ -92,7 +120,7 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
         }
         return bulletedSectionTitles
     }
-    
+        
     func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
         return index/2
     }

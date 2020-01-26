@@ -3,25 +3,28 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		252C65D0146DAC1EAF98F7C5 /* Pods_MuniTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE1B530035922E0378354BCB /* Pods_MuniTracker.framework */; };
+		4CA862BF976EE1C1E1654B54 /* Pods_MuniTrackerFavoritesExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B636E8657E3C8285F44F1197 /* Pods_MuniTrackerFavoritesExtension.framework */; };
+		5E4D6D3043306D2C68C8E591 /* Pods_MuniTrackerRecentExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA2D29EDA5175578A85724A8 /* Pods_MuniTrackerRecentExtension.framework */; };
 		7A0292E620ED8207006DFDF5 /* AppIcon-2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A0292E420ED8207006DFDF5 /* AppIcon-2@2x.png */; };
 		7A0292E720ED8207006DFDF5 /* AppIcon-2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7A0292E520ED8207006DFDF5 /* AppIcon-2@3x.png */; };
 		7A068D1521266AC400D3425E /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D1421266AC400D3425E /* CoreDataStack.swift */; };
 		7A068D1E212697DA00D3425E /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A068D01212646A700D3425E /* NotificationCenter.framework */; };
 		7A068D21212697DA00D3425E /* FavoritesExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D20212697DA00D3425E /* FavoritesExtensionViewController.swift */; };
 		7A068D24212697DA00D3425E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A068D22212697DA00D3425E /* MainInterface.storyboard */; };
-		7A068D28212697DA00D3425E /* MuniTrackerFavoritesExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D1D212697DA00D3425E /* MuniTrackerFavoritesExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7A068D28212697DA00D3425E /* BusTracker - Favorites.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D1D212697DA00D3425E /* BusTracker - Favorites.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7A068D31212697F000D3425E /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A068D01212646A700D3425E /* NotificationCenter.framework */; };
 		7A068D34212697F000D3425E /* RecentExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D33212697F000D3425E /* RecentExtensionViewController.swift */; };
 		7A068D37212697F000D3425E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A068D35212697F000D3425E /* MainInterface.storyboard */; };
-		7A068D3B212697F000D3425E /* MuniTrackerRecentExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D30212697F000D3425E /* MuniTrackerRecentExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7A068D3B212697F000D3425E /* BusTracker - Recent.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D30212697F000D3425E /* BusTracker - Recent.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7A068D442126980900D3425E /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A068D01212646A700D3425E /* NotificationCenter.framework */; };
 		7A068D472126980900D3425E /* NearbyExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D462126980900D3425E /* NearbyExtensionViewController.swift */; };
 		7A068D4A2126980900D3425E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A068D482126980900D3425E /* MainInterface.storyboard */; };
-		7A068D4E2126980900D3425E /* MuniTrackerNearbyExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D432126980900D3425E /* MuniTrackerNearbyExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7A068D4E2126980900D3425E /* BusTracker - Nearby.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D432126980900D3425E /* BusTracker - Nearby.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7A068D52212698B900D3425E /* MuniTrackerExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D04212646A700D3425E /* MuniTrackerExtensionViewController.swift */; };
 		7A068D53212698BA00D3425E /* MuniTrackerExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D04212646A700D3425E /* MuniTrackerExtensionViewController.swift */; };
 		7A068D54212698BA00D3425E /* MuniTrackerExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D04212646A700D3425E /* MuniTrackerExtensionViewController.swift */; };
@@ -71,6 +74,7 @@
 		7AE57F8C2270D17600F1B42B /* DirectionStopCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE57F8B2270D17600F1B42B /* DirectionStopCell.swift */; };
 		7AF50BE220E1B71E00E4BFD1 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF50BE120E1B71E00E4BFD1 /* SettingsViewController.swift */; };
 		7AFB4752216DBD480043450B /* NotificationEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB4751216DBD480043450B /* NotificationEditorViewController.swift */; };
+		E9B34E41BF704EBBCE556F55 /* Pods_MuniTrackerNearbyExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A2E37DEC4CA84755B8870A7 /* Pods_MuniTrackerNearbyExtension.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,9 +108,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				7A068D4E2126980900D3425E /* MuniTrackerNearbyExtension.appex in Embed App Extensions */,
-				7A068D3B212697F000D3425E /* MuniTrackerRecentExtension.appex in Embed App Extensions */,
-				7A068D28212697DA00D3425E /* MuniTrackerFavoritesExtension.appex in Embed App Extensions */,
+				7A068D4E2126980900D3425E /* BusTracker - Nearby.appex in Embed App Extensions */,
+				7A068D3B212697F000D3425E /* BusTracker - Recent.appex in Embed App Extensions */,
+				7A068D28212697DA00D3425E /* BusTracker - Favorites.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -114,6 +118,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3A2E37DEC4CA84755B8870A7 /* Pods_MuniTrackerNearbyExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MuniTrackerNearbyExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5072D43C9CBDEA2F3FD720FE /* Pods-MuniTrackerNearbyExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MuniTrackerNearbyExtension.debug.xcconfig"; path = "Target Support Files/Pods-MuniTrackerNearbyExtension/Pods-MuniTrackerNearbyExtension.debug.xcconfig"; sourceTree = "<group>"; };
+		52D7192E1B0E81DFE8718511 /* Pods-MuniTrackerNearbyExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MuniTrackerNearbyExtension.release.xcconfig"; path = "Target Support Files/Pods-MuniTrackerNearbyExtension/Pods-MuniTrackerNearbyExtension.release.xcconfig"; sourceTree = "<group>"; };
+		56ADC82685652AED2C537F39 /* Pods-MuniTrackerFavoritesExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MuniTrackerFavoritesExtension.debug.xcconfig"; path = "Target Support Files/Pods-MuniTrackerFavoritesExtension/Pods-MuniTrackerFavoritesExtension.debug.xcconfig"; sourceTree = "<group>"; };
+		69AFD3E85B130B2B75DBE062 /* Pods-MuniTrackerRecentExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MuniTrackerRecentExtension.debug.xcconfig"; path = "Target Support Files/Pods-MuniTrackerRecentExtension/Pods-MuniTrackerRecentExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		7A0292E420ED8207006DFDF5 /* AppIcon-2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-2@2x.png"; sourceTree = "<group>"; };
 		7A0292E520ED8207006DFDF5 /* AppIcon-2@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AppIcon-2@3x.png"; sourceTree = "<group>"; };
 		7A068D01212646A700D3425E /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
@@ -121,15 +130,15 @@
 		7A068D07212646A700D3425E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		7A068D1421266AC400D3425E /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		7A068D1721266F9B00D3425E /* RoutePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutePageViewController.swift; sourceTree = "<group>"; };
-		7A068D1D212697DA00D3425E /* MuniTrackerFavoritesExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MuniTrackerFavoritesExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A068D1D212697DA00D3425E /* BusTracker - Favorites.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "BusTracker - Favorites.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A068D20212697DA00D3425E /* FavoritesExtensionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesExtensionViewController.swift; sourceTree = "<group>"; };
 		7A068D23212697DA00D3425E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		7A068D25212697DA00D3425E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7A068D30212697F000D3425E /* MuniTrackerRecentExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MuniTrackerRecentExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A068D30212697F000D3425E /* BusTracker - Recent.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "BusTracker - Recent.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A068D33212697F000D3425E /* RecentExtensionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentExtensionViewController.swift; sourceTree = "<group>"; };
 		7A068D36212697F000D3425E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		7A068D38212697F000D3425E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7A068D432126980900D3425E /* MuniTrackerNearbyExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MuniTrackerNearbyExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A068D432126980900D3425E /* BusTracker - Nearby.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "BusTracker - Nearby.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A068D462126980900D3425E /* NearbyExtensionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyExtensionViewController.swift; sourceTree = "<group>"; };
 		7A068D492126980900D3425E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		7A068D4B2126980900D3425E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -168,6 +177,13 @@
 		7AE57F8B2270D17600F1B42B /* DirectionStopCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionStopCell.swift; sourceTree = "<group>"; };
 		7AF50BE120E1B71E00E4BFD1 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		7AFB4751216DBD480043450B /* NotificationEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEditorViewController.swift; sourceTree = "<group>"; };
+		7E7B48D7BD62A7D66377914C /* Pods-MuniTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MuniTracker.debug.xcconfig"; path = "Target Support Files/Pods-MuniTracker/Pods-MuniTracker.debug.xcconfig"; sourceTree = "<group>"; };
+		9E2DB524B5793798ECEBF609 /* Pods-MuniTrackerRecentExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MuniTrackerRecentExtension.release.xcconfig"; path = "Target Support Files/Pods-MuniTrackerRecentExtension/Pods-MuniTrackerRecentExtension.release.xcconfig"; sourceTree = "<group>"; };
+		B636E8657E3C8285F44F1197 /* Pods_MuniTrackerFavoritesExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MuniTrackerFavoritesExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D3600293A677DEA09E484456 /* Pods-MuniTrackerFavoritesExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MuniTrackerFavoritesExtension.release.xcconfig"; path = "Target Support Files/Pods-MuniTrackerFavoritesExtension/Pods-MuniTrackerFavoritesExtension.release.xcconfig"; sourceTree = "<group>"; };
+		EE1B530035922E0378354BCB /* Pods_MuniTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MuniTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F418022B374AD0F3C4211049 /* Pods-MuniTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MuniTracker.release.xcconfig"; path = "Target Support Files/Pods-MuniTracker/Pods-MuniTracker.release.xcconfig"; sourceTree = "<group>"; };
+		FA2D29EDA5175578A85724A8 /* Pods_MuniTrackerRecentExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MuniTrackerRecentExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +192,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A068D1E212697DA00D3425E /* NotificationCenter.framework in Frameworks */,
+				4CA862BF976EE1C1E1654B54 /* Pods_MuniTrackerFavoritesExtension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,6 +201,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A068D31212697F000D3425E /* NotificationCenter.framework in Frameworks */,
+				5E4D6D3043306D2C68C8E591 /* Pods_MuniTrackerRecentExtension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -192,6 +210,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A068D442126980900D3425E /* NotificationCenter.framework in Frameworks */,
+				E9B34E41BF704EBBCE556F55 /* Pods_MuniTrackerNearbyExtension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,6 +221,7 @@
 				7A0EF1FD20E80AC90039212B /* CloudKit.framework in Frameworks */,
 				7A0E8C6A20E0AAAC00C28465 /* CoreLocation.framework in Frameworks */,
 				7A4930C420D788EA008208D1 /* MapKit.framework in Frameworks */,
+				252C65D0146DAC1EAF98F7C5 /* Pods_MuniTracker.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -327,6 +347,7 @@
 				7A068D452126980900D3425E /* MuniTrackerNearbyExtension */,
 				7AD81E0720D6E60C004BAB1E /* Products */,
 				BF88086283A00694C5C2DF7F /* Frameworks */,
+				B12EA9C214D8F7C0A928847C /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -334,9 +355,9 @@
 			isa = PBXGroup;
 			children = (
 				7AD81E0620D6E60C004BAB1E /* MuniTracker.app */,
-				7A068D1D212697DA00D3425E /* MuniTrackerFavoritesExtension.appex */,
-				7A068D30212697F000D3425E /* MuniTrackerRecentExtension.appex */,
-				7A068D432126980900D3425E /* MuniTrackerNearbyExtension.appex */,
+				7A068D1D212697DA00D3425E /* BusTracker - Favorites.appex */,
+				7A068D30212697F000D3425E /* BusTracker - Recent.appex */,
+				7A068D432126980900D3425E /* BusTracker - Nearby.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -360,6 +381,21 @@
 			path = MuniTracker;
 			sourceTree = "<group>";
 		};
+		B12EA9C214D8F7C0A928847C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7E7B48D7BD62A7D66377914C /* Pods-MuniTracker.debug.xcconfig */,
+				F418022B374AD0F3C4211049 /* Pods-MuniTracker.release.xcconfig */,
+				56ADC82685652AED2C537F39 /* Pods-MuniTrackerFavoritesExtension.debug.xcconfig */,
+				D3600293A677DEA09E484456 /* Pods-MuniTrackerFavoritesExtension.release.xcconfig */,
+				5072D43C9CBDEA2F3FD720FE /* Pods-MuniTrackerNearbyExtension.debug.xcconfig */,
+				52D7192E1B0E81DFE8718511 /* Pods-MuniTrackerNearbyExtension.release.xcconfig */,
+				69AFD3E85B130B2B75DBE062 /* Pods-MuniTrackerRecentExtension.debug.xcconfig */,
+				9E2DB524B5793798ECEBF609 /* Pods-MuniTrackerRecentExtension.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		BF88086283A00694C5C2DF7F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -367,6 +403,10 @@
 				7A0E8C6920E0AAAB00C28465 /* CoreLocation.framework */,
 				7A4930C320D788EA008208D1 /* MapKit.framework */,
 				7A068D01212646A700D3425E /* NotificationCenter.framework */,
+				EE1B530035922E0378354BCB /* Pods_MuniTracker.framework */,
+				B636E8657E3C8285F44F1197 /* Pods_MuniTrackerFavoritesExtension.framework */,
+				3A2E37DEC4CA84755B8870A7 /* Pods_MuniTrackerNearbyExtension.framework */,
+				FA2D29EDA5175578A85724A8 /* Pods_MuniTrackerRecentExtension.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -378,6 +418,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7A068D29212697DA00D3425E /* Build configuration list for PBXNativeTarget "MuniTrackerFavoritesExtension" */;
 			buildPhases = (
+				9196FCED82477243A1FEB775 /* [CP] Check Pods Manifest.lock */,
 				7A068D19212697DA00D3425E /* Sources */,
 				7A068D1A212697DA00D3425E /* Frameworks */,
 				7A068D1B212697DA00D3425E /* Resources */,
@@ -388,13 +429,14 @@
 			);
 			name = MuniTrackerFavoritesExtension;
 			productName = MuniTrackerFavoritesExtension;
-			productReference = 7A068D1D212697DA00D3425E /* MuniTrackerFavoritesExtension.appex */;
+			productReference = 7A068D1D212697DA00D3425E /* BusTracker - Favorites.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		7A068D2F212697F000D3425E /* MuniTrackerRecentExtension */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7A068D3C212697F000D3425E /* Build configuration list for PBXNativeTarget "MuniTrackerRecentExtension" */;
 			buildPhases = (
+				B445C318AD0B662CDE186AD4 /* [CP] Check Pods Manifest.lock */,
 				7A068D2C212697F000D3425E /* Sources */,
 				7A068D2D212697F000D3425E /* Frameworks */,
 				7A068D2E212697F000D3425E /* Resources */,
@@ -405,13 +447,14 @@
 			);
 			name = MuniTrackerRecentExtension;
 			productName = MuniTrackerRecentExtension;
-			productReference = 7A068D30212697F000D3425E /* MuniTrackerRecentExtension.appex */;
+			productReference = 7A068D30212697F000D3425E /* BusTracker - Recent.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		7A068D422126980900D3425E /* MuniTrackerNearbyExtension */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7A068D4F2126980900D3425E /* Build configuration list for PBXNativeTarget "MuniTrackerNearbyExtension" */;
 			buildPhases = (
+				D9B40ECA9F483B5D4F573448 /* [CP] Check Pods Manifest.lock */,
 				7A068D3F2126980900D3425E /* Sources */,
 				7A068D402126980900D3425E /* Frameworks */,
 				7A068D412126980900D3425E /* Resources */,
@@ -422,18 +465,20 @@
 			);
 			name = MuniTrackerNearbyExtension;
 			productName = MuniTrackerNearbyExtension;
-			productReference = 7A068D432126980900D3425E /* MuniTrackerNearbyExtension.appex */;
+			productReference = 7A068D432126980900D3425E /* BusTracker - Nearby.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		7AD81E0520D6E60C004BAB1E /* MuniTracker */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7AD81E1B20D6E60D004BAB1E /* Build configuration list for PBXNativeTarget "MuniTracker" */;
 			buildPhases = (
+				3F1AA1A52B78A770C7A5A7B6 /* [CP] Check Pods Manifest.lock */,
 				7AD81E0220D6E60C004BAB1E /* Sources */,
 				7AD81E0320D6E60C004BAB1E /* Frameworks */,
 				7A85E89B23CD638400EC11B9 /* ShellScript */,
 				7AD81E0420D6E60C004BAB1E /* Resources */,
 				7A068D10212646A700D3425E /* Embed App Extensions */,
+				E6B403A92375EE54A466DAC9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -571,6 +616,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		3F1AA1A52B78A770C7A5A7B6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MuniTracker-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		7A85E89B23CD638400EC11B9 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -587,6 +654,89 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nsed -i .bak -e \"/userLabel=\\\"APP_VERSION\\\"/s/text=\\\"[^\\\"]*\\\"/text=\\\"Version: $MARKETING_VERSION Build: $CURRENT_PROJECT_VERSION\\\"/\" \"$PROJECT_DIR/$PROJECT_NAME/Base.lproj/LaunchScreen.storyboard\"\n";
+		};
+		9196FCED82477243A1FEB775 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MuniTrackerFavoritesExtension-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B445C318AD0B662CDE186AD4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MuniTrackerRecentExtension-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D9B40ECA9F483B5D4F573448 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MuniTrackerNearbyExtension-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E6B403A92375EE54A466DAC9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MuniTracker/Pods-MuniTracker-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MuniTracker/Pods-MuniTracker-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MuniTracker/Pods-MuniTracker-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -740,10 +890,11 @@
 /* Begin XCBuildConfiguration section */
 		7A068D2A212697DA00D3425E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 56ADC82685652AED2C537F39 /* Pods-MuniTrackerFavoritesExtension.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerFavoritesExtension/MuniTrackerFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200120;
+				CURRENT_PROJECT_VERSION = 20200125;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerFavoritesExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -752,7 +903,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerFavoritesExtension;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "BusTracker - Favorites";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -761,10 +912,11 @@
 		};
 		7A068D2B212697DA00D3425E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D3600293A677DEA09E484456 /* Pods-MuniTrackerFavoritesExtension.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerFavoritesExtension/MuniTrackerFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200120;
+				CURRENT_PROJECT_VERSION = 20200125;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerFavoritesExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -773,7 +925,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerFavoritesExtension;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "BusTracker - Favorites";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -782,10 +934,11 @@
 		};
 		7A068D3D212697F000D3425E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 69AFD3E85B130B2B75DBE062 /* Pods-MuniTrackerRecentExtension.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerRecentExtension/MuniTrackerRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200120;
+				CURRENT_PROJECT_VERSION = 20200125;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerRecentExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -794,7 +947,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerRecentExtension;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "BusTracker - Recent";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -803,10 +956,11 @@
 		};
 		7A068D3E212697F000D3425E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9E2DB524B5793798ECEBF609 /* Pods-MuniTrackerRecentExtension.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerRecentExtension/MuniTrackerRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200120;
+				CURRENT_PROJECT_VERSION = 20200125;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerRecentExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -815,7 +969,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerRecentExtension;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "BusTracker - Recent";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -824,10 +978,11 @@
 		};
 		7A068D502126980900D3425E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5072D43C9CBDEA2F3FD720FE /* Pods-MuniTrackerNearbyExtension.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerNearbyExtension/MuniTrackerNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200120;
+				CURRENT_PROJECT_VERSION = 20200125;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerNearbyExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -836,7 +991,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerNearbyExtension;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "BusTracker - Nearby";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -845,10 +1000,11 @@
 		};
 		7A068D512126980900D3425E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 52D7192E1B0E81DFE8718511 /* Pods-MuniTrackerNearbyExtension.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerNearbyExtension/MuniTrackerNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200120;
+				CURRENT_PROJECT_VERSION = 20200125;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerNearbyExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -857,7 +1013,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerNearbyExtension;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "BusTracker - Nearby";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -980,12 +1136,13 @@
 		};
 		7AD81E1C20D6E60D004BAB1E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7E7B48D7BD62A7D66377914C /* Pods-MuniTracker.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = MuniTracker/MuniTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200120;
+				CURRENT_PROJECT_VERSION = 20200125;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1003,12 +1160,13 @@
 		};
 		7AD81E1D20D6E60D004BAB1E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F418022B374AD0F3C4211049 /* Pods-MuniTracker.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = MuniTracker/MuniTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200120;
+				CURRENT_PROJECT_VERSION = 20200125;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;

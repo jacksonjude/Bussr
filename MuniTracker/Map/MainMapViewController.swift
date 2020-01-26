@@ -10,6 +10,7 @@ import UIKit
 import MapKit
 
 let appDelegate = UIApplication.shared.delegate as! AppDelegate
+let swipeBarSize: CGFloat = 30.0
 
 enum AnnotationType
 {
@@ -284,13 +285,15 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     {
         MapState.showingPickerView = true
         self.pickerViewBottomConstraint.constant = 0
-        self.view.viewWithTag(618)?.isHidden = false
+        //self.view.viewWithTag(618)?.isHidden = false
         
         UIView.animate(withDuration: 0.5, animations: {
             self.view.layoutSubviews()
         }) { (bool) in
             self.setupHidePickerButton()
         }
+        
+        NotificationCenter.default.post(name: NSNotification.Name("RouteInfoPickerViewShown"), object: nil)
     }
     
     @objc func hidePickerView()
@@ -298,28 +301,30 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         NotificationCenter.default.post(name: NSNotification.Name("CollapseFilters"), object: self)
         
         MapState.showingPickerView = false
-        self.pickerViewBottomConstraint.constant = -1*(self.view.viewWithTag(618)?.frame.size.height ?? 0)
+        self.pickerViewBottomConstraint.constant = -1*(self.view.viewWithTag(618)?.frame.size.height ?? 0)+swipeBarSize
         
         UIView.animate(withDuration: 0.5, animations: {
             self.view.layoutSubviews()
         }) { (bool) in
-            self.view.viewWithTag(618)?.isHidden = true
+            //self.view.viewWithTag(618)?.isHidden = true
             self.setupShowPickerButton()
         }
+        
+        NotificationCenter.default.post(name: NSNotification.Name("RouteInfoPickerViewHidden"), object: nil)
     }
     
     func setupHidePickerButton()
     {
-        showHidePickerButton.title = "Hide"
+        /*showHidePickerButton.title = "Hide"
         showHidePickerButton.target = self
-        showHidePickerButton.action = #selector(hidePickerView)
+        showHidePickerButton.action = #selector(hidePickerView)*/
     }
     
     func setupShowPickerButton()
     {
-        showHidePickerButton.title = "Show"
+        /*showHidePickerButton.title = "Show"
         showHidePickerButton.target = self
-        showHidePickerButton.action = #selector(showPickerView)
+        showHidePickerButton.action = #selector(showPickerView)*/
     }
     
     //MARK: - Update Notifications
@@ -328,6 +333,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     {
         NotificationCenter.default.addObserver(self, selector: #selector(updateMap(notification:)), name: NSNotification.Name("UpdateRouteMap"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadAllAnnotations), name: NSNotification.Name("ReloadAnnotations"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showPickerView), name: NSNotification.Name("ShowRouteInfoPickerView"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hidePickerView), name: NSNotification.Name("HideRouteInfoPickerView"), object: nil)
     }
     
     func removeRouteMapUpdateNotifications()

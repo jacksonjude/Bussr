@@ -20,6 +20,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     @IBOutlet weak var addFavoriteButton: UIButton!
     @IBOutlet weak var addNotificationButton: UIButton!
     @IBOutlet weak var expandFiltersButton: UIButton!
+    @IBOutlet weak var swipeBar: UIView!
+    @IBOutlet weak var swipeBarImage: UIImageView!
     
     var favoriteFilterEnabled = false
     var locationFilterEnabled = false
@@ -37,9 +39,13 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         NotificationCenter.default.addObserver(self, selector: #selector(selectCurrentStop), name: NSNotification.Name("SelectCurrentStop"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(collapseFilters), name: NSNotification.Name("CollapseFilters"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(enableFilters), name: NSNotification.Name("EnableFilters"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateSwipeBarImage), name: NSNotification.Name("RouteInfoPickerViewShown"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateSwipeBarImage), name: NSNotification.Name("RouteInfoPickerViewHidden"), object: nil)
         
         setFavoriteButtonImage(inverse: false)
         setupThemeElements()
+        
+        setupSwipeGestures()
         
         setupFilterButtons()
     }
@@ -95,6 +101,10 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             self.expandFiltersButton.setImage(UIImage(named: "FilterIcon"), for: UIControl.State.normal)
             self.addNotificationButton.setImage(UIImage(named: "BellAddIcon"), for: UIControl.State.normal)
             setFavoriteButtonImage(inverse: false)
+            
+            self.swipeBarImage.image = UIImage(named: (MapState.showingPickerView ? "Down" : "Up") + "AngleIcon")
+            
+            swipeBar.backgroundColor = UIColor(white: 0.97, alpha: 1)
         case .dark:
             for filterButton in filterButtons
             {
@@ -103,8 +113,12 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             self.directionButton.setImage(UIImage(named: "DirectionIconDark"), for: UIControl.State.normal)
             self.otherDirectionsButton.setImage(UIImage(named: "BusStopIconDark"), for: UIControl.State.normal)
             self.expandFiltersButton.setImage(UIImage(named: "FilterIconDark"), for: UIControl.State.normal)
-             self.addNotificationButton.setImage(UIImage(named: "BellAddIconDark"), for: UIControl.State.normal)
+            self.addNotificationButton.setImage(UIImage(named: "BellAddIconDark"), for: UIControl.State.normal)
             setFavoriteButtonImage(inverse: false)
+            
+            self.swipeBarImage.image = UIImage(named: (MapState.showingPickerView ? "Down" : "Up") + "AngleIconDark")
+            
+            swipeBar.backgroundColor = UIColor(white: 0.07, alpha: 1)
         }
     }
     
@@ -143,6 +157,43 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         }
     }
     
+    func setupSwipeGestures()
+    {
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(showPickerView))
+        swipeUp.direction = .up
+        self.view.addGestureRecognizer(swipeUp)
+
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(hidePickerView))
+        swipeDown.direction = .down
+        self.view.addGestureRecognizer(swipeDown)
+    }
+    
+    @IBAction func swipeBarButtonPressed(_ sender: Any) {
+        if MapState.showingPickerView
+        {
+            hidePickerView()
+        }
+        else
+        {
+            showPickerView()
+        }
+    }
+    
+    @objc func showPickerView()
+    {
+        NotificationCenter.default.post(name: NSNotification.Name("ShowRouteInfoPickerView"), object: nil)
+    }
+    
+    @objc func hidePickerView()
+    {
+        NotificationCenter.default.post(name: NSNotification.Name("HideRouteInfoPickerView"), object: nil)
+    }
+    
+    @objc func updateSwipeBarImage()
+    {
+        swipeBarImage.image = UIImage(named: (MapState.showingPickerView ? "Down" : "Up") + "AngleIcon" + darkImageAppend())
+    }
+        
     //MARK: - Picker View
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -554,13 +605,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     {
         if filtersExpanded
         {
-            /*favoriteButton.isHidden = false
-            favoriteButton.isEnabled = true
-            locationButton.isHidden = false
-            locationButton.isEnabled = true*/
             filterButtons.forEach { (filterButton) in
                 filterButton.enableButton()
-                //filterButton.setFilterImage()
             }
         }
         else
@@ -577,10 +623,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         expandFiltersButton.isHidden = true
         expandFiltersButton.isEnabled = false
         
-        /*favoriteButton.isHidden = true
-        favoriteButton.isEnabled = false
-        locationButton.isHidden = true
-        locationButton.isEnabled = false*/
         filterButtons.forEach { (filterButton) in
             filterButton.disableButton()
         }

@@ -1,0 +1,1114 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0206685B425FA7E3E26E58ED69C5D18D /* SlideUpPanel-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = A76EBC67238704863D4311B788AA7322 /* SlideUpPanel-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		028D54565D6735FFA68224A1C28CF2CC /* Pods-MuniTrackerRecentExtension-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 711425673BF229C0EBB40FFB9954852E /* Pods-MuniTrackerRecentExtension-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43B53D690484B2884896CB7BA6FCAA6B /* Pods-MuniTracker-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFB0ECC555B4000862660B92F937469 /* Pods-MuniTracker-dummy.m */; };
+		56C29A244244F681AC99A65CEF816648 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
+		6188F43139E22633074DC92C882D5C1E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
+		64137C203E2A74F8A9437F540DE3970F /* SlideUpPanel-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AFC988285B2A01A8AF8F42709F1E6F1 /* SlideUpPanel-dummy.m */; };
+		6D6562D0D2DF1A7FA065F1D1690DAEF3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
+		70429254D0C47D77D9C5BFB4EB3D8099 /* Pods-MuniTrackerRecentExtension-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CA81EC037290E3B76610F0BE369D1A /* Pods-MuniTrackerRecentExtension-dummy.m */; };
+		75EEE288D4DB10655A8CFA4C87033D4F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
+		7637B25ECA5DA90E0A72B5CF8A21AA74 /* SlideUpPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595D8CC4D75683CC2D848A4454C04CE9 /* SlideUpPanel.swift */; };
+		99B379F61BDDA74A2E5FFBCE8C4D4E55 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
+		B29181A4F35FD6FA552C8E2D8DB9E4DC /* Pods-MuniTracker-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = D505A258EF401C373572A0A2D19A989B /* Pods-MuniTracker-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3D893565EB1611BD0E81F1AE80BB1E2 /* Pods-MuniTrackerFavoritesExtension-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 442C3D3B659CD5600A0168CD1CF7FEB4 /* Pods-MuniTrackerFavoritesExtension-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CB9DEF11B88A6AF868CAF84C7F7393B0 /* Pods-MuniTrackerFavoritesExtension-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = E01133AE475900E82C4B106CC423395F /* Pods-MuniTrackerFavoritesExtension-dummy.m */; };
+		D20C8BCA64146A4B36047BF8F157F753 /* Pods-MuniTrackerNearbyExtension-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 42A83B42FF0AD97B042796BFFE4571A0 /* Pods-MuniTrackerNearbyExtension-dummy.m */; };
+		E10BC55E2F953FA93743275F19FBBAD5 /* Pods-MuniTrackerNearbyExtension-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E337642DFA15488BBD72F04E3FAA06DF /* Pods-MuniTrackerNearbyExtension-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F137F8820358C087EFBC62BF008D12D6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B1E6ADDBC7C1822064667BE0996874F2;
+			remoteInfo = SlideUpPanel;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0947CA6AD6FE9DD7A15B88418460C524 /* Pods-MuniTracker-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-MuniTracker-frameworks.sh"; sourceTree = "<group>"; };
+		0AF83CB9BA243DF5DC80D3BACE9AB552 /* Pods-MuniTrackerRecentExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MuniTrackerRecentExtension.debug.xcconfig"; sourceTree = "<group>"; };
+		0EC44C8C7DEBF6FEEB155BA78BE23C4B /* Pods-MuniTracker-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-MuniTracker-Info.plist"; sourceTree = "<group>"; };
+		10BD9BB68D747576ED561E0B80B26486 /* Pods-MuniTrackerRecentExtension-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-MuniTrackerRecentExtension-acknowledgements.plist"; sourceTree = "<group>"; };
+		1B6F9B5CD720AA9195323EBDE407EA60 /* Pods-MuniTrackerNearbyExtension-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-MuniTrackerNearbyExtension-acknowledgements.plist"; sourceTree = "<group>"; };
+		1DDF56ECFF84FD9891F0DA49A022CBFD /* Pods-MuniTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MuniTracker.debug.xcconfig"; sourceTree = "<group>"; };
+		2BF87BE07FBF586623461596EFB021D1 /* Pods-MuniTrackerNearbyExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MuniTrackerNearbyExtension.debug.xcconfig"; sourceTree = "<group>"; };
+		2D97363A2BBF9C8E5F39AC939C64EEFA /* Pods_MuniTrackerNearbyExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MuniTrackerNearbyExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		38F7BF4457F10AA1C40C871E501DED28 /* Pods-MuniTrackerFavoritesExtension-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-MuniTrackerFavoritesExtension-Info.plist"; sourceTree = "<group>"; };
+		3B546BF41D132731ECDF6D906913550E /* Pods-MuniTrackerNearbyExtension-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-MuniTrackerNearbyExtension-acknowledgements.markdown"; sourceTree = "<group>"; };
+		3F2A5EFFE67868F2EAFB9A5BAE9F0338 /* Pods_MuniTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MuniTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		411636C6ECA4CB6B5D92418BEBF98279 /* Pods-MuniTrackerNearbyExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MuniTrackerNearbyExtension.release.xcconfig"; sourceTree = "<group>"; };
+		42A83B42FF0AD97B042796BFFE4571A0 /* Pods-MuniTrackerNearbyExtension-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-MuniTrackerNearbyExtension-dummy.m"; sourceTree = "<group>"; };
+		44254BD49635CDD57C9B090FA54D5C01 /* Pods-MuniTrackerFavoritesExtension.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-MuniTrackerFavoritesExtension.modulemap"; sourceTree = "<group>"; };
+		442C3D3B659CD5600A0168CD1CF7FEB4 /* Pods-MuniTrackerFavoritesExtension-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-MuniTrackerFavoritesExtension-umbrella.h"; sourceTree = "<group>"; };
+		4C26B6C7AA196EB47F2A517DD717B69E /* Pods-MuniTrackerRecentExtension-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-MuniTrackerRecentExtension-acknowledgements.markdown"; sourceTree = "<group>"; };
+		595D8CC4D75683CC2D848A4454C04CE9 /* SlideUpPanel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SlideUpPanel.swift; path = SlideUpPanel/SlideUpPanel/SlideUpPanel.swift; sourceTree = "<group>"; };
+		5AFC988285B2A01A8AF8F42709F1E6F1 /* SlideUpPanel-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SlideUpPanel-dummy.m"; sourceTree = "<group>"; };
+		68C2658B1BF8272EA350FFD702B7ACF3 /* Pods_MuniTrackerRecentExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MuniTrackerRecentExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		711425673BF229C0EBB40FFB9954852E /* Pods-MuniTrackerRecentExtension-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-MuniTrackerRecentExtension-umbrella.h"; sourceTree = "<group>"; };
+		7C98BC837E85967D49E2654418B33B9D /* Pods-MuniTrackerFavoritesExtension-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-MuniTrackerFavoritesExtension-acknowledgements.plist"; sourceTree = "<group>"; };
+		9164DFF6D745113A97AB4CDF91366735 /* SlideUpPanel.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SlideUpPanel.xcconfig; sourceTree = "<group>"; };
+		9738427036990B5C10ED4AD2C13D8A11 /* Pods-MuniTrackerFavoritesExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MuniTrackerFavoritesExtension.debug.xcconfig"; sourceTree = "<group>"; };
+		97D1FD765417FCDFA607C39E94FF7D6E /* SlideUpPanel.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = SlideUpPanel.modulemap; sourceTree = "<group>"; };
+		9CF6AABFEA477BDD1CCCBAA9D795131B /* Pods-MuniTracker.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-MuniTracker.modulemap"; sourceTree = "<group>"; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9ED2498C807531FF2AF54CEB5AE1BF46 /* Pods-MuniTrackerRecentExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MuniTrackerRecentExtension.release.xcconfig"; sourceTree = "<group>"; };
+		A09DE7D9BF3E3593A086E89ECE4D250E /* Pods-MuniTracker-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-MuniTracker-acknowledgements.markdown"; sourceTree = "<group>"; };
+		A51CABF66423938FED6789FC69A8370D /* Pods-MuniTracker-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-MuniTracker-acknowledgements.plist"; sourceTree = "<group>"; };
+		A76EBC67238704863D4311B788AA7322 /* SlideUpPanel-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SlideUpPanel-umbrella.h"; sourceTree = "<group>"; };
+		B4171D03B61B6F8D6C8A59D15E39E729 /* Pods-MuniTrackerFavoritesExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MuniTrackerFavoritesExtension.release.xcconfig"; sourceTree = "<group>"; };
+		B47DCDF7F5F7B82BC04D648A5FDF42EA /* Pods-MuniTrackerRecentExtension-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-MuniTrackerRecentExtension-Info.plist"; sourceTree = "<group>"; };
+		BB2A388CEEC8C425F938B96CD2077392 /* Pods-MuniTrackerFavoritesExtension-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-MuniTrackerFavoritesExtension-acknowledgements.markdown"; sourceTree = "<group>"; };
+		C2B49D455CA2DA6B0A5A16A1B4B70CE5 /* Pods-MuniTrackerNearbyExtension.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-MuniTrackerNearbyExtension.modulemap"; sourceTree = "<group>"; };
+		CA4C53C860017EA15AE40A02FAC5EDAC /* Pods-MuniTrackerRecentExtension.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-MuniTrackerRecentExtension.modulemap"; sourceTree = "<group>"; };
+		CBFB0ECC555B4000862660B92F937469 /* Pods-MuniTracker-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-MuniTracker-dummy.m"; sourceTree = "<group>"; };
+		D505A258EF401C373572A0A2D19A989B /* Pods-MuniTracker-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-MuniTracker-umbrella.h"; sourceTree = "<group>"; };
+		E01133AE475900E82C4B106CC423395F /* Pods-MuniTrackerFavoritesExtension-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-MuniTrackerFavoritesExtension-dummy.m"; sourceTree = "<group>"; };
+		E205EA35473EAC4D7A5FE7AA4BC8D582 /* Pods-MuniTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MuniTracker.release.xcconfig"; sourceTree = "<group>"; };
+		E337642DFA15488BBD72F04E3FAA06DF /* Pods-MuniTrackerNearbyExtension-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-MuniTrackerNearbyExtension-umbrella.h"; sourceTree = "<group>"; };
+		E3408A84A06CF2C64384AFE903136FB7 /* SlideUpPanel-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "SlideUpPanel-Info.plist"; sourceTree = "<group>"; };
+		E5CA81EC037290E3B76610F0BE369D1A /* Pods-MuniTrackerRecentExtension-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-MuniTrackerRecentExtension-dummy.m"; sourceTree = "<group>"; };
+		E6164D084D08DA87560A68A1A77B484D /* SlideUpPanel-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SlideUpPanel-prefix.pch"; sourceTree = "<group>"; };
+		EA95270E712161B619A219CCDCCA2169 /* SlideUpPanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SlideUpPanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F4F4BB7FB87BFEADE6815B1019706134 /* Pods_MuniTrackerFavoritesExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MuniTrackerFavoritesExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F8EEDE895CA5951B459B20FB144EF425 /* Pods-MuniTrackerNearbyExtension-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-MuniTrackerNearbyExtension-Info.plist"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		480BE5CC630106E39B5BD26E81937510 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6188F43139E22633074DC92C882D5C1E /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		58A25CF1CBE61776E3B6F6C020062E15 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				56C29A244244F681AC99A65CEF816648 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A1FFD8338B0EC1589D06C0E8F8896EE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6D6562D0D2DF1A7FA065F1D1690DAEF3 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E1524071A6A60249A5C33F43A9B6AA6F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75EEE288D4DB10655A8CFA4C87033D4F /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FECBA8246918D949F4A215C165205F62 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				99B379F61BDDA74A2E5FFBCE8C4D4E55 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		09F977CDFA46FAAD1506FBD9DEAEE8C6 /* Pods-MuniTrackerRecentExtension */ = {
+			isa = PBXGroup;
+			children = (
+				CA4C53C860017EA15AE40A02FAC5EDAC /* Pods-MuniTrackerRecentExtension.modulemap */,
+				4C26B6C7AA196EB47F2A517DD717B69E /* Pods-MuniTrackerRecentExtension-acknowledgements.markdown */,
+				10BD9BB68D747576ED561E0B80B26486 /* Pods-MuniTrackerRecentExtension-acknowledgements.plist */,
+				E5CA81EC037290E3B76610F0BE369D1A /* Pods-MuniTrackerRecentExtension-dummy.m */,
+				B47DCDF7F5F7B82BC04D648A5FDF42EA /* Pods-MuniTrackerRecentExtension-Info.plist */,
+				711425673BF229C0EBB40FFB9954852E /* Pods-MuniTrackerRecentExtension-umbrella.h */,
+				0AF83CB9BA243DF5DC80D3BACE9AB552 /* Pods-MuniTrackerRecentExtension.debug.xcconfig */,
+				9ED2498C807531FF2AF54CEB5AE1BF46 /* Pods-MuniTrackerRecentExtension.release.xcconfig */,
+			);
+			name = "Pods-MuniTrackerRecentExtension";
+			path = "Target Support Files/Pods-MuniTrackerRecentExtension";
+			sourceTree = "<group>";
+		};
+		0DD76BBD6FD6872E345096F90F333EB0 /* SlideUpPanel */ = {
+			isa = PBXGroup;
+			children = (
+				595D8CC4D75683CC2D848A4454C04CE9 /* SlideUpPanel.swift */,
+				DD72B781FEE61AFEE1D36DAFCC7C883A /* Support Files */,
+			);
+			path = SlideUpPanel;
+			sourceTree = "<group>";
+		};
+		16E48EFAB872511C668ABF8D82732A9D /* Pods-MuniTracker */ = {
+			isa = PBXGroup;
+			children = (
+				9CF6AABFEA477BDD1CCCBAA9D795131B /* Pods-MuniTracker.modulemap */,
+				A09DE7D9BF3E3593A086E89ECE4D250E /* Pods-MuniTracker-acknowledgements.markdown */,
+				A51CABF66423938FED6789FC69A8370D /* Pods-MuniTracker-acknowledgements.plist */,
+				CBFB0ECC555B4000862660B92F937469 /* Pods-MuniTracker-dummy.m */,
+				0947CA6AD6FE9DD7A15B88418460C524 /* Pods-MuniTracker-frameworks.sh */,
+				0EC44C8C7DEBF6FEEB155BA78BE23C4B /* Pods-MuniTracker-Info.plist */,
+				D505A258EF401C373572A0A2D19A989B /* Pods-MuniTracker-umbrella.h */,
+				1DDF56ECFF84FD9891F0DA49A022CBFD /* Pods-MuniTracker.debug.xcconfig */,
+				E205EA35473EAC4D7A5FE7AA4BC8D582 /* Pods-MuniTracker.release.xcconfig */,
+			);
+			name = "Pods-MuniTracker";
+			path = "Target Support Files/Pods-MuniTracker";
+			sourceTree = "<group>";
+		};
+		7EA97E007571C10318300B867F7EACC9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3F2A5EFFE67868F2EAFB9A5BAE9F0338 /* Pods_MuniTracker.framework */,
+				F4F4BB7FB87BFEADE6815B1019706134 /* Pods_MuniTrackerFavoritesExtension.framework */,
+				2D97363A2BBF9C8E5F39AC939C64EEFA /* Pods_MuniTrackerNearbyExtension.framework */,
+				68C2658B1BF8272EA350FFD702B7ACF3 /* Pods_MuniTrackerRecentExtension.framework */,
+				EA95270E712161B619A219CCDCCA2169 /* SlideUpPanel.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		98CED3C31779C16975344BDF56556B96 /* Pods-MuniTrackerNearbyExtension */ = {
+			isa = PBXGroup;
+			children = (
+				C2B49D455CA2DA6B0A5A16A1B4B70CE5 /* Pods-MuniTrackerNearbyExtension.modulemap */,
+				3B546BF41D132731ECDF6D906913550E /* Pods-MuniTrackerNearbyExtension-acknowledgements.markdown */,
+				1B6F9B5CD720AA9195323EBDE407EA60 /* Pods-MuniTrackerNearbyExtension-acknowledgements.plist */,
+				42A83B42FF0AD97B042796BFFE4571A0 /* Pods-MuniTrackerNearbyExtension-dummy.m */,
+				F8EEDE895CA5951B459B20FB144EF425 /* Pods-MuniTrackerNearbyExtension-Info.plist */,
+				E337642DFA15488BBD72F04E3FAA06DF /* Pods-MuniTrackerNearbyExtension-umbrella.h */,
+				2BF87BE07FBF586623461596EFB021D1 /* Pods-MuniTrackerNearbyExtension.debug.xcconfig */,
+				411636C6ECA4CB6B5D92418BEBF98279 /* Pods-MuniTrackerNearbyExtension.release.xcconfig */,
+			);
+			name = "Pods-MuniTrackerNearbyExtension";
+			path = "Target Support Files/Pods-MuniTrackerNearbyExtension";
+			sourceTree = "<group>";
+		};
+		C0834CEBB1379A84116EF29F93051C60 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		CF1408CF629C7361332E53B88F7BD30C = {
+			isa = PBXGroup;
+			children = (
+				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
+				D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */,
+				FBD6CC028848987970B732220926A9D9 /* Pods */,
+				7EA97E007571C10318300B867F7EACC9 /* Products */,
+				D1EE51601CCEFDDA71EDF6A4FFF388D8 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		D1EE51601CCEFDDA71EDF6A4FFF388D8 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				16E48EFAB872511C668ABF8D82732A9D /* Pods-MuniTracker */,
+				DFB34A795513AB1AB4E55CC317DD8A14 /* Pods-MuniTrackerFavoritesExtension */,
+				98CED3C31779C16975344BDF56556B96 /* Pods-MuniTrackerNearbyExtension */,
+				09F977CDFA46FAAD1506FBD9DEAEE8C6 /* Pods-MuniTrackerRecentExtension */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C0834CEBB1379A84116EF29F93051C60 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DD72B781FEE61AFEE1D36DAFCC7C883A /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				97D1FD765417FCDFA607C39E94FF7D6E /* SlideUpPanel.modulemap */,
+				9164DFF6D745113A97AB4CDF91366735 /* SlideUpPanel.xcconfig */,
+				5AFC988285B2A01A8AF8F42709F1E6F1 /* SlideUpPanel-dummy.m */,
+				E3408A84A06CF2C64384AFE903136FB7 /* SlideUpPanel-Info.plist */,
+				E6164D084D08DA87560A68A1A77B484D /* SlideUpPanel-prefix.pch */,
+				A76EBC67238704863D4311B788AA7322 /* SlideUpPanel-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/SlideUpPanel";
+			sourceTree = "<group>";
+		};
+		DFB34A795513AB1AB4E55CC317DD8A14 /* Pods-MuniTrackerFavoritesExtension */ = {
+			isa = PBXGroup;
+			children = (
+				44254BD49635CDD57C9B090FA54D5C01 /* Pods-MuniTrackerFavoritesExtension.modulemap */,
+				BB2A388CEEC8C425F938B96CD2077392 /* Pods-MuniTrackerFavoritesExtension-acknowledgements.markdown */,
+				7C98BC837E85967D49E2654418B33B9D /* Pods-MuniTrackerFavoritesExtension-acknowledgements.plist */,
+				E01133AE475900E82C4B106CC423395F /* Pods-MuniTrackerFavoritesExtension-dummy.m */,
+				38F7BF4457F10AA1C40C871E501DED28 /* Pods-MuniTrackerFavoritesExtension-Info.plist */,
+				442C3D3B659CD5600A0168CD1CF7FEB4 /* Pods-MuniTrackerFavoritesExtension-umbrella.h */,
+				9738427036990B5C10ED4AD2C13D8A11 /* Pods-MuniTrackerFavoritesExtension.debug.xcconfig */,
+				B4171D03B61B6F8D6C8A59D15E39E729 /* Pods-MuniTrackerFavoritesExtension.release.xcconfig */,
+			);
+			name = "Pods-MuniTrackerFavoritesExtension";
+			path = "Target Support Files/Pods-MuniTrackerFavoritesExtension";
+			sourceTree = "<group>";
+		};
+		FBD6CC028848987970B732220926A9D9 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0DD76BBD6FD6872E345096F90F333EB0 /* SlideUpPanel */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		1F92FBA26949A55E1916A8357C64135E /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				028D54565D6735FFA68224A1C28CF2CC /* Pods-MuniTrackerRecentExtension-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		58ADC944AC9630007F08D32E8B288D6A /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0206685B425FA7E3E26E58ED69C5D18D /* SlideUpPanel-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F33AAEEA001E5B3C5478F788F0EA787 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B3D893565EB1611BD0E81F1AE80BB1E2 /* Pods-MuniTrackerFavoritesExtension-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		84F30CCF4DD79FA3EDD2710D92277E21 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B29181A4F35FD6FA552C8E2D8DB9E4DC /* Pods-MuniTracker-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BC60C938D843E9CBB58C10C81A13A95F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E10BC55E2F953FA93743275F19FBBAD5 /* Pods-MuniTrackerNearbyExtension-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		10AA8013F70BBF2AC1B0F19075FADDD8 /* Pods-MuniTrackerFavoritesExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0EF2F7BCCE9E5A7595B49485C077B3CD /* Build configuration list for PBXNativeTarget "Pods-MuniTrackerFavoritesExtension" */;
+			buildPhases = (
+				7F33AAEEA001E5B3C5478F788F0EA787 /* Headers */,
+				E90577B2DB1B5C0EB4DA94ADA237E4EF /* Sources */,
+				9A1FFD8338B0EC1589D06C0E8F8896EE /* Frameworks */,
+				94F8E0C029476A2F47B63E748631B98F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-MuniTrackerFavoritesExtension";
+			productName = "Pods-MuniTrackerFavoritesExtension";
+			productReference = F4F4BB7FB87BFEADE6815B1019706134 /* Pods_MuniTrackerFavoritesExtension.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		3B28B682C2896854B9C8938911C6EEE2 /* Pods-MuniTrackerNearbyExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6836D736F7BDC53CDFCC7F95A154DA27 /* Build configuration list for PBXNativeTarget "Pods-MuniTrackerNearbyExtension" */;
+			buildPhases = (
+				BC60C938D843E9CBB58C10C81A13A95F /* Headers */,
+				CCEBACB438CF4190B5D4CFAAA0221130 /* Sources */,
+				58A25CF1CBE61776E3B6F6C020062E15 /* Frameworks */,
+				83903988B7683B59688BDDB364D29998 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-MuniTrackerNearbyExtension";
+			productName = "Pods-MuniTrackerNearbyExtension";
+			productReference = 2D97363A2BBF9C8E5F39AC939C64EEFA /* Pods_MuniTrackerNearbyExtension.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		7917A5446D5B9EEF1871FE2A4383995A /* Pods-MuniTracker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 75A27E3100EE20570D3EAF9DF6D88C81 /* Build configuration list for PBXNativeTarget "Pods-MuniTracker" */;
+			buildPhases = (
+				84F30CCF4DD79FA3EDD2710D92277E21 /* Headers */,
+				660558DA351A832A0084291C46DBB407 /* Sources */,
+				FECBA8246918D949F4A215C165205F62 /* Frameworks */,
+				599EAC35C7F1480E4857F9636F1FC34D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9ACECCB49B2764846237C844576397FE /* PBXTargetDependency */,
+			);
+			name = "Pods-MuniTracker";
+			productName = "Pods-MuniTracker";
+			productReference = 3F2A5EFFE67868F2EAFB9A5BAE9F0338 /* Pods_MuniTracker.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		B1E6ADDBC7C1822064667BE0996874F2 /* SlideUpPanel */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 261ADB529C6D8B7F7272465F3F080F1F /* Build configuration list for PBXNativeTarget "SlideUpPanel" */;
+			buildPhases = (
+				58ADC944AC9630007F08D32E8B288D6A /* Headers */,
+				9F63E58B691E8176E792B7DE2C39CCC6 /* Sources */,
+				480BE5CC630106E39B5BD26E81937510 /* Frameworks */,
+				3408CC0054DAD879424C8E3AEED5A337 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SlideUpPanel;
+			productName = SlideUpPanel;
+			productReference = EA95270E712161B619A219CCDCCA2169 /* SlideUpPanel.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		C63347FD3228F406410A03C2A2F21876 /* Pods-MuniTrackerRecentExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6A7673D99EF76770ADF3F98FF4A97D6D /* Build configuration list for PBXNativeTarget "Pods-MuniTrackerRecentExtension" */;
+			buildPhases = (
+				1F92FBA26949A55E1916A8357C64135E /* Headers */,
+				03E35D6249CDDB44559A93C19285AC86 /* Sources */,
+				E1524071A6A60249A5C33F43A9B6AA6F /* Frameworks */,
+				2EF2236B75334D9AB2685580233BD367 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-MuniTrackerRecentExtension";
+			productName = "Pods-MuniTrackerRecentExtension";
+			productReference = 68C2658B1BF8272EA350FFD702B7ACF3 /* Pods_MuniTrackerRecentExtension.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1100;
+				LastUpgradeCheck = 1100;
+				TargetAttributes = {
+					B1E6ADDBC7C1822064667BE0996874F2 = {
+						LastSwiftMigration = 1130;
+					};
+				};
+			};
+			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
+			productRefGroup = 7EA97E007571C10318300B867F7EACC9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7917A5446D5B9EEF1871FE2A4383995A /* Pods-MuniTracker */,
+				10AA8013F70BBF2AC1B0F19075FADDD8 /* Pods-MuniTrackerFavoritesExtension */,
+				3B28B682C2896854B9C8938911C6EEE2 /* Pods-MuniTrackerNearbyExtension */,
+				C63347FD3228F406410A03C2A2F21876 /* Pods-MuniTrackerRecentExtension */,
+				B1E6ADDBC7C1822064667BE0996874F2 /* SlideUpPanel */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2EF2236B75334D9AB2685580233BD367 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3408CC0054DAD879424C8E3AEED5A337 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		599EAC35C7F1480E4857F9636F1FC34D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		83903988B7683B59688BDDB364D29998 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		94F8E0C029476A2F47B63E748631B98F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		03E35D6249CDDB44559A93C19285AC86 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				70429254D0C47D77D9C5BFB4EB3D8099 /* Pods-MuniTrackerRecentExtension-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		660558DA351A832A0084291C46DBB407 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43B53D690484B2884896CB7BA6FCAA6B /* Pods-MuniTracker-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9F63E58B691E8176E792B7DE2C39CCC6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				64137C203E2A74F8A9437F540DE3970F /* SlideUpPanel-dummy.m in Sources */,
+				7637B25ECA5DA90E0A72B5CF8A21AA74 /* SlideUpPanel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CCEBACB438CF4190B5D4CFAAA0221130 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D20C8BCA64146A4B36047BF8F157F753 /* Pods-MuniTrackerNearbyExtension-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E90577B2DB1B5C0EB4DA94ADA237E4EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB9DEF11B88A6AF868CAF84C7F7393B0 /* Pods-MuniTrackerFavoritesExtension-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9ACECCB49B2764846237C844576397FE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SlideUpPanel;
+			target = B1E6ADDBC7C1822064667BE0996874F2 /* SlideUpPanel */;
+			targetProxy = F137F8820358C087EFBC62BF008D12D6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		131356BE54884448CA49C07BEDF4BB2A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		25F3725D741A2D10CC10425D7BF1610E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2BF87BE07FBF586623461596EFB021D1 /* Pods-MuniTrackerNearbyExtension.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-MuniTrackerNearbyExtension/Pods-MuniTrackerNearbyExtension-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-MuniTrackerNearbyExtension/Pods-MuniTrackerNearbyExtension.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		32B0D5D2AB5DAA7DF195EE3B78302143 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1DDF56ECFF84FD9891F0DA49A022CBFD /* Pods-MuniTracker.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-MuniTracker/Pods-MuniTracker-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-MuniTracker/Pods-MuniTracker.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		4967A76BF092CD0713B5566EAE894761 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0AF83CB9BA243DF5DC80D3BACE9AB552 /* Pods-MuniTrackerRecentExtension.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-MuniTrackerRecentExtension/Pods-MuniTrackerRecentExtension-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-MuniTrackerRecentExtension/Pods-MuniTrackerRecentExtension.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		5067B1B152A2FAEE53B5EE2124182090 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 411636C6ECA4CB6B5D92418BEBF98279 /* Pods-MuniTrackerNearbyExtension.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-MuniTrackerNearbyExtension/Pods-MuniTrackerNearbyExtension-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-MuniTrackerNearbyExtension/Pods-MuniTrackerNearbyExtension.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		6D7C61FDAA5826A7F7AFDA06069350F2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9ED2498C807531FF2AF54CEB5AE1BF46 /* Pods-MuniTrackerRecentExtension.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-MuniTrackerRecentExtension/Pods-MuniTrackerRecentExtension-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-MuniTrackerRecentExtension/Pods-MuniTrackerRecentExtension.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		8184804DC50F1E4496F9AE706D0AEE90 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9738427036990B5C10ED4AD2C13D8A11 /* Pods-MuniTrackerFavoritesExtension.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-MuniTrackerFavoritesExtension/Pods-MuniTrackerFavoritesExtension-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-MuniTrackerFavoritesExtension/Pods-MuniTrackerFavoritesExtension.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		8A291208BD3B5B1A4EC10BBEA7D66FC2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9164DFF6D745113A97AB4CDF91366735 /* SlideUpPanel.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/SlideUpPanel/SlideUpPanel-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SlideUpPanel/SlideUpPanel-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/SlideUpPanel/SlideUpPanel.modulemap";
+				PRODUCT_MODULE_NAME = SlideUpPanel;
+				PRODUCT_NAME = SlideUpPanel;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		B07874237248D1818025E9CA18580EAE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9164DFF6D745113A97AB4CDF91366735 /* SlideUpPanel.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/SlideUpPanel/SlideUpPanel-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SlideUpPanel/SlideUpPanel-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/SlideUpPanel/SlideUpPanel.modulemap";
+				PRODUCT_MODULE_NAME = SlideUpPanel;
+				PRODUCT_NAME = SlideUpPanel;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		CE283D4D19FAEA46E29293A9BEB211E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B4171D03B61B6F8D6C8A59D15E39E729 /* Pods-MuniTrackerFavoritesExtension.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-MuniTrackerFavoritesExtension/Pods-MuniTrackerFavoritesExtension-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-MuniTrackerFavoritesExtension/Pods-MuniTrackerFavoritesExtension.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		EF9AA2D6A170477CDB0C0D9FB5F50508 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E205EA35473EAC4D7A5FE7AA4BC8D582 /* Pods-MuniTracker.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-MuniTracker/Pods-MuniTracker-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-MuniTracker/Pods-MuniTracker.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		F090CD07A80273D5A73C8EA19224ADDB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0EF2F7BCCE9E5A7595B49485C077B3CD /* Build configuration list for PBXNativeTarget "Pods-MuniTrackerFavoritesExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8184804DC50F1E4496F9AE706D0AEE90 /* Debug */,
+				CE283D4D19FAEA46E29293A9BEB211E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		261ADB529C6D8B7F7272465F3F080F1F /* Build configuration list for PBXNativeTarget "SlideUpPanel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B07874237248D1818025E9CA18580EAE /* Debug */,
+				8A291208BD3B5B1A4EC10BBEA7D66FC2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				131356BE54884448CA49C07BEDF4BB2A /* Debug */,
+				F090CD07A80273D5A73C8EA19224ADDB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6836D736F7BDC53CDFCC7F95A154DA27 /* Build configuration list for PBXNativeTarget "Pods-MuniTrackerNearbyExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				25F3725D741A2D10CC10425D7BF1610E /* Debug */,
+				5067B1B152A2FAEE53B5EE2124182090 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6A7673D99EF76770ADF3F98FF4A97D6D /* Build configuration list for PBXNativeTarget "Pods-MuniTrackerRecentExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4967A76BF092CD0713B5566EAE894761 /* Debug */,
+				6D7C61FDAA5826A7F7AFDA06069350F2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		75A27E3100EE20570D3EAF9DF6D88C81 /* Build configuration list for PBXNativeTarget "Pods-MuniTracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				32B0D5D2AB5DAA7DF195EE3B78302143 /* Debug */,
+				EF9AA2D6A170477CDB0C0D9FB5F50508 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+}

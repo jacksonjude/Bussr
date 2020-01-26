@@ -53,6 +53,12 @@ extension UIColor
             return Int(lowerHex) ?? 0
         }
     }
+    
+    var hsba: (h: CGFloat, s: CGFloat, b: CGFloat, a: CGFloat) {
+        var hsba: (h: CGFloat, s: CGFloat, b: CGFloat, a: CGFloat) = (0, 0, 0, 0)
+        self.getHue(&(hsba.h), saturation: &(hsba.s), brightness: &(hsba.b), alpha: &(hsba.a))
+        return hsba
+    }
 }
 
 class DirectionStopCell: UITableViewCell
