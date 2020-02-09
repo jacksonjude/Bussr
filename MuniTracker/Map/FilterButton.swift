@@ -23,7 +23,7 @@ class FilterButton: UIButton
     init(imagePath: String, superview: UIView)
     {
         self.imagePath = imagePath
-        super.init(frame: CGRect(x: superview.frame.width-imageSize-8, y: (swipeBarSize)+8, width: imageSize, height: imageSize))
+        super.init(frame: CGRect(x: superview.frame.width-imageSize-8, y: (panelTipSize)+8, width: imageSize, height: imageSize))
         
         superview.addSubview(self)
         
@@ -32,7 +32,7 @@ class FilterButton: UIButton
         self.translatesAutoresizingMaskIntoConstraints = false
         
         superview.addConstraint(leadingConstraint!)
-        superview.addConstraint(NSLayoutConstraint(item: self, attribute: .top, relatedBy: .equal, toItem: self.superview, attribute: .top, multiplier: 1, constant: (swipeBarSize)+8))
+        superview.addConstraint(NSLayoutConstraint(item: self, attribute: .top, relatedBy: .equal, toItem: self.superview, attribute: .top, multiplier: 1, constant: (panelTipSize)+8))
         self.addConstraint(NSLayoutConstraint(item: self, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: imageSize))
         self.addConstraint(NSLayoutConstraint(item: self, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: imageSize))
         

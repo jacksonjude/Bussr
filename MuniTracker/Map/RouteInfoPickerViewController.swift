@@ -21,7 +21,10 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     @IBOutlet weak var addNotificationButton: UIButton!
     @IBOutlet weak var expandFiltersButton: UIButton!
     @IBOutlet weak var swipeBar: UIView!
-    @IBOutlet weak var swipeBarImage: UIImageView!
+    
+    @IBOutlet weak var panelTipHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var routeInfoPickerHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var routeInfoPanelBottomMarginConstraint: NSLayoutConstraint!
     
     var favoriteFilterEnabled = false
     var locationFilterEnabled = false
@@ -41,15 +44,18 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         NotificationCenter.default.addObserver(self, selector: #selector(selectCurrentStop), name: NSNotification.Name("SelectCurrentStop"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(collapseFilters), name: NSNotification.Name("CollapseFilters"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(enableFilters), name: NSNotification.Name("EnableFilters"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(updateSwipeBarImage), name: NSNotification.Name("RouteInfoPickerViewShown"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(updateSwipeBarImage), name: NSNotification.Name("RouteInfoPickerViewHidden"), object: nil)
         
         setFavoriteButtonImage(inverse: false)
         setupThemeElements()
         
-        //setupSwipeGestures()
+        panelTipHeightConstraint.constant = panelTipSize
+        routeInfoPickerHeightConstraint.constant = panelHalfSize-panelTipSize-panelBottomMargin
+        routeInfoPanelBottomMarginConstraint.constant = panelBottomMargin
+        self.view.layoutIfNeeded()
         
         setupFilterButtons()
+        
+        reloadRouteData()
     }
     
     func setupFilterButtons()
@@ -103,9 +109,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             self.expandFiltersButton.setImage(UIImage(named: "FilterIcon"), for: UIControl.State.normal)
             self.addNotificationButton.setImage(UIImage(named: "BellAddIcon"), for: UIControl.State.normal)
             setFavoriteButtonImage(inverse: false)
-            
-            self.swipeBarImage.image = UIImage(named: (MapState.showingPickerView ? "Down" : "Up") + "AngleIcon")
-            
+                        
             swipeBar.backgroundColor = UIColor(white: 0.97, alpha: 1)
         case .dark:
             for filterButton in filterButtons
@@ -117,9 +121,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             self.expandFiltersButton.setImage(UIImage(named: "FilterIconDark"), for: UIControl.State.normal)
             self.addNotificationButton.setImage(UIImage(named: "BellAddIconDark"), for: UIControl.State.normal)
             setFavoriteButtonImage(inverse: false)
-            
-            self.swipeBarImage.image = UIImage(named: (MapState.showingPickerView ? "Down" : "Up") + "AngleIconDark")
-            
+                        
             swipeBar.backgroundColor = UIColor(white: 0.07, alpha: 1)
         }
     }
@@ -191,9 +193,12 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         NotificationCenter.default.post(name: NSNotification.Name("HideRouteInfoPickerView"), object: nil)
     }
     
-    @objc func updateSwipeBarImage()
-    {
-        swipeBarImage.image = UIImage(named: (MapState.showingPickerView ? "Down" : "Up") + "AngleIcon" + darkImageAppend())
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "embedPanelTip"
+        {
+            let routeInfoPanelTipVC = segue.destination as! RouteInfoPanelTipViewController
+            routeInfoPanelTipVC.mainMapViewController = mainMapViewController
+        }
     }
         
     //MARK: - Picker View
@@ -280,10 +285,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             switch MapState.routeInfoShowing
             {
             case .none:
-                self.view.superview!.isHidden = true
+                break
             case .direction:
-                self.view.superview!.isHidden = false
-                
                 routeInfoToChange = (MapState.routeInfoObject as? Route)?.directions?.array as? Array<Direction> ?? Array<Direction>()
                 
                 disableFilterButtons()
@@ -301,8 +304,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 
                 rowToSelect = (routeInfoToChange as! Array<Direction>).firstIndex(of: (routeInfoToChange as! Array<Direction>).filter({$0.tag == MapState.selectedDirectionTag}).first ?? (routeInfoToChange as! Array<Direction>)[0]) ?? 0
             case .stop:
-                self.view.superview!.isHidden = false
-                
                 routeInfoToChange = (MapState.routeInfoObject as? Direction)?.stops?.array as? Array<Stop> ?? Array<Stop>()
                 
                 showFilterButtons()
@@ -320,8 +321,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 
                 rowToSelect = (routeInfoToChange as! Array<Stop>).firstIndex(of: (routeInfoToChange as! Array<Stop>).filter({$0.tag == MapState.selectedStopTag}).first ?? (routeInfoToChange as! Array<Stop>)[0]) ?? 0
             case .otherDirections:
-                self.view.superview!.isHidden = false
-                
                 routeInfoToChange = MapState.routeInfoObject as? Array<Direction> ?? Array<Direction>()
                 
                 disableFilterButtons()
@@ -336,8 +335,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 
                 rowToSelect = (routeInfoToChange as! Array<Direction>).firstIndex(of: (routeInfoToChange as! Array<Direction>).filter({$0.tag == MapState.selectedDirectionTag}).first ?? (routeInfoToChange as! Array<Direction>)[0]) ?? 0
             case .vehicles:
-                self.view.superview!.isHidden = false
-                
                 routeInfoToChange = MapState.routeInfoObject as? Array<(vehicleID: String, prediction: String)> ?? Array<(vehicleID: String, prediction: String)>()
                 
                 disableFilterButtons()
@@ -404,7 +401,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         }
         else
         {
-            self.view.superview!.isHidden = true
+            //self.view.superview!.isHidden = true
         }
     }
     

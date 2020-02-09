@@ -51,6 +51,7 @@
 		7A9F7E79216FA40200DF093D /* NotificationRepeatTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9F7E78216FA40200DF093D /* NotificationRepeatTableViewController.swift */; };
 		7A9F7E7B216FA49E00DF093D /* NotificationTimePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9F7E7A216FA49E00DF093D /* NotificationTimePickerViewController.swift */; };
 		7AA5E4B821E2D28E0039CCDD /* FilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5E4B721E2D28E0039CCDD /* FilterButton.swift */; };
+		7AB9E9A323EFF30B002E7D67 /* RouteInfoPanelTipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB9E9A223EFF30B002E7D67 /* RouteInfoPanelTipViewController.swift */; };
 		7AC9BE6623D401B3008D2639 /* MuniTracker.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 7AC9BE6523D401B3008D2639 /* MuniTracker.xcmappingmodel */; };
 		7AC9BE6723D401B3008D2639 /* MuniTracker.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 7AC9BE6523D401B3008D2639 /* MuniTracker.xcmappingmodel */; };
 		7AC9BE6823D401B3008D2639 /* MuniTracker.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 7AC9BE6523D401B3008D2639 /* MuniTracker.xcmappingmodel */; };
@@ -164,6 +165,7 @@
 		7AA5601E212FCAA200C6E47E /* MuniTrackerFavoritesExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MuniTrackerFavoritesExtension.entitlements; sourceTree = "<group>"; };
 		7AA5601F212FCAB300C6E47E /* MuniTrackerNearbyExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MuniTrackerNearbyExtension.entitlements; sourceTree = "<group>"; };
 		7AA5E4B721E2D28E0039CCDD /* FilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterButton.swift; sourceTree = "<group>"; };
+		7AB9E9A223EFF30B002E7D67 /* RouteInfoPanelTipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoPanelTipViewController.swift; sourceTree = "<group>"; };
 		7AC9BE6523D401B3008D2639 /* MuniTracker.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = MuniTracker.xcmappingmodel; sourceTree = "<group>"; };
 		7AD81E0620D6E60C004BAB1E /* MuniTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MuniTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AD81E0920D6E60C004BAB1E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -317,6 +319,7 @@
 			children = (
 				7AD81E0B20D6E60C004BAB1E /* MainMapViewController.swift */,
 				7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */,
+				7AB9E9A223EFF30B002E7D67 /* RouteInfoPanelTipViewController.swift */,
 				7A7FE2B420DB4761005B654C /* MapState.swift */,
 				7AA5E4B721E2D28E0039CCDD /* FilterButton.swift */,
 			);
@@ -805,6 +808,7 @@
 				7AD81E0C20D6E60C004BAB1E /* MainMapViewController.swift in Sources */,
 				7A9F21E72106B0B00000E971 /* FavoriteState.swift in Sources */,
 				7AFB4752216DBD480043450B /* NotificationEditorViewController.swift in Sources */,
+				7AB9E9A323EFF30B002E7D67 /* RouteInfoPanelTipViewController.swift in Sources */,
 				7AA5E4B821E2D28E0039CCDD /* FilterButton.swift in Sources */,
 				7AD81E0A20D6E60C004BAB1E /* AppDelegate.swift in Sources */,
 				7A71722B20D70943002144D5 /* RoutesTableViewController.swift in Sources */,
@@ -894,7 +898,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerFavoritesExtension/MuniTrackerFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200208;
+				CURRENT_PROJECT_VERSION = 20200209;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerFavoritesExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -906,7 +910,7 @@
 				PRODUCT_NAME = "BusTracker - Favorites";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -916,7 +920,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerFavoritesExtension/MuniTrackerFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200208;
+				CURRENT_PROJECT_VERSION = 20200209;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerFavoritesExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -928,7 +932,7 @@
 				PRODUCT_NAME = "BusTracker - Favorites";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -938,7 +942,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerRecentExtension/MuniTrackerRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200208;
+				CURRENT_PROJECT_VERSION = 20200209;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerRecentExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -950,7 +954,7 @@
 				PRODUCT_NAME = "BusTracker - Recent";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -960,7 +964,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerRecentExtension/MuniTrackerRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200208;
+				CURRENT_PROJECT_VERSION = 20200209;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerRecentExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -972,7 +976,7 @@
 				PRODUCT_NAME = "BusTracker - Recent";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -982,7 +986,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerNearbyExtension/MuniTrackerNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200208;
+				CURRENT_PROJECT_VERSION = 20200209;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerNearbyExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -994,7 +998,7 @@
 				PRODUCT_NAME = "BusTracker - Nearby";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1004,7 +1008,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerNearbyExtension/MuniTrackerNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200208;
+				CURRENT_PROJECT_VERSION = 20200209;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerNearbyExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1016,7 +1020,7 @@
 				PRODUCT_NAME = "BusTracker - Nearby";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -1142,7 +1146,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = MuniTracker/MuniTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200208;
+				CURRENT_PROJECT_VERSION = 20200209;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1166,7 +1170,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = MuniTracker/MuniTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200208;
+				CURRENT_PROJECT_VERSION = 20200209;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;

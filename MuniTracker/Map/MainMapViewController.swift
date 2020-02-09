@@ -8,9 +8,12 @@
 
 import UIKit
 import MapKit
+import FloatingPanel
 
 let appDelegate = UIApplication.shared.delegate as! AppDelegate
-let swipeBarSize: CGFloat = 30.0
+let panelTipSize: CGFloat = 90.0
+let panelHalfSize: CGFloat = 300.0
+let panelBottomMargin: CGFloat = 30.0
 
 enum AnnotationType
 {
@@ -106,7 +109,7 @@ extension Dictionary
     }
 }*/
 
-class MainMapViewController: UIViewController, MKMapViewDelegate {
+class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelControllerDelegate {
     
     @IBOutlet weak var mainMapView: MKMapView!
     @IBOutlet weak var predictionTimesNavigationBar: UINavigationBar!
@@ -115,10 +118,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var refreshButton: UIBarButtonItem!
     @IBOutlet weak var mainNavigationItem: UINavigationItem!
     @IBOutlet weak var mainNavigationBar: UINavigationBar!
-    @IBOutlet weak var mainToolbar: UIToolbar!
-    @IBOutlet weak var showHidePickerButton: UIBarButtonItem!
     @IBOutlet weak var vehicleSelectionButton: UIButton!
-    @IBOutlet weak var pickerViewBottomConstraint: NSLayoutConstraint!
+    //@IBOutlet weak var pickerViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var predictionBarTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var predictionTimesProgressView: UIProgressView!
     @IBOutlet weak var predictionTimesProgressViewConstraint: NSLayoutConstraint!
@@ -155,9 +156,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         centerMapOnLocation(location: initialLocation, range: 15000)
         
         setupRouteMapUpdateNotifications()
-        
-        setupHidePickerButton()
-        self.pickerViewBottomConstraint.constant = -1*(self.view.viewWithTag(618)?.frame.size.height ?? 0)
+                
+        setupPickerPanel()
         
         if appDelegate.firstLaunch
         {
@@ -280,17 +280,48 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     
     //MARK: - Picker View Show/Hide
     
+    var pickerFloatingPanelController: FloatingPanelController?
+    
+    func setupPickerPanel()
+    {
+        self.pickerFloatingPanelController = FloatingPanelController()
+        
+        pickerFloatingPanelController?.delegate = self
+        
+        let pickerContentVC = storyboard!.instantiateViewController(withIdentifier: "RouteInfoPickerViewController") as! RouteInfoPickerViewController
+        pickerContentVC.mainMapViewController = self
+        
+        pickerFloatingPanelController?.set(contentViewController: pickerContentVC)
+                
+        pickerFloatingPanelController?.addPanel(toParent: self)
+        pickerFloatingPanelController?.updateLayout()
+        
+        pickerFloatingPanelController?.move(to: .tip, animated: false)
+    }
+    
+    func floatingPanel(_ vc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout? {
+        if MapState.routeInfoShowing == .none
+        {
+            return RouteInfoPickerTipFloatingPanelLayout()
+        }
+        else
+        {
+            return RouteInfoPickerFloatingPanelLayout()
+        }
+    }
+    
+    func floatingPanelDidChangePosition(_ vc: FloatingPanelController) {
+        if vc.position == .tip
+        {
+            NotificationCenter.default.post(name: NSNotification.Name("CollapseFilters"), object: self)
+        }
+    }
+    
     @objc func showPickerView()
     {
         MapState.showingPickerView = true
-        self.pickerViewBottomConstraint.constant = 0
-        //self.view.viewWithTag(618)?.isHidden = false
-        
-        UIView.animate(withDuration: 0.5, animations: {
-            self.view.layoutSubviews()
-        }) { (bool) in
-            self.setupHidePickerButton()
-        }
+        pickerFloatingPanelController?.updateLayout()
+        self.pickerFloatingPanelController?.move(to: .half, animated: false)
         
         NotificationCenter.default.post(name: NSNotification.Name("RouteInfoPickerViewShown"), object: nil)
     }
@@ -300,30 +331,10 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         NotificationCenter.default.post(name: NSNotification.Name("CollapseFilters"), object: self)
         
         MapState.showingPickerView = false
-        self.pickerViewBottomConstraint.constant = -1*(self.view.viewWithTag(618)?.frame.size.height ?? 0)+swipeBarSize
+        self.pickerFloatingPanelController?.move(to: .tip, animated: false)
         
-        UIView.animate(withDuration: 0.5, animations: {
-            self.view.layoutSubviews()
-        }) { (bool) in
-            //self.view.viewWithTag(618)?.isHidden = true
-            self.setupShowPickerButton()
-        }
         
         NotificationCenter.default.post(name: NSNotification.Name("RouteInfoPickerViewHidden"), object: nil)
-    }
-    
-    func setupHidePickerButton()
-    {
-        /*showHidePickerButton.title = "Hide"
-        showHidePickerButton.target = self
-        showHidePickerButton.action = #selector(hidePickerView)*/
-    }
-    
-    func setupShowPickerButton()
-    {
-        /*showHidePickerButton.title = "Show"
-        showHidePickerButton.target = self
-        showHidePickerButton.action = #selector(showPickerView)*/
     }
     
     //MARK: - Update Notifications
@@ -346,13 +357,13 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
     {
         mainMapView.setRegion(MKCoordinateRegion(center: mainMapView.region.center, latitudinalMeters: range, longitudinalMeters: range), animated: false)
         
-        //let offset = self.view.viewWithTag(618)?.frame.height ?? 0
+        let offset = panelHalfSize-10
         
-        //var point = mainMapView.convert(location.coordinate, toPointTo: self.view)
-        //point.y += offset/2
-        //let offsetCoordinate = mainMapView.convert(point, toCoordinateFrom: self.view)
+        var point = mainMapView.convert(location.coordinate, toPointTo: self.view)
+        point.y += offset/2
+        let offsetCoordinate = mainMapView.convert(point, toCoordinateFrom: self.view)
         
-        mainMapView.setRegion(MKCoordinateRegion(center: location.coordinate, latitudinalMeters: range, longitudinalMeters: range), animated: !willChangeRange)
+        mainMapView.setRegion(MKCoordinateRegion(center: offsetCoordinate, latitudinalMeters: range, longitudinalMeters: range), animated: !willChangeRange)
     }
     
     @objc func updateMap(notification: Notification?)
@@ -363,9 +374,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             resetAnnotations()
             
             hidePredictionNavigationBar()
-            
-            showHidePickerButton.isEnabled = false
-            
+                        
             mainNavigationItem.title = "Map"
         case .direction:
             reloadAllAnnotations()
@@ -381,10 +390,10 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 bringSelectedStopHeaderToFront()
             }
             
+            showPickerView()
+            
             hidePredictionNavigationBar()
-            
-            showHidePickerButton.isEnabled = true
-            
+                        
             mainNavigationItem.title = MapState.getCurrentDirection()?.route?.title
         case .stop:
             let changingRouteInfoShowing = notification?.userInfo?["ChangingRouteInfoShowing"] as? Bool ?? true
@@ -413,9 +422,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
                 reloadPolyline()
             }
             
-            //setFavoriteButtonImage(inverse: false)
-            
-            showHidePickerButton.isEnabled = true
+            showPickerView()
             
             mainNavigationItem.title = MapState.getCurrentDirection()?.route?.title
         case .otherDirections:
@@ -819,11 +826,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             notificationEditorView.stopNotification = self.newStopNotification
             notificationEditorView.newNotification = true
         }
-        else if segue.identifier == "embedRoutePicker"
-        {
-            let routeInfoPickerVC = segue.destination as! RouteInfoPickerViewController
-            routeInfoPickerVC.mainMapViewController = self
-        }
     }
     
     @IBAction func unwindFromRouteTableViewWithSelectedRoute(_ segue: UIStoryboardSegue)
@@ -1133,38 +1135,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    /*//MARK: - Add Favorite
-    
-    @IBAction func addFavoriteButtonPressed(_ sender: Any) {
-        setFavoriteButtonImage(inverse: true)
-        
-        NotificationCenter.default.post(name: NSNotification.Name("ToggleFavoriteForStop"), object: nil)
-    }
-    
-    func setFavoriteButtonImage(inverse: Bool)
-    {
-        if MapState.selectedStopTag != nil
-        {
-            if let stop = MapState.getCurrentStop(), let direction = MapState.getCurrentDirection()
-            {
-                var stopIsFavorite = RouteDataManager.favoriteStopExists(stopTag: stop.stopTag!, directionTag: direction.directionTag!)
-                if inverse
-                {
-                    stopIsFavorite = !stopIsFavorite
-                }
-                
-                if stopIsFavorite
-                {
-                    addFavoriteButton.image = UIImage(named:  "FavoriteAddFillIcon")
-                }
-                else
-                {
-                    addFavoriteButton.image = UIImage(named: "FavoriteAddIcon")
-                }
-            }
-        }
-    }*/
-    
     //MARK: - Tracking
     
     @IBAction func toggleVehiclesButtonPressed(_ sender: Any) {
@@ -1262,5 +1232,34 @@ class SelectedStopHeadingAnnotation: NSObject, MKAnnotation
     {
         self.coordinate = coordinate
         self.headingValue = heading
+    }
+}
+
+class RouteInfoPickerFloatingPanelLayout: FloatingPanelIntrinsicLayout {
+    var initialPosition: FloatingPanelPosition {
+        return .tip
+    }
+    
+    var supportedPositions: Set<FloatingPanelPosition> {
+        return [.tip, .half]
+    }
+
+    func insetFor(position: FloatingPanelPosition) -> CGFloat? {
+        switch position {
+            case .half: return panelHalfSize
+            case .tip: return panelTipSize
+            default: return nil // Or `case .hidden: return nil`
+        }
+    }
+    
+    var positionReference: FloatingPanelLayoutReference {
+        return .fromSuperview
+    }
+}
+
+class RouteInfoPickerTipFloatingPanelLayout: RouteInfoPickerFloatingPanelLayout
+{
+    override var supportedPositions: Set<FloatingPanelPosition> {
+        return [.tip]
     }
 }
