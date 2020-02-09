@@ -157,7 +157,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         setupRouteMapUpdateNotifications()
         
         setupHidePickerButton()
-        
         self.pickerViewBottomConstraint.constant = -1*(self.view.viewWithTag(618)?.frame.size.height ?? 0)
         
         if appDelegate.firstLaunch
@@ -820,6 +819,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
             notificationEditorView.stopNotification = self.newStopNotification
             notificationEditorView.newNotification = true
         }
+        else if segue.identifier == "embedRoutePicker"
+        {
+            let routeInfoPickerVC = segue.destination as! RouteInfoPickerViewController
+            routeInfoPickerVC.mainMapViewController = self
+        }
     }
     
     @IBAction func unwindFromRouteTableViewWithSelectedRoute(_ segue: UIStoryboardSegue)
@@ -1188,7 +1192,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate {
         
         NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
     }
-    
 }
 
 class StopAnnotation: NSObject, MKAnnotation

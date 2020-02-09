@@ -7,6 +7,7 @@ target 'MuniTracker' do
 
   # Pods for MuniTracker
   pod 'CloudCore'
+  pod 'FloatingPanel'
 
 end
 

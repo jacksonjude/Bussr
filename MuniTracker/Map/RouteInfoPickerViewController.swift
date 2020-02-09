@@ -28,6 +28,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     var waitingForLocation = false
     var filtersExpanded = false
     
+    var mainMapViewController: MainMapViewController?
+
     //MARK: - View
     
     override func viewDidLoad() {
@@ -45,7 +47,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         setFavoriteButtonImage(inverse: false)
         setupThemeElements()
         
-        setupSwipeGestures()
+        //setupSwipeGestures()
         
         setupFilterButtons()
     }

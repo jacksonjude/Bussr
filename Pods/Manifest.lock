@@ -1,16 +1,20 @@
 PODS:
   - CloudCore (3.0.1)
+  - FloatingPanel (1.7.1)
 
 DEPENDENCIES:
   - CloudCore
+  - FloatingPanel
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - CloudCore
+    - FloatingPanel
 
 SPEC CHECKSUMS:
   CloudCore: 605345ab755affeb1d8320c467d87c7d0aa746a9
+  FloatingPanel: 2f87246071476cf05d77ba3f50a373ca4b04549e
 
-PODFILE CHECKSUM: 1170b3b494904726a503740fce8daf919d0c5ee3
+PODFILE CHECKSUM: ab1e34f05fbebbb8150d531fe4634f25c60bf595
 
 COCOAPODS: 1.7.5
