@@ -21,9 +21,10 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     @IBOutlet weak var addNotificationButton: UIButton!
     @IBOutlet weak var expandFiltersButton: UIButton!
     @IBOutlet weak var swipeBar: UIView!
+    @IBOutlet weak var routeInfoPickerContainer: UIView!
     
     @IBOutlet weak var panelTipHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var routeInfoPickerHeightConstraint: NSLayoutConstraint!
+    //@IBOutlet weak var routeInfoPickerHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var routeInfoPanelBottomMarginConstraint: NSLayoutConstraint!
     
     var favoriteFilterEnabled = false
@@ -49,7 +50,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         setupThemeElements()
         
         panelTipHeightConstraint.constant = panelTipSize
-        routeInfoPickerHeightConstraint.constant = panelHalfSize-panelTipSize-panelBottomMargin
+        //routeInfoPickerHeightConstraint.constant = panelHalfSize-panelTipSize-panelBottomMargin
         routeInfoPanelBottomMarginConstraint.constant = panelBottomMargin
         self.view.layoutIfNeeded()
         
@@ -60,8 +61,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     
     func setupFilterButtons()
     {
-        let favoriteButton = FilterButton(imagePath: "Favorite", superview: self.view)
-        let locationButton = FilterButton(imagePath: "CurrentLocation", superview: self.view)
+        let favoriteButton = FilterButton(imagePath: "Favorite", superview: routeInfoPickerContainer)
+        let locationButton = FilterButton(imagePath: "CurrentLocation", superview: routeInfoPickerContainer)
         favoriteButton.singleTapHandler = {
             self.favoriteFilterButtonPressed(favoriteButton)
             favoriteButton.filterIsEnabled = self.favoriteFilterEnabled
@@ -110,7 +111,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             self.addNotificationButton.setImage(UIImage(named: "BellAddIcon"), for: UIControl.State.normal)
             setFavoriteButtonImage(inverse: false)
                         
-            swipeBar.backgroundColor = UIColor(white: 0.97, alpha: 1)
+            swipeBar.backgroundColor = UIColor(white: 1, alpha: 1)
         case .dark:
             for filterButton in filterButtons
             {
@@ -122,7 +123,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             self.addNotificationButton.setImage(UIImage(named: "BellAddIconDark"), for: UIControl.State.normal)
             setFavoriteButtonImage(inverse: false)
                         
-            swipeBar.backgroundColor = UIColor(white: 0.07, alpha: 1)
+            swipeBar.backgroundColor = UIColor(white: 0, alpha: 1)
         }
     }
     
@@ -259,7 +260,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         if locationFilterEnabled
         {
             locationFilterEnabled = false
-            //locationButton.setImage(UIImage(named: "CurrentLocationIcon" + darkImageAppend()), for: UIControl.State.normal)
         }
         
         for filterButton in filterButtons
@@ -637,15 +637,13 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         expandFiltersButton.isEnabled = false
         
         showFilterButtons()
-        
-        //favoriteButtonLeadingConstraint.constant = -1*(favoriteButton.frame.size.height)
-        
+                
         for filterButton in filterButtons
         {
             filterButton.leadingConstraint?.constant = -8
         }
         
-        self.view.layoutSubviews()
+        self.routeInfoPickerContainer.layoutSubviews()
         
         var filterButtonNumber: CGFloat = 0
         for filterButton in filterButtons
@@ -653,10 +651,9 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             filterButton.leadingConstraint?.constant = -1*(((filterButton.frame.size.height)*filterButtonNumber) + (8*(filterButtonNumber+1)))
             filterButtonNumber += 1
         }
-        //favoriteButtonLeadingConstraint.constant = 8
         
         UIView.animate(withDuration: 0.5) {
-            self.view.layoutSubviews()
+            self.routeInfoPickerContainer.layoutSubviews()
         }
     }
     
@@ -664,20 +661,14 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     {
         filtersExpanded = false
         
-        //favoriteButtonLeadingConstraint.constant = -1*(favoriteButton.frame.size.height)
         for filterButton in filterButtons
         {
             filterButton.leadingConstraint?.constant = -8
         }
         
         UIView.animate(withDuration: 0.3, animations: {
-            self.view.layoutSubviews()
+            self.routeInfoPickerContainer.layoutSubviews()
         }) { (bool) in
-            /*self.favoriteButton.isHidden = true
-            self.favoriteButton.isEnabled = false
-            self.locationButton.isHidden = true
-            self.locationButton.isEnabled = false*/
-            
             for filterButton in self.filterButtons
             {
                 filterButton.disableButton()
@@ -696,9 +687,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         favoriteFilterEnabled = false
         locationFilterEnabled = false
         
-        /*favoriteButton.setImage(UIImage(named: "FavoriteIcon" + darkImageAppend()), for: UIControl.State.normal)
-        locationButton.setImage(UIImage(named: "CurrentLocationIcon" + darkImageAppend()), for: UIControl.State.normal)*/
-        
         for filterButton in filterButtons
         {
             filterButton.filterIsEnabled = false
@@ -712,9 +700,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         
         favoriteFilterEnabled = true
         locationFilterEnabled = true
-        
-        /*favoriteButton.setImage(UIImage(named: "FavoriteFillIcon" + darkImageAppend()), for: UIControl.State.normal)
-        locationButton.setImage(UIImage(named: "CurrentLocationFillIcon" + darkImageAppend()), for: UIControl.State.normal)*/
         
         for filterButton in filterButtons
         {

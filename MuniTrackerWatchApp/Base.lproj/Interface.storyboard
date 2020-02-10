@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="15705" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
+    <device id="watch38"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="15501"/>
+    </dependencies>
+    <scenes>
+        <!--Favorites-->
+        <scene sceneID="aou-V4-d1y">
+            <objects>
+                <controller identifier="Favorites" id="AgC-eL-Hgc" customClass="FavoritesWatchInterfaceController" customModule="MuniTrackerWatchApp_Extension">
+                    <items>
+                        <table alignment="left" id="Syl-eJ-5gE">
+                            <items>
+                                <tableRow identifier="DirectionStopRow" id="ofW-XK-K0m" customClass="DirectionStopRowController" customModule="MuniTrackerWatchApp_Extension">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" id="s4Q-jt-oD2">
+                                        <items>
+                                            <group width="1" alignment="left" layout="vertical" id="vNO-zO-zaJ">
+                                                <items>
+                                                    <group width="1" alignment="left" id="WpI-er-4IM">
+                                                        <items>
+                                                            <label alignment="left" text="Route" minimumScaleFactor="0.5" id="Idf-vr-8XT"/>
+                                                            <label alignment="right" text="Times" minimumScaleFactor="0.5" id="VqZ-R0-8Px"/>
+                                                        </items>
+                                                    </group>
+                                                    <label alignment="left" text="Stop" minimumScaleFactor="0.40000000000000002" id="ZW2-Ae-mLl"/>
+                                                </items>
+                                            </group>
+                                        </items>
+                                    </group>
+                                    <connections>
+                                        <outlet property="directionStopRowGroup" destination="s4Q-jt-oD2" id="nLv-ul-Loy"/>
+                                        <outlet property="predictionTimesLabel" destination="VqZ-R0-8Px" id="0nW-kX-tXh"/>
+                                        <outlet property="routeLabel" destination="Idf-vr-8XT" id="sJ1-tb-nOG"/>
+                                        <outlet property="stopLabel" destination="ZW2-Ae-mLl" id="52w-W1-XWc"/>
+                                    </connections>
+                                </tableRow>
+                            </items>
+                        </table>
+                    </items>
+                    <connections>
+                        <outlet property="favoritesTable" destination="Syl-eJ-5gE" id="MTD-G1-uW8"/>
+                        <segue destination="7s7-jh-DES" kind="relationship" relationship="nextPage" id="fXQ-SG-Zrt"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="34" y="83"/>
+        </scene>
+        <!--Recent-->
+        <scene sceneID="gWR-hq-gef">
+            <objects>
+                <controller identifier="Recent" id="7s7-jh-DES">
+                    <items>
+                        <table alignment="left" id="Sxe-U7-DoB">
+                            <items>
+                                <tableRow identifier="DirectionStopRow" id="zA5-Dr-53S" customClass="DirectionStopRowController" customModule="MuniTrackerWatchApp_Extension">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" id="5Ig-rR-e7f">
+                                        <items>
+                                            <group width="1" alignment="left" layout="vertical" id="Xqr-XH-oL2">
+                                                <items>
+                                                    <group width="1" alignment="left" id="aAS-W7-d4I">
+                                                        <items>
+                                                            <label alignment="left" text="Route" minimumScaleFactor="0.5" id="noE-ll-f3N"/>
+                                                            <label alignment="right" text="Times" minimumScaleFactor="0.5" id="gQt-Fk-KCB"/>
+                                                        </items>
+                                                    </group>
+                                                    <label alignment="left" text="Stop" minimumScaleFactor="0.40000000000000002" id="mjY-wj-Xuu"/>
+                                                </items>
+                                            </group>
+                                        </items>
+                                    </group>
+                                </tableRow>
+                            </items>
+                        </table>
+                    </items>
+                    <connections>
+                        <segue destination="obO-q5-WyC" kind="relationship" relationship="nextPage" id="fMW-ph-ylq"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="312" y="83"/>
+        </scene>
+        <!--Nearby-->
+        <scene sceneID="UyJ-NP-h5c">
+            <objects>
+                <controller identifier="Nearby" id="obO-q5-WyC">
+                    <items>
+                        <table alignment="left" id="ccL-Pu-rkc">
+                            <items>
+                                <tableRow identifier="DirectionStopRow" id="Hue-Bs-P2S" customClass="DirectionStopRowController" customModule="MuniTrackerWatchApp_Extension">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" id="998-GL-Q6A">
+                                        <items>
+                                            <group width="1" alignment="left" layout="vertical" id="wr4-fN-cpn">
+                                                <items>
+                                                    <group width="1" alignment="left" id="vTa-Xa-b9q">
+                                                        <items>
+                                                            <label alignment="left" text="Route" minimumScaleFactor="0.5" id="J2q-km-7Vv"/>
+                                                            <label alignment="right" text="Times" minimumScaleFactor="0.5" id="mdg-EI-g98"/>
+                                                        </items>
+                                                    </group>
+                                                    <label alignment="left" text="Stop" minimumScaleFactor="0.40000000000000002" id="pgC-FK-3nn"/>
+                                                </items>
+                                            </group>
+                                        </items>
+                                    </group>
+                                </tableRow>
+                            </items>
+                        </table>
+                    </items>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="596" y="83"/>
+        </scene>
+    </scenes>
+</document>

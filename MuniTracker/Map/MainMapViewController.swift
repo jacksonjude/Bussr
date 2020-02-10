@@ -11,9 +11,9 @@ import MapKit
 import FloatingPanel
 
 let appDelegate = UIApplication.shared.delegate as! AppDelegate
-let panelTipSize: CGFloat = 90.0
-let panelHalfSize: CGFloat = 300.0
-let panelBottomMargin: CGFloat = 30.0
+let panelTipSize: CGFloat = 80.0
+let panelHalfSize: CGFloat = 281.0
+let panelBottomMargin: CGFloat = 5.0
 
 enum AnnotationType
 {
@@ -292,9 +292,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         pickerContentVC.mainMapViewController = self
         
         pickerFloatingPanelController?.set(contentViewController: pickerContentVC)
-                
+        
         pickerFloatingPanelController?.addPanel(toParent: self)
         pickerFloatingPanelController?.updateLayout()
+        
+        self.view.viewWithTag(618)?.isHidden = true
         
         pickerFloatingPanelController?.move(to: .tip, animated: false)
     }
@@ -313,8 +315,33 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     func floatingPanelDidChangePosition(_ vc: FloatingPanelController) {
         if vc.position == .tip
         {
+            self.view.viewWithTag(618)?.alpha = 0.0
             NotificationCenter.default.post(name: NSNotification.Name("CollapseFilters"), object: self)
         }
+        else
+        {
+            self.view.viewWithTag(618)?.alpha = 1.0
+        }
+    }
+    
+    func floatingPanelDidMove(_ vc: FloatingPanelController) {
+        if MapState.routeInfoShowing == .none { return }
+
+        let y = vc.surfaceView.frame.origin.y
+        let tipY = vc.originYOfSurface(for: .tip)
+        if y > tipY - panelTipSize {
+            let progress = max(0.0, min((tipY  - y) / panelTipSize, 1.0))
+            self.view.viewWithTag(618)?.alpha = progress
+        }
+    }
+    
+    func floatingPanelDidEndDragging(_ vc: FloatingPanelController, withVelocity velocity: CGPoint, targetPosition: FloatingPanelPosition) {
+        if MapState.routeInfoShowing == .none { return }
+
+        let progress = ((targetPosition == .tip) ? 0.0 : 1.0)
+        UIView.animate(withDuration: 0.25, delay: 0.0, options: .allowUserInteraction, animations: {
+            self.view.viewWithTag(618)?.alpha = CGFloat(progress)
+        }, completion: nil)
     }
     
     @objc func showPickerView()
@@ -322,6 +349,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         MapState.showingPickerView = true
         pickerFloatingPanelController?.updateLayout()
         self.pickerFloatingPanelController?.move(to: .half, animated: false)
+        self.view.viewWithTag(618)?.isHidden = false
         
         NotificationCenter.default.post(name: NSNotification.Name("RouteInfoPickerViewShown"), object: nil)
     }
@@ -357,7 +385,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     {
         mainMapView.setRegion(MKCoordinateRegion(center: mainMapView.region.center, latitudinalMeters: range, longitudinalMeters: range), animated: false)
         
-        let offset = panelHalfSize-10
+        let offset = panelHalfSize-10-panelTipSize
         
         var point = mainMapView.convert(location.coordinate, toPointTo: self.view)
         point.y += offset/2
@@ -365,7 +393,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         mainMapView.setRegion(MKCoordinateRegion(center: offsetCoordinate, latitudinalMeters: range, longitudinalMeters: range), animated: !willChangeRange)
     }
-    
+        
     @objc func updateMap(notification: Notification?)
     {
         switch MapState.routeInfoShowing
@@ -1253,7 +1281,7 @@ class RouteInfoPickerFloatingPanelLayout: FloatingPanelIntrinsicLayout {
     }
     
     var positionReference: FloatingPanelLayoutReference {
-        return .fromSuperview
+        return .fromSafeArea
     }
 }
 

@@ -75,6 +75,21 @@
 		7AE57F8C2270D17600F1B42B /* DirectionStopCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE57F8B2270D17600F1B42B /* DirectionStopCell.swift */; };
 		7AF50BE220E1B71E00E4BFD1 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF50BE120E1B71E00E4BFD1 /* SettingsViewController.swift */; };
 		7AFB4752216DBD480043450B /* NotificationEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB4751216DBD480043450B /* NotificationEditorViewController.swift */; };
+		7AFD5CA823F009EA00AFFEEF /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AFD5CA623F009EA00AFFEEF /* Interface.storyboard */; };
+		7AFD5CAA23F009EB00AFFEEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7AFD5CA923F009EB00AFFEEF /* Assets.xcassets */; };
+		7AFD5CB123F009EB00AFFEEF /* MuniTrackerWatchApp Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7AFD5CB023F009EB00AFFEEF /* MuniTrackerWatchApp Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7AFD5CB623F009EB00AFFEEF /* MuniTrackerWatchInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CB523F009EB00AFFEEF /* MuniTrackerWatchInterfaceController.swift */; };
+		7AFD5CB823F009EB00AFFEEF /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CB723F009EB00AFFEEF /* ExtensionDelegate.swift */; };
+		7AFD5CBA23F009EB00AFFEEF /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CB923F009EB00AFFEEF /* ComplicationController.swift */; };
+		7AFD5CBC23F009EC00AFFEEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7AFD5CBB23F009EC00AFFEEF /* Assets.xcassets */; };
+		7AFD5CC023F009EC00AFFEEF /* BusTracker.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 7AFD5CA423F009EA00AFFEEF /* BusTracker.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7AFD5CC923F00C3200AFFEEF /* DirectionStopRowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CC823F00C3200AFFEEF /* DirectionStopRowController.swift */; };
+		7AFD5CCB23F0AF5200AFFEEF /* RouteDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */; };
+		7AFD5CCC23F0AF8C00AFFEEF /* MuniTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1020D6E60C004BAB1E /* MuniTracker.xcdatamodeld */; };
+		7AFD5CCD23F0AF8F00AFFEEF /* MuniTracker.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 7AC9BE6523D401B3008D2639 /* MuniTracker.xcmappingmodel */; };
+		7AFD5CCE23F0AF9200AFFEEF /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D1421266AC400D3425E /* CoreDataStack.swift */; };
+		7AFD5CCF23F0B2EA00AFFEEF /* MapState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7FE2B420DB4761005B654C /* MapState.swift */; };
+		7AFD5CD123F0B39600AFFEEF /* FavoritesWatchInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CD023F0B39600AFFEEF /* FavoritesWatchInterfaceController.swift */; };
 		E9B34E41BF704EBBCE556F55 /* Pods_MuniTrackerNearbyExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A2E37DEC4CA84755B8870A7 /* Pods_MuniTrackerNearbyExtension.framework */; };
 /* End PBXBuildFile section */
 
@@ -100,6 +115,20 @@
 			remoteGlobalIDString = 7A068D422126980900D3425E;
 			remoteInfo = MuniTrackerNearbyExtension;
 		};
+		7AFD5CB223F009EB00AFFEEF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7AD81DFE20D6E60C004BAB1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7AFD5CAF23F009EB00AFFEEF;
+			remoteInfo = "MuniTrackerWatchApp Extension";
+		};
+		7AFD5CBE23F009EC00AFFEEF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7AD81DFE20D6E60C004BAB1E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7AFD5CA323F009EA00AFFEEF;
+			remoteInfo = MuniTrackerWatchApp;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -112,6 +141,28 @@
 				7A068D4E2126980900D3425E /* BusTracker - Nearby.appex in Embed App Extensions */,
 				7A068D3B212697F000D3425E /* BusTracker - Recent.appex in Embed App Extensions */,
 				7A068D28212697DA00D3425E /* BusTracker - Favorites.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7ADB4F9323F00935006DFDB3 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				7AFD5CC023F009EC00AFFEEF /* BusTracker.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7AFD5CC423F009EC00AFFEEF /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				7AFD5CB123F009EB00AFFEEF /* MuniTrackerWatchApp Extension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -179,6 +230,20 @@
 		7AE57F8B2270D17600F1B42B /* DirectionStopCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionStopCell.swift; sourceTree = "<group>"; };
 		7AF50BE120E1B71E00E4BFD1 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		7AFB4751216DBD480043450B /* NotificationEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEditorViewController.swift; sourceTree = "<group>"; };
+		7AFD5CA423F009EA00AFFEEF /* BusTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BusTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AFD5CA723F009EA00AFFEEF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		7AFD5CA923F009EB00AFFEEF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7AFD5CAB23F009EB00AFFEEF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7AFD5CB023F009EB00AFFEEF /* MuniTrackerWatchApp Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "MuniTrackerWatchApp Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AFD5CB523F009EB00AFFEEF /* MuniTrackerWatchInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuniTrackerWatchInterfaceController.swift; sourceTree = "<group>"; };
+		7AFD5CB723F009EB00AFFEEF /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
+		7AFD5CB923F009EB00AFFEEF /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
+		7AFD5CBB23F009EC00AFFEEF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7AFD5CBD23F009EC00AFFEEF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7AFD5CC823F00C3200AFFEEF /* DirectionStopRowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionStopRowController.swift; sourceTree = "<group>"; };
+		7AFD5CD023F0B39600AFFEEF /* FavoritesWatchInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesWatchInterfaceController.swift; sourceTree = "<group>"; };
+		7AFD5CD223F0B5CD00AFFEEF /* MuniTrackerWatchApp Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MuniTrackerWatchApp Extension.entitlements"; sourceTree = "<group>"; };
+		7AFD5CD323F0B86700AFFEEF /* BusTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BusTracker.entitlements; sourceTree = "<group>"; };
 		7E7B48D7BD62A7D66377914C /* Pods-MuniTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MuniTracker.debug.xcconfig"; path = "Target Support Files/Pods-MuniTracker/Pods-MuniTracker.debug.xcconfig"; sourceTree = "<group>"; };
 		9E2DB524B5793798ECEBF609 /* Pods-MuniTrackerRecentExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MuniTrackerRecentExtension.release.xcconfig"; path = "Target Support Files/Pods-MuniTrackerRecentExtension/Pods-MuniTrackerRecentExtension.release.xcconfig"; sourceTree = "<group>"; };
 		B636E8657E3C8285F44F1197 /* Pods_MuniTrackerFavoritesExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MuniTrackerFavoritesExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -224,6 +289,13 @@
 				7A0E8C6A20E0AAAC00C28465 /* CoreLocation.framework in Frameworks */,
 				7A4930C420D788EA008208D1 /* MapKit.framework in Frameworks */,
 				252C65D0146DAC1EAF98F7C5 /* Pods_MuniTracker.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7AFD5CAD23F009EB00AFFEEF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,6 +420,8 @@
 				7A068D1F212697DA00D3425E /* MuniTrackerFavoritesExtension */,
 				7A068D32212697F000D3425E /* MuniTrackerRecentExtension */,
 				7A068D452126980900D3425E /* MuniTrackerNearbyExtension */,
+				7AFD5CA523F009EA00AFFEEF /* MuniTrackerWatchApp */,
+				7AFD5CB423F009EB00AFFEEF /* MuniTrackerWatchApp Extension */,
 				7AD81E0720D6E60C004BAB1E /* Products */,
 				BF88086283A00694C5C2DF7F /* Frameworks */,
 				B12EA9C214D8F7C0A928847C /* Pods */,
@@ -361,6 +435,8 @@
 				7A068D1D212697DA00D3425E /* BusTracker - Favorites.appex */,
 				7A068D30212697F000D3425E /* BusTracker - Recent.appex */,
 				7A068D432126980900D3425E /* BusTracker - Nearby.appex */,
+				7AFD5CA423F009EA00AFFEEF /* BusTracker.app */,
+				7AFD5CB023F009EB00AFFEEF /* MuniTrackerWatchApp Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -382,6 +458,32 @@
 				7A4930C220D788BB008208D1 /* MuniTracker.entitlements */,
 			);
 			path = MuniTracker;
+			sourceTree = "<group>";
+		};
+		7AFD5CA523F009EA00AFFEEF /* MuniTrackerWatchApp */ = {
+			isa = PBXGroup;
+			children = (
+				7AFD5CD323F0B86700AFFEEF /* BusTracker.entitlements */,
+				7AFD5CA623F009EA00AFFEEF /* Interface.storyboard */,
+				7AFD5CA923F009EB00AFFEEF /* Assets.xcassets */,
+				7AFD5CAB23F009EB00AFFEEF /* Info.plist */,
+			);
+			path = MuniTrackerWatchApp;
+			sourceTree = "<group>";
+		};
+		7AFD5CB423F009EB00AFFEEF /* MuniTrackerWatchApp Extension */ = {
+			isa = PBXGroup;
+			children = (
+				7AFD5CD223F0B5CD00AFFEEF /* MuniTrackerWatchApp Extension.entitlements */,
+				7AFD5CB523F009EB00AFFEEF /* MuniTrackerWatchInterfaceController.swift */,
+				7AFD5CC823F00C3200AFFEEF /* DirectionStopRowController.swift */,
+				7AFD5CB723F009EB00AFFEEF /* ExtensionDelegate.swift */,
+				7AFD5CB923F009EB00AFFEEF /* ComplicationController.swift */,
+				7AFD5CBB23F009EC00AFFEEF /* Assets.xcassets */,
+				7AFD5CBD23F009EC00AFFEEF /* Info.plist */,
+				7AFD5CD023F0B39600AFFEEF /* FavoritesWatchInterfaceController.swift */,
+			);
+			path = "MuniTrackerWatchApp Extension";
 			sourceTree = "<group>";
 		};
 		B12EA9C214D8F7C0A928847C /* Pods */ = {
@@ -482,6 +584,7 @@
 				7AD81E0420D6E60C004BAB1E /* Resources */,
 				7A068D10212646A700D3425E /* Embed App Extensions */,
 				E6B403A92375EE54A466DAC9 /* [CP] Embed Pods Frameworks */,
+				7ADB4F9323F00935006DFDB3 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
@@ -489,11 +592,46 @@
 				7A068D27212697DA00D3425E /* PBXTargetDependency */,
 				7A068D3A212697F000D3425E /* PBXTargetDependency */,
 				7A068D4D2126980900D3425E /* PBXTargetDependency */,
+				7AFD5CBF23F009EC00AFFEEF /* PBXTargetDependency */,
 			);
 			name = MuniTracker;
 			productName = MuniTracker;
 			productReference = 7AD81E0620D6E60C004BAB1E /* MuniTracker.app */;
 			productType = "com.apple.product-type.application";
+		};
+		7AFD5CA323F009EA00AFFEEF /* MuniTrackerWatchApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7AFD5CC523F009EC00AFFEEF /* Build configuration list for PBXNativeTarget "MuniTrackerWatchApp" */;
+			buildPhases = (
+				7AFD5CA223F009EA00AFFEEF /* Resources */,
+				7AFD5CC423F009EC00AFFEEF /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7AFD5CB323F009EB00AFFEEF /* PBXTargetDependency */,
+			);
+			name = MuniTrackerWatchApp;
+			productName = MuniTrackerWatchApp;
+			productReference = 7AFD5CA423F009EA00AFFEEF /* BusTracker.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		7AFD5CAF23F009EB00AFFEEF /* MuniTrackerWatchApp Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7AFD5CC123F009EC00AFFEEF /* Build configuration list for PBXNativeTarget "MuniTrackerWatchApp Extension" */;
+			buildPhases = (
+				7AFD5CAC23F009EB00AFFEEF /* Sources */,
+				7AFD5CAD23F009EB00AFFEEF /* Frameworks */,
+				7AFD5CAE23F009EB00AFFEEF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "MuniTrackerWatchApp Extension";
+			productName = "MuniTrackerWatchApp Extension";
+			productReference = 7AFD5CB023F009EB00AFFEEF /* MuniTrackerWatchApp Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -501,7 +639,7 @@
 		7AD81DFE20D6E60C004BAB1E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1000;
+				LastSwiftUpdateCheck = 1130;
 				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = jackson;
 				TargetAttributes = {
@@ -556,6 +694,12 @@
 							};
 						};
 					};
+					7AFD5CA323F009EA00AFFEEF = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
+					7AFD5CAF23F009EB00AFFEEF = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
 				};
 			};
 			buildConfigurationList = 7AD81E0120D6E60C004BAB1E /* Build configuration list for PBXProject "MuniTracker" */;
@@ -575,6 +719,8 @@
 				7A068D1C212697DA00D3425E /* MuniTrackerFavoritesExtension */,
 				7A068D2F212697F000D3425E /* MuniTrackerRecentExtension */,
 				7A068D422126980900D3425E /* MuniTrackerNearbyExtension */,
+				7AFD5CA323F009EA00AFFEEF /* MuniTrackerWatchApp */,
+				7AFD5CAF23F009EB00AFFEEF /* MuniTrackerWatchApp Extension */,
 			);
 		};
 /* End PBXProject section */
@@ -613,6 +759,23 @@
 				7AD81E1420D6E60D004BAB1E /* Assets.xcassets in Resources */,
 				7A0292E620ED8207006DFDF5 /* AppIcon-2@2x.png in Resources */,
 				7AD81E0F20D6E60C004BAB1E /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7AFD5CA223F009EA00AFFEEF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7AFD5CAA23F009EB00AFFEEF /* Assets.xcassets in Resources */,
+				7AFD5CA823F009EA00AFFEEF /* Interface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7AFD5CAE23F009EB00AFFEEF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7AFD5CBC23F009EC00AFFEEF /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -820,6 +983,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7AFD5CAC23F009EB00AFFEEF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7AFD5CCF23F0B2EA00AFFEEF /* MapState.swift in Sources */,
+				7AFD5CC923F00C3200AFFEEF /* DirectionStopRowController.swift in Sources */,
+				7AFD5CD123F0B39600AFFEEF /* FavoritesWatchInterfaceController.swift in Sources */,
+				7AFD5CB823F009EB00AFFEEF /* ExtensionDelegate.swift in Sources */,
+				7AFD5CB623F009EB00AFFEEF /* MuniTrackerWatchInterfaceController.swift in Sources */,
+				7AFD5CCE23F0AF9200AFFEEF /* CoreDataStack.swift in Sources */,
+				7AFD5CCB23F0AF5200AFFEEF /* RouteDataManager.swift in Sources */,
+				7AFD5CCD23F0AF8F00AFFEEF /* MuniTracker.xcmappingmodel in Sources */,
+				7AFD5CBA23F009EB00AFFEEF /* ComplicationController.swift in Sources */,
+				7AFD5CCC23F0AF8C00AFFEEF /* MuniTracker.xcdatamodeld in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -837,6 +1017,16 @@
 			isa = PBXTargetDependency;
 			target = 7A068D422126980900D3425E /* MuniTrackerNearbyExtension */;
 			targetProxy = 7A068D4C2126980900D3425E /* PBXContainerItemProxy */;
+		};
+		7AFD5CB323F009EB00AFFEEF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7AFD5CAF23F009EB00AFFEEF /* MuniTrackerWatchApp Extension */;
+			targetProxy = 7AFD5CB223F009EB00AFFEEF /* PBXContainerItemProxy */;
+		};
+		7AFD5CBF23F009EC00AFFEEF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7AFD5CA323F009EA00AFFEEF /* MuniTrackerWatchApp */;
+			targetProxy = 7AFD5CBE23F009EC00AFFEEF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -887,6 +1077,14 @@
 				7AD81E1620D6E60D004BAB1E /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		7AFD5CA623F009EA00AFFEEF /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7AFD5CA723F009EA00AFFEEF /* Base */,
+			);
+			name = Interface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1186,6 +1384,100 @@
 			};
 			name = Release;
 		};
+		7AFD5CC223F009EC00AFFEEF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_ENTITLEMENTS = "MuniTrackerWatchApp Extension/MuniTrackerWatchApp Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20200209;
+				DEVELOPMENT_TEAM = 26Y8AQV29F;
+				INFOPLIST_FILE = "MuniTrackerWatchApp Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+			};
+			name = Debug;
+		};
+		7AFD5CC323F009EC00AFFEEF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_ENTITLEMENTS = "MuniTrackerWatchApp Extension/MuniTrackerWatchApp Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20200209;
+				DEVELOPMENT_TEAM = 26Y8AQV29F;
+				INFOPLIST_FILE = "MuniTrackerWatchApp Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+			};
+			name = Release;
+		};
+		7AFD5CC623F009EC00AFFEEF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MuniTrackerWatchApp/BusTracker.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20200209;
+				DEVELOPMENT_TEAM = 26Y8AQV29F;
+				IBSC_MODULE = MuniTrackerWatchApp_Extension;
+				INFOPLIST_FILE = MuniTrackerWatchApp/Info.plist;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.watchkitapp;
+				PRODUCT_NAME = BusTracker;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+			};
+			name = Debug;
+		};
+		7AFD5CC723F009EC00AFFEEF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MuniTrackerWatchApp/BusTracker.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20200209;
+				DEVELOPMENT_TEAM = 26Y8AQV29F;
+				IBSC_MODULE = MuniTrackerWatchApp_Extension;
+				INFOPLIST_FILE = MuniTrackerWatchApp/Info.plist;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.watchkitapp;
+				PRODUCT_NAME = BusTracker;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1230,6 +1522,24 @@
 			buildConfigurations = (
 				7AD81E1C20D6E60D004BAB1E /* Debug */,
 				7AD81E1D20D6E60D004BAB1E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7AFD5CC123F009EC00AFFEEF /* Build configuration list for PBXNativeTarget "MuniTrackerWatchApp Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7AFD5CC223F009EC00AFFEEF /* Debug */,
+				7AFD5CC323F009EC00AFFEEF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7AFD5CC523F009EC00AFFEEF /* Build configuration list for PBXNativeTarget "MuniTrackerWatchApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7AFD5CC623F009EC00AFFEEF /* Debug */,
+				7AFD5CC723F009EC00AFFEEF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -23,7 +23,7 @@ class MuniTrackerExtensionViewController: UITableViewController, NCWidgetProvidi
         
         self.extensionContext?.widgetLargestAvailableDisplayMode = .expanded
     }
-        
+    
     func widgetPerformUpdate(completionHandler: (@escaping (NCUpdateResult) -> Void)) {
         // Perform any setup necessary in order to update the view.
         
