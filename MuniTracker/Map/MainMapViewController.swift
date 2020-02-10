@@ -292,9 +292,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         pickerContentVC.mainMapViewController = self
         
         pickerFloatingPanelController?.set(contentViewController: pickerContentVC)
-        
         pickerFloatingPanelController?.addPanel(toParent: self)
-        pickerFloatingPanelController?.updateLayout()
         
         self.view.viewWithTag(618)?.isHidden = true
         
@@ -302,14 +300,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     }
     
     func floatingPanel(_ vc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout? {
-        if MapState.routeInfoShowing == .none
-        {
-            return RouteInfoPickerTipFloatingPanelLayout()
-        }
-        else
-        {
-            return RouteInfoPickerFloatingPanelLayout()
-        }
+        return RouteInfoPickerFloatingPanelLayout()
     }
     
     func floatingPanelDidChangePosition(_ vc: FloatingPanelController) {
@@ -347,7 +338,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     @objc func showPickerView()
     {
         MapState.showingPickerView = true
-        pickerFloatingPanelController?.updateLayout()
+        //pickerFloatingPanelController?.updateLayout()
         self.pickerFloatingPanelController?.move(to: .half, animated: false)
         self.view.viewWithTag(618)?.isHidden = false
         

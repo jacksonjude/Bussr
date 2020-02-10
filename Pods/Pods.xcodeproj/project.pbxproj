@@ -117,12 +117,12 @@
 		2574A5639F445B6310781A1F552E1F62 /* PullResult.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PullResult.swift; path = Source/Enum/PullResult.swift; sourceTree = "<group>"; };
 		279ADDCF6ADBD72CD41C0E5185F37288 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		2BF87BE07FBF586623461596EFB021D1 /* Pods-MuniTrackerNearbyExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MuniTrackerNearbyExtension.debug.xcconfig"; sourceTree = "<group>"; };
-		2D97363A2BBF9C8E5F39AC939C64EEFA /* Pods_MuniTrackerNearbyExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MuniTrackerNearbyExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D97363A2BBF9C8E5F39AC939C64EEFA /* Pods_MuniTrackerNearbyExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_MuniTrackerNearbyExtension.framework; path = "Pods-MuniTrackerNearbyExtension.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		335DDF300AC8B08818E5E955092F0A36 /* FloatingPanel-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FloatingPanel-umbrella.h"; sourceTree = "<group>"; };
 		38F7BF4457F10AA1C40C871E501DED28 /* Pods-MuniTrackerFavoritesExtension-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-MuniTrackerFavoritesExtension-Info.plist"; sourceTree = "<group>"; };
 		3B546BF41D132731ECDF6D906913550E /* Pods-MuniTrackerNearbyExtension-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-MuniTrackerNearbyExtension-acknowledgements.markdown"; sourceTree = "<group>"; };
 		3EAD1BD44E02839EB96C3F7EF4B5BFCB /* FloatingPanelBehavior.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FloatingPanelBehavior.swift; path = Framework/Sources/FloatingPanelBehavior.swift; sourceTree = "<group>"; };
-		3F2A5EFFE67868F2EAFB9A5BAE9F0338 /* Pods_MuniTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MuniTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F2A5EFFE67868F2EAFB9A5BAE9F0338 /* Pods_MuniTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_MuniTracker.framework; path = "Pods-MuniTracker.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F30564EF9EC472FAB380F367717CE3A /* RecordWithDatabase.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RecordWithDatabase.swift; path = Source/Classes/Push/Model/RecordWithDatabase.swift; sourceTree = "<group>"; };
 		411636C6ECA4CB6B5D92418BEBF98279 /* Pods-MuniTrackerNearbyExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MuniTrackerNearbyExtension.release.xcconfig"; sourceTree = "<group>"; };
 		42A83B42FF0AD97B042796BFFE4571A0 /* Pods-MuniTrackerNearbyExtension-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-MuniTrackerNearbyExtension-dummy.m"; sourceTree = "<group>"; };
@@ -136,12 +136,12 @@
 		515ABFBB3E04E5BD60F5476982C17894 /* CoreDataRelationship.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CoreDataRelationship.swift; path = Source/Classes/Push/ObjectToRecord/CoreDataRelationship.swift; sourceTree = "<group>"; };
 		59FEB31004D28871537D176736BEE080 /* FloatingPanel-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "FloatingPanel-dummy.m"; sourceTree = "<group>"; };
 		5BF356991B36AC927699ABA47940185E /* PublicDatabaseSubscriptions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PublicDatabaseSubscriptions.swift; path = Source/Classes/Pull/PublicSubscriptions/PublicDatabaseSubscriptions.swift; sourceTree = "<group>"; };
-		5C215B6B40BE8F9BCAD62D3D4F55C661 /* CloudCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CloudCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5C215B6B40BE8F9BCAD62D3D4F55C661 /* CloudCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = CloudCore.framework; path = CloudCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E218B732D1C5244BBE3C9EB71A39E35 /* UIExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UIExtensions.swift; path = Framework/Sources/UIExtensions.swift; sourceTree = "<group>"; };
 		644C66AA3849B1765BAF0E9948E2E166 /* NSManagedObjectModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NSManagedObjectModel.swift; path = Source/Extensions/NSManagedObjectModel.swift; sourceTree = "<group>"; };
-		68C2658B1BF8272EA350FFD702B7ACF3 /* Pods_MuniTrackerRecentExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MuniTrackerRecentExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		68C2658B1BF8272EA350FFD702B7ACF3 /* Pods_MuniTrackerRecentExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_MuniTrackerRecentExtension.framework; path = "Pods-MuniTrackerRecentExtension.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		69C8ECAB8A344DFF97F13C2E89EEDCF9 /* FloatingPanelView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FloatingPanelView.swift; path = Framework/Sources/FloatingPanelView.swift; sourceTree = "<group>"; };
-		6FAAB7D3DE9B2564509ABD18687E938E /* FloatingPanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FloatingPanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6FAAB7D3DE9B2564509ABD18687E938E /* FloatingPanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = FloatingPanel.framework; path = FloatingPanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		70AF749A641DD220AAC6A314C2895A53 /* CloudCore-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CloudCore-dummy.m"; sourceTree = "<group>"; };
 		70C8AE94B8F15BC8FA4000E0DE73CB64 /* FloatingPanel-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FloatingPanel-prefix.pch"; sourceTree = "<group>"; };
 		711425673BF229C0EBB40FFB9954852E /* Pods-MuniTrackerRecentExtension-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-MuniTrackerRecentExtension-umbrella.h"; sourceTree = "<group>"; };
@@ -156,7 +156,7 @@
 		9B293F256B9A25123F686029F77974A1 /* CloudKitAttribute.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CloudKitAttribute.swift; path = Source/Model/CloudKitAttribute.swift; sourceTree = "<group>"; };
 		9C347DD9956B6461AC07FD0E6B5C8171 /* AsynchronousOperation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AsynchronousOperation.swift; path = Source/Classes/AsynchronousOperation.swift; sourceTree = "<group>"; };
 		9CF6AABFEA477BDD1CCCBAA9D795131B /* Pods-MuniTracker.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-MuniTracker.modulemap"; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9ED2498C807531FF2AF54CEB5AE1BF46 /* Pods-MuniTrackerRecentExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MuniTrackerRecentExtension.release.xcconfig"; sourceTree = "<group>"; };
 		A09DE7D9BF3E3593A086E89ECE4D250E /* Pods-MuniTracker-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-MuniTracker-acknowledgements.markdown"; sourceTree = "<group>"; };
 		A3A809A460FDF36F85EE3AD02355119E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -191,7 +191,7 @@
 		E60E58777E4791929B86E41D745F4511 /* ErrorBlockProxy.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ErrorBlockProxy.swift; path = Source/Classes/ErrorBlockProxy.swift; sourceTree = "<group>"; };
 		E8A5C9AAA1038F4FCDF8E5395BBE42CC /* CKRecord.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CKRecord.swift; path = Source/Model/CKRecord.swift; sourceTree = "<group>"; };
 		EB31D5C91D2407094C20E9F163F82354 /* FloatingPanelBackdropView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FloatingPanelBackdropView.swift; path = Framework/Sources/FloatingPanelBackdropView.swift; sourceTree = "<group>"; };
-		F4F4BB7FB87BFEADE6815B1019706134 /* Pods_MuniTrackerFavoritesExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MuniTrackerFavoritesExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F4F4BB7FB87BFEADE6815B1019706134 /* Pods_MuniTrackerFavoritesExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_MuniTrackerFavoritesExtension.framework; path = "Pods-MuniTrackerFavoritesExtension.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F61D0DB31E08F859006186F3B5A08B3B /* CoreDataObserver.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CoreDataObserver.swift; path = Source/Classes/Push/CoreDataObserver.swift; sourceTree = "<group>"; };
 		F8EEDE895CA5951B459B20FB144EF425 /* Pods-MuniTrackerNearbyExtension-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-MuniTrackerNearbyExtension-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -348,6 +348,7 @@
 				84850433B40938732FF22E4A536BE82F /* Tokens.swift */,
 				CDD909727D9AFA73D0B7C2EE0156332F /* Support Files */,
 			);
+			name = CloudCore;
 			path = CloudCore;
 			sourceTree = "<group>";
 		};
@@ -465,6 +466,7 @@
 				5E218B732D1C5244BBE3C9EB71A39E35 /* UIExtensions.swift */,
 				5C10B08BBF4018189530BA81F2AB4FA7 /* Support Files */,
 			);
+			name = FloatingPanel;
 			path = FloatingPanel;
 			sourceTree = "<group>";
 		};
@@ -647,7 +649,6 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				Base,
 			);
 			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
 			productRefGroup = BB401C968E1A14E39827BE331B7FCDF7 /* Products */;
