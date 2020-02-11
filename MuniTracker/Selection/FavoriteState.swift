@@ -12,14 +12,14 @@ class FavoriteState: NSObject
 {
     enum FavoritesOrganizeType: Int
     {
-        case route
-        case stop
         case list
+        case stop
         case group
         case addingToGroup
+        case route
     }
     
-    static var favoritesOrganizeType: FavoritesOrganizeType = .route
+    static var favoritesOrganizeType: FavoritesOrganizeType = .list
     {
         didSet
         {

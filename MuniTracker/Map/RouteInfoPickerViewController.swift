@@ -24,11 +24,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     @IBOutlet weak var routeInfoPickerContainer: UIView!
     
     @IBOutlet weak var panelTipHeightConstraint: NSLayoutConstraint!
-    //@IBOutlet weak var routeInfoPickerHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var routeInfoPanelBottomMarginConstraint: NSLayoutConstraint!
     
-    var favoriteFilterEnabled = false
-    var locationFilterEnabled = false
     var waitingForLocation = false
     var filtersExpanded = false
     
@@ -49,9 +46,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         setFavoriteButtonImage(inverse: false)
         setupThemeElements()
         
-        panelTipHeightConstraint.constant = panelTipSize
-        //routeInfoPickerHeightConstraint.constant = panelHalfSize-panelTipSize-panelBottomMargin
-        routeInfoPanelBottomMarginConstraint.constant = panelBottomMargin
+        panelTipHeightConstraint.constant = Constants.panelTipSize
+        routeInfoPanelBottomMarginConstraint.constant = Constants.panelBottomMargin
         self.view.layoutIfNeeded()
         
         setupFilterButtons()
@@ -65,11 +61,11 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         let locationButton = FilterButton(imagePath: "CurrentLocation", superview: routeInfoPickerContainer)
         favoriteButton.singleTapHandler = {
             self.favoriteFilterButtonPressed(favoriteButton)
-            favoriteButton.filterIsEnabled = self.favoriteFilterEnabled
+            favoriteButton.filterIsEnabled = MapState.favoriteFilterEnabled
         }
         locationButton.singleTapHandler = {
             self.locationFilterButtonPressed(locationButton)
-            locationButton.filterIsEnabled = self.locationFilterEnabled
+            locationButton.filterIsEnabled = MapState.locationFilterEnabled
         }
         filterButtons.append(locationButton)
         filterButtons.append(favoriteButton)
@@ -110,8 +106,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             self.expandFiltersButton.setImage(UIImage(named: "FilterIcon"), for: UIControl.State.normal)
             self.addNotificationButton.setImage(UIImage(named: "BellAddIcon"), for: UIControl.State.normal)
             setFavoriteButtonImage(inverse: false)
-                        
-            swipeBar.backgroundColor = UIColor(white: 1, alpha: 1)
+            
+            self.view.backgroundColor = UIColor.white.withAlphaComponent(Constants.mapAlphaValue)
         case .dark:
             for filterButton in filterButtons
             {
@@ -122,8 +118,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             self.expandFiltersButton.setImage(UIImage(named: "FilterIconDark"), for: UIControl.State.normal)
             self.addNotificationButton.setImage(UIImage(named: "BellAddIconDark"), for: UIControl.State.normal)
             setFavoriteButtonImage(inverse: false)
-                        
-            swipeBar.backgroundColor = UIColor(white: 0, alpha: 1)
+            
+            self.view.backgroundColor = UIColor.black.withAlphaComponent(Constants.mapAlphaValue)
         }
     }
     
@@ -140,7 +136,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     
     func locationFillAppend() -> String
     {
-        if locationFilterEnabled
+        if MapState.locationFilterEnabled
         {
             return "Fill"
         }
@@ -152,35 +148,13 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     
     func favoriteFillAppend() -> String
     {
-        if favoriteFilterEnabled
+        if MapState.favoriteFilterEnabled
         {
             return "Fill"
         }
         else
         {
             return ""
-        }
-    }
-    
-    func setupSwipeGestures()
-    {
-        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(showPickerView))
-        swipeUp.direction = .up
-        self.view.addGestureRecognizer(swipeUp)
-
-        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(hidePickerView))
-        swipeDown.direction = .down
-        self.view.addGestureRecognizer(swipeDown)
-    }
-    
-    @IBAction func swipeBarButtonPressed(_ sender: Any) {
-        if MapState.showingPickerView
-        {
-            hidePickerView()
-        }
-        else
-        {
-            showPickerView()
         }
     }
     
@@ -257,16 +231,16 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         pickerSelectedRow()
         
-        if locationFilterEnabled
+        if MapState.locationFilterEnabled
         {
-            locationFilterEnabled = false
+            MapState.locationFilterEnabled = false
         }
         
         for filterButton in filterButtons
         {
             if filterButton.imagePath == "CurrentLocation"
             {
-                filterButton.filterIsEnabled = locationFilterEnabled
+                filterButton.filterIsEnabled = MapState.locationFilterEnabled
                 filterButton.setFilterImage()
             }
         }
@@ -365,11 +339,11 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             }
             
             OperationQueue.main.addOperation {
-                if self.favoriteFilterEnabled
+                if MapState.favoriteFilterEnabled
                 {
                     self.filterByFavorites()
                 }
-                else if self.locationFilterEnabled
+                else if MapState.locationFilterEnabled
                 {
                     self.routeInfoPicker.reloadAllComponents()
                     
@@ -575,18 +549,18 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     
     @objc func selectCurrentStop()
     {
-        if !favoriteFilterEnabled
+        if !MapState.favoriteFilterEnabled
         {
             if MapState.routeInfoShowing == .stop, let stops = routeInfoToChange as? Array<Stop>
             {
                 self.routeInfoPicker.selectRow(stops.firstIndex(of: stops.first(where: {$0.tag == MapState.selectedStopTag})!) ?? 0, inComponent: 0, animated: true)
                 
-                locationFilterEnabled = false
+                MapState.locationFilterEnabled = false
                 for filterButton in filterButtons
                 {
                     if filterButton.imagePath == "CurrentLocation"
                     {
-                        filterButton.filterIsEnabled = locationFilterEnabled
+                        filterButton.filterIsEnabled = MapState.locationFilterEnabled
                         filterButton.setFilterImage()
                     }
                 }
@@ -684,8 +658,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     
     @objc func disableFilters()
     {
-        favoriteFilterEnabled = false
-        locationFilterEnabled = false
+        MapState.favoriteFilterEnabled = false
+        MapState.locationFilterEnabled = false
         
         for filterButton in filterButtons
         {
@@ -698,8 +672,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     {
         expandFilters()
         
-        favoriteFilterEnabled = true
-        locationFilterEnabled = true
+        MapState.favoriteFilterEnabled = true
+        MapState.locationFilterEnabled = true
         
         for filterButton in filterButtons
         {
@@ -709,9 +683,9 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     }
     
     @IBAction func favoriteFilterButtonPressed(_ sender: Any) {
-        favoriteFilterEnabled = !favoriteFilterEnabled
+        MapState.favoriteFilterEnabled = !MapState.favoriteFilterEnabled
         
-        if favoriteFilterEnabled
+        if MapState.favoriteFilterEnabled
         {
             filterByFavorites()
         }
@@ -799,7 +773,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             OperationQueue.main.addOperation {
                 self.routeInfoPicker.reloadAllComponents()
                 
-                if self.locationFilterEnabled
+                if MapState.locationFilterEnabled
                 {
                     if let currentLocation = appDelegate.mainMapViewController?.mainMapView?.userLocation.location
                     {
@@ -823,9 +797,9 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     }
     
     @IBAction func locationFilterButtonPressed(_ sender: Any) {
-        locationFilterEnabled = !locationFilterEnabled
+        MapState.locationFilterEnabled = !MapState.locationFilterEnabled
         
-        if locationFilterEnabled
+        if MapState.locationFilterEnabled
         {
             if let currentLocation = appDelegate.mainMapViewController?.mainMapView?.userLocation.location
             {

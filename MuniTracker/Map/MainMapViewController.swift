@@ -11,14 +11,21 @@ import MapKit
 import FloatingPanel
 
 let appDelegate = UIApplication.shared.delegate as! AppDelegate
-let panelTipSize: CGFloat = 80.0
-let panelHalfSize: CGFloat = 281.0
-let panelBottomMargin: CGFloat = 5.0
+
+struct Constants
+{
+    static let panelTipSize: CGFloat = 80.0
+    static let panelHalfSize: CGFloat = 281.0
+    static let panelBottomMargin: CGFloat = 5.0
+    static let routeInfoPickerViewTag = 618
+    static let helpInfoViewTag = 819
+    static let mapAlphaValue: CGFloat = 0.8
+}
 
 enum AnnotationType
 {
-    case red
-    case orange
+    case small
+    case large
 }
 
 extension CLLocationCoordinate2D
@@ -35,7 +42,6 @@ extension FloatingPoint {
 }
 
 extension CLLocationCoordinate2D {
-    
     func heading(to: CLLocationCoordinate2D) -> Double {
         let lat1 = self.latitude.degreesToRadians
         let lon1 = self.longitude.degreesToRadians
@@ -72,54 +78,22 @@ extension UIImage {
     }
 }
 
-/*extension Dictionary.Keys
-{
-    var array: [Key] {
-        var keyArray = Array<Key>()
-        for key in self
-        {
-            keyArray.append(key)
-        }
-        return keyArray
-    }
-}
-
-extension Dictionary.Values
-{
-    var array: [Value] {
-        var valueArray = Array<Value>()
-        for value in self
-        {
-            valueArray.append(value)
-        }
-        return valueArray
-    }
-}
-
-extension Dictionary
-{
-    mutating func setKeysValues(keys: [Key], values: [Value])
-    {
-        var numOn = 0
-        for key in keys
-        {
-            self[key] = values[numOn]
-            numOn += 1
-        }
-    }
-}*/
-
 class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelControllerDelegate {
     
     @IBOutlet weak var mainMapView: MKMapView!
+    
+    @IBOutlet weak var mainNavigationItem: UINavigationItem!
+    @IBOutlet weak var mainNavigationBar: UINavigationBar!
+    
     @IBOutlet weak var predictionTimesNavigationBar: UINavigationBar!
     @IBOutlet weak var predictionTimesLabel: UILabel!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var refreshButton: UIBarButtonItem!
-    @IBOutlet weak var mainNavigationItem: UINavigationItem!
-    @IBOutlet weak var mainNavigationBar: UINavigationBar!
     @IBOutlet weak var vehicleSelectionButton: UIButton!
-    //@IBOutlet weak var pickerViewBottomConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var centerOnLocationButton: UIButton!
+    @IBOutlet weak var centerOnStopButton: UIButton!
+    
     @IBOutlet weak var predictionBarTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var predictionTimesProgressView: UIProgressView!
     @IBOutlet weak var predictionTimesProgressViewConstraint: NSLayoutConstraint!
@@ -161,10 +135,12 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         if appDelegate.firstLaunch
         {
+            pickerFloatingPanelController?.move(to: .half, animated: true)
             downloadAllData = true
         }
         
         setupThemeElements()
+        setupCenterMapButtons()
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -185,11 +161,17 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         case .light:
             self.activityIndicator.style = .gray
             self.vehicleSelectionButton.setImage(UIImage(named: "BusIcon" + darkImageAppend()), for: UIControl.State.normal)
+            
             self.predictionTimesLabel.textColor = UIColor.black
+            self.centerOnLocationButton.backgroundColor = UIColor.white.withAlphaComponent(Constants.mapAlphaValue)
+            self.centerOnStopButton.backgroundColor = UIColor.white.withAlphaComponent(Constants.mapAlphaValue)
         case .dark:
             self.activityIndicator.style = .white
             self.vehicleSelectionButton.setImage(UIImage(named: "BusIcon" + darkImageAppend()), for: UIControl.State.normal)
+            
             self.predictionTimesLabel.textColor = UIColor.white
+            self.centerOnLocationButton.backgroundColor = UIColor.black.withAlphaComponent(Constants.mapAlphaValue)
+            self.centerOnStopButton.backgroundColor = UIColor.black.withAlphaComponent(Constants.mapAlphaValue)
         }
     }
     
@@ -213,6 +195,14 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         case .dark:
             return .lightContent
         }
+    }
+    
+    func setupCenterMapButtons()
+    {
+        centerOnLocationButton.layer.cornerRadius = 8
+        centerOnStopButton.layer.cornerRadius = 8
+        self.predictionBarTopConstraint.constant = -1*(self.predictionTimesNavigationBar.frame.size.height)
+        self.view.layoutSubviews()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -294,9 +284,21 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         pickerFloatingPanelController?.set(contentViewController: pickerContentVC)
         pickerFloatingPanelController?.addPanel(toParent: self)
         
-        self.view.viewWithTag(618)?.isHidden = true
+        pickerFloatingPanelController?.surfaceView.backgroundColor = UIColor.clear
+        
+        self.view.viewWithTag(Constants.routeInfoPickerViewTag)?.isHidden = true
+        self.view.viewWithTag(Constants.helpInfoViewTag)?.isHidden = false
         
         pickerFloatingPanelController?.move(to: .tip, animated: false)
+    }
+    
+    func getTagForRouteInfoView() -> Int
+    {
+        if MapState.routeInfoShowing == .none
+        {
+            return Constants.helpInfoViewTag
+        }
+        return Constants.routeInfoPickerViewTag
     }
     
     func floatingPanel(_ vc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout? {
@@ -306,23 +308,21 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     func floatingPanelDidChangePosition(_ vc: FloatingPanelController) {
         if vc.position == .tip
         {
-            self.view.viewWithTag(618)?.alpha = 0.0
+            self.view.viewWithTag(getTagForRouteInfoView())?.alpha = 0.0
             NotificationCenter.default.post(name: NSNotification.Name("CollapseFilters"), object: self)
         }
         else
         {
-            self.view.viewWithTag(618)?.alpha = 1.0
+            self.view.viewWithTag(getTagForRouteInfoView())?.alpha = 1.0
         }
     }
     
     func floatingPanelDidMove(_ vc: FloatingPanelController) {
-        if MapState.routeInfoShowing == .none { return }
-
         let y = vc.surfaceView.frame.origin.y
         let tipY = vc.originYOfSurface(for: .tip)
-        if y > tipY - panelTipSize {
-            let progress = max(0.0, min((tipY  - y) / panelTipSize, 1.0))
-            self.view.viewWithTag(618)?.alpha = progress
+        if y > tipY - Constants.panelTipSize {
+            let progress = max(0.0, min((tipY  - y) / Constants.panelTipSize, 1.0))
+            self.view.viewWithTag(getTagForRouteInfoView())?.alpha = progress
         }
     }
     
@@ -331,18 +331,17 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
 
         let progress = ((targetPosition == .tip) ? 0.0 : 1.0)
         UIView.animate(withDuration: 0.25, delay: 0.0, options: .allowUserInteraction, animations: {
-            self.view.viewWithTag(618)?.alpha = CGFloat(progress)
+            self.view.viewWithTag(self.getTagForRouteInfoView())?.alpha = CGFloat(progress)
         }, completion: nil)
     }
     
     @objc func showPickerView()
     {
         MapState.showingPickerView = true
-        //pickerFloatingPanelController?.updateLayout()
-        self.pickerFloatingPanelController?.move(to: .half, animated: false)
-        self.view.viewWithTag(618)?.isHidden = false
         
-        NotificationCenter.default.post(name: NSNotification.Name("RouteInfoPickerViewShown"), object: nil)
+        self.pickerFloatingPanelController?.move(to: .half, animated: false)
+        self.view.viewWithTag(Constants.routeInfoPickerViewTag)?.isHidden = false
+        self.view.viewWithTag(Constants.helpInfoViewTag)?.isHidden = true
     }
     
     @objc func hidePickerView()
@@ -351,9 +350,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         MapState.showingPickerView = false
         self.pickerFloatingPanelController?.move(to: .tip, animated: false)
-        
-        
-        NotificationCenter.default.post(name: NSNotification.Name("RouteInfoPickerViewHidden"), object: nil)
     }
     
     //MARK: - Update Notifications
@@ -372,11 +368,51 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("ReloadAnnotations"), object: nil)
     }
     
+    //MARK: - Location Centering
+    
+    @IBAction func centerMapOnCurrentLocation()
+    {
+        guard let userLocation = mainMapView.userLocation.location else { return }
+        centerMapOnLocation(location: userLocation)
+    }
+    
+    @IBAction func centerMapOnCurrentStop()
+    {
+        if MapState.routeInfoShowing != .stop { return }
+        guard let currentStop = MapState.getCurrentStop() else { return }
+        
+        let stopLocation = CLLocation(latitude: currentStop.latitude, longitude: currentStop.longitude)
+        centerMapOnLocation(location: stopLocation)
+    }
+    
+    func centerMapOnLocation(location: CLLocation)
+    {
+        let mapRegionLatLong = mapViewSpanToDistance(center: mainMapView.region.center, span: mainMapView.region.span)
+        
+        centerMapOnLocation(location: location, range: min(mapRegionLatLong.latitude, mapRegionLatLong.longitude), willChangeRange: false)
+    }
+    
+    func mapViewSpanToDistance(center: CLLocationCoordinate2D, span: MKCoordinateSpan) -> (latitude: CLLocationDistance, longitude: CLLocationDistance)
+    {
+        let spanLatitudeDegrees = span.latitudeDelta
+        let spanLongitudeDegrees = span.longitudeDelta
+        
+        let spanLatLocation = CLLocation(latitude: center.latitude + spanLatitudeDegrees, longitude: center.longitude)
+        let spanLongLocation = CLLocation(latitude: center.latitude, longitude: center.longitude + spanLongitudeDegrees)
+        
+        let centerLocation = CLLocation(latitude: center.latitude, longitude: center.longitude)
+        
+        let latDistance = spanLatLocation.distance(from: centerLocation)
+        let longDistance = spanLongLocation.distance(from: centerLocation)
+        
+        return (latDistance, longDistance)
+    }
+    
     func centerMapOnLocation(location: CLLocation, range: CLLocationDistance, willChangeRange: Bool = true)
     {
         mainMapView.setRegion(MKCoordinateRegion(center: mainMapView.region.center, latitudinalMeters: range, longitudinalMeters: range), animated: false)
         
-        let offset = panelHalfSize-10-panelTipSize
+        let offset = (pickerFloatingPanelController?.position == .half) ? Constants.panelHalfSize : Constants.panelTipSize
         
         var point = mainMapView.convert(location.coordinate, toPointTo: self.view)
         point.y += offset/2
@@ -384,7 +420,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         mainMapView.setRegion(MKCoordinateRegion(center: offsetCoordinate, latitudinalMeters: range, longitudinalMeters: range), animated: !willChangeRange)
     }
-        
+    
     @objc func updateMap(notification: Notification?)
     {
         switch MapState.routeInfoShowing
@@ -423,8 +459,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                 
                 centerMapOnLocation(location: stopLocation, range: 1000, willChangeRange: changingRouteInfoShowing)
                 
-                setAnnotationType(coordinate: selectedAnnotationLocation, annotationType: .red)
-                setAnnotationType(coordinate: stopLocation.coordinate.convertToString(), annotationType: .orange)
+                setAnnotationType(coordinate: selectedAnnotationLocation, annotationType: .small)
+                setAnnotationType(coordinate: stopLocation.coordinate.convertToString(), annotationType: .large)
                 
                 reloadCurrentStopHeader(stopLocation: stopLocation)
                 bringSelectedStopHeaderToFront()
@@ -496,7 +532,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         }
     }
     
-    func addAnnotation(coordinate: CLLocationCoordinate2D, stopTag: String, annotationType: AnnotationType = .red)
+    func addAnnotation(coordinate: CLLocationCoordinate2D, stopTag: String, annotationType: AnnotationType = .small)
     {
         let annotation = StopAnnotation(coordinate: coordinate, stopTag: stopTag, annotationType: annotationType)
         
@@ -601,9 +637,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             
             switch stopAnnotation.type
             {
-            case .red:
+            case .small:
                 annotationView.image = UIImage(named: "SmallDot")
-            case .orange:
+            case .large:
                 annotationView.image = UIImage(named: "BigDot")
             }
             
@@ -735,16 +771,10 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             
             reloadPredictionTimesLabel()
         }
-        else if let stopAnnotation = view.annotation as? StopAnnotation
+        else if let stopAnnotation = view.annotation as? StopAnnotation, MapState.routeInfoShowing == .stop && MapState.selectedStopTag != stopAnnotation.stopTag, !MapState.favoriteFilterEnabled
         {
-            if MapState.routeInfoShowing == .stop
-            {
-                if MapState.selectedStopTag != stopAnnotation.stopTag
-                {
-                    MapState.selectedStopTag = stopAnnotation.stopTag
-                    NotificationCenter.default.post(name: NSNotification.Name("SelectCurrentStop"), object: self)
-                }
-            }
+            MapState.selectedStopTag = stopAnnotation.stopTag
+            NotificationCenter.default.post(name: NSNotification.Name("SelectCurrentStop"), object: self)
         }
     }
     
@@ -759,7 +789,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     {
         if let stop = RouteDataManager.fetchStop(stopTag: stopTag)
         {
-            setAnnotationType(coordinate: CLLocationCoordinate2D(latitude: stop.latitude, longitude: stop.longitude).convertToString(), annotationType: .orange)
+            setAnnotationType(coordinate: CLLocationCoordinate2D(latitude: stop.latitude, longitude: stop.longitude).convertToString(), annotationType: .large)
             
             reloadCurrentStopHeader(stopLocation: CLLocation(latitude: stop.latitude, longitude: stop.longitude))
             
@@ -918,7 +948,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             self.predictionTimesNavigationBar.isHidden = false
             self.vehicleSelectionButton.isEnabled = true
             self.vehicleSelectionButton.isHidden = false
-            //self.predictionTimesProgressView.isHidden = false
+            
+            self.centerOnStopButton.isHidden = false
+            self.centerOnStopButton.isEnabled = true
             
             UIView.animate(withDuration: 0.5) {
                 self.view.layoutSubviews()
@@ -945,6 +977,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     func hidePredictionNavigationBar()
     {
         OperationQueue.main.addOperation {
+            self.centerOnStopButton.isHidden = true
+            self.centerOnStopButton.isEnabled = false
+            
             self.predictionBarTopConstraint.constant = -1*(self.predictionTimesNavigationBar.frame.size.height)
             
             UIView.animate(withDuration: 0.5, animations: {
@@ -1107,7 +1142,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                 
                 if let headingAnnotation = self.busAnnotations[vehicleLocation.id]!.annotation.headingAnnotation
                 {
-                    //self.mainMapView.removeAnnotation(headingAnnotation)
                     UIView.animate(withDuration: 1, animations: {
                         headingAnnotation.coordinate = vehicleLocation.location.coordinate
                     })
@@ -1188,17 +1222,17 @@ class StopAnnotation: NSObject, MKAnnotation
     var coordinate: CLLocationCoordinate2D
     var title: String?
     var subtitle: String?
-    var type: AnnotationType = .red
+    var type: AnnotationType = .small
     var stopTag: String?
     
-    init(coordinate: CLLocationCoordinate2D, stopTag: String, annotationType: AnnotationType = .red)
+    init(coordinate: CLLocationCoordinate2D, stopTag: String, annotationType: AnnotationType = .small)
     {
         self.coordinate = coordinate
         self.type = annotationType
         self.stopTag = stopTag
     }
     
-    init(coordinate: CLLocationCoordinate2D, title: String?, subtitle: String?, annotationType: AnnotationType = .red)
+    init(coordinate: CLLocationCoordinate2D, title: String?, subtitle: String?, annotationType: AnnotationType = .small)
     {
         self.coordinate = coordinate
         self.title = title
@@ -1265,9 +1299,9 @@ class RouteInfoPickerFloatingPanelLayout: FloatingPanelIntrinsicLayout {
 
     func insetFor(position: FloatingPanelPosition) -> CGFloat? {
         switch position {
-            case .half: return panelHalfSize
-            case .tip: return panelTipSize
-            default: return nil // Or `case .hidden: return nil`
+            case .half: return Constants.panelHalfSize
+            case .tip: return Constants.panelTipSize
+            default: return nil
         }
     }
     

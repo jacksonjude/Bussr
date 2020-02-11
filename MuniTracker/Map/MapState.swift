@@ -28,6 +28,8 @@ class MapState: NSObject
     static var selectedVehicleID: String? = nil
     
     static var showingPickerView = false
+    static var favoriteFilterEnabled = false
+    static var locationFilterEnabled = false
     
     static var currentRecentStopUUID: String? = nil
     
