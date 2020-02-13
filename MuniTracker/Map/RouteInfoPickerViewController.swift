@@ -46,8 +46,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         setFavoriteButtonImage(inverse: false)
         setupThemeElements()
         
-        panelTipHeightConstraint.constant = Constants.panelTipSize
-        routeInfoPanelBottomMarginConstraint.constant = Constants.panelBottomMargin
+        panelTipHeightConstraint.constant = DisplayConstants.panelTipSize
+        routeInfoPanelBottomMarginConstraint.constant = DisplayConstants.panelBottomMargin
         self.view.layoutIfNeeded()
         
         setupFilterButtons()
@@ -107,7 +107,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             self.addNotificationButton.setImage(UIImage(named: "BellAddIcon"), for: UIControl.State.normal)
             setFavoriteButtonImage(inverse: false)
             
-            self.view.backgroundColor = UIColor.white.withAlphaComponent(Constants.mapAlphaValue)
+            self.view.backgroundColor = UIColor.white.withAlphaComponent(DisplayConstants.mapAlphaValue)
         case .dark:
             for filterButton in filterButtons
             {
@@ -119,7 +119,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             self.addNotificationButton.setImage(UIImage(named: "BellAddIconDark"), for: UIControl.State.normal)
             setFavoriteButtonImage(inverse: false)
             
-            self.view.backgroundColor = UIColor.black.withAlphaComponent(Constants.mapAlphaValue)
+            self.view.backgroundColor = UIColor.black.withAlphaComponent(DisplayConstants.mapAlphaValue)
         }
     }
     

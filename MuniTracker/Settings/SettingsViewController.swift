@@ -15,8 +15,17 @@ enum LocationSortType: Int
     case selectClosest
 }
 
+enum OnLaunchType: Int
+{
+    case none
+    case favorites
+    case nearby
+    case recents
+}
+
 class SettingsViewController: UITableViewController
 {
+    @IBOutlet weak var onLaunchLabel: UILabel!
     @IBOutlet weak var locationSortTypeLabel: UILabel!
     @IBOutlet weak var appIconLabel: UILabel!
     @IBOutlet weak var predictionRefreshTimeLabel: UILabel!
@@ -30,13 +39,16 @@ class SettingsViewController: UITableViewController
         setupThemeElements()
                 
         let locationSortType: LocationSortType = (UserDefaults.standard.object(forKey: "LocationSortType") as? Int).map { LocationSortType(rawValue: $0)  ?? .selectClosest } ?? .selectClosest
-        setLocationSortTypeButtonTitle(locationSortType: locationSortType)
+        setLocationSortTypeTitle(locationSortType: locationSortType)
         
         let appIcon = UserDefaults.standard.object(forKey: "AppIcon") as? Int ?? 1
-        setAppIconButtonTitle(appIcon: appIcon)
+        setAppIconTitle(appIcon: appIcon)
         
-        let refreshTime = UserDefaults.standard.object(forKey: "predictionRefreshTime") as? Double ?? 60.0
-        setPredictionRefreshTimeButtonTitle(refreshTime: refreshTime)
+        let refreshTime = UserDefaults.standard.object(forKey: "PredictionRefreshTime") as? Double ?? 60.0
+        setPredictionRefreshTimeTitle(refreshTime: refreshTime)
+        
+        let onLaunchType: OnLaunchType = (UserDefaults.standard.object(forKey: "OnLaunchType") as? Int).map { OnLaunchType(rawValue: $0)  ?? .none } ?? .none
+        setOnLaunchTypeTitle(onLaunchType: onLaunchType)
     }
     
     func setupThemeElements()
@@ -56,7 +68,7 @@ class SettingsViewController: UITableViewController
         switch tableView.cellForRow(at: indexPath)!.reuseIdentifier ?? ""
         {
         case "OnLaunchCell":
-            break
+            setOnLaunch(tableView)
         case "PredictionRefreshCell":
             setPredictionRefreshTime(tableView)
         case "AppIconCell":
@@ -98,7 +110,7 @@ class SettingsViewController: UITableViewController
         })
         
         let locationSortType: LocationSortType = (UserDefaults.standard.object(forKey: "LocationSortType") as? Int).map { LocationSortType(rawValue: $0)  ?? .selectClosest } ?? .selectClosest
-        setLocationSortTypeButtonTitle(locationSortType: locationSortType)
+        setLocationSortTypeTitle(locationSortType: locationSortType)
     }
     
     @objc func addToProgress(notification: Notification)
@@ -163,10 +175,10 @@ class SettingsViewController: UITableViewController
         {
         case .selectClosest:
             UserDefaults.standard.set(LocationSortType.fullSort.rawValue, forKey: "LocationSortType")
-            setLocationSortTypeButtonTitle(locationSortType: .fullSort)
+            setLocationSortTypeTitle(locationSortType: .fullSort)
         case .fullSort:
             UserDefaults.standard.set(LocationSortType.selectClosest.rawValue, forKey: "LocationSortType")
-            setLocationSortTypeButtonTitle(locationSortType: .selectClosest)
+            setLocationSortTypeTitle(locationSortType: .selectClosest)
         }
     }
     
@@ -177,10 +189,10 @@ class SettingsViewController: UITableViewController
         {
         case 1:
             UserDefaults.standard.set(2, forKey: "AppIcon")
-            setAppIconButtonTitle(appIcon: 2)
+            setAppIconTitle(appIcon: 2)
         case 2:
             UserDefaults.standard.set(1, forKey: "AppIcon")
-            setAppIconButtonTitle(appIcon: 1)
+            setAppIconTitle(appIcon: 1)
         default:
             break
         }
@@ -189,7 +201,7 @@ class SettingsViewController: UITableViewController
     }
     
     func setPredictionRefreshTime(_ sender: Any) {
-        var refreshTime = UserDefaults.standard.object(forKey: "predictionRefreshTime") as? Double ?? 60.0
+        var refreshTime = UserDefaults.standard.object(forKey: "PredictionRefreshTime") as? Double ?? 60.0
         
         let possibleRefreshTimes = [0.0, 15.0, 30.0, 60.0]
         if let refreshTimeIndex = possibleRefreshTimes.firstIndex(of: refreshTime), refreshTimeIndex+1 < possibleRefreshTimes.count
@@ -200,12 +212,29 @@ class SettingsViewController: UITableViewController
         {
             refreshTime = possibleRefreshTimes[0]
         }
-        UserDefaults.standard.set(refreshTime, forKey: "predictionRefreshTime")
+        UserDefaults.standard.set(refreshTime, forKey: "PredictionRefreshTime")
         
-        setPredictionRefreshTimeButtonTitle(refreshTime: refreshTime)
+        setPredictionRefreshTimeTitle(refreshTime: refreshTime)
     }
     
-    func setLocationSortTypeButtonTitle(locationSortType: LocationSortType)
+    func setOnLaunch(_ sender: Any) {
+        var onLaunchTypeInt = UserDefaults.standard.object(forKey: "OnLaunchType") as? Int ?? 0
+        onLaunchTypeInt += 1
+        
+        if onLaunchTypeInt > 4-1
+        {
+            onLaunchTypeInt = 0
+        }
+                
+        let onLaunchType = OnLaunchType(rawValue: onLaunchTypeInt) ?? .none
+        UserDefaults.standard.set(onLaunchType.rawValue, forKey: "OnLaunchType")
+        
+        setOnLaunchTypeTitle(onLaunchType: onLaunchType)
+    }
+    
+    //MARK: - Set Titles
+    
+    func setLocationSortTypeTitle(locationSortType: LocationSortType)
     {
         switch locationSortType
         {
@@ -216,13 +245,31 @@ class SettingsViewController: UITableViewController
         }
     }
     
-    func setAppIconButtonTitle(appIcon: Int)
+    func setAppIconTitle(appIcon: Int)
     {
         appIconLabel.text = "Icon " + String(appIcon)
     }
     
-    func setPredictionRefreshTimeButtonTitle(refreshTime: Double)
+    func setPredictionRefreshTimeTitle(refreshTime: Double)
     {
         predictionRefreshTimeLabel.text = String(Int(refreshTime)) + "s"
+    }
+    
+    func setOnLaunchTypeTitle(onLaunchType: OnLaunchType)
+    {
+        var onLaunchTypeText = "None"
+        switch onLaunchType
+        {
+        case .none:
+            onLaunchTypeText = "None"
+        case .favorites:
+            onLaunchTypeText = "Favorites"
+        case .nearby:
+            onLaunchTypeText = "Nearby"
+        case .recents:
+            onLaunchTypeText = "Recents"
+        }
+        
+        onLaunchLabel.text = onLaunchTypeText
     }
 }

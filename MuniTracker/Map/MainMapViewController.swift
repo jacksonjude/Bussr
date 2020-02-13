@@ -12,7 +12,7 @@ import FloatingPanel
 
 let appDelegate = UIApplication.shared.delegate as! AppDelegate
 
-struct Constants
+struct DisplayConstants
 {
     static let panelTipSize: CGFloat = 80.0
     static let panelHalfSize: CGFloat = 281.0
@@ -20,6 +20,13 @@ struct Constants
     static let routeInfoPickerViewTag = 618
     static let helpInfoViewTag = 819
     static let mapAlphaValue: CGFloat = 0.85
+}
+
+struct MapConstants
+{
+    static let maxLongMetersBeforeHidingStopAnnotations = 4000.0
+    static let directionPolylineWidth: CGFloat = 5.0
+    static let borderPolylineWidth: CGFloat = 6.0
 }
 
 enum AnnotationType
@@ -109,6 +116,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     var selectedAnnotationLocation: String?
     var stopAnnotations = Dictionary<String,StopAnnotation>()
     var directionPolyline: MKPolyline?
+    var borderPolyline: MKPolyline?
     var busAnnotations = Dictionary<String,(annotation: BusAnnotation, annotationView: MKAnnotationView?, headingAnnotationView: MKAnnotationView?)>()
     var vehicleIDs = Array<String>()
     var predictions = Array<String>()
@@ -163,15 +171,15 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             self.vehicleSelectionButton.setImage(UIImage(named: "BusIcon" + darkImageAppend()), for: UIControl.State.normal)
             
             self.predictionTimesLabel.textColor = UIColor.black
-            self.centerOnLocationButton.backgroundColor = UIColor.white.withAlphaComponent(Constants.mapAlphaValue)
-            self.centerOnStopButton.backgroundColor = UIColor.white.withAlphaComponent(Constants.mapAlphaValue)
+            self.centerOnLocationButton.backgroundColor = UIColor.white.withAlphaComponent(DisplayConstants.mapAlphaValue)
+            self.centerOnStopButton.backgroundColor = UIColor.white.withAlphaComponent(DisplayConstants.mapAlphaValue)
         case .dark:
             self.activityIndicator.style = .white
             self.vehicleSelectionButton.setImage(UIImage(named: "BusIcon" + darkImageAppend()), for: UIControl.State.normal)
             
             self.predictionTimesLabel.textColor = UIColor.white
-            self.centerOnLocationButton.backgroundColor = UIColor.black.withAlphaComponent(Constants.mapAlphaValue)
-            self.centerOnStopButton.backgroundColor = UIColor.black.withAlphaComponent(Constants.mapAlphaValue)
+            self.centerOnLocationButton.backgroundColor = UIColor.black.withAlphaComponent(DisplayConstants.mapAlphaValue)
+            self.centerOnStopButton.backgroundColor = UIColor.black.withAlphaComponent(DisplayConstants.mapAlphaValue)
         }
     }
     
@@ -286,8 +294,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         pickerFloatingPanelController?.surfaceView.backgroundColor = UIColor.clear
         
-        self.view.viewWithTag(Constants.routeInfoPickerViewTag)?.isHidden = true
-        self.view.viewWithTag(Constants.helpInfoViewTag)?.isHidden = false
+        self.view.viewWithTag(DisplayConstants.routeInfoPickerViewTag)?.isHidden = true
+        self.view.viewWithTag(DisplayConstants.helpInfoViewTag)?.isHidden = false
         
         pickerFloatingPanelController?.move(to: .tip, animated: false)
     }
@@ -296,9 +304,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     {
         if MapState.routeInfoShowing == .none
         {
-            return Constants.helpInfoViewTag
+            return DisplayConstants.helpInfoViewTag
         }
-        return Constants.routeInfoPickerViewTag
+        return DisplayConstants.routeInfoPickerViewTag
     }
     
     func floatingPanel(_ vc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout? {
@@ -320,8 +328,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     func floatingPanelDidMove(_ vc: FloatingPanelController) {
         let y = vc.surfaceView.frame.origin.y
         let tipY = vc.originYOfSurface(for: .tip)
-        if y > tipY - Constants.panelTipSize {
-            let progress = max(0.0, min((tipY  - y) / Constants.panelTipSize, 1.0))
+        if y > tipY - DisplayConstants.panelTipSize {
+            let progress = max(0.0, min((tipY  - y) / DisplayConstants.panelTipSize, 1.0))
             self.view.viewWithTag(getTagForRouteInfoView())?.alpha = progress
         }
     }
@@ -340,8 +348,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         MapState.showingPickerView = true
         
         self.pickerFloatingPanelController?.move(to: .half, animated: false)
-        self.view.viewWithTag(Constants.routeInfoPickerViewTag)?.isHidden = false
-        self.view.viewWithTag(Constants.helpInfoViewTag)?.isHidden = true
+        self.view.viewWithTag(DisplayConstants.routeInfoPickerViewTag)?.isHidden = false
+        self.view.viewWithTag(DisplayConstants.helpInfoViewTag)?.isHidden = true
     }
     
     @objc func hidePickerView()
@@ -412,7 +420,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     {
         mainMapView.setRegion(MKCoordinateRegion(center: mainMapView.region.center, latitudinalMeters: range, longitudinalMeters: range), animated: false)
         
-        let offset = (pickerFloatingPanelController?.position == .half) ? Constants.panelHalfSize : Constants.panelTipSize
+        let offset = (pickerFloatingPanelController?.position == .half) ? DisplayConstants.panelHalfSize : DisplayConstants.panelTipSize
         
         var point = mainMapView.convert(location.coordinate, toPointTo: self.view)
         point.y += offset/2
@@ -519,22 +527,26 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         if let direction = MapState.getCurrentDirection()
         {
+            var stopOn = 0
             for stop in direction.stops!.array
             {
                 let stop = stop as! Stop
-                addAnnotation(coordinate: CLLocationCoordinate2D(latitude: stop.latitude, longitude: stop.longitude), stopTag: stop.tag!)
+                addAnnotation(coordinate: CLLocationCoordinate2D(latitude: stop.latitude, longitude: stop.longitude), stopTag: stop.tag!, endpointStop: (stopOn == 0 || stopOn == direction.stops!.array.count-1))
+                stopOn += 1
             }
             
             reloadPolyline()
             
             NotificationCenter.default.addObserver(self, selector: #selector(fetchVehicleLocations), name: NSNotification.Name("FetchVehicleLocations"), object: nil)
             fetchPredictionTimes()
+            
+            showHideStopAnnotations(mapView: self.mainMapView, animated: false)
         }
     }
     
-    func addAnnotation(coordinate: CLLocationCoordinate2D, stopTag: String, annotationType: AnnotationType = .small)
+    func addAnnotation(coordinate: CLLocationCoordinate2D, stopTag: String, annotationType: AnnotationType = .small, endpointStop: Bool = false)
     {
-        let annotation = StopAnnotation(coordinate: coordinate, stopTag: stopTag, annotationType: annotationType)
+        let annotation = StopAnnotation(coordinate: coordinate, stopTag: stopTag, annotationType: annotationType, endpointStop: endpointStop)
         
         mainMapView.addAnnotation(annotation)
         stopAnnotations[CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude).coordinate.convertToString()] = annotation
@@ -565,6 +577,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         {
             mainMapView.removeOverlay(directionPolyline!)
         }
+        
+        if borderPolyline != nil
+        {
+            mainMapView.removeOverlay(borderPolyline!)
+        }
     }
     
     func reloadPolyline()
@@ -572,6 +589,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         if directionPolyline != nil
         {
             mainMapView.removeOverlay(directionPolyline!)
+        }
+        
+        if borderPolyline != nil
+        {
+            mainMapView.removeOverlay(borderPolyline!)
         }
         
         if let direction = MapState.getCurrentDirection()
@@ -583,6 +605,18 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                 if let stop = stop as? Stop
                 {
                     coordinates.append(CLLocationCoordinate2D(latitude: stop.latitude, longitude: stop.longitude))
+                }
+            }
+            
+            if (direction.route?.oppositeColor) != nil
+            {
+                let routeOppositeColor = UIColor(hexString: direction.route!.oppositeColor!)
+                let showBorderPolyline = routeOppositeColor.hsba.b == 1 && appDelegate.getCurrentTheme() == .dark
+                                
+                if showBorderPolyline
+                {
+                    borderPolyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
+                    mainMapView.addOverlay(borderPolyline!)
                 }
             }
             
@@ -621,12 +655,29 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let polylineRenderer = MKPolylineRenderer(overlay: overlay)
-        polylineRenderer.strokeColor = UIColor(red: 0.972, green: 0.611, blue: 0.266, alpha: 1)
-        if let route = MapState.getCurrentDirection()?.route
+        
+        if let polyline = overlay as? MKPolyline
         {
-            polylineRenderer.strokeColor = UIColor(hexString: route.color!)
+            if directionPolyline != nil && polyline == directionPolyline!
+            {
+                polylineRenderer.strokeColor = UIColor(red: 0.972, green: 0.611, blue: 0.266, alpha: 1)
+                if let route = MapState.getCurrentDirection()?.route
+                {
+                    polylineRenderer.strokeColor = UIColor(hexString: route.color!)
+                }
+                polylineRenderer.lineWidth = MapConstants.directionPolylineWidth
+            }
+            else if borderPolyline != nil && polyline == borderPolyline!
+            {
+                polylineRenderer.strokeColor = UIColor(red: 0.972, green: 0.611, blue: 0.266, alpha: 1)
+                if let route = MapState.getCurrentDirection()?.route
+                {
+                    polylineRenderer.strokeColor = UIColor(hexString: route.oppositeColor!)
+                }
+                polylineRenderer.lineWidth = MapConstants.borderPolylineWidth
+            }
         }
-        polylineRenderer.lineWidth = 5
+        
         return polylineRenderer
     }
     
@@ -802,6 +853,42 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         if let selectedStopHeading = self.selectedStopHeading, let selectedStopHeadingView = mainMapView.view(for: selectedStopHeading)
         {
             selectedStopHeadingView.superview?.bringSubviewToFront(selectedStopHeadingView)
+        }
+    }
+        
+    func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+        showHideStopAnnotations(mapView: mapView)
+    }
+    
+    func showHideStopAnnotations(mapView: MKMapView, animated: Bool = true)
+    {
+        OperationQueue.main.addOperation {
+            let longDistance = self.mapViewSpanToDistance(center: mapView.region.center, span: mapView.region.span).longitude
+            let hideAnnotations = (longDistance >= MapConstants.maxLongMetersBeforeHidingStopAnnotations)
+            
+            let annotations = mapView.annotations
+            for annotation in annotations
+            {
+                switch annotation.self
+                {
+                case is StopAnnotation:
+                    if (annotation as! StopAnnotation).type == .small && !(annotation as! StopAnnotation).endpointStop
+                    {
+                        if animated
+                        {
+                            UIView.animate(withDuration: 0.1) {
+                                mapView.view(for: annotation)?.isHidden = hideAnnotations
+                            }
+                        }
+                        else
+                        {
+                            mapView.view(for: annotation)?.isHidden = hideAnnotations
+                        }
+                    }
+                default:
+                    break
+                }
+            }
         }
     }
     
@@ -1224,20 +1311,23 @@ class StopAnnotation: NSObject, MKAnnotation
     var subtitle: String?
     var type: AnnotationType = .small
     var stopTag: String?
+    var endpointStop: Bool = false
     
-    init(coordinate: CLLocationCoordinate2D, stopTag: String, annotationType: AnnotationType = .small)
+    init(coordinate: CLLocationCoordinate2D, stopTag: String, annotationType: AnnotationType = .small, endpointStop: Bool = false)
     {
         self.coordinate = coordinate
         self.type = annotationType
         self.stopTag = stopTag
+        self.endpointStop = endpointStop
     }
     
-    init(coordinate: CLLocationCoordinate2D, title: String?, subtitle: String?, annotationType: AnnotationType = .small)
+    init(coordinate: CLLocationCoordinate2D, title: String?, subtitle: String?, annotationType: AnnotationType = .small, endpointStop: Bool = false)
     {
         self.coordinate = coordinate
         self.title = title
         self.subtitle = subtitle
         self.type = annotationType
+        self.endpointStop = endpointStop
     }
 }
 
@@ -1299,8 +1389,8 @@ class RouteInfoPickerFloatingPanelLayout: FloatingPanelIntrinsicLayout {
 
     func insetFor(position: FloatingPanelPosition) -> CGFloat? {
         switch position {
-            case .half: return Constants.panelHalfSize
-            case .tip: return Constants.panelTipSize
+            case .half: return DisplayConstants.panelHalfSize
+            case .tip: return DisplayConstants.panelTipSize
             default: return nil
         }
     }

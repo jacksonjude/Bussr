@@ -387,6 +387,7 @@
                     <connections>
                         <outlet property="appIconLabel" destination="sBz-yM-r99" id="Vej-g9-dMa"/>
                         <outlet property="locationSortTypeLabel" destination="UHx-ST-E3r" id="ern-Gn-9Pk"/>
+                        <outlet property="onLaunchLabel" destination="9kl-RS-aVc" id="tqG-vM-AGd"/>
                         <outlet property="predictionRefreshTimeLabel" destination="uWL-Iw-wWt" id="vhD-fD-kgN"/>
                     </connections>
                 </tableViewController>
