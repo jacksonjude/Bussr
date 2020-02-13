@@ -19,7 +19,7 @@ struct Constants
     static let panelBottomMargin: CGFloat = 5.0
     static let routeInfoPickerViewTag = 618
     static let helpInfoViewTag = 819
-    static let mapAlphaValue: CGFloat = 0.8
+    static let mapAlphaValue: CGFloat = 0.85
 }
 
 enum AnnotationType

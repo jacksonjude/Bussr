@@ -15,24 +15,11 @@ enum LocationSortType: Int
     case selectClosest
 }
 
-enum FavoritesSortType: Int
+class SettingsViewController: UITableViewController
 {
-    case location
-    case list
-}
-
-class SettingsViewController: UIViewController
-{
-    @IBOutlet weak var favoritesSortedByButton: UIButton!
-    @IBOutlet weak var locationSortTypeButton: UIButton!
-    @IBOutlet weak var appIconButton: UIButton!
-    @IBOutlet weak var predictionRefreshTimeButton: UIButton!
-    
-    @IBOutlet weak var mainNavigationBar: UINavigationBar!
-    
-    @IBOutlet weak var filterConfigLabel: UILabel!
-    @IBOutlet weak var manageRouteDataLabel: UILabel!
-    @IBOutlet weak var generalLabel: UILabel!
+    @IBOutlet weak var locationSortTypeLabel: UILabel!
+    @IBOutlet weak var appIconLabel: UILabel!
+    @IBOutlet weak var predictionRefreshTimeLabel: UILabel!
     
     var progressAlertView: UIAlertController?
     var progressView: UIProgressView?
@@ -42,10 +29,7 @@ class SettingsViewController: UIViewController
     override func viewDidLoad() {
         setupThemeElements()
                 
-        let favoritesSortType: FavoritesSortType = (UserDefaults.standard.object(forKey: "FavoritesSortType") as? Int).map { FavoritesSortType(rawValue: $0) ?? .location } ?? .location
         let locationSortType: LocationSortType = (UserDefaults.standard.object(forKey: "LocationSortType") as? Int).map { LocationSortType(rawValue: $0)  ?? .selectClosest } ?? .selectClosest
-        
-        setFavoritesSortedByButtonTitle(favoritesSortType: favoritesSortType)
         setLocationSortTypeButtonTitle(locationSortType: locationSortType)
         
         let appIcon = UserDefaults.standard.object(forKey: "AppIcon") as? Int ?? 1
@@ -66,9 +50,31 @@ class SettingsViewController: UIViewController
         }
     }
     
-    //MARK: - Route Manage
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        switch tableView.cellForRow(at: indexPath)!.reuseIdentifier ?? ""
+        {
+        case "OnLaunchCell":
+            break
+        case "PredictionRefreshCell":
+            setPredictionRefreshTime(tableView)
+        case "AppIconCell":
+            toggleAppIcon(tableView)
+        case "UpdateRoutesCell":
+            updateRoutes(tableView)
+        case "ClearRoutesCell":
+            clearRoutes(tableView)
+        case "LocationFilterCell":
+            toggleLocationSortType(tableView)
+        default:
+            break
+        }
+    }
     
-    @IBAction func updateRoutes(_ sender: Any) {
+    //MARK: - Manage Routes
+    
+    func updateRoutes(_ sender: Any) {
         progressAlertView = UIAlertController(title: "Updating", message: "Updating route data...\n", preferredStyle: .alert)
         //progressAlertView!.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
@@ -92,10 +98,7 @@ class SettingsViewController: UIViewController
         })
         
         let locationSortType: LocationSortType = (UserDefaults.standard.object(forKey: "LocationSortType") as? Int).map { LocationSortType(rawValue: $0)  ?? .selectClosest } ?? .selectClosest
-        let favoritesSortType: FavoritesSortType = (UserDefaults.standard.object(forKey: "FavoritesSortType") as? Int).map { FavoritesSortType(rawValue: $0) ?? .location } ?? .location
-        
         setLocationSortTypeButtonTitle(locationSortType: locationSortType)
-        setFavoritesSortedByButtonTitle(favoritesSortType: favoritesSortType)
     }
     
     @objc func addToProgress(notification: Notification)
@@ -113,7 +116,7 @@ class SettingsViewController: UIViewController
         })
     }
     
-    @IBAction func clearRoutes(_ sender: Any) {
+    func clearRoutes(_ sender: Any) {
         let entityTypes = ["Agency", "Route", "Direction", "Stop", "FavoriteStop"]
         
         var deletionLogs = ""
@@ -153,21 +156,7 @@ class SettingsViewController: UIViewController
     
     //MARK: - Other Buttons
     
-    @IBAction func toggleFavoritesSortType(_ sender: Any) {
-        let favoritesSortType: FavoritesSortType = (UserDefaults.standard.object(forKey: "FavoritesSortType") as? Int).map { FavoritesSortType(rawValue: $0) ?? .location } ?? .location
-        
-        switch favoritesSortType
-        {
-        case .list:
-            UserDefaults.standard.set(FavoritesSortType.location.rawValue, forKey: "FavoritesSortType")
-            setFavoritesSortedByButtonTitle(favoritesSortType: .location)
-        case .location:
-            UserDefaults.standard.set(FavoritesSortType.list.rawValue, forKey: "FavoritesSortType")
-            setFavoritesSortedByButtonTitle(favoritesSortType: .list)
-        }
-    }
-    
-    @IBAction func toggleLocationSortType(_ sender: Any) {
+    func toggleLocationSortType(_ sender: Any) {
         let locationSortType: LocationSortType = (UserDefaults.standard.object(forKey: "LocationSortType") as? Int).map { LocationSortType(rawValue: $0)  ?? .selectClosest } ?? .selectClosest
         
         switch locationSortType
@@ -181,7 +170,7 @@ class SettingsViewController: UIViewController
         }
     }
     
-    @IBAction func toggleAppIcon(_ sender: Any) {
+    func toggleAppIcon(_ sender: Any) {
         let appIcon = UserDefaults.standard.object(forKey: "AppIcon") as? Int ?? 1
         
         switch appIcon
@@ -199,7 +188,7 @@ class SettingsViewController: UIViewController
         appDelegate.updateAppIcon()
     }
     
-    @IBAction func setPredictionRefreshTime(_ sender: Any) {
+    func setPredictionRefreshTime(_ sender: Any) {
         var refreshTime = UserDefaults.standard.object(forKey: "predictionRefreshTime") as? Double ?? 60.0
         
         let possibleRefreshTimes = [0.0, 15.0, 30.0, 60.0]
@@ -216,35 +205,24 @@ class SettingsViewController: UIViewController
         setPredictionRefreshTimeButtonTitle(refreshTime: refreshTime)
     }
     
-    func setFavoritesSortedByButtonTitle(favoritesSortType: FavoritesSortType)
-    {
-        switch favoritesSortType
-        {
-        case .location:
-            favoritesSortedByButton.setTitle("Favorites Sorted By – " + "Location", for: UIControl.State.normal)
-        case .list:
-            favoritesSortedByButton.setTitle("Favorites Sorted By – " + "List", for: UIControl.State.normal)
-        }
-    }
-    
     func setLocationSortTypeButtonTitle(locationSortType: LocationSortType)
     {
         switch locationSortType
         {
         case .fullSort:
-            locationSortTypeButton.setTitle("Location – " + "Full Sort", for: UIControl.State.normal)
+            locationSortTypeLabel.text = "Full Sort"
         case .selectClosest:
-            locationSortTypeButton.setTitle("Location – " + "Select Closest", for: UIControl.State.normal)
+            locationSortTypeLabel.text = "Select Closest"
         }
     }
     
     func setAppIconButtonTitle(appIcon: Int)
     {
-        appIconButton.setTitle("AppIcon – " + String(appIcon), for: UIControl.State.normal)
+        appIconLabel.text = "Icon " + String(appIcon)
     }
     
     func setPredictionRefreshTimeButtonTitle(refreshTime: Double)
     {
-        predictionRefreshTimeButton.setTitle("Prediction Refresh – " + String(Int(refreshTime)) + "s", for: UIControl.State.normal)
+        predictionRefreshTimeLabel.text = String(Int(refreshTime)) + "s"
     }
 }

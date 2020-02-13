@@ -16,15 +16,15 @@
 		7A068D1E212697DA00D3425E /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A068D01212646A700D3425E /* NotificationCenter.framework */; };
 		7A068D21212697DA00D3425E /* FavoritesExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D20212697DA00D3425E /* FavoritesExtensionViewController.swift */; };
 		7A068D24212697DA00D3425E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A068D22212697DA00D3425E /* MainInterface.storyboard */; };
-		7A068D28212697DA00D3425E /* BusTracker - Favorites.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D1D212697DA00D3425E /* BusTracker - Favorites.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7A068D28212697DA00D3425E /* Bussr - Favorites.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D1D212697DA00D3425E /* Bussr - Favorites.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7A068D31212697F000D3425E /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A068D01212646A700D3425E /* NotificationCenter.framework */; };
 		7A068D34212697F000D3425E /* RecentExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D33212697F000D3425E /* RecentExtensionViewController.swift */; };
 		7A068D37212697F000D3425E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A068D35212697F000D3425E /* MainInterface.storyboard */; };
-		7A068D3B212697F000D3425E /* BusTracker - Recent.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D30212697F000D3425E /* BusTracker - Recent.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7A068D3B212697F000D3425E /* Bussr - Recent.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D30212697F000D3425E /* Bussr - Recent.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7A068D442126980900D3425E /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A068D01212646A700D3425E /* NotificationCenter.framework */; };
 		7A068D472126980900D3425E /* NearbyExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D462126980900D3425E /* NearbyExtensionViewController.swift */; };
 		7A068D4A2126980900D3425E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A068D482126980900D3425E /* MainInterface.storyboard */; };
-		7A068D4E2126980900D3425E /* BusTracker - Nearby.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D432126980900D3425E /* BusTracker - Nearby.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7A068D4E2126980900D3425E /* Bussr - Nearby.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D432126980900D3425E /* Bussr - Nearby.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7A068D52212698B900D3425E /* MuniTrackerExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D04212646A700D3425E /* MuniTrackerExtensionViewController.swift */; };
 		7A068D53212698BA00D3425E /* MuniTrackerExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D04212646A700D3425E /* MuniTrackerExtensionViewController.swift */; };
 		7A068D54212698BA00D3425E /* MuniTrackerExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D04212646A700D3425E /* MuniTrackerExtensionViewController.swift */; };
@@ -82,7 +82,7 @@
 		7AFD5CB823F009EB00AFFEEF /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CB723F009EB00AFFEEF /* ExtensionDelegate.swift */; };
 		7AFD5CBA23F009EB00AFFEEF /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CB923F009EB00AFFEEF /* ComplicationController.swift */; };
 		7AFD5CBC23F009EC00AFFEEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7AFD5CBB23F009EC00AFFEEF /* Assets.xcassets */; };
-		7AFD5CC023F009EC00AFFEEF /* BusTracker.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 7AFD5CA423F009EA00AFFEEF /* BusTracker.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7AFD5CC023F009EC00AFFEEF /* Bussr.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 7AFD5CA423F009EA00AFFEEF /* Bussr.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7AFD5CC923F00C3200AFFEEF /* DirectionStopRowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CC823F00C3200AFFEEF /* DirectionStopRowController.swift */; };
 		7AFD5CCB23F0AF5200AFFEEF /* RouteDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */; };
 		7AFD5CCC23F0AF8C00AFFEEF /* MuniTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1020D6E60C004BAB1E /* MuniTracker.xcdatamodeld */; };
@@ -138,9 +138,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				7A068D4E2126980900D3425E /* BusTracker - Nearby.appex in Embed App Extensions */,
-				7A068D3B212697F000D3425E /* BusTracker - Recent.appex in Embed App Extensions */,
-				7A068D28212697DA00D3425E /* BusTracker - Favorites.appex in Embed App Extensions */,
+				7A068D4E2126980900D3425E /* Bussr - Nearby.appex in Embed App Extensions */,
+				7A068D3B212697F000D3425E /* Bussr - Recent.appex in Embed App Extensions */,
+				7A068D28212697DA00D3425E /* Bussr - Favorites.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -151,7 +151,7 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				7AFD5CC023F009EC00AFFEEF /* BusTracker.app in Embed Watch Content */,
+				7AFD5CC023F009EC00AFFEEF /* Bussr.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -182,15 +182,15 @@
 		7A068D07212646A700D3425E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		7A068D1421266AC400D3425E /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		7A068D1721266F9B00D3425E /* RoutePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutePageViewController.swift; sourceTree = "<group>"; };
-		7A068D1D212697DA00D3425E /* BusTracker - Favorites.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "BusTracker - Favorites.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A068D1D212697DA00D3425E /* Bussr - Favorites.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Bussr - Favorites.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A068D20212697DA00D3425E /* FavoritesExtensionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesExtensionViewController.swift; sourceTree = "<group>"; };
 		7A068D23212697DA00D3425E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		7A068D25212697DA00D3425E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7A068D30212697F000D3425E /* BusTracker - Recent.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "BusTracker - Recent.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A068D30212697F000D3425E /* Bussr - Recent.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Bussr - Recent.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A068D33212697F000D3425E /* RecentExtensionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentExtensionViewController.swift; sourceTree = "<group>"; };
 		7A068D36212697F000D3425E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		7A068D38212697F000D3425E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7A068D432126980900D3425E /* BusTracker - Nearby.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "BusTracker - Nearby.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A068D432126980900D3425E /* Bussr - Nearby.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Bussr - Nearby.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A068D462126980900D3425E /* NearbyExtensionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyExtensionViewController.swift; sourceTree = "<group>"; };
 		7A068D492126980900D3425E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		7A068D4B2126980900D3425E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -218,7 +218,7 @@
 		7AA5E4B721E2D28E0039CCDD /* FilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterButton.swift; sourceTree = "<group>"; };
 		7AB9E9A223EFF30B002E7D67 /* RouteInfoPanelTipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoPanelTipViewController.swift; sourceTree = "<group>"; };
 		7AC9BE6523D401B3008D2639 /* MuniTracker.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = MuniTracker.xcmappingmodel; sourceTree = "<group>"; };
-		7AD81E0620D6E60C004BAB1E /* MuniTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MuniTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AD81E0620D6E60C004BAB1E /* Bussr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bussr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AD81E0920D6E60C004BAB1E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7AD81E0B20D6E60C004BAB1E /* MainMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapViewController.swift; sourceTree = "<group>"; };
 		7AD81E0E20D6E60C004BAB1E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -230,7 +230,7 @@
 		7AE57F8B2270D17600F1B42B /* DirectionStopCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionStopCell.swift; sourceTree = "<group>"; };
 		7AF50BE120E1B71E00E4BFD1 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		7AFB4751216DBD480043450B /* NotificationEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEditorViewController.swift; sourceTree = "<group>"; };
-		7AFD5CA423F009EA00AFFEEF /* BusTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BusTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AFD5CA423F009EA00AFFEEF /* Bussr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bussr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AFD5CA723F009EA00AFFEEF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		7AFD5CA923F009EB00AFFEEF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7AFD5CAB23F009EB00AFFEEF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -438,11 +438,11 @@
 		7AD81E0720D6E60C004BAB1E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7AD81E0620D6E60C004BAB1E /* MuniTracker.app */,
-				7A068D1D212697DA00D3425E /* BusTracker - Favorites.appex */,
-				7A068D30212697F000D3425E /* BusTracker - Recent.appex */,
-				7A068D432126980900D3425E /* BusTracker - Nearby.appex */,
-				7AFD5CA423F009EA00AFFEEF /* BusTracker.app */,
+				7AD81E0620D6E60C004BAB1E /* Bussr.app */,
+				7A068D1D212697DA00D3425E /* Bussr - Favorites.appex */,
+				7A068D30212697F000D3425E /* Bussr - Recent.appex */,
+				7A068D432126980900D3425E /* Bussr - Nearby.appex */,
+				7AFD5CA423F009EA00AFFEEF /* Bussr.app */,
 				7AFD5CB023F009EB00AFFEEF /* MuniTrackerWatchApp Extension.appex */,
 			);
 			name = Products;
@@ -541,7 +541,7 @@
 			);
 			name = MuniTrackerFavoritesExtension;
 			productName = MuniTrackerFavoritesExtension;
-			productReference = 7A068D1D212697DA00D3425E /* BusTracker - Favorites.appex */;
+			productReference = 7A068D1D212697DA00D3425E /* Bussr - Favorites.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		7A068D2F212697F000D3425E /* MuniTrackerRecentExtension */ = {
@@ -559,7 +559,7 @@
 			);
 			name = MuniTrackerRecentExtension;
 			productName = MuniTrackerRecentExtension;
-			productReference = 7A068D30212697F000D3425E /* BusTracker - Recent.appex */;
+			productReference = 7A068D30212697F000D3425E /* Bussr - Recent.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		7A068D422126980900D3425E /* MuniTrackerNearbyExtension */ = {
@@ -577,7 +577,7 @@
 			);
 			name = MuniTrackerNearbyExtension;
 			productName = MuniTrackerNearbyExtension;
-			productReference = 7A068D432126980900D3425E /* BusTracker - Nearby.appex */;
+			productReference = 7A068D432126980900D3425E /* Bussr - Nearby.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		7AD81E0520D6E60C004BAB1E /* MuniTracker */ = {
@@ -603,7 +603,7 @@
 			);
 			name = MuniTracker;
 			productName = MuniTracker;
-			productReference = 7AD81E0620D6E60C004BAB1E /* MuniTracker.app */;
+			productReference = 7AD81E0620D6E60C004BAB1E /* Bussr.app */;
 			productType = "com.apple.product-type.application";
 		};
 		7AFD5CA323F009EA00AFFEEF /* MuniTrackerWatchApp */ = {
@@ -621,7 +621,7 @@
 			);
 			name = MuniTrackerWatchApp;
 			productName = MuniTrackerWatchApp;
-			productReference = 7AFD5CA423F009EA00AFFEEF /* BusTracker.app */;
+			productReference = 7AFD5CA423F009EA00AFFEEF /* Bussr.app */;
 			productType = "com.apple.product-type.application.watchapp2";
 		};
 		7AFD5CAF23F009EB00AFFEEF /* MuniTrackerWatchApp Extension */ = {
@@ -1104,7 +1104,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerFavoritesExtension/MuniTrackerFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200210;
+				CURRENT_PROJECT_VERSION = 20200212;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerFavoritesExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1113,7 +1113,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerFavoritesExtension;
-				PRODUCT_NAME = "BusTracker - Favorites";
+				PRODUCT_NAME = "Bussr - Favorites";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1126,7 +1126,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerFavoritesExtension/MuniTrackerFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200210;
+				CURRENT_PROJECT_VERSION = 20200212;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerFavoritesExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1135,7 +1135,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerFavoritesExtension;
-				PRODUCT_NAME = "BusTracker - Favorites";
+				PRODUCT_NAME = "Bussr - Favorites";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1148,7 +1148,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerRecentExtension/MuniTrackerRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200210;
+				CURRENT_PROJECT_VERSION = 20200212;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerRecentExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1157,7 +1157,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerRecentExtension;
-				PRODUCT_NAME = "BusTracker - Recent";
+				PRODUCT_NAME = "Bussr - Recent";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1170,7 +1170,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerRecentExtension/MuniTrackerRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200210;
+				CURRENT_PROJECT_VERSION = 20200212;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerRecentExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1179,7 +1179,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerRecentExtension;
-				PRODUCT_NAME = "BusTracker - Recent";
+				PRODUCT_NAME = "Bussr - Recent";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1192,7 +1192,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerNearbyExtension/MuniTrackerNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200210;
+				CURRENT_PROJECT_VERSION = 20200212;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerNearbyExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1201,7 +1201,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerNearbyExtension;
-				PRODUCT_NAME = "BusTracker - Nearby";
+				PRODUCT_NAME = "Bussr - Nearby";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1214,7 +1214,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerNearbyExtension/MuniTrackerNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200210;
+				CURRENT_PROJECT_VERSION = 20200212;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerNearbyExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1223,7 +1223,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.MuniTrackerNearbyExtension;
-				PRODUCT_NAME = "BusTracker - Nearby";
+				PRODUCT_NAME = "Bussr - Nearby";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1352,7 +1352,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = MuniTracker/MuniTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200210;
+				CURRENT_PROJECT_VERSION = 20200212;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1362,7 +1362,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Bussr;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1376,7 +1376,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = MuniTracker/MuniTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200210;
+				CURRENT_PROJECT_VERSION = 20200212;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1386,7 +1386,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Bussr;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1398,7 +1398,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "MuniTrackerWatchApp Extension/MuniTrackerWatchApp Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200210;
+				CURRENT_PROJECT_VERSION = 20200212;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = "MuniTrackerWatchApp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1423,7 +1423,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "MuniTrackerWatchApp Extension/MuniTrackerWatchApp Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200210;
+				CURRENT_PROJECT_VERSION = 20200212;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = "MuniTrackerWatchApp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1449,13 +1449,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerWatchApp/BusTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200210;
+				CURRENT_PROJECT_VERSION = 20200212;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				IBSC_MODULE = MuniTrackerWatchApp_Extension;
 				INFOPLIST_FILE = MuniTrackerWatchApp/Info.plist;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.watchkitapp;
-				PRODUCT_NAME = BusTracker;
+				PRODUCT_NAME = Bussr;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -1471,13 +1471,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerWatchApp/BusTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200210;
+				CURRENT_PROJECT_VERSION = 20200212;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				IBSC_MODULE = MuniTrackerWatchApp_Extension;
 				INFOPLIST_FILE = MuniTrackerWatchApp/Info.plist;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.watchkitapp;
-				PRODUCT_NAME = BusTracker;
+				PRODUCT_NAME = Bussr;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
