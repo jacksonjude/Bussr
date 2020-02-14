@@ -15,20 +15,12 @@ enum LocationSortType: Int
     case selectClosest
 }
 
-enum OnLaunchType: Int
-{
-    case none
-    case favorites
-    case nearby
-    case recents
-}
-
 class SettingsViewController: UITableViewController
 {
-    @IBOutlet weak var onLaunchLabel: UILabel!
     @IBOutlet weak var locationSortTypeLabel: UILabel!
     @IBOutlet weak var appIconLabel: UILabel!
     @IBOutlet weak var predictionRefreshTimeLabel: UILabel!
+    @IBOutlet weak var lastUpdatedRoutesLabel: UILabel!
     
     var progressAlertView: UIAlertController?
     var progressView: UIProgressView?
@@ -47,8 +39,9 @@ class SettingsViewController: UITableViewController
         let refreshTime = UserDefaults.standard.object(forKey: "PredictionRefreshTime") as? Double ?? 60.0
         setPredictionRefreshTimeTitle(refreshTime: refreshTime)
         
-        let onLaunchType: OnLaunchType = (UserDefaults.standard.object(forKey: "OnLaunchType") as? Int).map { OnLaunchType(rawValue: $0)  ?? .none } ?? .none
-        setOnLaunchTypeTitle(onLaunchType: onLaunchType)
+        setLastUpdatedRoutesLabel()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(setLastUpdatedRoutesLabel), name: NSNotification.Name("FinishedUpdatingRoutes"), object: nil)
     }
     
     func setupThemeElements()
@@ -67,8 +60,6 @@ class SettingsViewController: UITableViewController
         
         switch tableView.cellForRow(at: indexPath)!.reuseIdentifier ?? ""
         {
-        case "OnLaunchCell":
-            setOnLaunch(tableView)
         case "PredictionRefreshCell":
             setPredictionRefreshTime(tableView)
         case "AppIconCell":
@@ -129,7 +120,7 @@ class SettingsViewController: UITableViewController
     }
     
     func clearRoutes(_ sender: Any) {
-        let entityTypes = ["Agency", "Route", "Direction", "Stop", "FavoriteStop"]
+        let entityTypes = ["Agency", "Route", "Direction", "Stop"]
         
         var deletionLogs = ""
         
@@ -217,21 +208,6 @@ class SettingsViewController: UITableViewController
         setPredictionRefreshTimeTitle(refreshTime: refreshTime)
     }
     
-    func setOnLaunch(_ sender: Any) {
-        var onLaunchTypeInt = UserDefaults.standard.object(forKey: "OnLaunchType") as? Int ?? 0
-        onLaunchTypeInt += 1
-        
-        if onLaunchTypeInt > 4-1
-        {
-            onLaunchTypeInt = 0
-        }
-                
-        let onLaunchType = OnLaunchType(rawValue: onLaunchTypeInt) ?? .none
-        UserDefaults.standard.set(onLaunchType.rawValue, forKey: "OnLaunchType")
-        
-        setOnLaunchTypeTitle(onLaunchType: onLaunchType)
-    }
-    
     //MARK: - Set Titles
     
     func setLocationSortTypeTitle(locationSortType: LocationSortType)
@@ -253,23 +229,19 @@ class SettingsViewController: UITableViewController
     func setPredictionRefreshTimeTitle(refreshTime: Double)
     {
         predictionRefreshTimeLabel.text = String(Int(refreshTime)) + "s"
+        if refreshTime == 0.0
+        {
+            predictionRefreshTimeLabel.text = "None"
+        }
     }
     
-    func setOnLaunchTypeTitle(onLaunchType: OnLaunchType)
+    @objc func setLastUpdatedRoutesLabel()
     {
-        var onLaunchTypeText = "None"
-        switch onLaunchType
-        {
-        case .none:
-            onLaunchTypeText = "None"
-        case .favorites:
-            onLaunchTypeText = "Favorites"
-        case .nearby:
-            onLaunchTypeText = "Nearby"
-        case .recents:
-            onLaunchTypeText = "Recents"
-        }
+        let lastUpdatedRoutes = UserDefaults.standard.object(forKey: "RoutesUpdatedAt") as? Date ?? Date()
         
-        onLaunchLabel.text = onLaunchTypeText
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd hh:mm"
+        
+        lastUpdatedRoutesLabel.text = dateFormatter.string(from: lastUpdatedRoutes)
     }
 }

@@ -81,6 +81,25 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>MuniTracker would like to use your current location to find the bus stops nearest to you</string>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>UIApplicationShortcutIconTypeFavorite</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Favorite Stops</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>FavoriteAction</string>
+		</dict>
+		<dict>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>UIApplicationShortcutIconTypeLocation</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Nearby Stops</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>NearbyAction</string>
+		</dict>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

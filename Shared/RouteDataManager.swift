@@ -19,7 +19,11 @@ class RouteDataManager
     //MARK: - Feed Source
     static let jsonFeedSource = "http://webservices.nextbus.com/service/publicJSONFeed"
     
-    static func getJSONFromSource(_ command: String, _ arguments: Dictionary<String,String>, _ callback: @escaping (_ json: [String : Any]?) -> Void)
+    static let herokuHashSource = "http://munitracker.herokuapp.com"
+    static let listHash = "/rlhash"
+    static let configHashes = "/rchash"
+    
+    static func getJSONFromRouteSource(_ command: String, _ arguments: Dictionary<String,String>, _ callback: @escaping (_ json: [String : Any]?) -> Void)
     {
         var commandString = ""
         for commandArgument in arguments
@@ -48,26 +52,42 @@ class RouteDataManager
     static func updateAllData()
     {
         var routesFetched = 0
-                
+        
+        let routeListHash = fetchRouteListHash()
+        let routeConfigHashes = fetchRouteConfigHashes()
+        
         let routeDictionary = fetchRoutes()
         print("Received Routes")
-                
+        
         CoreDataStack.persistentContainer.performBackgroundTask({ (backgroundMOC) in
             let agencyFetchCallback = fetchOrCreateObject(type: "Agency", predicate: NSPredicate(format: "name == %@", agencyTag), moc: backgroundMOC)
             let agency = agencyFetchCallback.object as! Agency
             agency.name = agencyTag
-        
+            agency.serverHash = routeListHash
+            
             for routeTitle in routeDictionary
             {
                 let routeFetchCallback = fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "tag == %@", routeTitle.key), moc: backgroundMOC)
                 let route = routeFetchCallback.object as! Route
                 route.tag = routeTitle.key
                 route.title = routeTitle.value
-                
-                let routeConfig = fetchRouteInfo(routeTag: routeTitle.key)
+                                
+                if route.serverHash == routeConfigHashes[routeTitle.key]
+                {
+                    routesFetched += 1
+                    NotificationCenter.default.post(name: NSNotification.Name("CompletedRoute"), object: self, userInfo: ["progress":Float(routesFetched)/Float(routeDictionary.keys.count)])
+                    
+                    continue
+                }
+                else if route.serverHash != nil
+                {
+                    route.serverHash = routeConfigHashes[routeTitle.key]
+                }
                 
                 print(routeTitle.key)
-            
+                
+                let routeConfig = fetchRouteInfo(routeTag: routeTitle.key)
+                                
                 let generalRouteConfig = routeConfig["general"]
                 route.color = generalRouteConfig!["color"]!["color"] as? String
                 route.oppositeColor = generalRouteConfig!["color"]!["oppositeColor"] as? String
@@ -119,14 +139,15 @@ class RouteDataManager
                 try? backgroundMOC.save()
                 
                 mocSaveGroup.wait()
+            }
+            
+            if routesFetched == routeDictionary.keys.count
+            {
+                print("Complete")
+                UserDefaults.standard.set(Date(), forKey: "RoutesUpdatedAt")
                 
-                if routesFetched == routeDictionary.keys.count
-                {
-                    print("Complete")
-                    
-                    OperationQueue.main.addOperation {
-                        NotificationCenter.default.post(name: NSNotification.Name("FinishedUpdatingRoutes"), object: self)
-                    }
+                OperationQueue.main.addOperation {
+                    NotificationCenter.default.post(name: NSNotification.Name("FinishedUpdatingRoutes"), object: self)
                 }
             }
         })
@@ -145,7 +166,7 @@ class RouteDataManager
         let backgroundGroup = DispatchGroup()
         backgroundGroup.enter()
         
-        getJSONFromSource("routeList", ["a":agencyTag]) { (json) in
+        getJSONFromRouteSource("routeList", ["a":agencyTag]) { (json) in
             guard let json = json else { return }
             
             routeDictionary = Dictionary<String,String>()
@@ -163,6 +184,54 @@ class RouteDataManager
         return routeDictionary
     }
     
+    static func fetchRouteListHash() -> String
+    {
+        var routeListHash = ""
+
+        let backgroundGroup = DispatchGroup()
+        backgroundGroup.enter()
+        
+        let url = URL(string: herokuHashSource + listHash + "?_=" + String(Date().timeIntervalSince1970))!
+        
+        let task = (URLSession.shared.dataTask(with: url) { data, response, error in
+            if let data = data, let listHash = String(data: data, encoding: .utf8)
+            {
+                routeListHash = listHash
+            }
+            
+            backgroundGroup.leave()
+        })
+        
+        task.resume()
+        backgroundGroup.wait()
+        
+        return routeListHash
+    }
+    
+    static func fetchRouteConfigHashes() -> [String:String]
+    {
+        var routeConfigHashes = Dictionary<String,String>()
+        
+        let backgroundGroup = DispatchGroup()
+        backgroundGroup.enter()
+        
+        let url = URL(string: herokuHashSource + configHashes + "?_=" + String(Date().timeIntervalSince1970))!
+        
+        let task = (URLSession.shared.dataTask(with: url) { data, response, error in
+            if data != nil, let json = try? JSONSerialization.jsonObject(with: data!) as? [String:String]
+            {
+                routeConfigHashes = json
+            }
+            
+            backgroundGroup.leave()
+        })
+        
+        task.resume()
+        backgroundGroup.wait()
+        
+        return routeConfigHashes
+    }
+    
     static func fetchRouteInfo(routeTag: String) -> Dictionary<String,Dictionary<String,Dictionary<String,Any>>>
     {
         var routeInfoDictionary: Dictionary<String,Dictionary<String,Dictionary<String,Any>>>?
@@ -170,7 +239,7 @@ class RouteDataManager
         let backgroundGroup = DispatchGroup()
         backgroundGroup.enter()
         
-        getJSONFromSource("routeConfig", ["a":agencyTag,"r":routeTag,"terse":"618"]) { (json) in
+        getJSONFromRouteSource("routeConfig", ["a":agencyTag,"r":routeTag,"terse":"618"]) { (json) in
             guard let json = json else { return }
             
             var routeDirectionsArray = Dictionary<String,Dictionary<String,Any>>()
@@ -363,7 +432,7 @@ class RouteDataManager
             DispatchQueue.global(qos: .background).async {
                 if let stop = stop, let direction = direction, let route = direction.route
                 {
-                    getJSONFromSource("predictions", ["a":agencyTag,"s":stop.tag!,"r":route.tag!]) { (json) in
+                    getJSONFromRouteSource("predictions", ["a":agencyTag,"s":stop.tag!,"r":route.tag!]) { (json) in
                         let directionStopID = (stop.tag ?? "") + "-" + (direction.tag ?? "")
                         
                         if let json = json
@@ -446,7 +515,7 @@ class RouteDataManager
         DispatchQueue.global(qos: .background).async {
             if let direction = direction, let route = direction.route
             {
-                getJSONFromSource("vehicleLocations", ["a":agencyTag,"r":route.tag!,"t":lastVehicleTime ?? "0"]) { (json) in
+                getJSONFromRouteSource("vehicleLocations", ["a":agencyTag,"r":route.tag!,"t":lastVehicleTime ?? "0"]) { (json) in
                     guard let json = json else { return }
                     
                     let vehicles = json["vehicle"] as? Array<Dictionary<String,String>> ?? []

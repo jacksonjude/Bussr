@@ -10,6 +10,12 @@ import Foundation
 import UserNotifications
 import CoreData
 
+enum NotificationChangeType: Int
+{
+    case updated = 0
+    case deleted = 1
+}
+
 extension StopNotification
 {
     public override func prepareForDeletion() {
@@ -41,7 +47,7 @@ class NotificationManager
     @objc static func stopNotificationDidUpdate(_ notification: Notification)
     {
         let stopNotification = notification.object as! StopNotification
-        notificationChanges[stopNotification.notificationUUID!] = 0
+        notificationChanges[stopNotification.notificationUUID!] = NotificationChangeType.updated
         
         syncNotificationChangesToServer()
     }
@@ -49,7 +55,7 @@ class NotificationManager
     @objc static func stopNotificationDidDelete(_ notification: Notification)
     {
         let stopNotificationUUID = notification.userInfo!["uuid"] as! String
-        notificationChanges[stopNotificationUUID] = 1
+        notificationChanges[stopNotificationUUID] = NotificationChangeType.deleted
         
         syncNotificationChangesToServer()
     }
@@ -105,7 +111,7 @@ class NotificationManager
         deleteTask.resume()
     }
     
-    static var notificationChanges = Dictionary<String,Int>()
+    static var notificationChanges = Dictionary<String,NotificationChangeType>()
     
     static func syncNotificationChangesToServer()
     {
@@ -115,7 +121,7 @@ class NotificationManager
             {
                 switch change.value
                 {
-                case 0:
+                case NotificationChangeType.updated:
                     if let stopNotification = RouteDataManager.fetchLocalObjects(type: "StopNotification", predicate: NSPredicate(format: "notificationUUID == %@", change.key), moc: backgroundMOC) as? [StopNotification], stopNotification.count > 0
                     {
                         updateNotification(stopNotification: stopNotification[0], moc: backgroundMOC, callback: { (error) in
@@ -125,15 +131,13 @@ class NotificationManager
                             }
                         })
                     }
-                case 1:
+                case NotificationChangeType.deleted:
                     deleteNotification(stopNotificationUUID: change.key, callback: { (error) in
                         if error == nil
                         {
                             notificationChanges.removeValue(forKey: change.key)
                         }
                     })
-                default:
-                    break
                 }
             }
         }

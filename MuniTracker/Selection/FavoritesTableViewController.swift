@@ -300,7 +300,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
     {
         NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
         
-        if let predictions = notification.userInfo!["predictions"] as? [String], FavoriteState.favoritesOrganizeType == .list || FavoriteState.favoritesOrganizeType == .group
+        if let predictions = notification.userInfo?["predictions"] as? [String], FavoriteState.favoritesOrganizeType == .list || FavoriteState.favoritesOrganizeType == .group
         {
             OperationQueue.main.addOperation {
                 let predictionsString = RouteDataManager.formatPredictions(predictions: predictions).predictionsString

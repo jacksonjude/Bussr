@@ -24,6 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var window: UIWindow?
     
     var mainMapViewController: MainMapViewController?
+    var shortcutItemToProcess: UIApplicationShortcutItem?
     
     var firstLaunch = false
 
@@ -94,13 +95,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         if let notificationChangesData = UserDefaults.standard.object(forKey: "notificationChanges") as? Data
         {
-            let notificationChanges = (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(notificationChangesData) as? Dictionary<String,Int>) ?? [:]
+            let notificationChanges = (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(notificationChangesData) as? Dictionary<String,NotificationChangeType>) ?? [:]
             NotificationManager.notificationChanges = notificationChanges
         }
         
         NotificationManager.syncNotificationChangesToServer()
-                        
+        
+        if let shortcutItem = launchOptions?[UIApplication.LaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem {
+            shortcutItemToProcess = shortcutItem
+        }
+        
         return true
+    }
+    
+    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+        shortcutItemToProcess = shortcutItem
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -123,6 +132,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        if let shortcutItem = shortcutItemToProcess
+        {
+            switch shortcutItem.type
+            {
+            case "FavoriteAction":
+                mainMapViewController?.performSegue(withIdentifier: "showFavoritesTableView", sender: self)
+            case "NearbyAction":
+                mainMapViewController?.performSegue(withIdentifier: "showNearbyStopTableView", sender: self)
+            default:
+                break
+            }
+            
+            shortcutItemToProcess = nil
+        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
