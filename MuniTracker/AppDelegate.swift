@@ -25,6 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     var mainMapViewController: MainMapViewController?
     var shortcutItemToProcess: UIApplicationShortcutItem?
+    var routeStopToOpen: (stopTag: String, routeTag: String)?
     
     var firstLaunch = false
 
@@ -101,8 +102,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         NotificationManager.syncNotificationChangesToServer()
         
-        if let shortcutItem = launchOptions?[UIApplication.LaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem {
+        if let shortcutItem = launchOptions?[UIApplication.LaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem
+        {
             shortcutItemToProcess = shortcutItem
+        }
+                
+        if let remoteNotification = launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification] as? [AnyHashable : Any], let stopTag = remoteNotification["stop"] as? String, let routeTag = remoteNotification["route"] as? String
+        {
+            routeStopToOpen = (stopTag: stopTag, routeTag: routeTag)
         }
         
         return true
@@ -145,6 +152,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             }
             
             shortcutItemToProcess = nil
+        }
+        
+        if let routeStop = routeStopToOpen, let route = RouteDataManager.fetchObject(type: "Route", predicate: NSPredicate(format: "tag == %@", routeStop.routeTag), moc: CoreDataStack.persistentContainer.viewContext) as? Route, let directions = route.directions?.array as? [Direction]
+        {
+            var directionTag = ""
+            for direction in directions
+            {
+                if let stops = direction.stops?.array as? [Stop], stops.contains(where: { (stop) -> Bool in
+                    return (stop.tag ?? "") == routeStop.stopTag
+                })
+                {
+                    directionTag = direction.tag ?? ""
+                    break
+                }
+            }
+            
+            MapState.routeInfoShowing = .stop
+            MapState.selectedDirectionTag = directionTag
+            MapState.selectedStopTag = routeStop.stopTag
+            MapState.routeInfoObject = MapState.getCurrentDirection()
+            
+            mainMapViewController?.showPickerView()
+            mainMapViewController?.reloadAllAnnotations()
+            
+            NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
+            
+            routeStopToOpen = nil
         }
     }
 
