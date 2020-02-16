@@ -40,6 +40,8 @@ class NotificationManager
     
     static func addObservationNotifications()
     {
+        self.notificationChanges = Dictionary<String,NotificationChangeType>()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(stopNotificationDidUpdate(_:)), name: NSNotification.Name("UpdatedStopNotification"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(stopNotificationDidDelete(_:)), name: NSNotification.Name("DeletedStopNotification"), object: nil)
     }
@@ -49,7 +51,9 @@ class NotificationManager
         let stopNotification = notification.object as! StopNotification
         notificationChanges[stopNotification.notificationUUID!] = NotificationChangeType.updated
         
-        syncNotificationChangesToServer()
+        OperationQueue.main.addOperation { //Strange crash when iterating thru notification changes on sync
+            syncNotificationChangesToServer()
+        }
     }
     
     @objc static func stopNotificationDidDelete(_ notification: Notification)
