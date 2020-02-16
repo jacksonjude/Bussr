@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7AFD5CA323F009EA00AFFEEF"
-               BuildableName = "BusTracker.app"
+               BuildableName = "Bussr.app"
                BlueprintName = "MuniTrackerWatchApp"
                ReferencedContainer = "container:MuniTracker.xcodeproj">
             </BuildableReference>
@@ -29,7 +29,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7AD81E0520D6E60C004BAB1E"
-               BuildableName = "MuniTracker.app"
+               BuildableName = "Bussr.app"
                BlueprintName = "MuniTracker"
                ReferencedContainer = "container:MuniTracker.xcodeproj">
             </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7AFD5CA323F009EA00AFFEEF"
-            BuildableName = "BusTracker.app"
+            BuildableName = "Bussr.app"
             BlueprintName = "MuniTrackerWatchApp"
             ReferencedContainer = "container:MuniTracker.xcodeproj">
          </BuildableReference>
@@ -82,7 +82,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7AFD5CA323F009EA00AFFEEF"
-            BuildableName = "BusTracker.app"
+            BuildableName = "Bussr.app"
             BlueprintName = "MuniTrackerWatchApp"
             ReferencedContainer = "container:MuniTracker.xcodeproj">
          </BuildableReference>
@@ -91,7 +91,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7AFD5CA323F009EA00AFFEEF"
-            BuildableName = "BusTracker.app"
+            BuildableName = "Bussr.app"
             BlueprintName = "MuniTrackerWatchApp"
             ReferencedContainer = "container:MuniTracker.xcodeproj">
          </BuildableReference>

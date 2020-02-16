@@ -648,6 +648,15 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                 
                 return CGFloat(currentStopCoordinate.heading(to: nextStopCoordinate))
             }
+            else if stopArray.count >= 2
+            {
+                let prevStopObject = stopArray[stopIndex-1]
+                
+                let prevStopCoordinate = CLLocationCoordinate2D(latitude: prevStopObject.latitude, longitude: prevStopObject.longitude)
+                let currentStopCoordinate = CLLocationCoordinate2D(latitude: stop.latitude, longitude: stop.longitude)
+                
+                return CGFloat(prevStopCoordinate.heading(to: currentStopCoordinate))
+            }
         }
         
         return 0

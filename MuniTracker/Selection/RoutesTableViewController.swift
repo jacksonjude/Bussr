@@ -94,6 +94,15 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
 
         routeCell.backgroundColor = (appDelegate.getCurrentTheme() == .dark) ? UIColor.black : UIColor.white
         routeCell.backgroundView = UIView()
+        
+//        let gradient = CAGradientLayer()
+//        gradient.colors = [routeCellColor.cgColor, UIColor(hue: hsba.h, saturation: 0, brightness: hsba.b, alpha: 1).cgColor]
+//        gradient.locations = [0.90, 0.95]
+//        gradient.startPoint = CGPoint(x: 0.0, y: 1.0)
+//        gradient.endPoint = CGPoint(x: 1.0, y: 1.0)
+//        gradient.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: self.view.frame.size.height)
+//        routeCell.backgroundView?.layer.insertSublayer(gradient, at: 0)
+        
         routeCell.backgroundView?.backgroundColor = routeCellColor
         
         let selectedCellBackground = UIView()

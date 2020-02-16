@@ -16,7 +16,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7A068D2F212697F000D3425E"
-               BuildableName = "BusTracker - Recent.appex"
+               BuildableName = "Bussr &#x2013; Recent.appex"
                BlueprintName = "MuniTrackerRecentExtension"
                ReferencedContainer = "container:MuniTracker.xcodeproj">
             </BuildableReference>
@@ -30,7 +30,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7AD81E0520D6E60C004BAB1E"
-               BuildableName = "MuniTracker.app"
+               BuildableName = "Bussr.app"
                BlueprintName = "MuniTracker"
                ReferencedContainer = "container:MuniTracker.xcodeproj">
             </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7AD81E0520D6E60C004BAB1E"
-            BuildableName = "MuniTracker.app"
+            BuildableName = "Bussr.app"
             BlueprintName = "MuniTracker"
             ReferencedContainer = "container:MuniTracker.xcodeproj">
          </BuildableReference>
@@ -80,7 +80,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7AD81E0520D6E60C004BAB1E"
-            BuildableName = "MuniTracker.app"
+            BuildableName = "Bussr.app"
             BlueprintName = "MuniTracker"
             ReferencedContainer = "container:MuniTracker.xcodeproj">
          </BuildableReference>
