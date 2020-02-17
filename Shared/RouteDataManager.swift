@@ -465,7 +465,9 @@ class RouteDataManager
             let route = ((json["root"] as? Dictionary<String,Any>)?["routes"] as? Dictionary<String,Any>)?["route"] as? Dictionary<String,Any> ?? [:]
             
             routeGeneralConfig["color"] = Dictionary<String,String>()
-            routeGeneralConfig["color"]!["color"] = String((route["hexcolor"] as? String)?.split(separator: "#")[0] ?? "000000")
+            let hexColorSplit = (route["hexcolor"] as? String)?.split(separator: "#") ?? ["000000"]
+            if hexColorSplit.count < 1 { backgroundGroup.leave(); return }
+            routeGeneralConfig["color"]!["color"] = String(hexColorSplit[0])
             routeGeneralConfig["color"]!["oppositeColor"] = ((UIColor(hexString: routeGeneralConfig["color"]!["color"]!).hsba.b > 0.8) ? "000000" : "ffffff")
             //routeGeneralConfig["color"]!["oppositeColor"] = "000000"
             
@@ -646,68 +648,140 @@ class RouteDataManager
         fetchPredictionTimesOperations[directionStopID] = BlockOperation()
         fetchPredictionTimesOperations[directionStopID]?.addExecutionBlock {
             DispatchQueue.global(qos: .background).async {
-                if let stop = stop, let direction = direction, let route = direction.route
+                if let stop = stop, let direction = direction, let route = direction.route, let agencyTag = route.agency?.name
                 {
-                    getJSONFromNextBusSource("predictions", ["a":RouteConstants.NextBusAgencyTag,"s":stop.tag!,"r":route.tag!]) { (json) in
-                        let directionStopID = (stop.tag ?? "") + "-" + (direction.tag ?? "")
-                        
-                        if let json = json
-                        {
-                            let predictionsMain = json["predictions"] as? Dictionary<String,Any> ?? [:]
-                            
-                            var directionDictionary: Dictionary<String,Any>?
-                            
-                            if let directionDictionaryTmp = predictionsMain["direction"] as? Dictionary<String,Any>
-                            {
-                                directionDictionary = directionDictionaryTmp
-                            }
-                            else if let directionArray = predictionsMain["direction"] as? Array<Dictionary<String,Any>>
-                            {
-                                for directionDictionaryTmp in directionArray
-                                {
-                                    if directionDictionaryTmp["title"] as? String == direction.title
-                                    {
-                                        directionDictionary = directionDictionaryTmp
-                                        break
-                                    }
-                                }
-                            }
-                            
-                            let predictionsDictionary = directionDictionary?["prediction"] as? Array<Dictionary<String,String>> ?? []
-                            
-                            var predictions = Array<String>()
-                            var vehicles = Array<String>()
-                            
-                            for prediction in predictionsDictionary
-                            {
-                                predictions.append(prediction["minutes"] ?? "nil")
-                                vehicles.append(prediction["vehicle"]!)
-                            }
-                            
-                            for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
-                            {
-                                NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictions,"vehicleIDs":vehicles])
-                                
-                                guard let uuidIndex = fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID) else { continue }
-                                
-                                fetchPredictionTimesReturnUUIDS[directionStopID]!.remove(at: uuidIndex)
-                            }
-                        }
-                        else
-                        {
-                            for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
-                            {
-                                NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["error":"Connection Error"])
-                                
-                                fetchPredictionTimesReturnUUIDS[directionStopID]!.remove(at: fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID)!)
-                            }
-                        }
+                    switch agencyTag
+                    {
+                    case RouteConstants.NextBusAgencyTag:
+                        fetchNextBusPredictionTimes(route: route, direction: direction, stop: stop)
+                    case RouteConstants.BARTAgencyTag:
+                        fetchBARTPredictionTimes(route: route, direction: direction, stop: stop)
+                    default:
+                        break
                     }
                 }
             }
         }
         
         fetchPredictionTimesOperations[directionStopID]?.start()
+    }
+    
+    static func fetchNextBusPredictionTimes(route: Route, direction: Direction, stop: Stop)
+    {
+        getJSONFromNextBusSource("predictions", ["a":RouteConstants.NextBusAgencyTag,"s":stop.tag!,"r":route.tag!]) { (json) in
+            let directionStopID = (stop.tag ?? "") + "-" + (direction.tag ?? "")
+            
+            if let json = json
+            {
+                let predictionsMain = json["predictions"] as? Dictionary<String,Any> ?? [:]
+                
+                var directionDictionary: Dictionary<String,Any>?
+                if let directionDictionaryTmp = predictionsMain["direction"] as? Dictionary<String,Any>
+                {
+                    directionDictionary = directionDictionaryTmp
+                }
+                else if let directionArray = predictionsMain["direction"] as? Array<Dictionary<String,Any>>
+                {
+                    for directionDictionaryTmp in directionArray
+                    {
+                        if directionDictionaryTmp["title"] as? String == direction.title
+                        {
+                            directionDictionary = directionDictionaryTmp
+                            break
+                        }
+                    }
+                }
+                
+                let predictionsDictionary = directionDictionary?["prediction"] as? Array<Dictionary<String,String>> ?? []
+                
+                var predictions = Array<String>()
+                var vehicles = Array<String>()
+                
+                for prediction in predictionsDictionary
+                {
+                    predictions.append(prediction["minutes"] ?? "nil")
+                    vehicles.append(prediction["vehicle"] ?? "nil")
+                }
+                
+                for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
+                {
+                    NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictions,"vehicleIDs":vehicles])
+                    
+                    guard let uuidIndex = fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID) else { continue }
+                    
+                    fetchPredictionTimesReturnUUIDS[directionStopID]!.remove(at: uuidIndex)
+                }
+            }
+            else
+            {
+                for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
+                {
+                    NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["error":"Connection Error"])
+                    
+                    fetchPredictionTimesReturnUUIDS[directionStopID]!.remove(at: fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID)!)
+                }
+            }
+        }
+    }
+    
+    static func fetchBARTPredictionTimes(route: Route, direction: Direction, stop: Stop)
+    {
+        getJSONFromBARTSource("/etd.aspx", "etd", ["key":RouteConstants.BARTAPIKey, "orig":stop.tag ?? ""]) { (json) in
+            let directionStopID = (stop.tag ?? "") + "-" + (direction.tag ?? "")
+            
+            if let json = json
+            {
+                guard let routeHexColor = route.color else { return }
+                
+                guard let directionTag = direction.tag else { return }
+                let directionTagSplit = directionTag.split(separator: "–")
+                if directionTagSplit.count < 2 { return }
+                let directionDestination = String(directionTagSplit[1])
+                
+                let predictionsMain = (json["root"] as? Dictionary<String,Any> ?? [:])["station"] as? Array<Dictionary<String,Any>> ?? []
+                if predictionsMain.count < 1 { return }
+                
+                var predictionTimes = Array<String>()
+                if let etdArray = predictionsMain[0]["etd"] as? Array<Dictionary<String,Any>>
+                {
+                    for estimateTmp in etdArray
+                    {
+                        let destination = estimateTmp["abbreviation"] as? String
+                        let estimateArray = estimateTmp["estimate"] as? Array<Dictionary<String,String>> ?? []
+                        for estimate in estimateArray
+                        {
+                            guard var hexColor = estimate["hexcolor"] else { continue }
+                            let hexColorSplit = hexColor.split(separator: "#")
+                            if hexColorSplit.count < 1 { return }
+                            hexColor = String(hexColorSplit[0])
+                            
+                            if directionDestination == destination && routeHexColor.lowercased() == hexColor.lowercased()
+                            {
+                                predictionTimes.append(estimate["minutes"] ?? "nil")
+                            }
+                        }
+                    }
+                }
+                
+                for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
+                {
+                    NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictionTimes,"vehicleIDs":[]])
+                    
+                    guard let uuidIndex = fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID) else { continue }
+                    
+                    fetchPredictionTimesReturnUUIDS[directionStopID]!.remove(at: uuidIndex)
+                }
+            }
+            else
+            {
+                for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
+                {
+                    NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["error":"Connection Error"])
+                    
+                    fetchPredictionTimesReturnUUIDS[directionStopID]!.remove(at: fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID)!)
+                }
+            }
+        }
     }
     
     static func sortStopsByDistanceFromLocation(stops: Array<Stop>, locationToTest: CLLocation) -> Array<Stop>

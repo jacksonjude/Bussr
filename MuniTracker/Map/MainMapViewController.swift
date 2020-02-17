@@ -24,9 +24,12 @@ struct DisplayConstants
 
 struct MapConstants
 {
-    static let maxLongMetersBeforeHidingStopAnnotations = 4000.0
+    static let NextBusMaxLongMetersBeforeHidingStopAnnotations = 4000.0
+    static let BARTMaxLongMetersBeforeHidingStopAnnotations = 14000.0
     static let directionPolylineWidth: CGFloat = 5.0
     static let borderPolylineWidth: CGFloat = 6.0
+    static let directionZoomMarginPercent: Double = 20.0
+    static let stopZoomMarginPercent: Double = 50.0
 }
 
 enum AnnotationType
@@ -393,11 +396,74 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         centerMapOnLocation(location: stopLocation)
     }
     
+    func zoomMapOnCurrentStop()
+    {
+        guard let currentDirection = MapState.getCurrentDirection() else { return }
+        guard let currentStops = currentDirection.stops?.array as? [Stop] else { return }
+        guard let currentStop = MapState.getCurrentStop() else { return }
+        guard let stopIndex = currentStops.firstIndex(of: currentStop) else { return }
+        
+        var minStopIndex = stopIndex
+        if stopIndex > 0
+        {
+            minStopIndex -= 1
+        }
+        var maxStopIndex = stopIndex
+        if stopIndex < currentStops.count-1
+        {
+            maxStopIndex += 1
+        }
+        
+        let currentStopSlice = Array<Stop>(currentStops[minStopIndex...maxStopIndex])
+        let currentStopLocation = CLLocation(latitude: currentStop.latitude, longitude: currentStop.longitude)
+        zoomMapOnStopArray(stops: currentStopSlice, zoomMargin: MapConstants.stopZoomMarginPercent, center: currentStopLocation, animated: true)
+    }
+    
+    func zoomMapOnCurrentDirection()
+    {
+        guard let currentDirection = MapState.getCurrentDirection() else { return }
+        guard let currentStops = currentDirection.stops?.array as? [Stop] else { return }
+        
+        zoomMapOnStopArray(stops: currentStops, zoomMargin: MapConstants.directionZoomMarginPercent)
+    }
+    
+    func zoomMapOnStopArray(stops: [Stop], zoomMargin: Double, center: CLLocation? = nil, animated: Bool = false)
+    {
+        if stops.count == 0 { return }
+        
+        var minLat = stops[0].latitude
+        var maxLat = stops[0].latitude
+        var minLong = stops[0].longitude
+        var maxLong = stops[0].longitude
+        
+        for stop in stops
+        {
+            minLat = min(minLat, stop.latitude)
+            maxLat = max(maxLat, stop.latitude)
+            minLong = min(minLong, stop.longitude)
+            maxLong = max(maxLong, stop.longitude)
+        }
+        
+        let centerLat = (minLat + maxLat)/2
+        let centerLong = (minLong + maxLong)/2
+        var centerLocation = CLLocation(latitude: centerLat, longitude: centerLong)
+        if center != nil { centerLocation = center! }
+        
+        let latDegrees = maxLat - minLat
+        let longDegrees = maxLong - minLong
+        let span = MKCoordinateSpan(latitudeDelta: latDegrees, longitudeDelta: longDegrees)
+        
+        let latLongMaters = mapViewSpanToDistance(center: centerLocation.coordinate, span: span)
+        let range = max(latLongMaters.latitude, latLongMaters.longitude)*(1+zoomMargin/100)
+        
+        centerMapOnLocation(location: centerLocation, range: range)
+    }
+    
     func centerMapOnLocation(location: CLLocation)
     {
         let mapRegionLatLong = mapViewSpanToDistance(center: mainMapView.region.center, span: mainMapView.region.span)
         
-        centerMapOnLocation(location: location, range: min(mapRegionLatLong.latitude, mapRegionLatLong.longitude), willChangeRange: false)
+        centerMapOnLocation(location: location, range: min(mapRegionLatLong.latitude, mapRegionLatLong.longitude))
     }
     
     func mapViewSpanToDistance(center: CLLocationCoordinate2D, span: MKCoordinateSpan) -> (latitude: CLLocationDistance, longitude: CLLocationDistance)
@@ -416,8 +482,10 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         return (latDistance, longDistance)
     }
     
-    func centerMapOnLocation(location: CLLocation, range: CLLocationDistance, willChangeRange: Bool = true)
+    func centerMapOnLocation(location: CLLocation, range: CLLocationDistance)
     {
+        let prevMapRegion = mainMapView.region
+        
         mainMapView.setRegion(MKCoordinateRegion(center: mainMapView.region.center, latitudinalMeters: range, longitudinalMeters: range), animated: false)
         
         let offset = (pickerFloatingPanelController?.position == .half) ? DisplayConstants.panelHalfSize : DisplayConstants.panelTipSize
@@ -426,7 +494,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         point.y += offset/2
         let offsetCoordinate = mainMapView.convert(point, toCoordinateFrom: self.view)
         
-        mainMapView.setRegion(MKCoordinateRegion(center: offsetCoordinate, latitudinalMeters: range, longitudinalMeters: range), animated: !willChangeRange)
+        mainMapView.setRegion(prevMapRegion, animated: false)
+        
+        mainMapView.setRegion(MKCoordinateRegion(center: offsetCoordinate, latitudinalMeters: range, longitudinalMeters: range), animated: true)
+        
+        showHideStopAnnotations(mapView: mainMapView, animated: false, range: range)
     }
     
     @objc func updateMap(notification: Notification?)
@@ -442,7 +514,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         case .direction:
             reloadAllAnnotations()
             
-            centerMapOnLocation(location: initialLocation, range: 15000)
+            OperationQueue.main.addOperation {
+                self.zoomMapOnCurrentDirection()
+            }
             
             if let direction = MapState.getCurrentDirection(), let location = self.mainMapView?.userLocation.location
             {
@@ -465,7 +539,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             {
                 let stopLocation = CLLocation(latitude: stop.latitude, longitude: stop.longitude)
                 
-                centerMapOnLocation(location: stopLocation, range: 1000, willChangeRange: changingRouteInfoShowing)
+                zoomMapOnCurrentStop()
                 
                 setAnnotationType(coordinate: selectedAnnotationLocation, annotationType: .small)
                 setAnnotationType(coordinate: stopLocation.coordinate.convertToString(), annotationType: .large)
@@ -539,8 +613,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             
             NotificationCenter.default.addObserver(self, selector: #selector(fetchVehicleLocations), name: NSNotification.Name("FetchVehicleLocations"), object: nil)
             fetchPredictionTimes()
-            
-            showHideStopAnnotations(mapView: self.mainMapView, animated: false)
         }
     }
     
@@ -866,14 +938,15 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     }
         
     func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
-        showHideStopAnnotations(mapView: mapView)
+        showHideStopAnnotations(mapView: mapView, animated: true)
     }
     
-    func showHideStopAnnotations(mapView: MKMapView, animated: Bool = true)
+    func showHideStopAnnotations(mapView: MKMapView, animated: Bool = true, range: CLLocationDistance? = nil)
     {
         OperationQueue.main.addOperation {
-            let longDistance = self.mapViewSpanToDistance(center: mapView.region.center, span: mapView.region.span).longitude
-            let hideAnnotations = (longDistance >= MapConstants.maxLongMetersBeforeHidingStopAnnotations)
+            var longDistance = self.mapViewSpanToDistance(center: mapView.region.center, span: mapView.region.span).longitude
+            if range != nil { longDistance = range! }
+            let hideAnnotations = (longDistance >= (MapState.getCurrentDirection()?.route?.agency?.name == RouteConstants.BARTAgencyTag ? MapConstants.BARTMaxLongMetersBeforeHidingStopAnnotations : MapConstants.NextBusMaxLongMetersBeforeHidingStopAnnotations))
             
             let annotations = mapView.annotations
             for annotation in annotations
