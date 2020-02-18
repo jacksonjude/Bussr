@@ -360,7 +360,8 @@ class RouteDataManager
             
             routeGeneralConfig["color"] = Dictionary<String,String>()
             routeGeneralConfig["color"]!["color"] = route["color"] as? String
-            routeGeneralConfig["color"]!["oppositeColor"] = route["oppositeColor"] as? String
+            //routeGeneralConfig["color"]!["oppositeColor"] = route["oppositeColor"] as? String
+            routeGeneralConfig["color"]!["oppositeColor"] = "FFFFFF"
             routeGeneralConfig["general"] = Dictionary<String,String>()
             routeGeneralConfig["general"]!["shortTitle"] = route["shortTitle"] as? String ?? route ["title"] as! String
             

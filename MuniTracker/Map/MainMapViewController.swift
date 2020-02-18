@@ -25,7 +25,7 @@ struct DisplayConstants
 struct MapConstants
 {
     static let NextBusMaxLongMetersBeforeHidingStopAnnotations = 4000.0
-    static let BARTMaxLongMetersBeforeHidingStopAnnotations = 14000.0
+    static let BARTMaxLongMetersBeforeHidingStopAnnotations = 22000.0
     static let directionPolylineWidth: CGFloat = 5.0
     static let borderPolylineWidth: CGFloat = 6.0
     static let directionZoomMarginPercent: Double = 20.0
@@ -152,6 +152,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         setupThemeElements()
         setupCenterMapButtons()
+        setupNavItemTitleView()
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -214,6 +215,17 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         centerOnStopButton.layer.cornerRadius = 8
         self.predictionBarTopConstraint.constant = -1*(self.predictionTimesNavigationBar.frame.size.height)
         self.view.layoutSubviews()
+    }
+    
+    func setupNavItemTitleView()
+    {
+        let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 250, height: 40))
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 22.0)
+        titleLabel.textAlignment = .center
+        titleLabel.adjustsFontSizeToFitWidth = true
+        titleLabel.minimumScaleFactor = 0.5
+        titleLabel.text = "Map"
+        self.mainNavigationItem.titleView = titleLabel
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -510,7 +522,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             
             hidePredictionNavigationBar()
                         
-            mainNavigationItem.title = "Map"
+            (mainNavigationItem.titleView as? UILabel)?.text = "Map"
         case .direction:
             reloadAllAnnotations()
             
@@ -531,7 +543,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             
             hidePredictionNavigationBar()
                         
-            mainNavigationItem.title = MapState.getCurrentDirection()?.route?.title
+            (mainNavigationItem.titleView as? UILabel)?.text = MapState.getCurrentDirection()?.route?.title
         case .stop:
             let changingRouteInfoShowing = notification?.userInfo?["ChangingRouteInfoShowing"] as? Bool ?? true
             
@@ -550,8 +562,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                 selectedAnnotationLocation = stopLocation.coordinate.convertToString()
             }
             
+            predictionTimesLabel.text = ""
             showPredictionNavigationBar()
-            
             refreshPredictionNavigationBar()
             
             if changingRouteInfoShowing
@@ -561,7 +573,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             
             showPickerView()
             
-            mainNavigationItem.title = MapState.getCurrentDirection()?.route?.title
+            (mainNavigationItem.titleView as? UILabel)?.text = MapState.getCurrentDirection()?.route?.title
         case .otherDirections:
             reloadAllAnnotations()
             
@@ -569,27 +581,13 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             
             hidePredictionNavigationBar()
             
-            mainNavigationItem.title = MapState.getCurrentDirection()?.route?.title
+            (mainNavigationItem.titleView as? UILabel)?.text = MapState.getCurrentDirection()?.route?.title
         case .vehicles:
             reloadPredictionTimesLabel()
             
-            mainNavigationItem.title = MapState.getCurrentDirection()?.route?.title
+            (mainNavigationItem.titleView as? UILabel)?.text = MapState.getCurrentDirection()?.route?.title
             
-            let darkBusIcon = UIImage(named: "BusAnnotationDark")
-            for busAnnotation in busAnnotations
-            {
-                if busAnnotation.value.annotationView?.image == darkBusIcon
-                {
-                    busAnnotation.value.annotationView?.image = UIImage(named: "BusAnnotation")
-                }
-                
-                if busAnnotation.value.annotation.isMapKitSelected
-                {
-                    mainMapView.deselectAnnotation(busAnnotations[MapState.selectedVehicleID!]?.annotation, animated: false)
-                }
-            }
-            
-            busAnnotations[MapState.selectedVehicleID ?? ""]?.annotationView?.image = UIImage(named: "BusAnnotationDark")
+            updateSelectedVehicle()
         }
     }
     
@@ -1136,7 +1134,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     
     func setupPredictionRefreshTimer()
     {
-        if let refreshTime = UserDefaults.standard.object(forKey: "predictionRefreshTime") as? TimeInterval, refreshTime > 0.0
+        if predictionRefreshTimer?.isValid ?? false { return }
+        
+        if let refreshTime = UserDefaults.standard.object(forKey: "PredictionRefreshTime") as? TimeInterval, refreshTime > 0.0
         {
             self.predictionRefreshTimer?.invalidate()
             self.predictionRefreshTimer = Timer.scheduledTimer(timeInterval: refreshTime, target: self, selector: #selector(self.refreshPredictionNavigationBar), userInfo: nil, repeats: true)
@@ -1179,6 +1179,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             })
         }
         
+        setupPredictionRefreshTimer()
         fetchPredictionTimes()
     }
     
@@ -1357,9 +1358,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         }
     }
     
-    //MARK: - Tracking
+    //MARK: - Vehicles Menu
     
-    @IBAction func toggleVehiclesButtonPressed(_ sender: Any) {
+    func toggleVehiclesMenu() {
         if MapState.routeInfoShowing != .vehicles && vehicleIDs.count == predictions.count
         {
             var predictionVehicleArray = Array<(vehicleID: String, prediction: String)>()
@@ -1384,6 +1385,77 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
     }
+    
+    func selectClosestVehicle() {
+        if vehicleIDs.count < 1 { return }
+        
+        var vehicleIndexToSelect = 0
+        
+        if let selectedVehicleID = MapState.selectedVehicleID, var selectedVehicleIndex = vehicleIDs.firstIndex(of: selectedVehicleID)
+        {
+            if selectedVehicleIndex != 0 && selectedVehicleIndex < vehicleIDs.count-1
+            {
+                selectedVehicleIndex += 1
+            }
+            else
+            {
+                selectedVehicleIndex = -1
+            }
+            
+            vehicleIndexToSelect = selectedVehicleIndex
+        }
+        else
+        {
+            vehicleIndexToSelect = 0
+        }
+        
+        if vehicleIndexToSelect == -1
+        {
+            MapState.selectedVehicleID = nil
+        }
+        else
+        {
+            MapState.selectedVehicleID = vehicleIDs[vehicleIndexToSelect]
+        }
+        
+        reloadPredictionTimesLabel()
+        updateSelectedVehicle()
+    }
+    
+    func updateSelectedVehicle()
+    {
+        let darkBusIcon = UIImage(named: "BusAnnotationDark")
+        for busAnnotation in busAnnotations
+        {
+            if busAnnotation.value.annotationView?.image == darkBusIcon
+            {
+                busAnnotation.value.annotationView?.image = UIImage(named: "BusAnnotation")
+            }
+            
+            if busAnnotation.value.annotation.isMapKitSelected
+            {
+                mainMapView.deselectAnnotation(busAnnotations[MapState.selectedVehicleID!]?.annotation, animated: false)
+            }
+        }
+        
+        busAnnotations[MapState.selectedVehicleID ?? ""]?.annotationView?.image = UIImage(named: "BusAnnotationDark")
+    }
+    
+    @IBAction func vehiclesButtonSingleTap(_ sender: Any) {
+        if MapState.routeInfoShowing == .vehicles
+        {
+            toggleVehiclesMenu()
+        }
+        else if MapState.routeInfoShowing == .stop
+        {
+            selectClosestVehicle()
+        }
+    }
+    
+    @IBAction func vehiclesButtonDoubleTap(_ sender: Any) {
+        toggleVehiclesMenu()
+    }
+    
 }
 
 class StopAnnotation: NSObject, MKAnnotation

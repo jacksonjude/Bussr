@@ -77,7 +77,7 @@
 		7AFB4752216DBD480043450B /* NotificationEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB4751216DBD480043450B /* NotificationEditorViewController.swift */; };
 		7AFD5CA823F009EA00AFFEEF /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AFD5CA623F009EA00AFFEEF /* Interface.storyboard */; };
 		7AFD5CAA23F009EB00AFFEEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7AFD5CA923F009EB00AFFEEF /* Assets.xcassets */; };
-		7AFD5CB123F009EB00AFFEEF /* MuniTrackerWatchApp Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7AFD5CB023F009EB00AFFEEF /* MuniTrackerWatchApp Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7AFD5CB123F009EB00AFFEEF /* Bussr WatchApp Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7AFD5CB023F009EB00AFFEEF /* Bussr WatchApp Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7AFD5CB623F009EB00AFFEEF /* MuniTrackerWatchInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CB523F009EB00AFFEEF /* MuniTrackerWatchInterfaceController.swift */; };
 		7AFD5CB823F009EB00AFFEEF /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CB723F009EB00AFFEEF /* ExtensionDelegate.swift */; };
 		7AFD5CBA23F009EB00AFFEEF /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CB923F009EB00AFFEEF /* ComplicationController.swift */; };
@@ -162,7 +162,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				7AFD5CB123F009EB00AFFEEF /* MuniTrackerWatchApp Extension.appex in Embed App Extensions */,
+				7AFD5CB123F009EB00AFFEEF /* Bussr WatchApp Extension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -234,7 +234,7 @@
 		7AFD5CA723F009EA00AFFEEF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
 		7AFD5CA923F009EB00AFFEEF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7AFD5CAB23F009EB00AFFEEF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7AFD5CB023F009EB00AFFEEF /* MuniTrackerWatchApp Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "MuniTrackerWatchApp Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AFD5CB023F009EB00AFFEEF /* Bussr WatchApp Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Bussr WatchApp Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AFD5CB523F009EB00AFFEEF /* MuniTrackerWatchInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuniTrackerWatchInterfaceController.swift; sourceTree = "<group>"; };
 		7AFD5CB723F009EB00AFFEEF /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
 		7AFD5CB923F009EB00AFFEEF /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
@@ -443,7 +443,7 @@
 				7A068D30212697F000D3425E /* Bussr – Recent.appex */,
 				7A068D432126980900D3425E /* Bussr – Nearby.appex */,
 				7AFD5CA423F009EA00AFFEEF /* Bussr.app */,
-				7AFD5CB023F009EB00AFFEEF /* MuniTrackerWatchApp Extension.appex */,
+				7AFD5CB023F009EB00AFFEEF /* Bussr WatchApp Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -638,7 +638,7 @@
 			);
 			name = "MuniTrackerWatchApp Extension";
 			productName = "MuniTrackerWatchApp Extension";
-			productReference = 7AFD5CB023F009EB00AFFEEF /* MuniTrackerWatchApp Extension.appex */;
+			productReference = 7AFD5CB023F009EB00AFFEEF /* Bussr WatchApp Extension.appex */;
 			productType = "com.apple.product-type.watchkit2-extension";
 		};
 /* End PBXNativeTarget section */
@@ -827,7 +827,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nsed -i .bak -e \"/userLabel=\\\"APP_VERSION\\\"/s/text=\\\"[^\\\"]*\\\"/text=\\\"Version: $MARKETING_VERSION Build: $CURRENT_PROJECT_VERSION\\\"/\" \"$PROJECT_DIR/$PROJECT_NAME/Base.lproj/LaunchScreen.storyboard\"\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nsed -i .bak -e \"/userLabel=\\\"APP_VERSION\\\"/s/text=\\\"[^\\\"]*\\\"/text=\\\"Version: $MARKETING_VERSION Build: $CURRENT_PROJECT_VERSION\\\"/\" \"$PROJECT_DIR/$PROJECT_NAME/Base.lproj/LaunchScreen.storyboard\"\nsed -i .bak -e \"/userLabel=\\\"APP_VERSION\\\"/s/text=\\\"[^\\\"]*\\\"/text=\\\"Version: $MARKETING_VERSION Build: $CURRENT_PROJECT_VERSION\\\"/\" \"$PROJECT_DIR/$PROJECT_NAME/Base.lproj/Main.storyboard\"\n";
 		};
 		9196FCED82477243A1FEB775 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1104,7 +1104,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerFavoritesExtension/MuniTrackerFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200216;
+				CURRENT_PROJECT_VERSION = 20200217;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerFavoritesExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1126,7 +1126,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerFavoritesExtension/MuniTrackerFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200216;
+				CURRENT_PROJECT_VERSION = 20200217;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerFavoritesExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1148,7 +1148,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerRecentExtension/MuniTrackerRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200216;
+				CURRENT_PROJECT_VERSION = 20200217;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerRecentExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1170,7 +1170,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerRecentExtension/MuniTrackerRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200216;
+				CURRENT_PROJECT_VERSION = 20200217;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerRecentExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1192,7 +1192,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerNearbyExtension/MuniTrackerNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200216;
+				CURRENT_PROJECT_VERSION = 20200217;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerNearbyExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1214,7 +1214,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerNearbyExtension/MuniTrackerNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200216;
+				CURRENT_PROJECT_VERSION = 20200217;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerNearbyExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1352,7 +1352,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = MuniTracker/MuniTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200216;
+				CURRENT_PROJECT_VERSION = 20200217;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1376,7 +1376,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = MuniTracker/MuniTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200216;
+				CURRENT_PROJECT_VERSION = 20200217;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1398,7 +1398,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "MuniTrackerWatchApp Extension/MuniTrackerWatchApp Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200216;
+				CURRENT_PROJECT_VERSION = 20200217;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = "MuniTrackerWatchApp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1408,7 +1408,7 @@
 				);
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.watchkitapp.watchkitextension;
-				PRODUCT_NAME = "${TARGET_NAME}";
+				PRODUCT_NAME = "Bussr WatchApp Extension";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -1423,7 +1423,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "MuniTrackerWatchApp Extension/MuniTrackerWatchApp Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200216;
+				CURRENT_PROJECT_VERSION = 20200217;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = "MuniTrackerWatchApp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1433,7 +1433,7 @@
 				);
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.MuniTracker.watchkitapp.watchkitextension;
-				PRODUCT_NAME = "${TARGET_NAME}";
+				PRODUCT_NAME = "Bussr WatchApp Extension";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -1449,7 +1449,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerWatchApp/BusTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200216;
+				CURRENT_PROJECT_VERSION = 20200217;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				IBSC_MODULE = MuniTrackerWatchApp_Extension;
 				INFOPLIST_FILE = MuniTrackerWatchApp/Info.plist;
@@ -1471,7 +1471,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerWatchApp/BusTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200216;
+				CURRENT_PROJECT_VERSION = 20200217;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				IBSC_MODULE = MuniTrackerWatchApp_Extension;
 				INFOPLIST_FILE = MuniTrackerWatchApp/Info.plist;

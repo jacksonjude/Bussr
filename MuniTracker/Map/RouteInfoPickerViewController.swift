@@ -276,6 +276,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 addNotificationButton.isHidden = true
                 addNotificationButton.isEnabled = false
                 
+                if (routeInfoToChange as! Array<Direction>).count < 1 { break }
                 rowToSelect = (routeInfoToChange as! Array<Direction>).firstIndex(of: (routeInfoToChange as! Array<Direction>).filter({$0.tag == MapState.selectedDirectionTag}).first ?? (routeInfoToChange as! Array<Direction>)[0]) ?? 0
             case .stop:
                 routeInfoToChange = (MapState.routeInfoObject as? Direction)?.stops?.array as? Array<Stop> ?? Array<Stop>()
@@ -413,6 +414,73 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         }
         
         reloadRouteData()
+    }
+    
+    @IBAction func directionButtonSingleTap()
+    {
+        switch MapState.routeInfoShowing
+        {
+        case .direction:
+            switchRouteInfoDirectionToStop()
+        case .stop:
+            let route = (MapState.routeInfoObject as? Direction)?.route
+            
+            if route?.directions?.count == 2
+            {
+                switchDirection(route: route!)
+            }
+            else
+            {
+                switchRouteInfoStopToDirection()
+            }
+        default:
+            break
+        }
+        
+        reloadRouteData()
+    }
+    
+    @IBAction func directionButtonDoubleTap()
+    {
+        switch MapState.routeInfoShowing
+        {
+        case .direction:
+            switchRouteInfoDirectionToStop()
+        case .stop:
+            switchRouteInfoStopToDirection()
+        default:
+            break
+        }
+        
+        reloadRouteData()
+    }
+    
+    func switchRouteInfoDirectionToStop()
+    {
+        MapState.routeInfoShowing = .stop
+        MapState.routeInfoObject = routeInfoToChange[routeInfoPicker.selectedRow(inComponent: 0)] as? Direction
+    }
+    
+    func switchRouteInfoStopToDirection()
+    {
+        MapState.routeInfoShowing = .direction
+        MapState.routeInfoObject = (MapState.routeInfoObject as? Direction)?.route
+    }
+    
+    func switchDirection(route: Route)
+    {
+        var directionArray = route.directions!.array as! [Direction]
+        directionArray.remove(at: directionArray.firstIndex(of: (MapState.routeInfoObject as! Direction))!)
+        MapState.routeInfoObject = directionArray[0]
+        MapState.selectedDirectionTag = directionArray[0].tag
+        
+        if let selectedStop = MapState.getCurrentStop(), let stops = directionArray[0].stops?.array as? [Stop]
+        {
+            let sortedStops = RouteDataManager.sortStopsByDistanceFromLocation(stops: stops, locationToTest: CLLocation(latitude: selectedStop.latitude, longitude: selectedStop.longitude))
+            MapState.selectedStopTag = sortedStops[0].tag
+        }
+        
+        NotificationCenter.default.post(name: NSNotification.Name("ReloadAnnotations"), object: nil)
     }
     
     func pickerSelectedRow()

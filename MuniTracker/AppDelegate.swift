@@ -249,6 +249,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // 1. Print out error if PNs registration not successful
         print("Failed to register for remote notifications with error: \(error)")
     }
-
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        if let stopTag = userInfo["stop"] as? String, let routeTag = userInfo["route"] as? String
+        {
+            routeStopToOpen = (stopTag: stopTag, routeTag: routeTag)
+        }
+    }
 }
 
