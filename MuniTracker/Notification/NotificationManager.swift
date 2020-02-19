@@ -121,6 +121,7 @@ class NotificationManager
     {
         print("↑ - Syncing Notifications to Cloud")
         CoreDataStack.persistentContainer.performBackgroundTask { (backgroundMOC) in
+            let notificationChanges = self.notificationChanges
             for change in notificationChanges
             {
                 switch change.value
@@ -131,7 +132,7 @@ class NotificationManager
                         updateNotification(stopNotification: stopNotification[0], moc: backgroundMOC, callback: { (error) in
                             if error == nil
                             {
-                                notificationChanges.removeValue(forKey: change.key)
+                                self.notificationChanges.removeValue(forKey: change.key)
                             }
                         })
                     }
@@ -139,7 +140,7 @@ class NotificationManager
                     deleteNotification(stopNotificationUUID: change.key, callback: { (error) in
                         if error == nil
                         {
-                            notificationChanges.removeValue(forKey: change.key)
+                            self.notificationChanges.removeValue(forKey: change.key)
                         }
                     })
                 }

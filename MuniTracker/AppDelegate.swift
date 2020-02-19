@@ -28,6 +28,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var routeStopToOpen: (stopTag: String, routeTag: String)?
     
     var firstLaunch = false
+    var hasDownloadedData: Bool = !(UserDefaults.standard.object(forKey: "hasDownloadedData") == nil)
+    {
+        didSet
+        {
+            if hasDownloadedData
+            {
+                UserDefaults.standard.set(618, forKey: "hasDownloadedData")
+            }
+            else
+            {
+                UserDefaults.standard.set(nil, forKey: "hasDownloadedData")
+            }
+        }
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.

@@ -24,6 +24,7 @@ class SettingsViewController: UITableViewController
     
     var progressAlertView: UIAlertController?
     var progressView: UIProgressView?
+    var routeOnLabel: UILabel?
     
     //MARK: - View
     
@@ -78,13 +79,19 @@ class SettingsViewController: UITableViewController
     //MARK: - Manage Routes
     
     func updateRoutes(_ sender: Any) {
-        progressAlertView = UIAlertController(title: "Updating", message: "Updating route data...\n", preferredStyle: .alert)
-        //progressAlertView!.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        progressAlertView = UIAlertController(title: "Updating Routes", message: "\n\n", preferredStyle: .alert)
+        progressAlertView!.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
         self.present(progressAlertView!, animated: true, completion: {
             let margin: CGFloat = 8.0
-            let rect = CGRect(x: margin, y: 72.0, width: self.progressAlertView!.view.frame.width - margin * 2.0, height: 2.0)
-            self.progressView = UIProgressView(frame: rect)
+            
+            let routeOnLabelRect = CGRect(x: 0, y: 60.0, width: self.progressAlertView!.view.frame.width, height: 20)
+            self.routeOnLabel = UILabel(frame: routeOnLabelRect)
+            self.routeOnLabel!.textAlignment = .center
+            self.progressAlertView!.view.addSubview(self.routeOnLabel!)
+            
+            let progressViewRect = CGRect(x: margin, y: 88.0, width: self.progressAlertView!.view.frame.width - margin * 2.0, height: 2.0)
+            self.progressView = UIProgressView(frame: progressViewRect)
             self.progressView!.tintColor = UIColor.blue
             self.progressAlertView!.view.addSubview(self.progressView!)
             
@@ -107,6 +114,7 @@ class SettingsViewController: UITableViewController
     @objc func addToProgress(notification: Notification)
     {
         OperationQueue.main.addOperation {
+            self.routeOnLabel?.text = notification.userInfo?["route"] as? String
             self.progressView?.progress = notification.userInfo?["progress"] as? Float ?? 0.0
         }
     }
@@ -120,30 +128,7 @@ class SettingsViewController: UITableViewController
     }
     
     func clearRoutes(_ sender: Any) {
-        let entityTypes = ["Agency", "Route", "Direction", "Stop"]
-        
-        var deletionLogs = ""
-        
-        for entityType in entityTypes
-        {
-            if let objects = RouteDataManager.fetchLocalObjects(type: entityType, predicate: NSPredicate(format: "TRUEPREDICATE"), moc: CoreDataStack.persistentContainer.viewContext) as? [NSManagedObject]
-            {
-                for object in objects
-                {
-                    CoreDataStack.persistentContainer.viewContext.delete(object)
-                }
-                
-                deletionLogs += "Deleted " + String(objects.count) + " " + entityType + "\n"
-            }
-            else
-            {
-                deletionLogs += "Deleted 0 " + entityType + "\n"
-            }
-        }
-        
-        deletionLogs = String(deletionLogs.dropLast())
-        
-        CoreDataStack.saveContext()
+        let deletionLogs = CoreDataStack.clearData(entityTypes: CoreDataStack.localRouteEntityTypes)
         
         let deletionAlertView = UIAlertController(title: "Deleted All Data", message: deletionLogs, preferredStyle: .alert)
         deletionAlertView.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: { (alert) in

@@ -115,6 +115,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     var downloadAllData = false
     var progressAlertView: UIAlertController?
     var progressView: UIProgressView?
+    var routeOnLabel: UILabel?
+    var updateAllRouteDataOperation: BlockOperation?
     
     var selectedAnnotationLocation: String?
     var stopAnnotations = Dictionary<String,StopAnnotation>()
@@ -144,7 +146,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                 
         setupPickerPanel()
         
-        if appDelegate.firstLaunch
+        if !appDelegate.hasDownloadedData
         {
             pickerFloatingPanelController?.move(to: .half, animated: true)
             downloadAllData = true
@@ -233,12 +235,18 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         if downloadAllData
         {
-            progressAlertView = UIAlertController(title: "Updating", message: "Updating route data...\n", preferredStyle: .alert)
+            progressAlertView = UIAlertController(title: "Updating Routes", message: "\n", preferredStyle: .alert)
             
             self.present(progressAlertView!, animated: true, completion: {
                 let margin: CGFloat = 8.0
-                let rect = CGRect(x: margin, y: 72.0, width: self.progressAlertView!.view.frame.width - margin * 2.0, height: 2.0)
-                self.progressView = UIProgressView(frame: rect)
+                
+                let routeOnLabelRect = CGRect(x: 0, y: 48.0, width: self.progressAlertView!.view.frame.width, height: 20)
+                self.routeOnLabel = UILabel(frame: routeOnLabelRect)
+                self.routeOnLabel!.textAlignment = .center
+                self.progressAlertView!.view.addSubview(self.routeOnLabel!)
+                
+                let progressViewRect = CGRect(x: margin, y: 72.0, width: self.progressAlertView!.view.frame.width - margin * 2.0, height: 2.0)
+                self.progressView = UIProgressView(frame: progressViewRect)
                 self.progressView!.tintColor = UIColor.blue
                 self.progressAlertView!.view.addSubview(self.progressView!)
                 
@@ -246,9 +254,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                 
                 NotificationCenter.default.addObserver(self, selector: #selector(self.dismissAlertView), name: NSNotification.Name("FinishedUpdatingRoutes"), object: nil)
                 
-                DispatchQueue.global(qos: .background).async
-                    {
-                        RouteDataManager.updateAllData()
+                DispatchQueue.global(qos: .background).async {
+                    RouteDataManager.updateAllData()
                 }
             })
             
@@ -274,6 +281,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     @objc func addToProgress(notification: Notification)
     {
         OperationQueue.main.addOperation {
+            self.routeOnLabel?.text = notification.userInfo?["route"] as? String
             self.progressView?.progress = notification.userInfo?["progress"] as? Float ?? 0.0
         }
     }
@@ -283,6 +291,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         progressAlertView?.dismiss(animated: true, completion: {
             NotificationCenter.default.removeObserver(self, name: NSNotification.Name("CompletedRoute"), object: nil)
             NotificationCenter.default.removeObserver(self, name: NSNotification.Name("FinishedUpdatingRoutes"), object: nil)
+            
+            appDelegate.hasDownloadedData = true
             
             if appDelegate.firstLaunch && CLLocationManager.authorizationStatus() != .denied
             {

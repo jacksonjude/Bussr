@@ -87,21 +87,27 @@ class RouteDataManager
     {
         self.routesFetched = 0
         
-        let nextBusRouteListHash = fetchRouteListHash()
-        let nextBusRouteConfigHashes = fetchRouteConfigHashes()
+        let NextBusRouteListHash = fetchRouteListHash()
+        let NextBusRouteConfigHashes = fetchRouteConfigHashes()
         
-        let nextBusRouteDictionary = fetchNextBusRoutes()
+        let NextBusRouteDictionary = fetchNextBusRoutes()
+        let NextBusSortedRouteKeys = Array<String>(NextBusRouteDictionary.keys).sorted { (routeTag1, routeTag2) -> Bool in
+            return routeTag1.localizedStandardCompare(routeTag2) == .orderedAscending
+        }
         print("Received NextBus Routes")
         
         let BARTRouteDictionary = fetchBARTRoutes()
+        let BARTSortedRouteKeys = Array<String>(BARTRouteDictionary.keys).sorted { (routeTag1, routeTag2) -> Bool in
+            return routeTag1.localizedStandardCompare(routeTag2) == .orderedAscending
+        }
         let BARTStopDictionary = fetchBARTStops()
         print("Received BART Routes")
         
-        self.totalRoutes = nextBusRouteDictionary.count + BARTRouteDictionary.count
+        self.totalRoutes = NextBusRouteDictionary.count + BARTRouteDictionary.count
         
         let backgroundGroup = DispatchGroup()
         backgroundGroup.enter()
-        self.loadRouteInfo(routeDictionary: nextBusRouteDictionary, agencyTag: RouteConstants.NextBusAgencyTag, listHash: nextBusRouteListHash, configHashes: nextBusRouteConfigHashes, mainBackgroundGroup: backgroundGroup, setRouteFields: { (routeKeyValue, backgroundMOC, configHashes, agencyTag) in
+        self.loadRouteInfo(routeDictionary: NextBusRouteDictionary, sortedRouteKeys: NextBusSortedRouteKeys, agencyTag: RouteConstants.NextBusAgencyTag, listHash: NextBusRouteListHash, configHashes: NextBusRouteConfigHashes, mainBackgroundGroup: backgroundGroup, setRouteFields: { (routeKeyValue, backgroundMOC, configHashes, agencyTag) in
             let routeFetchCallback = fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "tag == %@", routeKeyValue.tag), moc: backgroundMOC)
             let routeObject = routeFetchCallback.object as! Route
             
@@ -111,7 +117,7 @@ class RouteDataManager
             if routeObject.serverHash == configHashes[routeKeyValue.tag]
             {
                 routesFetched += 1
-                checkForCompletedRoutes()
+                checkForCompletedRoutes(routeTagOn: routeKeyValue.tag)
                 
                 return (nil, nil, nil)
             }
@@ -139,7 +145,7 @@ class RouteDataManager
             return stopObject
         })
         backgroundGroup.wait()
-        self.loadRouteInfo(routeDictionary: BARTRouteDictionary, agencyTag: RouteConstants.BARTAgencyTag, listHash: "", configHashes: [:], mainBackgroundGroup: nil, setRouteFields: { (routeKeyValue, backgroundMOC, configHashes, agencyTag) in
+        self.loadRouteInfo(routeDictionary: BARTRouteDictionary, sortedRouteKeys: BARTSortedRouteKeys, agencyTag: RouteConstants.BARTAgencyTag, listHash: "", configHashes: [:], mainBackgroundGroup: nil, setRouteFields: { (routeKeyValue, backgroundMOC, configHashes, agencyTag) in
             var routeAbbr = routeKeyValue.title
             let routeNumber = routeKeyValue.tag
             
@@ -184,7 +190,7 @@ class RouteDataManager
         })
     }
     
-    static func loadRouteInfo(routeDictionary: Dictionary<String,String>, agencyTag: String, listHash: String, configHashes: Dictionary<String,String>, mainBackgroundGroup: DispatchGroup?, setRouteFields: @escaping (_ routeKeyValue: (tag: String, title: String), _ backgroundMOC: NSManagedObjectContext, _ configHashes: Dictionary<String,String>, _ agencyTag: String) -> (route: Route?, justCreated: Bool?, routeConfig: Dictionary<String,Dictionary<String,Dictionary<String,Any>>>?), setStopFields: @escaping (_ stopObject: Stop, _ stopDictionary: Dictionary<String,String>) -> Stop)
+    static func loadRouteInfo(routeDictionary: Dictionary<String,String>, sortedRouteKeys: Array<String>, agencyTag: String, listHash: String, configHashes: Dictionary<String,String>, mainBackgroundGroup: DispatchGroup?, setRouteFields: @escaping (_ routeKeyValue: (tag: String, title: String), _ backgroundMOC: NSManagedObjectContext, _ configHashes: Dictionary<String,String>, _ agencyTag: String) -> (route: Route?, justCreated: Bool?, routeConfig: Dictionary<String,Dictionary<String,Dictionary<String,Any>>>?), setStopFields: @escaping (_ stopObject: Stop, _ stopDictionary: Dictionary<String,String>) -> Stop)
     {
         CoreDataStack.persistentContainer.performBackgroundTask({ (backgroundMOC) in
             let agencyFetchCallback = fetchOrCreateObject(type: "Agency", predicate: NSPredicate(format: "name == %@", agencyTag), moc: backgroundMOC)
@@ -194,9 +200,11 @@ class RouteDataManager
             
             try? backgroundMOC.save()
             
-            for routeTitle in routeDictionary
+            for routeTag in sortedRouteKeys
             {
-                let routeFieldSetCallback = setRouteFields((tag: routeTitle.key, title: routeTitle.value), backgroundMOC, configHashes, agency.name!)
+                let routeTitle = routeDictionary[routeTag] ?? ""
+                
+                let routeFieldSetCallback = setRouteFields((tag: routeTag, title: routeTitle), backgroundMOC, configHashes, agency.name!)
                 
                 guard let route = routeFieldSetCallback.route else { continue }
                 guard let routeJustCreated = routeFieldSetCallback.justCreated else { continue }
@@ -241,7 +249,7 @@ class RouteDataManager
                 mocSaveGroup.wait()
                 
                 routesFetched += 1
-                checkForCompletedRoutes()
+                checkForCompletedRoutes(routeTagOn: (agencyTag == RouteConstants.BARTAgencyTag ? routeTitle : routeTag))
             }
             
             mainBackgroundGroup?.leave()
@@ -254,9 +262,9 @@ class RouteDataManager
         mocSaveGroup.leave()
     }
     
-    static func checkForCompletedRoutes()
+    static func checkForCompletedRoutes(routeTagOn: String)
     {
-        NotificationCenter.default.post(name: NSNotification.Name("CompletedRoute"), object: self, userInfo: ["progress":Float(routesFetched)/Float(totalRoutes)])
+        NotificationCenter.default.post(name: NSNotification.Name("CompletedRoute"), object: self, userInfo: ["progress":Float(routesFetched)/Float(totalRoutes),"route":routeTagOn])
         
         if routesFetched == totalRoutes
         {

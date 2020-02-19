@@ -28,8 +28,8 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     var selectedRouteObject: Route?
     
-    var routeTitleDictionary = Dictionary<String,String>()
-    var sortedRouteDictionary = Dictionary<Int,Array<String>>()
+    var routeArray = Array<Route>()
+    var sortedRouteDictionary = Dictionary<Int,Array<Route>>()
     let sectionTitles = ["01", "10", "20", "30", "40", "50", "60", "70", "80", "90", "A", "B"]
     
     //MARK: - View
@@ -37,8 +37,8 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        convertRouteObjectsToRouteTitleDictionary()
-        convertRouteDictionaryToRouteTitles()
+        fetchRoutes()
+        sortRoutes()
         
         setupThemeElements()
     }
@@ -79,35 +79,10 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let routeFullTitle = sortedRouteDictionary[indexPath.section]![indexPath.row]
-        let routeTag = String(routeFullTitle.split(separator: "–")[0].dropLast())
-        let routeObject = RouteDataManager.fetchObject(type: "Route", predicate: NSPredicate(format: "tag == %@", routeTag), moc: CoreDataStack.persistentContainer.viewContext) as? Route
+        let routeObject = sortedRouteDictionary[indexPath.section]![indexPath.row]
         
-        let routeCell = tableView.dequeueReusableCell(withIdentifier: "RouteCell")!
-        
-        routeCell.textLabel?.text = routeFullTitle
-        routeCell.textLabel?.textColor = UIColor(hexString: routeObject?.oppositeColor ?? "FFFFFF")
-                
-        var routeCellColor = UIColor(hexString: routeObject?.color ?? "000000")
-        let hsba = routeCellColor.hsba
-        routeCellColor = UIColor(hue: hsba.h, saturation: hsba.s, brightness: hsba.b, alpha: 1)
-
-        routeCell.backgroundColor = (appDelegate.getCurrentTheme() == .dark) ? UIColor.black : UIColor.white
-        routeCell.backgroundView = UIView()
-        
-//        let gradient = CAGradientLayer()
-//        gradient.colors = [routeCellColor.cgColor, UIColor(hue: hsba.h, saturation: 0, brightness: hsba.b, alpha: 1).cgColor]
-//        gradient.locations = [0.90, 0.95]
-//        gradient.startPoint = CGPoint(x: 0.0, y: 1.0)
-//        gradient.endPoint = CGPoint(x: 1.0, y: 1.0)
-//        gradient.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: self.view.frame.size.height)
-//        routeCell.backgroundView?.layer.insertSublayer(gradient, at: 0)
-        
-        routeCell.backgroundView?.backgroundColor = routeCellColor
-        
-        let selectedCellBackground = UIView()
-        selectedCellBackground.backgroundColor = UIColor(white: 0.7, alpha: 0.4)
-        routeCell.selectedBackgroundView = selectedCellBackground
+        let routeCell = tableView.dequeueReusableCell(withIdentifier: "RouteCell") as! RouteCell
+        routeCell.route = routeObject
         
         return routeCell
     }
@@ -135,11 +110,7 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let routeFullTitle = sortedRouteDictionary[indexPath.section]![indexPath.row].split(separator: "–")
-        
-        let selectedRouteTag = String(routeFullTitle[0].dropLast())
-        
-        selectedRouteObject = RouteDataManager.fetchObject(type: "Route", predicate: NSPredicate(format: "tag == %@", selectedRouteTag), moc: CoreDataStack.persistentContainer.viewContext) as? Route
+        selectedRouteObject = sortedRouteDictionary[indexPath.section]![indexPath.row]
         
         performSegue(withIdentifier: "SelectedRouteUnwind", sender: self)
     }
@@ -154,19 +125,7 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     //MARK: - Route Dictionary
     
-    @objc func receiveRouteDictionary(_ notification: Notification)
-    {
-        NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
-        
-        if notification.userInfo != nil && notification.userInfo!.count > 0
-        {
-            routeTitleDictionary = notification.userInfo!["xmlDictionary"] as! Dictionary<String,String>
-            
-            convertRouteDictionaryToRouteTitles()
-        }
-    }
-    
-    func convertRouteObjectsToRouteTitleDictionary()
+    func fetchRoutes()
     {
         let nextBusAgency = RouteDataManager.fetchObject(type: "Agency", predicate: NSPredicate(format: "name == %@", RouteConstants.NextBusAgencyTag), moc: CoreDataStack.persistentContainer.viewContext) as! Agency
         let nextBusAgencyRoutes = (nextBusAgency.routes?.allObjects) as! [Route]
@@ -175,51 +134,44 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
         let BARTAgencyRoutes = (BARTAgency.routes?.allObjects) as! [Route]
         
         let agencyRoutes = nextBusAgencyRoutes + BARTAgencyRoutes
-        
-        for route in agencyRoutes
-        {
-            if route.tag != nil
-            {
-                routeTitleDictionary[route.tag!] = route.title!
-            }
-        }
+        self.routeArray = agencyRoutes
     }
     
-    func convertRouteDictionaryToRouteTitles()
+    func sortRoutes()
     {
         var sectionOn = 0
         for _ in sectionTitles
         {
-            sortedRouteDictionary[sectionOn] = Array<String>()
+            sortedRouteDictionary[sectionOn] = Array<Route>()
             sectionOn += 1
         }
         
-        for routeInfo in routeTitleDictionary
+        for route in routeArray
         {
-            let routeTitle = routeInfo.key + " – " + routeInfo.value
+            let routeTag = route.tag ?? ""
             
-            if (routeInfo.key.count == 1 && CharacterSet.decimalDigits.contains(routeInfo.key.getUnicodeScalarCharacter(0))) || (routeInfo.key.count > 1 && CharacterSet.decimalDigits.contains(routeInfo.key.getUnicodeScalarCharacter(0)) && CharacterSet.letters.contains(routeInfo.key.getUnicodeScalarCharacter(1)))
+            if (routeTag.count == 1 && CharacterSet.decimalDigits.contains(routeTag.getUnicodeScalarCharacter(0))) || (routeTag.count > 1 && CharacterSet.decimalDigits.contains(routeTag.getUnicodeScalarCharacter(0)) && CharacterSet.letters.contains(routeTag.getUnicodeScalarCharacter(1)))
             {
-                sortedRouteDictionary[0]!.append(routeTitle)
+                sortedRouteDictionary[0]!.append(route)
             }
-            else if CharacterSet.decimalDigits.contains(routeInfo.key.getUnicodeScalarCharacter(0))
+            else if CharacterSet.decimalDigits.contains(routeTag.getUnicodeScalarCharacter(0))
             {
-                let sectionNumber = Int(String(routeInfo.key[0]))
-                sortedRouteDictionary[sectionNumber!]!.append(routeTitle)
+                let sectionNumber = Int(String(routeTag[0]))
+                sortedRouteDictionary[sectionNumber!]!.append(route)
             }
-            else if routeTitle.contains("BART")
+            else if routeTag.contains("BART")
             {
-                sortedRouteDictionary[11]!.append(routeTitle)
+                sortedRouteDictionary[11]!.append(route)
             }
             else
             {
-                sortedRouteDictionary[10]!.append(routeTitle)
+                sortedRouteDictionary[10]!.append(route)
             }
         }
         
         for sectionArray in sortedRouteDictionary
         {
-            sortedRouteDictionary[sectionArray.key]!.sort {$0.localizedStandardCompare($1) == .orderedAscending}
+            sortedRouteDictionary[sectionArray.key]!.sort {($0.tag ?? "").localizedStandardCompare($1.tag ?? "") == .orderedAscending}
         }
         
         OperationQueue.main.addOperation {

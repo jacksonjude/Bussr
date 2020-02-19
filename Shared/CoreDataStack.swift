@@ -10,6 +10,9 @@ import Foundation
 import CoreData
 
 class CoreDataStack {
+    static let localRouteEntityTypes = ["Agency", "Route", "Direction", "Stop"]
+    static let cloudEntityTypes = ["FavoriteStop", "FavoriteStopGroup", "RecentStop", "StopNotification"]
+    
     // MARK: - Core Data stack
     
     static var persistentContainer: NSPersistentContainer = {
@@ -84,7 +87,7 @@ class CoreDataStack {
     
     // MARK: - Core Data Saving support
     
-    static func saveContext () {
+    static func saveContext() {
         let context = persistentContainer.viewContext
         if context.hasChanges {
             do {
@@ -96,5 +99,34 @@ class CoreDataStack {
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
+    }
+    
+    //MARK: - Clear All Data
+    
+    static func clearData(entityTypes: [String]) -> String {
+        var deletionLogs = ""
+        
+        for entityType in entityTypes
+        {
+            if let objects = RouteDataManager.fetchLocalObjects(type: entityType, predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext) as? [NSManagedObject]
+            {
+                for object in objects
+                {
+                    CoreDataStack.persistentContainer.viewContext.delete(object)
+                }
+                
+                deletionLogs += "Deleted " + String(objects.count) + " " + entityType + "\n"
+            }
+            else
+            {
+                deletionLogs += "Deleted 0 " + entityType + "\n"
+            }
+        }
+        
+        deletionLogs = String(deletionLogs.dropLast())
+        
+        CoreDataStack.saveContext()
+        
+        return deletionLogs
     }
 }
