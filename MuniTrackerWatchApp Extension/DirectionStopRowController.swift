@@ -67,6 +67,7 @@ class DirectionStopRowController: NSObject
     @IBOutlet weak var stopLabel: WKInterfaceLabel!
     @IBOutlet weak var predictionTimesLabel: WKInterfaceLabel!
     @IBOutlet weak var directionStopRowGroup: WKInterfaceGroup!
+    @IBOutlet weak var activityIndicatorImage: WKInterfaceImage!
     
     var directionStop: (stop: Stop, direction: Direction)?
     {
@@ -118,15 +119,31 @@ class DirectionStopRowController: NSObject
         if let predictions = notification.userInfo!["predictions"] as? [String]
         {
             OperationQueue.main.addOperation {
-                var predictionsString = RouteDataManager.formatPredictions(predictions: predictions).predictionsString
+                var predictionsString = RouteDataManager.formatPredictions(predictions: predictions, vehicleIDs: nil, predictionsToShow: 4).predictionsString
                 
                 if !self.includeMins && predictionsString.contains(" mins")
                 {
                     predictionsString.removeSubrange(Range<String.Index>(NSRange(location: predictionsString.count-5, length: 5), in: predictionsString)!)
                 }
                 
+                if self.predictionTimesLabel == nil { return }
                 self.predictionTimesLabel.setText(predictionsString)
+                self.stopActivityIndicator()
             }
         }
+    }
+    
+    func startActivityIndicator()
+    {
+        activityIndicatorImage.setHidden(false)
+        activityIndicatorImage.setImageNamed("Activity")
+        activityIndicatorImage.startAnimatingWithImages(in: NSRange(location: 0, length: 30), duration: 1.0, repeatCount: 0)
+    }
+    
+    func stopActivityIndicator()
+    {
+        activityIndicatorImage.stopAnimating()
+        activityIndicatorImage.setImageNamed(nil)
+        activityIndicatorImage.setHidden(true)
     }
 }

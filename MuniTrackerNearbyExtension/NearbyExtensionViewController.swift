@@ -22,7 +22,7 @@ class NearbyExtensionViewController: MuniTrackerExtensionViewController, CLLocat
             locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
             locationManager.startUpdatingLocation()
         }
-                
+        
         self.loadNearbyStops()
     }
     
@@ -60,10 +60,6 @@ class NearbyExtensionViewController: MuniTrackerExtensionViewController, CLLocat
                     defaultCut = nearbyStops.count
                 }
                 let sortedNearbyStops = RouteDataManager.sortStopsByDistanceFromLocation(stops: nearbyStops, locationToTest: currentLocation)[0...defaultCut-1]
-                
-                let prevStopTags = stopDirectionObjects?.map({ (directionStop) -> String in
-                    return directionStop.stopTag
-                })
                                 
                 stopDirectionObjects = []
                 for stop in sortedNearbyStops
@@ -73,13 +69,6 @@ class NearbyExtensionViewController: MuniTrackerExtensionViewController, CLLocat
                         stopDirectionObjects?.append((stopTag: stop.tag!, directionTag: (direction as! Direction).tag!))
                     }
                 }
-                
-                let currentStopTags = stopDirectionObjects?.map({ (directionStop) -> String in
-                    return directionStop.stopTag
-                })
-                
-                if prevStopTags != nil && currentStopTags != nil && prevStopTags![0...min(prevStopTags!.count, numStopsToDisplay)] == currentStopTags![0...min(currentStopTags!.count, numStopsToDisplay)] { return }
-                
                 
                 self.tableView.reloadData()
             }

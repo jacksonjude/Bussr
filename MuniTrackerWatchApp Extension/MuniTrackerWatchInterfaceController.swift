@@ -14,9 +14,7 @@ class MuniTrackerWatchInterfaceController: WKInterfaceController {
     var directionStopObjects: Array<(stopTag: String, directionTag: String)>?
     var stops: Array<Stop>?
     
-    let numStopsToDisplay = 4
-    
-    var directionStopTable: WKInterfaceTable?
+    let numStopsToDisplay = 10
     
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
@@ -34,12 +32,15 @@ class MuniTrackerWatchInterfaceController: WKInterfaceController {
         super.didDeactivate()
     }
     
-    func updateTable()
+    func updateTable(directionStopTable: WKInterfaceTable)
     {
-        guard let directionStopTable = self.directionStopTable else { return }
-        guard let directionStopObjects = self.directionStopObjects else { return }
+        guard var directionStopObjects = self.directionStopObjects else { return }
         
-        directionStopTable.setNumberOfRows(directionStopObjects.count, withRowType: "StopRow")
+        directionStopTable.setNumberOfRows(min(self.directionStopObjects?.count ?? 0, numStopsToDisplay), withRowType: "DirectionStopRow")
+        if self.directionStopObjects?.count ?? 0 > numStopsToDisplay && self.directionStopObjects?.count ?? 0 > 0
+        {
+            directionStopObjects = Array<(stopTag: String, directionTag: String)>(directionStopObjects[0...numStopsToDisplay])
+        }
         
         var directionStopOn = 0
         for directionStop in directionStopObjects
@@ -49,6 +50,7 @@ class MuniTrackerWatchInterfaceController: WKInterfaceController {
                 directionStopRowController.directionStop = (stop: stop, direction: direction)
                 
                 directionStopRowController.updateCellText()
+                directionStopRowController.startActivityIndicator()
                 directionStopRowController.refreshTimes()
             }
             
@@ -57,10 +59,10 @@ class MuniTrackerWatchInterfaceController: WKInterfaceController {
     }
 
     override func table(_ table: WKInterfaceTable, didSelectRowAt rowIndex: Int) {
-        guard let directionStopTable = self.directionStopTable else { return }
-        
-        if let directionStopRowController = directionStopTable.rowController(at: rowIndex) as? DirectionStopRowController
+        if let directionStopRowController = table.rowController(at: rowIndex) as? DirectionStopRowController
         {
+            directionStopRowController.predictionTimesLabel.setText("")
+            directionStopRowController.startActivityIndicator()
             directionStopRowController.refreshTimes()
         }
     }

@@ -52,6 +52,37 @@
 		7A9F7E7B216FA49E00DF093D /* NotificationTimePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9F7E7A216FA49E00DF093D /* NotificationTimePickerViewController.swift */; };
 		7AA5E4B821E2D28E0039CCDD /* FilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5E4B721E2D28E0039CCDD /* FilterButton.swift */; };
 		7AAD586323FD1182002F3FAF /* RouteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AAD586223FD1182002F3FAF /* RouteCell.swift */; };
+		7AAD586923FDC51F002F3FAF /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AAD586823FDC51F002F3FAF /* CloudKit.framework */; };
+		7AAD58C523FE1952002F3FAF /* Activity13@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58A723FE1952002F3FAF /* Activity13@2x.png */; };
+		7AAD58C623FE1952002F3FAF /* Activity29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58A823FE1952002F3FAF /* Activity29@2x.png */; };
+		7AAD58C723FE1952002F3FAF /* Activity25@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58A923FE1952002F3FAF /* Activity25@2x.png */; };
+		7AAD58C823FE1952002F3FAF /* Activity2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58AA23FE1952002F3FAF /* Activity2@2x.png */; };
+		7AAD58C923FE1952002F3FAF /* Activity11@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58AB23FE1952002F3FAF /* Activity11@2x.png */; };
+		7AAD58CA23FE1952002F3FAF /* Activity27@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58AC23FE1952002F3FAF /* Activity27@2x.png */; };
+		7AAD58CB23FE1952002F3FAF /* Activity6@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58AD23FE1952002F3FAF /* Activity6@2x.png */; };
+		7AAD58CC23FE1952002F3FAF /* Activity23@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58AE23FE1952002F3FAF /* Activity23@2x.png */; };
+		7AAD58CD23FE1952002F3FAF /* Activity15@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58AF23FE1952002F3FAF /* Activity15@2x.png */; };
+		7AAD58CE23FE1952002F3FAF /* Activity19@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58B023FE1952002F3FAF /* Activity19@2x.png */; };
+		7AAD58CF23FE1952002F3FAF /* Activity21@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58B123FE1952002F3FAF /* Activity21@2x.png */; };
+		7AAD58D023FE1952002F3FAF /* Activity17@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58B223FE1952002F3FAF /* Activity17@2x.png */; };
+		7AAD58D123FE1952002F3FAF /* Activity8@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58B323FE1952002F3FAF /* Activity8@2x.png */; };
+		7AAD58D223FE1952002F3FAF /* Activity4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58B423FE1952002F3FAF /* Activity4@2x.png */; };
+		7AAD58D323FE1952002F3FAF /* Activity1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58B523FE1952002F3FAF /* Activity1@2x.png */; };
+		7AAD58D423FE1952002F3FAF /* Activity28@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58B623FE1952002F3FAF /* Activity28@2x.png */; };
+		7AAD58D523FE1952002F3FAF /* Activity24@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58B723FE1952002F3FAF /* Activity24@2x.png */; };
+		7AAD58D623FE1952002F3FAF /* Activity12@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58B823FE1952002F3FAF /* Activity12@2x.png */; };
+		7AAD58D723FE1952002F3FAF /* Activity26@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58B923FE1952002F3FAF /* Activity26@2x.png */; };
+		7AAD58D823FE1952002F3FAF /* Activity10@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58BA23FE1952002F3FAF /* Activity10@2x.png */; };
+		7AAD58D923FE1952002F3FAF /* Activity3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58BB23FE1952002F3FAF /* Activity3@2x.png */; };
+		7AAD58DA23FE1952002F3FAF /* Activity14@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58BC23FE1952002F3FAF /* Activity14@2x.png */; };
+		7AAD58DB23FE1952002F3FAF /* Activity18@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58BD23FE1952002F3FAF /* Activity18@2x.png */; };
+		7AAD58DC23FE1952002F3FAF /* Activity30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58BE23FE1952002F3FAF /* Activity30@2x.png */; };
+		7AAD58DD23FE1952002F3FAF /* Activity22@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58BF23FE1952002F3FAF /* Activity22@2x.png */; };
+		7AAD58DE23FE1952002F3FAF /* Activity7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58C023FE1952002F3FAF /* Activity7@2x.png */; };
+		7AAD58DF23FE1952002F3FAF /* Activity9@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58C123FE1952002F3FAF /* Activity9@2x.png */; };
+		7AAD58E023FE1952002F3FAF /* Activity5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58C223FE1952002F3FAF /* Activity5@2x.png */; };
+		7AAD58E123FE1952002F3FAF /* Activity16@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58C323FE1952002F3FAF /* Activity16@2x.png */; };
+		7AAD58E223FE1952002F3FAF /* Activity20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58C423FE1952002F3FAF /* Activity20@2x.png */; };
 		7AB9E9A323EFF30B002E7D67 /* RouteInfoPanelTipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB9E9A223EFF30B002E7D67 /* RouteInfoPanelTipViewController.swift */; };
 		7AC9BE6623D401B3008D2639 /* MuniTracker.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 7AC9BE6523D401B3008D2639 /* MuniTracker.xcmappingmodel */; };
 		7AC9BE6723D401B3008D2639 /* MuniTracker.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 7AC9BE6523D401B3008D2639 /* MuniTracker.xcmappingmodel */; };
@@ -90,7 +121,7 @@
 		7AFD5CCD23F0AF8F00AFFEEF /* MuniTracker.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 7AC9BE6523D401B3008D2639 /* MuniTracker.xcmappingmodel */; };
 		7AFD5CCE23F0AF9200AFFEEF /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D1421266AC400D3425E /* CoreDataStack.swift */; };
 		7AFD5CCF23F0B2EA00AFFEEF /* MapState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7FE2B420DB4761005B654C /* MapState.swift */; };
-		7AFD5CD123F0B39600AFFEEF /* FavoritesWatchInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CD023F0B39600AFFEEF /* FavoritesWatchInterfaceController.swift */; };
+		7AFD5CD123F0B39600AFFEEF /* StopsWatchInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CD023F0B39600AFFEEF /* StopsWatchInterfaceController.swift */; };
 		E9B34E41BF704EBBCE556F55 /* Pods_MuniTrackerNearbyExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A2E37DEC4CA84755B8870A7 /* Pods_MuniTrackerNearbyExtension.framework */; };
 /* End PBXBuildFile section */
 
@@ -218,6 +249,37 @@
 		7AA5601F212FCAB300C6E47E /* MuniTrackerNearbyExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MuniTrackerNearbyExtension.entitlements; sourceTree = "<group>"; };
 		7AA5E4B721E2D28E0039CCDD /* FilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterButton.swift; sourceTree = "<group>"; };
 		7AAD586223FD1182002F3FAF /* RouteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteCell.swift; sourceTree = "<group>"; };
+		7AAD586823FDC51F002F3FAF /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS6.1.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
+		7AAD58A723FE1952002F3FAF /* Activity13@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity13@2x.png"; sourceTree = "<group>"; };
+		7AAD58A823FE1952002F3FAF /* Activity29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity29@2x.png"; sourceTree = "<group>"; };
+		7AAD58A923FE1952002F3FAF /* Activity25@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity25@2x.png"; sourceTree = "<group>"; };
+		7AAD58AA23FE1952002F3FAF /* Activity2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity2@2x.png"; sourceTree = "<group>"; };
+		7AAD58AB23FE1952002F3FAF /* Activity11@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity11@2x.png"; sourceTree = "<group>"; };
+		7AAD58AC23FE1952002F3FAF /* Activity27@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity27@2x.png"; sourceTree = "<group>"; };
+		7AAD58AD23FE1952002F3FAF /* Activity6@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity6@2x.png"; sourceTree = "<group>"; };
+		7AAD58AE23FE1952002F3FAF /* Activity23@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity23@2x.png"; sourceTree = "<group>"; };
+		7AAD58AF23FE1952002F3FAF /* Activity15@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity15@2x.png"; sourceTree = "<group>"; };
+		7AAD58B023FE1952002F3FAF /* Activity19@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity19@2x.png"; sourceTree = "<group>"; };
+		7AAD58B123FE1952002F3FAF /* Activity21@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity21@2x.png"; sourceTree = "<group>"; };
+		7AAD58B223FE1952002F3FAF /* Activity17@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity17@2x.png"; sourceTree = "<group>"; };
+		7AAD58B323FE1952002F3FAF /* Activity8@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity8@2x.png"; sourceTree = "<group>"; };
+		7AAD58B423FE1952002F3FAF /* Activity4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity4@2x.png"; sourceTree = "<group>"; };
+		7AAD58B523FE1952002F3FAF /* Activity1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity1@2x.png"; sourceTree = "<group>"; };
+		7AAD58B623FE1952002F3FAF /* Activity28@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity28@2x.png"; sourceTree = "<group>"; };
+		7AAD58B723FE1952002F3FAF /* Activity24@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity24@2x.png"; sourceTree = "<group>"; };
+		7AAD58B823FE1952002F3FAF /* Activity12@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity12@2x.png"; sourceTree = "<group>"; };
+		7AAD58B923FE1952002F3FAF /* Activity26@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity26@2x.png"; sourceTree = "<group>"; };
+		7AAD58BA23FE1952002F3FAF /* Activity10@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity10@2x.png"; sourceTree = "<group>"; };
+		7AAD58BB23FE1952002F3FAF /* Activity3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity3@2x.png"; sourceTree = "<group>"; };
+		7AAD58BC23FE1952002F3FAF /* Activity14@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity14@2x.png"; sourceTree = "<group>"; };
+		7AAD58BD23FE1952002F3FAF /* Activity18@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity18@2x.png"; sourceTree = "<group>"; };
+		7AAD58BE23FE1952002F3FAF /* Activity30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity30@2x.png"; sourceTree = "<group>"; };
+		7AAD58BF23FE1952002F3FAF /* Activity22@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity22@2x.png"; sourceTree = "<group>"; };
+		7AAD58C023FE1952002F3FAF /* Activity7@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity7@2x.png"; sourceTree = "<group>"; };
+		7AAD58C123FE1952002F3FAF /* Activity9@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity9@2x.png"; sourceTree = "<group>"; };
+		7AAD58C223FE1952002F3FAF /* Activity5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity5@2x.png"; sourceTree = "<group>"; };
+		7AAD58C323FE1952002F3FAF /* Activity16@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity16@2x.png"; sourceTree = "<group>"; };
+		7AAD58C423FE1952002F3FAF /* Activity20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity20@2x.png"; sourceTree = "<group>"; };
 		7AB9E9A223EFF30B002E7D67 /* RouteInfoPanelTipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoPanelTipViewController.swift; sourceTree = "<group>"; };
 		7AC9BE6523D401B3008D2639 /* MuniTracker.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = MuniTracker.xcmappingmodel; sourceTree = "<group>"; };
 		7AD81E0620D6E60C004BAB1E /* Bussr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bussr.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -243,7 +305,7 @@
 		7AFD5CBB23F009EC00AFFEEF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7AFD5CBD23F009EC00AFFEEF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AFD5CC823F00C3200AFFEEF /* DirectionStopRowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionStopRowController.swift; sourceTree = "<group>"; };
-		7AFD5CD023F0B39600AFFEEF /* FavoritesWatchInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesWatchInterfaceController.swift; sourceTree = "<group>"; };
+		7AFD5CD023F0B39600AFFEEF /* StopsWatchInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopsWatchInterfaceController.swift; sourceTree = "<group>"; };
 		7AFD5CD223F0B5CD00AFFEEF /* MuniTrackerWatchApp Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MuniTrackerWatchApp Extension.entitlements"; sourceTree = "<group>"; };
 		7AFD5CD323F0B86700AFFEEF /* BusTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BusTracker.entitlements; sourceTree = "<group>"; };
 		7E7B48D7BD62A7D66377914C /* Pods-MuniTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MuniTracker.debug.xcconfig"; path = "Target Support Files/Pods-MuniTracker/Pods-MuniTracker.debug.xcconfig"; sourceTree = "<group>"; };
@@ -298,6 +360,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7AAD586923FDC51F002F3FAF /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,6 +484,43 @@
 			path = Notification;
 			sourceTree = "<group>";
 		};
+		7AAD58A623FE1952002F3FAF /* Activity */ = {
+			isa = PBXGroup;
+			children = (
+				7AAD58A723FE1952002F3FAF /* Activity13@2x.png */,
+				7AAD58A823FE1952002F3FAF /* Activity29@2x.png */,
+				7AAD58A923FE1952002F3FAF /* Activity25@2x.png */,
+				7AAD58AA23FE1952002F3FAF /* Activity2@2x.png */,
+				7AAD58AB23FE1952002F3FAF /* Activity11@2x.png */,
+				7AAD58AC23FE1952002F3FAF /* Activity27@2x.png */,
+				7AAD58AD23FE1952002F3FAF /* Activity6@2x.png */,
+				7AAD58AE23FE1952002F3FAF /* Activity23@2x.png */,
+				7AAD58AF23FE1952002F3FAF /* Activity15@2x.png */,
+				7AAD58B023FE1952002F3FAF /* Activity19@2x.png */,
+				7AAD58B123FE1952002F3FAF /* Activity21@2x.png */,
+				7AAD58B223FE1952002F3FAF /* Activity17@2x.png */,
+				7AAD58B323FE1952002F3FAF /* Activity8@2x.png */,
+				7AAD58B423FE1952002F3FAF /* Activity4@2x.png */,
+				7AAD58B523FE1952002F3FAF /* Activity1@2x.png */,
+				7AAD58B623FE1952002F3FAF /* Activity28@2x.png */,
+				7AAD58B723FE1952002F3FAF /* Activity24@2x.png */,
+				7AAD58B823FE1952002F3FAF /* Activity12@2x.png */,
+				7AAD58B923FE1952002F3FAF /* Activity26@2x.png */,
+				7AAD58BA23FE1952002F3FAF /* Activity10@2x.png */,
+				7AAD58BB23FE1952002F3FAF /* Activity3@2x.png */,
+				7AAD58BC23FE1952002F3FAF /* Activity14@2x.png */,
+				7AAD58BD23FE1952002F3FAF /* Activity18@2x.png */,
+				7AAD58BE23FE1952002F3FAF /* Activity30@2x.png */,
+				7AAD58BF23FE1952002F3FAF /* Activity22@2x.png */,
+				7AAD58C023FE1952002F3FAF /* Activity7@2x.png */,
+				7AAD58C123FE1952002F3FAF /* Activity9@2x.png */,
+				7AAD58C223FE1952002F3FAF /* Activity5@2x.png */,
+				7AAD58C323FE1952002F3FAF /* Activity16@2x.png */,
+				7AAD58C423FE1952002F3FAF /* Activity20@2x.png */,
+			);
+			path = Activity;
+			sourceTree = "<group>";
+		};
 		7AD81DFD20D6E60C004BAB1E = {
 			isa = PBXGroup;
 			children = (
@@ -484,14 +584,15 @@
 		7AFD5CB423F009EB00AFFEEF /* MuniTrackerWatchApp Extension */ = {
 			isa = PBXGroup;
 			children = (
+				7AAD58A623FE1952002F3FAF /* Activity */,
 				7AFD5CD223F0B5CD00AFFEEF /* MuniTrackerWatchApp Extension.entitlements */,
 				7AFD5CB523F009EB00AFFEEF /* MuniTrackerWatchInterfaceController.swift */,
+				7AFD5CD023F0B39600AFFEEF /* StopsWatchInterfaceController.swift */,
 				7AFD5CC823F00C3200AFFEEF /* DirectionStopRowController.swift */,
 				7AFD5CB723F009EB00AFFEEF /* ExtensionDelegate.swift */,
 				7AFD5CB923F009EB00AFFEEF /* ComplicationController.swift */,
 				7AFD5CBB23F009EC00AFFEEF /* Assets.xcassets */,
 				7AFD5CBD23F009EC00AFFEEF /* Info.plist */,
-				7AFD5CD023F0B39600AFFEEF /* FavoritesWatchInterfaceController.swift */,
 			);
 			path = "MuniTrackerWatchApp Extension";
 			sourceTree = "<group>";
@@ -514,6 +615,7 @@
 		BF88086283A00694C5C2DF7F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7AAD586823FDC51F002F3FAF /* CloudKit.framework */,
 				7A0EF1FC20E80AC90039212B /* CloudKit.framework */,
 				7A0E8C6920E0AAAB00C28465 /* CoreLocation.framework */,
 				7A4930C320D788EA008208D1 /* MapKit.framework */,
@@ -786,7 +888,37 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7AAD58CB23FE1952002F3FAF /* Activity6@2x.png in Resources */,
+				7AAD58C623FE1952002F3FAF /* Activity29@2x.png in Resources */,
+				7AAD58E123FE1952002F3FAF /* Activity16@2x.png in Resources */,
+				7AAD58E223FE1952002F3FAF /* Activity20@2x.png in Resources */,
+				7AAD58CF23FE1952002F3FAF /* Activity21@2x.png in Resources */,
+				7AAD58D423FE1952002F3FAF /* Activity28@2x.png in Resources */,
+				7AAD58DB23FE1952002F3FAF /* Activity18@2x.png in Resources */,
+				7AAD58C923FE1952002F3FAF /* Activity11@2x.png in Resources */,
+				7AAD58D923FE1952002F3FAF /* Activity3@2x.png in Resources */,
+				7AAD58DE23FE1952002F3FAF /* Activity7@2x.png in Resources */,
+				7AAD58DA23FE1952002F3FAF /* Activity14@2x.png in Resources */,
+				7AAD58D123FE1952002F3FAF /* Activity8@2x.png in Resources */,
+				7AAD58E023FE1952002F3FAF /* Activity5@2x.png in Resources */,
 				7AFD5CBC23F009EC00AFFEEF /* Assets.xcassets in Resources */,
+				7AAD58CE23FE1952002F3FAF /* Activity19@2x.png in Resources */,
+				7AAD58DC23FE1952002F3FAF /* Activity30@2x.png in Resources */,
+				7AAD58D623FE1952002F3FAF /* Activity12@2x.png in Resources */,
+				7AAD58CC23FE1952002F3FAF /* Activity23@2x.png in Resources */,
+				7AAD58CD23FE1952002F3FAF /* Activity15@2x.png in Resources */,
+				7AAD58CA23FE1952002F3FAF /* Activity27@2x.png in Resources */,
+				7AAD58D523FE1952002F3FAF /* Activity24@2x.png in Resources */,
+				7AAD58DD23FE1952002F3FAF /* Activity22@2x.png in Resources */,
+				7AAD58D023FE1952002F3FAF /* Activity17@2x.png in Resources */,
+				7AAD58D323FE1952002F3FAF /* Activity1@2x.png in Resources */,
+				7AAD58C823FE1952002F3FAF /* Activity2@2x.png in Resources */,
+				7AAD58C723FE1952002F3FAF /* Activity25@2x.png in Resources */,
+				7AAD58DF23FE1952002F3FAF /* Activity9@2x.png in Resources */,
+				7AAD58D223FE1952002F3FAF /* Activity4@2x.png in Resources */,
+				7AAD58D823FE1952002F3FAF /* Activity10@2x.png in Resources */,
+				7AAD58C523FE1952002F3FAF /* Activity13@2x.png in Resources */,
+				7AAD58D723FE1952002F3FAF /* Activity26@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1001,7 +1133,7 @@
 			files = (
 				7AFD5CCF23F0B2EA00AFFEEF /* MapState.swift in Sources */,
 				7AFD5CC923F00C3200AFFEEF /* DirectionStopRowController.swift in Sources */,
-				7AFD5CD123F0B39600AFFEEF /* FavoritesWatchInterfaceController.swift in Sources */,
+				7AFD5CD123F0B39600AFFEEF /* StopsWatchInterfaceController.swift in Sources */,
 				7AFD5CB823F009EB00AFFEEF /* ExtensionDelegate.swift in Sources */,
 				7AFD5CB623F009EB00AFFEEF /* MuniTrackerWatchInterfaceController.swift in Sources */,
 				7AFD5CCE23F0AF9200AFFEEF /* CoreDataStack.swift in Sources */,
@@ -1108,7 +1240,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerFavoritesExtension/MuniTrackerFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200218;
+				CURRENT_PROJECT_VERSION = 20200219;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerFavoritesExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1130,7 +1262,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerFavoritesExtension/MuniTrackerFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200218;
+				CURRENT_PROJECT_VERSION = 20200219;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerFavoritesExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1152,7 +1284,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerRecentExtension/MuniTrackerRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200218;
+				CURRENT_PROJECT_VERSION = 20200219;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerRecentExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1174,7 +1306,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerRecentExtension/MuniTrackerRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200218;
+				CURRENT_PROJECT_VERSION = 20200219;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerRecentExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1196,7 +1328,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerNearbyExtension/MuniTrackerNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200218;
+				CURRENT_PROJECT_VERSION = 20200219;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerNearbyExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1218,7 +1350,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerNearbyExtension/MuniTrackerNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200218;
+				CURRENT_PROJECT_VERSION = 20200219;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerNearbyExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1356,7 +1488,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = MuniTracker/MuniTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200218;
+				CURRENT_PROJECT_VERSION = 20200219;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1380,7 +1512,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = MuniTracker/MuniTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200218;
+				CURRENT_PROJECT_VERSION = 20200219;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1402,7 +1534,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "MuniTrackerWatchApp Extension/MuniTrackerWatchApp Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200218;
+				CURRENT_PROJECT_VERSION = 20200219;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = "MuniTrackerWatchApp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1427,7 +1559,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "MuniTrackerWatchApp Extension/MuniTrackerWatchApp Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200218;
+				CURRENT_PROJECT_VERSION = 20200219;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = "MuniTrackerWatchApp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1453,7 +1585,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerWatchApp/BusTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200218;
+				CURRENT_PROJECT_VERSION = 20200219;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				IBSC_MODULE = MuniTrackerWatchApp_Extension;
 				INFOPLIST_FILE = MuniTrackerWatchApp/Info.plist;
@@ -1475,7 +1607,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerWatchApp/BusTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200218;
+				CURRENT_PROJECT_VERSION = 20200219;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				IBSC_MODULE = MuniTrackerWatchApp_Extension;
 				INFOPLIST_FILE = MuniTrackerWatchApp/Info.plist;

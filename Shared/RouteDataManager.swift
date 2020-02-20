@@ -637,7 +637,6 @@ class RouteDataManager
     
     //MARK: - Data Fetch
     
-    static let maxPredictions = 5
     static var fetchPredictionTimesOperations = Dictionary<String,BlockOperation>()
     static var fetchPredictionTimesReturnUUIDS = Dictionary<String,Array<String>>()
     
@@ -843,10 +842,16 @@ class RouteDataManager
         }
     }
     
-    static func formatPredictions(predictions: Array<String>, vehicleIDs: Array<String>? = nil) -> (predictionsString: String, selectedVehicleRange: NSRange?)
+    static func formatPredictions(predictions: Array<String>, vehicleIDs: Array<String>? = nil, predictionsToShow: Int = 5) -> (predictionsString: String, selectedVehicleRange: NSRange?)
     {
         var predictionsString = ""
         var predictionOn = 0
+        
+        var predictions = predictions
+        if predictions.count > predictionsToShow && predictions.count > 0
+        {
+            predictions = Array<String>(predictions[0...predictionsToShow-1])
+        }
         
         var selectedVehicleRange: NSRange?
         
