@@ -102,8 +102,8 @@ class SettingsViewController: UITableViewController
             NotificationCenter.default.addObserver(self, selector: #selector(self.dismissAlertView), name: NSNotification.Name("FinishedUpdatingRoutes"), object: nil)
             
             DispatchQueue.global(qos: .background).async
-                {
-                    RouteDataManager.updateAllData()
+            {
+                RouteDataManager.updateAllData()
             }
         })
         

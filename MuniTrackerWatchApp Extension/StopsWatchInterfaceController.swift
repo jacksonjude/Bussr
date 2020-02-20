@@ -31,15 +31,24 @@ class StopsWatchInterfaceController: MuniTrackerWatchInterfaceController, CLLoca
         
         stopDisplayType = StopDisplayType(rawValue: (UserDefaults.standard.object(forKey: "StopDisplayType") as? Int) ?? 0) ?? .favorite
         
-        RouteDataManager.updateAllData()
-                
         locationManager.requestWhenInUseAuthorization()
         locationManager.delegate = self
     }
     
+    var justLoaded = true
+    
     override func willActivate() {
+        if justLoaded
+        {
+            justLoaded = false
+            NotificationCenter.default.addObserver(self, selector: #selector(loadStops), name: NSNotification.Name("FinishedUpdatingRoutes"), object: nil)
+            DispatchQueue.global(qos: .background).async
+            {
+                RouteDataManager.updateAllData()
+            }
+        }
+        
         locationManager.startUpdatingLocation()
-        loadStops()
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -72,7 +81,7 @@ class StopsWatchInterfaceController: MuniTrackerWatchInterfaceController, CLLoca
         loadStops()
     }
     
-    func loadStops()
+    @objc func loadStops()
     {
         UserDefaults.standard.set(stopDisplayType.rawValue, forKey: "StopDisplayType")
         directionStopObjects = []
