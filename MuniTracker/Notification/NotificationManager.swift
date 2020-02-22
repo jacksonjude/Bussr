@@ -19,7 +19,10 @@ enum NotificationChangeType: Int
 extension StopNotification
 {
     public override func prepareForDeletion() {
-        NotificationCenter.default.post(name: NSNotification.Name("DeletedStopNotification"), object: nil, userInfo: ["uuid":self.notificationUUID!])
+        if let notificationUUID = self.notificationUUID
+        {
+            NotificationCenter.default.post(name: NSNotification.Name("DeletedStopNotification"), object: nil, userInfo: ["uuid":notificationUUID])
+        }
         
         super.prepareForDeletion()
     }
@@ -49,7 +52,7 @@ class NotificationManager
     @objc static func stopNotificationDidUpdate(_ notification: Notification)
     {
         let stopNotification = notification.object as! StopNotification
-        notificationChanges[stopNotification.notificationUUID!] = NotificationChangeType.updated
+        notificationChanges?[stopNotification.notificationUUID!] = NotificationChangeType.updated
         
         OperationQueue.main.addOperation { //Strange crash when iterating thru notification changes on sync
             syncNotificationChangesToServer()
@@ -59,7 +62,7 @@ class NotificationManager
     @objc static func stopNotificationDidDelete(_ notification: Notification)
     {
         let stopNotificationUUID = notification.userInfo!["uuid"] as! String
-        notificationChanges[stopNotificationUUID] = NotificationChangeType.deleted
+        notificationChanges?[stopNotificationUUID] = NotificationChangeType.deleted
         
         syncNotificationChangesToServer()
     }
@@ -115,13 +118,13 @@ class NotificationManager
         deleteTask.resume()
     }
     
-    static var notificationChanges = Dictionary<String,NotificationChangeType>()
+    static var notificationChanges: Dictionary<String,NotificationChangeType>?
     
     static func syncNotificationChangesToServer()
     {
         print("↑ - Syncing Notifications to Cloud")
         CoreDataStack.persistentContainer.performBackgroundTask { (backgroundMOC) in
-            let notificationChanges = self.notificationChanges
+            guard let notificationChanges = self.notificationChanges else { return }
             for change in notificationChanges
             {
                 switch change.value
@@ -132,7 +135,7 @@ class NotificationManager
                         updateNotification(stopNotification: stopNotification[0], moc: backgroundMOC, callback: { (error) in
                             if error == nil
                             {
-                                self.notificationChanges.removeValue(forKey: change.key)
+                                self.notificationChanges?.removeValue(forKey: change.key)
                             }
                         })
                     }
@@ -140,7 +143,7 @@ class NotificationManager
                     deleteNotification(stopNotificationUUID: change.key, callback: { (error) in
                         if error == nil
                         {
-                            self.notificationChanges.removeValue(forKey: change.key)
+                            self.notificationChanges?.removeValue(forKey: change.key)
                         }
                     })
                 }

@@ -126,10 +126,11 @@ class NotificationTableViewController: UIViewController, UITableViewDelegate, UI
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        CoreDataStack.persistentContainer.viewContext.delete(notificationObjects![indexPath.row])
-        CoreDataStack.saveContext()
-        notificationObjects?.remove(at: indexPath.row)
-        
         tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+        
+        let notification = notificationObjects![indexPath.row]
+        notificationObjects?.remove(at: indexPath.row)
+        CoreDataStack.persistentContainer.viewContext.delete(notification)
+        CoreDataStack.saveContext()
     }
 }

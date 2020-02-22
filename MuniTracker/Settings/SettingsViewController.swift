@@ -21,6 +21,7 @@ class SettingsViewController: UITableViewController
     @IBOutlet weak var appIconLabel: UILabel!
     @IBOutlet weak var predictionRefreshTimeLabel: UILabel!
     @IBOutlet weak var lastUpdatedRoutesLabel: UILabel!
+    @IBOutlet weak var nearbyMenuCollapseTypeLabel: UILabel!
     
     var progressAlertView: UIAlertController?
     var progressView: UIProgressView?
@@ -33,6 +34,9 @@ class SettingsViewController: UITableViewController
                 
         let locationSortType: LocationSortType = (UserDefaults.standard.object(forKey: "LocationSortType") as? Int).map { LocationSortType(rawValue: $0)  ?? .selectClosest } ?? .selectClosest
         setLocationSortTypeTitle(locationSortType: locationSortType)
+        
+        let collapseRoutes = UserDefaults.standard.object(forKey: "ShouldCollapseRoutes") as? Bool ?? true
+        setNearbyCollapseTypeTitle(shouldCollapseRoutes: collapseRoutes)
         
         let appIcon = UserDefaults.standard.object(forKey: "AppIcon") as? Int ?? 1
         setAppIconTitle(appIcon: appIcon)
@@ -71,6 +75,8 @@ class SettingsViewController: UITableViewController
             clearRoutes(tableView)
         case "LocationFilterCell":
             toggleLocationSortType(tableView)
+        case "NearbyMenu":
+            toggleNearbyCollapseType(tableView)
         default:
             break
         }
@@ -193,6 +199,15 @@ class SettingsViewController: UITableViewController
         setPredictionRefreshTimeTitle(refreshTime: refreshTime)
     }
     
+    func toggleNearbyCollapseType(_ sender: Any)
+    {
+        let collapseRoutes = UserDefaults.standard.object(forKey: "ShouldCollapseRoutes") as? Bool ?? true
+        
+        UserDefaults.standard.set(!collapseRoutes, forKey: "ShouldCollapseRoutes")
+        
+        setNearbyCollapseTypeTitle(shouldCollapseRoutes: !collapseRoutes)
+    }
+    
     //MARK: - Set Titles
     
     func setLocationSortTypeTitle(locationSortType: LocationSortType)
@@ -228,5 +243,17 @@ class SettingsViewController: UITableViewController
         dateFormatter.dateFormat = "MM/dd hh:mm"
         
         lastUpdatedRoutesLabel.text = dateFormatter.string(from: lastUpdatedRoutes)
+    }
+    
+    func setNearbyCollapseTypeTitle(shouldCollapseRoutes: Bool)
+    {
+        if shouldCollapseRoutes
+        {
+            nearbyMenuCollapseTypeLabel.text = "Routes"
+        }
+        else
+        {
+            nearbyMenuCollapseTypeLabel.text = "Stops"
+        }
     }
 }

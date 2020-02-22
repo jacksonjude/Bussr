@@ -114,6 +114,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             NotificationManager.notificationChanges = notificationChanges
         }
         
+        NotificationManager.notificationChanges = Dictionary<String,NotificationChangeType>()
         NotificationManager.syncNotificationChangesToServer()
         
         if let shortcutItem = launchOptions?[UIApplication.LaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem
@@ -143,7 +144,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         NotificationManager.syncNotificationChangesToServer()
         
-        let notificationChangesData = try? NSKeyedArchiver.archivedData(withRootObject: NotificationManager.notificationChanges, requiringSecureCoding: false)
+        let notificationChangesData = try? NSKeyedArchiver.archivedData(withRootObject: NotificationManager.notificationChanges ?? [:], requiringSecureCoding: false)
         UserDefaults.standard.set(notificationChangesData, forKey: "notificationChanges")
     }
 
@@ -202,7 +203,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         CoreDataStack.saveContext()
                 
-        let notificationChangesData = try? NSKeyedArchiver.archivedData(withRootObject: NotificationManager.notificationChanges, requiringSecureCoding: false)
+        let notificationChangesData = try? NSKeyedArchiver.archivedData(withRootObject: NotificationManager.notificationChanges ?? [:], requiringSecureCoding: false)
         UserDefaults.standard.set(notificationChangesData, forKey: "notificationChanges")
     }
     

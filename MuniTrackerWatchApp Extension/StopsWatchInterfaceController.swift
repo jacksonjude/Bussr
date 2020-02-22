@@ -129,25 +129,47 @@ class StopsWatchInterfaceController: MuniTrackerWatchInterfaceController, CLLoca
         {
             let latitude = currentLocation.coordinate.latitude
             let longitude = currentLocation.coordinate.longitude
-            let halfMileDegree = 0.007245
+            let mileDegree = 0.01449
             
-            if let nearbyStops = RouteDataManager.fetchLocalObjects(type: "Stop", predicate: NSPredicate(format: "latitude >= %f AND latitude <= %f AND longitude >= %f AND longitude <= %f", latitude - halfMileDegree, latitude + halfMileDegree, longitude - halfMileDegree, longitude + halfMileDegree), moc: CoreDataStack.persistentContainer.viewContext) as? [Stop]
+            if let nearbyStops = RouteDataManager.fetchLocalObjects(type: "Stop", predicate: NSPredicate(format: "latitude >= %f AND latitude <= %f AND longitude >= %f AND longitude <= %f", latitude - mileDegree, latitude + mileDegree, longitude - mileDegree, longitude + mileDegree), moc: CoreDataStack.persistentContainer.viewContext) as? [Stop]
             {
-                var defaultCut = 20
-                if nearbyStops.count < defaultCut
-                {
-                    defaultCut = nearbyStops.count
-                }
-                let sortedNearbyStops = RouteDataManager.sortStopsByDistanceFromLocation(stops: nearbyStops, locationToTest: currentLocation)[0...defaultCut-1]
-                                                
-                directionStopObjects = []
+                let sortedNearbyStops = RouteDataManager.sortStopsByDistanceFromLocation(stops: nearbyStops, locationToTest: currentLocation)
+                
+                var nearbyDirectionStops = Array<(stop: Stop, direction: Direction)>()
                 for stop in sortedNearbyStops
                 {
-                    for direction in stop.direction!.allObjects
+                    guard let directions = stop.direction?.allObjects as? [Direction] else { continue }
+                    for direction in directions
                     {
-                        directionStopObjects?.append((stopTag: stop.tag!, directionTag: (direction as! Direction).tag!))
+                        nearbyDirectionStops.append((stop: stop, direction: direction))
                     }
                 }
+                
+                var nearbyRoutes = Array<String>()
+                var directionStopOn = 0
+                for directionStop in nearbyDirectionStops
+                {
+                    guard let routeTag = directionStop.direction.route?.tag else { continue }
+                    if !nearbyRoutes.contains(routeTag)
+                    {
+                        nearbyRoutes.append(routeTag)
+                        directionStopOn += 1
+                    }
+                    else
+                    {
+                        nearbyDirectionStops.remove(at: directionStopOn)
+                    }
+                }
+                
+                var defaultCut = 20
+                if nearbyDirectionStops.count < defaultCut
+                {
+                    defaultCut = nearbyDirectionStops.count
+                }
+                
+                self.directionStopObjects = nearbyDirectionStops.map({ (directionStop) -> (stopTag: String, directionTag: String) in
+                    return (stopTag: directionStop.stop.tag ?? "", directionTag: directionStop.direction.tag ?? "")
+                })
                 
                 self.updateTable(directionStopTable: self.stopsTable)
             }
