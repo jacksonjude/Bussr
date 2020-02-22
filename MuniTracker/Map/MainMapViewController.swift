@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 import FloatingPanel
+import CoreData
 
 let appDelegate = UIApplication.shared.delegate as! AppDelegate
 
@@ -1030,7 +1031,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         }
     }
     
-    var newStopNotification: StopNotification?
+    var newStopNotificationID: NSManagedObjectID?
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         self.predictionRefreshTimer?.invalidate()
@@ -1049,7 +1050,10 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         else if segue.identifier == "openNewNotificationEditor"
         {
             let notificationEditorView = segue.destination as! NotificationEditorViewController
-            notificationEditorView.stopNotification = self.newStopNotification
+            
+            guard let newStopNotificationID = newStopNotificationID else { return }
+            let stopNotification = CoreDataStack.persistentContainer.viewContext.object(with: newStopNotificationID) as? StopNotification
+            notificationEditorView.stopNotification = stopNotification
             notificationEditorView.newNotification = true
         }
     }

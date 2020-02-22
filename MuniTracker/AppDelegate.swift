@@ -11,6 +11,7 @@ import CoreData
 import CoreLocation
 import CloudKit
 import UserNotifications
+import CloudCore
 
 enum ThemeType: Int
 {
@@ -63,7 +64,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             }
         }
         
-        NotificationManager.addObservationNotifications()
+        //NotificationManager.addObservationNotifications()
         
         if #available(iOS 13.0, *), UserDefaults.standard.object(forKey: "transitionedToCD-CloudKit") == nil
         {
@@ -108,14 +109,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             FavoriteState.favoritesOrganizeType = FavoriteState.FavoritesOrganizeType(rawValue: favoritesOrganizeTypeInt) ?? .list
         }
                 
-        if let notificationChangesData = UserDefaults.standard.object(forKey: "notificationChanges") as? Data
-        {
-            let notificationChanges = (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(notificationChangesData) as? Dictionary<String,NotificationChangeType>) ?? [:]
-            NotificationManager.notificationChanges = notificationChanges
-        }
-        
-        NotificationManager.notificationChanges = Dictionary<String,NotificationChangeType>()
-        NotificationManager.syncNotificationChangesToServer()
+//        if let notificationChangesData = UserDefaults.standard.object(forKey: "notificationChanges") as? Data
+//        {
+//            let notificationChanges = (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(notificationChangesData) as? Dictionary<String,NotificationChangeType>) ?? [:]
+//            NotificationManager.notificationChanges = notificationChanges
+//        }
+//
+//        NotificationManager.notificationChanges = Dictionary<String,NotificationChangeType>()
+//        NotificationManager.syncNotificationChangesToServer()
         
         if let shortcutItem = launchOptions?[UIApplication.LaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem
         {
@@ -126,6 +127,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         {
             routeStopToOpen = (stopTag: stopTag, routeTag: routeTag)
         }
+        
+        application.registerForRemoteNotifications()
+        CloudCore.enable(persistentContainer: CoreDataStack.persistentContainer)
         
         return true
     }
@@ -142,10 +146,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-        NotificationManager.syncNotificationChangesToServer()
-        
-        let notificationChangesData = try? NSKeyedArchiver.archivedData(withRootObject: NotificationManager.notificationChanges ?? [:], requiringSecureCoding: false)
-        UserDefaults.standard.set(notificationChangesData, forKey: "notificationChanges")
+//        NotificationManager.syncNotificationChangesToServer()
+//
+//        let notificationChangesData = try? NSKeyedArchiver.archivedData(withRootObject: NotificationManager.notificationChanges ?? [:], requiringSecureCoding: false)
+//        UserDefaults.standard.set(notificationChangesData, forKey: "notificationChanges")
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -203,8 +207,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         CoreDataStack.saveContext()
                 
-        let notificationChangesData = try? NSKeyedArchiver.archivedData(withRootObject: NotificationManager.notificationChanges ?? [:], requiringSecureCoding: false)
-        UserDefaults.standard.set(notificationChangesData, forKey: "notificationChanges")
+//        let notificationChangesData = try? NSKeyedArchiver.archivedData(withRootObject: NotificationManager.notificationChanges ?? [:], requiringSecureCoding: false)
+//        UserDefaults.standard.set(notificationChangesData, forKey: "notificationChanges")
     }
     
     func getCurrentTheme() -> ThemeType
@@ -266,6 +270,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        if CloudCore.isCloudCoreNotification(withUserInfo: userInfo) {
+          // Fetch changed data from iCloud
+            CloudCore.pull(using: userInfo, to: CoreDataStack.persistentContainer, error: nil, completion: { (fetchResult) in
+            completionHandler(fetchResult.uiBackgroundFetchResult)
+          })
+        }
+        
         if let stopTag = userInfo["stop"] as? String, let routeTag = userInfo["route"] as? String
         {
             routeStopToOpen = (stopTag: stopTag, routeTag: routeTag)

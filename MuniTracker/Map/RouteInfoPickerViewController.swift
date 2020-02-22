@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import CoreData
 import CoreLocation
+import CloudCore
 
 class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate
 {
@@ -951,18 +952,27 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     }
     
     @IBAction func addNotificationButtonPressed(_ sender: Any) {
-        let newNotification = NSEntityDescription.insertNewObject(forEntityName: "StopNotification", into: CoreDataStack.persistentContainer.viewContext) as! StopNotification
-        newNotification.daysOfWeek = try? JSONSerialization.data(withJSONObject: [true, true, true, true, true, true, true], options: JSONSerialization.WritingOptions.sortedKeys)
-        newNotification.directionTag = MapState.selectedDirectionTag
-        newNotification.stopTag = MapState.selectedStopTag
-        newNotification.hour = 12
-        newNotification.minute = 0
-        newNotification.notificationUUID = UUID().uuidString
-        
-        CoreDataStack.saveContext()
-        
-        appDelegate.mainMapViewController?.newStopNotification = newNotification
-        appDelegate.mainMapViewController?.performSegue(withIdentifier: "openNewNotificationEditor", sender: self)
+        CoreDataStack.persistentContainer.performBackgroundTask { moc in
+            moc.name = CloudCore.config.pushContextName
+            
+            let newNotification = StopNotification(context: moc)
+            newNotification.daysOfWeek = try? JSONSerialization.data(withJSONObject: [true, true, true, true, true, true, true], options: JSONSerialization.WritingOptions.sortedKeys)
+            newNotification.directionTag = MapState.selectedDirectionTag
+            newNotification.stopTag = MapState.selectedStopTag
+            newNotification.stopTitle = MapState.getCurrentStop()?.title
+            newNotification.routeTag = MapState.getCurrentDirection()?.route?.tag
+            newNotification.hour = 12
+            newNotification.minute = 0
+            newNotification.uuid = UUID().uuidString
+            newNotification.deviceToken = UserDefaults.standard.object(forKey: "deviceToken") as? String
+            
+            try? moc.save()
+            
+            appDelegate.mainMapViewController?.newStopNotificationID = newNotification.objectID
+            OperationQueue.main.addOperation {
+                appDelegate.mainMapViewController?.performSegue(withIdentifier: "openNewNotificationEditor", sender: self)
+            }
+        }
     }
     
     @IBAction func stopButtonDoubleTapPressed(_ sender: Any) {

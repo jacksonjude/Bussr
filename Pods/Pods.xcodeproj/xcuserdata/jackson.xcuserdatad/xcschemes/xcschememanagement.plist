@@ -4,7 +4,12 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>CloudCore.xcscheme</key>
+		<key>CloudCore-iOS.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>CloudCore-watchOS.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -30,6 +35,11 @@
 			<false/>
 		</dict>
 		<key>Pods-MuniTrackerRecentExtension.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-MuniTrackerWatchApp Extension.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>

@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import CloudCore
 
 class NotificationTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource
 {
@@ -15,7 +16,7 @@ class NotificationTableViewController: UIViewController, UITableViewDelegate, UI
     @IBOutlet weak var notificationNavigationItem: UINavigationItem!
     @IBOutlet weak var notificationNavigationBar: UINavigationBar!
     
-    var notificationObjects: Array<StopNotification>?
+    var notificationObjects: Array<NSManagedObjectID>?
     var isEditingTableView = false
     
     override func viewDidLoad() {
@@ -40,10 +41,12 @@ class NotificationTableViewController: UIViewController, UITableViewDelegate, UI
     
     func fetchNotificationObjects()
     {
-        notificationObjects = Array<StopNotification>()
+        notificationObjects = Array<NSManagedObjectID>()
         if let stopNotificationObjects = RouteDataManager.fetchLocalObjects(type: "StopNotification", predicate: NSPredicate(format: "TRUEPREDICATE"), moc: CoreDataStack.persistentContainer.viewContext) as? [StopNotification]
         {
-            notificationObjects = stopNotificationObjects
+            notificationObjects = stopNotificationObjects.map({ (notification) -> NSManagedObjectID in
+                return notification.objectID
+            })
         }
         
         stopNotificationTableView.reloadData()
@@ -67,7 +70,9 @@ class NotificationTableViewController: UIViewController, UITableViewDelegate, UI
     
     func configureCell(cell: UITableViewCell, indexPath: IndexPath)
     {
-        if let direction = RouteDataManager.fetchDirection(directionTag: notificationObjects?[indexPath.row].directionTag ?? "")
+        guard let notificationObjectID = notificationObjects?[indexPath.row] else { return }
+        let notification = CoreDataStack.persistentContainer.viewContext.object(with: notificationObjectID) as! StopNotification
+        if let direction = RouteDataManager.fetchDirection(directionTag: notification.directionTag ?? "")
         {
             (cell.viewWithTag(600) as! UILabel).text = direction.route?.tag
             (cell.viewWithTag(601) as! UILabel).text = direction.name
@@ -86,15 +91,15 @@ class NotificationTableViewController: UIViewController, UITableViewDelegate, UI
             }
         }
         
-        if let stop = RouteDataManager.fetchStop(stopTag: notificationObjects?[indexPath.row].stopTag ?? "")
+        if let stop = RouteDataManager.fetchStop(stopTag: notification.stopTag ?? "")
         {
             (cell.viewWithTag(602) as! UILabel).text = stop.title
         }
         
-        let notificationHourFormatted =  String(((notificationObjects?[indexPath.row].hour ?? 0) > 12) ? (notificationObjects?[indexPath.row].hour ?? 0) - 12 : notificationObjects?[indexPath.row].hour ?? 0)
-        let notificationStopFormatted = ((notificationObjects?[indexPath.row].minute ?? 0) < 10) ? "0" + String(notificationObjects?[indexPath.row].minute ?? 0) : String(notificationObjects?[indexPath.row].minute ?? 0)
+        let notificationHourFormatted =  String(((notification.hour) > 12) ? (notification.hour) - 12 : notification.hour)
+        let notificationStopFormatted = ((notification.minute) < 10) ? "0" + String(notification.minute) : String(notification.minute)
         
-        (cell.viewWithTag(603) as! UILabel).text = notificationHourFormatted + ":" + notificationStopFormatted + ((notificationObjects?[indexPath.row].hour ?? 0 >= 12) ? "PM" : "AM")
+        (cell.viewWithTag(603) as! UILabel).text = notificationHourFormatted + ":" + notificationStopFormatted + ((notification.hour >= 12) ? "PM" : "AM")
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -104,7 +109,8 @@ class NotificationTableViewController: UIViewController, UITableViewDelegate, UI
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? NotificationEditorViewController, let selectedRow = stopNotificationTableView.indexPathForSelectedRow
         {
-            destination.stopNotification = notificationObjects![selectedRow.row]
+            let notification = CoreDataStack.persistentContainer.viewContext.object(with: notificationObjects![selectedRow.row]) as! StopNotification
+            destination.stopNotification = notification
         }
     }
     
@@ -126,11 +132,20 @@ class NotificationTableViewController: UIViewController, UITableViewDelegate, UI
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
-        
-        let notification = notificationObjects![indexPath.row]
-        notificationObjects?.remove(at: indexPath.row)
-        CoreDataStack.persistentContainer.viewContext.delete(notification)
-        CoreDataStack.saveContext()
+        CoreDataStack.persistentContainer.performBackgroundTask { moc in
+            moc.name = CloudCore.config.pushContextName
+            
+            let stopNotificationID = self.notificationObjects![indexPath.row]
+            self.notificationObjects?.remove(at: indexPath.row)
+            guard let stopNotification = moc.object(with: stopNotificationID) as? StopNotification else { return }
+            
+            moc.delete(stopNotification)
+            
+            try? moc.save()
+            
+            OperationQueue.main.addOperation {
+                tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
 ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES
-FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/CloudCore" "${PODS_CONFIGURATION_BUILD_DIR}/FloatingPanel"
+FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/CloudCore-iOS" "${PODS_CONFIGURATION_BUILD_DIR}/FloatingPanel"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/CloudCore/CloudCore.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/FloatingPanel/FloatingPanel.framework/Headers"
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/CloudCore-iOS/CloudCore.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/FloatingPanel/FloatingPanel.framework/Headers"
 LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
 OTHER_LDFLAGS = $(inherited) -framework "CloudCore" -framework "CloudKit" -framework "CoreData" -framework "FloatingPanel" -framework "Foundation" -framework "UIKit"
 OTHER_SWIFT_FLAGS = $(inherited) -D COCOAPODS

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CloudCore
 
 class NotificationEditorViewController: UIViewController
 {
@@ -56,13 +57,28 @@ class NotificationEditorViewController: UIViewController
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "ReloadNotificationEditorViews"), object: nil)
     }
     
+    var mocSaveGroup = DispatchGroup()
+    
     func saveNotificationData()
     {
-        stopNotification?.hour = NotificationEditorState.notificationHour ?? 0
-        stopNotification?.minute = NotificationEditorState.notificationMinute ?? 0
-        stopNotification?.daysOfWeek = try? JSONSerialization.data(withJSONObject: NotificationEditorState.notificationRepeatArray ?? [], options: JSONSerialization.WritingOptions.sortedKeys)
-        
-        CoreDataStack.saveContext()
+        CoreDataStack.persistentContainer.performBackgroundTask { moc in
+            moc.name = CloudCore.config.pushContextName
+            
+            guard let stopNotificationID = self.stopNotification?.objectID else { return }
+            let stopNotification = try? moc.existingObject(with: stopNotificationID) as? StopNotification
+            stopNotification?.hour = NotificationEditorState.notificationHour ?? 0
+            stopNotification?.minute = NotificationEditorState.notificationMinute ?? 0
+            stopNotification?.daysOfWeek = try? JSONSerialization.data(withJSONObject: NotificationEditorState.notificationRepeatArray ?? [], options: JSONSerialization.WritingOptions.sortedKeys)
+            stopNotification?.deviceToken = UserDefaults.standard.object(forKey: "deviceToken") as? String
+            
+            try? moc.save()
+        }
+    }
+    
+    @objc func savedBackgroundMOC()
+    {
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
+        mocSaveGroup.leave()
     }
     
     @objc func exitNewNotificationEditor()
@@ -72,13 +88,17 @@ class NotificationEditorViewController: UIViewController
     
     @IBAction func exitNotificationEditor()
     {
+        mocSaveGroup.enter()
+        NotificationCenter.default.addObserver(self, selector: #selector(savedBackgroundMOC), name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
+        saveNotificationData()
+        mocSaveGroup.wait()
         self.performSegue(withIdentifier: "unwindFromNotificationEditor", sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "unwindFromNotificationEditor" || segue.identifier == "unwindFromNewNotificationEditor"
         {
-            saveNotificationData()
+            //saveNotificationData()
         }
     }
 }

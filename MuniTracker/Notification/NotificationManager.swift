@@ -16,26 +16,26 @@ enum NotificationChangeType: Int
     case deleted = 1
 }
 
-extension StopNotification
-{
-    public override func prepareForDeletion() {
-        if let notificationUUID = self.notificationUUID
-        {
-            NotificationCenter.default.post(name: NSNotification.Name("DeletedStopNotification"), object: nil, userInfo: ["uuid":notificationUUID])
-        }
-        
-        super.prepareForDeletion()
-    }
-    
-    public override func didSave() {
-        super.didSave()
-        
-        if !isDeleted
-        {
-            NotificationCenter.default.post(name: NSNotification.Name("UpdatedStopNotification"), object: self)
-        }
-    }
-}
+//extension StopNotification
+//{
+//    public override func prepareForDeletion() {
+//        if let notificationUUID = self.uuid
+//        {
+//            NotificationCenter.default.post(name: NSNotification.Name("DeletedStopNotification"), object: nil, userInfo: ["uuid":notificationUUID])
+//        }
+//
+//        super.prepareForDeletion()
+//    }
+//
+//    public override func didSave() {
+//        super.didSave()
+//
+//        if !isDeleted
+//        {
+//            NotificationCenter.default.post(name: NSNotification.Name("UpdatedStopNotification"), object: self)
+//        }
+//    }
+//}
 
 class NotificationManager
 {
@@ -52,7 +52,7 @@ class NotificationManager
     @objc static func stopNotificationDidUpdate(_ notification: Notification)
     {
         let stopNotification = notification.object as! StopNotification
-        notificationChanges?[stopNotification.notificationUUID!] = NotificationChangeType.updated
+        notificationChanges?[stopNotification.uuid!] = NotificationChangeType.updated
         
         OperationQueue.main.addOperation { //Strange crash when iterating thru notification changes on sync
             syncNotificationChangesToServer()
@@ -80,9 +80,9 @@ class NotificationManager
         
         var queryString = "devicetoken=" + deviceToken + "&hour=" + String(notificationHour) + "&minute=" + String(notificationMinute)
         queryString += "&daysofweek=" + String(data: stopNotification.daysOfWeek!, encoding: String.Encoding.utf8)!.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-        queryString += "&routetag=" + routeTag + "&stoptag=" + stopNotification.stopTag! + "&stoptitle=" + stopTitle + "&uuid=" + stopNotification.notificationUUID!
+        queryString += "&routetag=" + routeTag + "&stoptag=" + stopNotification.stopTag! + "&stoptitle=" + stopTitle + "&uuid=" + stopNotification.uuid!
         
-        deleteNotification(stopNotificationUUID: stopNotification.notificationUUID!, callback: { (error) in
+        deleteNotification(stopNotificationUUID: stopNotification.uuid!, callback: { (error) in
             
             if error != nil
             {
@@ -130,7 +130,7 @@ class NotificationManager
                 switch change.value
                 {
                 case NotificationChangeType.updated:
-                    if let stopNotification = RouteDataManager.fetchLocalObjects(type: "StopNotification", predicate: NSPredicate(format: "notificationUUID == %@", change.key), moc: backgroundMOC) as? [StopNotification], stopNotification.count > 0
+                    if let stopNotification = RouteDataManager.fetchLocalObjects(type: "StopNotification", predicate: NSPredicate(format: "uuid == %@", change.key), moc: backgroundMOC) as? [StopNotification], stopNotification.count > 0
                     {
                         updateNotification(stopNotification: stopNotification[0], moc: backgroundMOC, callback: { (error) in
                             if error == nil
