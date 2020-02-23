@@ -64,8 +64,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             }
         }
         
-        //NotificationManager.addObservationNotifications()
-        
         if #available(iOS 13.0, *), UserDefaults.standard.object(forKey: "transitionedToCD-CloudKit") == nil
         {
             if let favoriteStops = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: NSPredicate(format: "TRUEPREDICATE"), moc: CoreDataStack.persistentContainer.viewContext) as? [NSManagedObject]
@@ -108,15 +106,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         {
             FavoriteState.favoritesOrganizeType = FavoriteState.FavoritesOrganizeType(rawValue: favoritesOrganizeTypeInt) ?? .list
         }
-                
-//        if let notificationChangesData = UserDefaults.standard.object(forKey: "notificationChanges") as? Data
-//        {
-//            let notificationChanges = (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(notificationChangesData) as? Dictionary<String,NotificationChangeType>) ?? [:]
-//            NotificationManager.notificationChanges = notificationChanges
-//        }
-//
-//        NotificationManager.notificationChanges = Dictionary<String,NotificationChangeType>()
-//        NotificationManager.syncNotificationChangesToServer()
         
         if let shortcutItem = launchOptions?[UIApplication.LaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem
         {
@@ -146,10 +135,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-//        NotificationManager.syncNotificationChangesToServer()
-//
-//        let notificationChangesData = try? NSKeyedArchiver.archivedData(withRootObject: NotificationManager.notificationChanges ?? [:], requiringSecureCoding: false)
-//        UserDefaults.standard.set(notificationChangesData, forKey: "notificationChanges")
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -206,9 +191,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Saves changes in the application's managed object context before the application terminates.
         
         CoreDataStack.saveContext()
-                
-//        let notificationChangesData = try? NSKeyedArchiver.archivedData(withRootObject: NotificationManager.notificationChanges ?? [:], requiringSecureCoding: false)
-//        UserDefaults.standard.set(notificationChangesData, forKey: "notificationChanges")
     }
     
     func getCurrentTheme() -> ThemeType

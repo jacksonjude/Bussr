@@ -73,7 +73,6 @@ class NotificationRepeatTableViewController: UIViewController, UITableViewDataSo
         selectedCells[indexPath.row] = !selectedCells[indexPath.row]
         
         tableView.cellForRow(at: indexPath)?.accessoryType = selectedCells[indexPath.row] ? .checkmark : .none
-        
         tableView.deselectRow(at: indexPath, animated: true)
         
         NotificationEditorState.notificationRepeatArray = selectedCells

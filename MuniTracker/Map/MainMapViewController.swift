@@ -1052,8 +1052,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             let notificationEditorView = segue.destination as! NotificationEditorViewController
             
             guard let newStopNotificationID = newStopNotificationID else { return }
-            let stopNotification = CoreDataStack.persistentContainer.viewContext.object(with: newStopNotificationID) as? StopNotification
-            notificationEditorView.stopNotification = stopNotification
+            notificationEditorView.stopNotificationID = newStopNotificationID
             notificationEditorView.newNotification = true
         }
     }

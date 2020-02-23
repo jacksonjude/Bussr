@@ -8,12 +8,13 @@
 
 import UIKit
 import CloudCore
+import CoreData
 
 class NotificationEditorViewController: UIViewController
 {
     @IBOutlet weak var backButton: UIBarButtonItem!
     @IBOutlet weak var notificationEditorNavigationBar: UINavigationBar!
-    var stopNotification: StopNotification?
+    var stopNotificationID: NSManagedObjectID?
     var newNotification = false
     
     override func viewDidLoad() {
@@ -46,25 +47,29 @@ class NotificationEditorViewController: UIViewController
     
     func loadNotificationData()
     {
-        NotificationEditorState.notificationHour = stopNotification?.hour
-        NotificationEditorState.notificationMinute = stopNotification?.minute
+        guard let stopNotificationID = stopNotificationID else { return }
+        let notification = CoreDataStack.persistentContainer.viewContext.object(with: stopNotificationID) as! StopNotification
         
-        if let repeatArrayData = stopNotification?.daysOfWeek
+        NotificationEditorState.notificationHour = notification.hour
+        NotificationEditorState.notificationMinute = notification.minute
+        
+        if let repeatArrayData = notification.daysOfWeek
         {
             NotificationEditorState.notificationRepeatArray = try? JSONSerialization.jsonObject(with: repeatArrayData, options: JSONSerialization.ReadingOptions.allowFragments) as? Array<Bool>
         }
         
+        NotificationEditorState.newNotification = self.newNotification
+        
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "ReloadNotificationEditorViews"), object: nil)
     }
-    
-    var mocSaveGroup = DispatchGroup()
-    
-    func saveNotificationData()
+        
+    @objc func saveNotificationData()
     {
+        guard let stopNotificationID = stopNotificationID else { return }
+        
         CoreDataStack.persistentContainer.performBackgroundTask { moc in
             moc.name = CloudCore.config.pushContextName
             
-            guard let stopNotificationID = self.stopNotification?.objectID else { return }
             let stopNotification = try? moc.existingObject(with: stopNotificationID) as? StopNotification
             stopNotification?.hour = NotificationEditorState.notificationHour ?? 0
             stopNotification?.minute = NotificationEditorState.notificationMinute ?? 0
@@ -75,30 +80,15 @@ class NotificationEditorViewController: UIViewController
         }
     }
     
-    @objc func savedBackgroundMOC()
-    {
-        NotificationCenter.default.removeObserver(self, name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
-        mocSaveGroup.leave()
-    }
-    
     @objc func exitNewNotificationEditor()
     {
+        saveNotificationData()
         self.performSegue(withIdentifier: "unwindFromNewNotificationEditor", sender: self)
     }
     
     @IBAction func exitNotificationEditor()
     {
-        mocSaveGroup.enter()
-        NotificationCenter.default.addObserver(self, selector: #selector(savedBackgroundMOC), name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
         saveNotificationData()
-        mocSaveGroup.wait()
         self.performSegue(withIdentifier: "unwindFromNotificationEditor", sender: self)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "unwindFromNotificationEditor" || segue.identifier == "unwindFromNewNotificationEditor"
-        {
-            //saveNotificationData()
-        }
     }
 }

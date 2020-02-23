@@ -13,4 +13,5 @@ class NotificationEditorState
     static var notificationHour: Int16?
     static var notificationMinute: Int16?
     static var notificationRepeatArray: Array<Bool>?
+    static var newNotification: Bool?
 }

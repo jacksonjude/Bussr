@@ -12,6 +12,7 @@ import CoreData
 
 class NotificationTimePickerViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate
 {
+    let hourOffset = Calendar(identifier: .gregorian).component(.hour, from: Date(timeIntervalSince1970: 0.0))
     var timeValues: Array<Array<String>> = []
     
     @IBOutlet weak var notificationTimePickerView: UIPickerView!
@@ -32,14 +33,33 @@ class NotificationTimePickerViewController: UIViewController, UIPickerViewDataSo
     {
         notificationTimePickerView.reloadAllComponents()
         
-        var notificationHour = NotificationEditorState.notificationHour ?? 0
-        if notificationHour > 12
+        var notificationHour = 0
+        if NotificationEditorState.notificationHour != nil && !(NotificationEditorState.newNotification ?? false)
         {
-            notificationHour -= 12
+            notificationHour = Int(NotificationEditorState.notificationHour!) + hourOffset
         }
-        if notificationHour == 0
+        else if NotificationEditorState.newNotification ?? false
         {
-            notificationHour = 12
+            NotificationEditorState.notificationHour = Int16(hourOffset)
+        }
+        
+        if notificationHour < 0
+        {
+            notificationHour += 24
+        }
+        if notificationHour > 24
+        {
+            notificationHour -= 24
+        }
+        
+        var notification12Hour = notificationHour
+        if notification12Hour > 12
+        {
+            notification12Hour -= 12
+        }
+        if notification12Hour == 0
+        {
+            notification12Hour = 12
         }
         
         var notificationMinuteFormatted = String(NotificationEditorState.notificationMinute ?? 0)
@@ -48,9 +68,9 @@ class NotificationTimePickerViewController: UIViewController, UIPickerViewDataSo
             notificationMinuteFormatted = "0" + notificationMinuteFormatted
         }
         
-        notificationTimePickerView.selectRow(timeValues[0].firstIndex(of: String(notificationHour))!, inComponent: 0, animated: true)
+        notificationTimePickerView.selectRow(timeValues[0].firstIndex(of: String(notification12Hour))!, inComponent: 0, animated: true)
         notificationTimePickerView.selectRow(timeValues[1].firstIndex(of: notificationMinuteFormatted)!, inComponent: 1, animated: true)
-        notificationTimePickerView.selectRow(timeValues[2].firstIndex(of: (NotificationEditorState.notificationHour ?? 0 >= 12) ? "PM":"AM")!, inComponent: 2, animated: true)
+        notificationTimePickerView.selectRow(timeValues[2].firstIndex(of: (notificationHour >= 12) ? "PM":"AM")!, inComponent: 2, animated: true)
     }
     
     func setTimeValues()
@@ -112,6 +132,17 @@ class NotificationTimePickerViewController: UIViewController, UIPickerViewDataSo
         {
             formattedNotificationHour = 0
         }
+        formattedNotificationHour -= Int16(hourOffset)
+        
+        if formattedNotificationHour < 0
+        {
+            formattedNotificationHour += 24
+        }
+        if formattedNotificationHour > 24
+        {
+            formattedNotificationHour -= 24
+        }
+        
         NotificationEditorState.notificationHour = formattedNotificationHour
     }
     
