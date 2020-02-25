@@ -597,7 +597,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         {
             predicateFormat += " AND uuid != %@"
         }
-        if let duplicateRecentStopArray = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(format: predicateFormat, MapState.selectedDirectionTag!, MapState.selectedStopTag!, uuidToNotMatch ?? ""), moc: backgroundMOC) as? [RecentStop]
+        if MapState.selectedDirectionTag != nil && MapState.selectedStopTag != nil, let duplicateRecentStopArray = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(format: predicateFormat, MapState.selectedDirectionTag!, MapState.selectedStopTag!, uuidToNotMatch ?? ""), moc: backgroundMOC) as? [RecentStop]
         {
             if duplicateRecentStopArray.count > 0
             {

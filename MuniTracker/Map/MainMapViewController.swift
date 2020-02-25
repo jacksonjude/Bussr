@@ -1258,6 +1258,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         {
             OperationQueue.main.addOperation {
                 self.predictionTimesLabel.text = error
+                self.hidePredictionTimesProgressView()
             }
         }
     }
@@ -1289,13 +1290,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         OperationQueue.main.addOperation {
             self.predictionTimesProgressView.setProgress(1, animated: true)
-            self.predictionTimesProgressViewConstraint.constant = -self.predictionTimesProgressView.frame.size.height
-            
-            UIView.animate(withDuration: 0.75, animations: {
-                self.view.layoutSubviews()
-            }) { (bool) in
-                self.predictionTimesProgressView.isHidden = true
-            }
+            self.hidePredictionTimesProgressView()
             
             var annotationsToSave = Dictionary<String,(annotation: BusAnnotation, annotationView: MKAnnotationView?, headingAnnotationView: MKAnnotationView?)>()
             
@@ -1368,6 +1363,17 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             }
             
             self.busAnnotations = annotationsToSave
+        }
+    }
+    
+    func hidePredictionTimesProgressView()
+    {
+        self.predictionTimesProgressViewConstraint.constant = -self.predictionTimesProgressView.frame.size.height
+        
+        UIView.animate(withDuration: 0.75, animations: {
+            self.view.layoutSubviews()
+        }) { (bool) in
+            self.predictionTimesProgressView.isHidden = true
         }
     }
     

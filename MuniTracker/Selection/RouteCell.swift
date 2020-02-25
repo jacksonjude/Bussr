@@ -15,7 +15,7 @@ class RouteCell: UITableViewCell
     {
         didSet
         {
-            self.textLabel?.text = (route?.tag ?? "") + " – " + (route?.title ?? "")
+            self.textLabel?.text = (route?.title ?? "")
             self.textLabel?.textColor = UIColor(hexString: route?.oppositeColor ?? "FFFFFF")
             
             var routeCellColor = UIColor(hexString: route?.color ?? "000000")

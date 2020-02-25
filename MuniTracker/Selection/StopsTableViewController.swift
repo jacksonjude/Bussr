@@ -34,7 +34,7 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
         
         if stopFetchType == .recent
         {
-            self.mainNavigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.refresh, target: self, action: #selector(clearRecentStops))
+            self.mainNavigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.trash, target: self, action: #selector(clearRecentStops))
         }
         
         setupThemeElements()
@@ -120,7 +120,7 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
                 }
             }
         case .recent:
-            if let recentStops = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(format: "TRUEPREDICATE"), moc: CoreDataStack.persistentContainer.viewContext, sortDescriptors: [NSSortDescriptor(key: "timestamp", ascending: false)], fetchLimit: 20) as? [RecentStop]
+            if let recentStops = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext, sortDescriptors: [NSSortDescriptor(key: "timestamp", ascending: false)], fetchLimit: 20) as? [RecentStop]
             {
                 for recentStop in recentStops
                 {
@@ -212,25 +212,40 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
         self.performSegue(withIdentifier: "SelectedStopUnwind", sender: self)
     }
     
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return stopFetchType == .recent
+    }
+
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == UITableViewCell.EditingStyle.delete && stopFetchType == .recent {
+            let stopDirection = stopDirectionObjects![indexPath.row]
+            if let recentStopFetch = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(format: "directionTag == %@ AND stopTag == %@", stopDirection.direction.tag ?? "", stopDirection.stop.tag ?? ""), moc: CoreDataStack.persistentContainer.viewContext) as? [RecentStop], recentStopFetch.count > 0
+            {
+                CoreDataStack.persistentContainer.viewContext.delete(recentStopFetch[0])
+                stopDirectionObjects?.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+                
+                CoreDataStack.saveContext()
+            }
+        }
+    }
+    
     @objc func clearRecentStops()
     {
-        if let recentStops = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(format: "TRUEPREDICATE"), moc: CoreDataStack.persistentContainer.viewContext) as? [RecentStop]
+        if let recentStops = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext) as? [RecentStop]
         {
             for recentStop in recentStops
             {
                 CoreDataStack.persistentContainer.viewContext.delete(recentStop)
             }
         }
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadTableViewAfterRecentStopClear(_:)), name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
+                
+        let stopDirectionCount = stopDirectionObjects?.count ?? 0
+        stopDirectionObjects = []
+        stopsTableView.deleteRows(at: Array(0...stopDirectionCount-1).map({ (row) -> IndexPath in
+            return IndexPath(row: row, section: 0)
+        }), with: .automatic)
         
         CoreDataStack.saveContext()
-    }
-    
-    @objc func reloadTableViewAfterRecentStopClear(_ notification: Notification)
-    {
-        NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
-        
-        stopsTableView.reloadData()
     }
 }

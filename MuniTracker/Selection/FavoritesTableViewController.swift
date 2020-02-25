@@ -140,7 +140,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
     
     func fetchFavoriteStops()
     {
-        if let favoriteStops = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: NSPredicate(format: "TRUEPREDICATE"), moc: CoreDataStack.persistentContainer.viewContext) as? [FavoriteStop]
+        if let favoriteStops = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext) as? [FavoriteStop]
         {
             favoriteStopObjects = favoriteStops
             

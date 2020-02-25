@@ -93,7 +93,12 @@ class DirectionStopRowController: NSObject
         stopLabel.setTextColor(textColor)
         predictionTimesLabel.setTextColor(textColor)
         
-        routeLabel.setText(directionStop?.direction.route?.tag)
+        let routeTag = directionStop?.direction.route?.tag ?? ""
+        var directionName = directionStop?.direction.name ?? ""
+        if directionName == "Inbound" { directionName = "IB" }
+        if directionName == "Outbound" { directionName = "OB" }
+        let routeTagString = routeTag + " – " + directionName
+        routeLabel.setText(routeTagString)
         stopLabel.setText(directionStop?.stop.title)
     }
     

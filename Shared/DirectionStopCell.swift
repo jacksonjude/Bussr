@@ -83,7 +83,12 @@ class DirectionStopCell: UITableViewCell
         (self.viewWithTag(603) as? UILabel)?.textColor = textColor
         (self.viewWithTag(604) as? UILabel)?.textColor = textColor
         
-        (self.viewWithTag(600) as? UILabel)?.text = directionObject?.route?.tag
+        let routeTag = directionObject?.route?.tag ?? ""
+        var directionName = directionObject?.name ?? ""
+        if directionName == "Inbound" { directionName = "IB" }
+        if directionName == "Outbound" { directionName = "OB" }
+        let routeTagString = routeTag + (((self.viewWithTag(604) as? UILabel) == nil) ? (" – " + directionName) : "")
+        (self.viewWithTag(600) as? UILabel)?.text = routeTagString
         (self.viewWithTag(601) as? UILabel)?.text = directionObject?.title
         (self.viewWithTag(602) as? UILabel)?.text = stopObject?.title
         (self.viewWithTag(604) as? UILabel)?.text = directionObject?.name

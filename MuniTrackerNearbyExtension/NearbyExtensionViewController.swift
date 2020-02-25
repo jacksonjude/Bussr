@@ -66,14 +66,14 @@ class NearbyExtensionViewController: MuniTrackerExtensionViewController, CLLocat
                     }
                 }
                 
-                var nearbyRoutes = Array<String>()
+                var nearbyDirections = Array<String>()
                 var directionStopOn = 0
                 for directionStop in nearbyDirectionStops
                 {
-                    guard let routeTag = directionStop.direction.route?.tag else { continue }
-                    if !nearbyRoutes.contains(routeTag)
+                    guard let directionTag = directionStop.direction.tag else { continue }
+                    if !nearbyDirections.contains(directionTag)
                     {
-                        nearbyRoutes.append(routeTag)
+                        nearbyDirections.append(directionTag)
                         directionStopOn += 1
                     }
                     else

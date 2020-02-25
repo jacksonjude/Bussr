@@ -12,7 +12,7 @@ import CloudCore
 
 class NotificationTableViewController: UITableViewController, NSFetchedResultsControllerDelegate
 {
-    let hourOffset = Calendar(identifier: .gregorian).component(.hour, from: Date(timeIntervalSince1970: 0.0))
+    let hourOffset = Calendar(identifier: .gregorian).component(.hour, from: Date(timeIntervalSince1970: 0.0))-24
     var isEditingTableView = false
     
     override func viewDidLoad() {
@@ -22,15 +22,7 @@ class NotificationTableViewController: UITableViewController, NSFetchedResultsCo
         
         try? fetchedResultsController.performFetch()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(mocSaved), name: NSNotification.Name.NSManagedObjectContextDidSave, object: nil)
-        
         self.clearsSelectionOnViewWillAppear = true
-    }
-    
-    @objc func mocSaved(_ notification: Notification)
-    {
-        CoreDataStack.persistentContainer.viewContext.mergeChanges(fromContextDidSave: notification)
-        CoreDataStack.saveContext()
     }
     
     //MARK: - Fetched Results Controller

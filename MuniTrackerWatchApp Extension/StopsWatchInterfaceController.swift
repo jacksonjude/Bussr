@@ -102,7 +102,7 @@ class StopsWatchInterfaceController: MuniTrackerWatchInterfaceController, CLLoca
     
     func loadClosestFavoriteStops()
     {
-        if let userLocation = self.currentUserLocation, var favoriteStops = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: NSPredicate(format: "TRUEPREDICATE"), moc: CoreDataStack.persistentContainer.viewContext) as? [FavoriteStop]
+        if let userLocation = self.currentUserLocation, var favoriteStops = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext) as? [FavoriteStop]
         {
             favoriteStops.sort { (favoriteStop1, favoriteStop2) -> Bool in
                 if let stop1 = RouteDataManager.fetchStop(stopTag: favoriteStop1.stopTag!), let stop2 = RouteDataManager.fetchStop(stopTag: favoriteStop2.stopTag!)
@@ -145,14 +145,14 @@ class StopsWatchInterfaceController: MuniTrackerWatchInterfaceController, CLLoca
                     }
                 }
                 
-                var nearbyRoutes = Array<String>()
+                var nearbyDirections = Array<String>()
                 var directionStopOn = 0
                 for directionStop in nearbyDirectionStops
                 {
-                    guard let routeTag = directionStop.direction.route?.tag else { continue }
-                    if !nearbyRoutes.contains(routeTag)
+                    guard let directionTag = directionStop.direction.tag else { continue }
+                    if !nearbyDirections.contains(directionTag)
                     {
-                        nearbyRoutes.append(routeTag)
+                        nearbyDirections.append(directionTag)
                         directionStopOn += 1
                     }
                     else
@@ -178,7 +178,7 @@ class StopsWatchInterfaceController: MuniTrackerWatchInterfaceController, CLLoca
     
     func loadRecentStops()
     {
-        if let recentStops = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(format: "TRUEPREDICATE"), moc: CoreDataStack.persistentContainer.viewContext, sortDescriptors: [NSSortDescriptor(key: "timestamp", ascending: false)], fetchLimit: numStopsToDisplay) as? [RecentStop]
+        if let recentStops = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext, sortDescriptors: [NSSortDescriptor(key: "timestamp", ascending: false)], fetchLimit: numStopsToDisplay) as? [RecentStop]
         {
             self.directionStopObjects = recentStops.map({ (recentStop) -> (stopTag: String, directionTag: String) in
                 return (stopTag: recentStop.stopTag!, directionTag: recentStop.directionTag!)

@@ -13,7 +13,8 @@ import CoreData
 class NotificationEditorViewController: UIViewController
 {
     @IBOutlet weak var backButton: UIBarButtonItem!
-    @IBOutlet weak var notificationEditorNavigationBar: UINavigationBar!
+    @IBOutlet weak var notificationEditorNavigationItem: UINavigationItem!
+    
     var stopNotificationID: NSManagedObjectID?
     var newNotification = false
     
@@ -61,6 +62,11 @@ class NotificationEditorViewController: UIViewController
         NotificationEditorState.newNotification = self.newNotification
         
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "ReloadNotificationEditorViews"), object: nil)
+        
+        if let routeTag = notification.routeTag, let route = RouteDataManager.fetchObject(type: "Route", predicate: NSPredicate(format: "tag == %@", routeTag), moc: CoreDataStack.persistentContainer.viewContext) as? Route
+        {
+            self.notificationEditorNavigationItem.title = (route.title ?? "")
+        }
     }
         
     @objc func saveNotificationData()
