@@ -268,6 +268,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         if MapState.routeInfoShowing == .stop
         {
             self.setupPredictionRefreshTimer()
+            self.refreshPredictionNavigationBar()
         }
     }
     

@@ -74,8 +74,8 @@
                                 </constraints>
                                 <state key="normal" image="BusIcon"/>
                                 <connections>
-                                    <action selector="vehiclesButtonSingleTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="P4t-gu-m9U"/>
                                     <outletCollection property="gestureRecognizers" destination="8Q7-3I-j0x" appends="YES" id="2jc-eK-oeq"/>
+                                    <outletCollection property="gestureRecognizers" destination="qxQ-2e-hnA" appends="YES" id="DiY-GB-KeH"/>
                                 </connections>
                             </button>
                             <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NHQ-Gi-Nhr">
@@ -191,6 +191,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="qxQ-2e-hnA">
+                    <connections>
+                        <action selector="vehiclesButtonSingleTap:" destination="BYZ-38-t0r" id="Z9n-64-Q6l"/>
+                    </connections>
+                </tapGestureRecognizer>
                 <tapGestureRecognizer numberOfTapsRequired="2" id="8Q7-3I-j0x">
                     <connections>
                         <action selector="vehiclesButtonDoubleTap:" destination="BYZ-38-t0r" id="6Iz-pF-uVs"/>
@@ -578,11 +583,11 @@
             <objects>
                 <viewController id="1er-42-KIJ" customClass="NotificationEditorViewController" customModule="Bussr" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cra-uB-OzM">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yk0-aH-neE">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
                                 <items>
                                     <navigationItem title="Notification" id="4Jh-18-dwn">
                                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="JTi-I5-vfi"/>
@@ -590,7 +595,7 @@
                                 </items>
                             </navigationBar>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kn0-Em-9ZL">
-                                <rect key="frame" x="0.0" y="68" width="375" height="162"/>
+                                <rect key="frame" x="0.0" y="80" width="375" height="162"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="162" id="BtS-gQ-SVH"/>
                                 </constraints>
@@ -599,7 +604,7 @@
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8ji-p2-IrU">
-                                <rect key="frame" x="0.0" y="270" width="375" height="308"/>
+                                <rect key="frame" x="0.0" y="282" width="375" height="308"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="308" id="Umq-F9-VPz"/>
                                 </constraints>
@@ -1572,6 +1577,6 @@
     <inferredMetricsTieBreakers>
         <segue reference="6fX-oF-13I"/>
         <segue reference="UJx-fY-8v6"/>
-        <segue reference="7ib-A4-h52"/>
+        <segue reference="IdA-st-vvj"/>
     </inferredMetricsTieBreakers>
 </document>

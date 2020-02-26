@@ -20,13 +20,13 @@
                                                 <items>
                                                     <group width="1" alignment="left" id="WpI-er-4IM">
                                                         <items>
-                                                            <label alignment="left" text="5R" minimumScaleFactor="0.5" id="Idf-vr-8XT"/>
+                                                            <label alignment="left" text="5R – OB" minimumScaleFactor="0.5" id="Idf-vr-8XT"/>
+                                                            <separator alignment="left" id="waK-dd-RWX">
+                                                                <color key="color" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </separator>
                                                             <label alignment="right" minimumScaleFactor="0.5" id="VqZ-R0-8Px">
                                                                 <fontDescription key="font" type="system" pointSize="15"/>
                                                             </label>
-                                                            <separator alignment="right" id="Bt9-M9-UzS">
-                                                                <color key="color" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            </separator>
                                                             <imageView width="18" height="18" alignment="right" verticalAlignment="bottom" id="LlC-UL-HwP"/>
                                                         </items>
                                                     </group>

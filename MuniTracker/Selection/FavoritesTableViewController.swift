@@ -499,6 +499,12 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         favoriteRouteCell.stopObject = RouteDataManager.fetchStop(stopTag: favoriteStopObject.stopTag ?? "")
         favoriteRouteCell.updateCellText()
         
+        if favoriteRouteCell.stopObject == nil || favoriteRouteCell.directionObject == nil
+        {
+            favoriteRouteCell.backgroundColor = UIColor.gray
+            favoriteRouteCell.isUserInteractionEnabled = false
+        }
+        
         return favoriteRouteCell
     }
     
