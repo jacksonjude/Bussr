@@ -642,6 +642,19 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             
             return [delete]
         }
+        else if FavoriteState.favoritesOrganizeType == .list
+        {
+            let delete = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
+                if let favoriteStop = self.favoriteStopObjects?[indexPath.row]
+                {
+                    CoreDataStack.persistentContainer.viewContext.delete(favoriteStop)
+                    self.favoriteStopObjects?.remove(at: indexPath.row)
+                    tableView.deleteRows(at: [indexPath], with: .fade)
+                }
+            }
+            
+            return [delete]
+        }
         
         return nil
     }

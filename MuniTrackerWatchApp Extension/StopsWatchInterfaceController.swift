@@ -91,13 +91,26 @@ class StopsWatchInterfaceController: MuniTrackerWatchInterfaceController, CLLoca
         case .favorite:
             self.setTitle("Favorites")
             loadClosestFavoriteStops()
+            if directionStopObjects?.count == 0 { setupMOCSaveNotification() }
         case .nearby:
             self.setTitle("Nearby")
             loadNearbyStops()
         case .recent:
             self.setTitle("Recent")
             loadRecentStops()
+            if directionStopObjects?.count == 0 { setupMOCSaveNotification() }
         }
+    }
+    
+    func setupMOCSaveNotification()
+    {
+        NotificationCenter.default.addObserver(self, selector: #selector(mocDidSave), name: NSNotification.Name.NSManagedObjectContextObjectsDidChange, object: nil)
+    }
+    
+    @objc func mocDidSave()
+    {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.NSManagedObjectContextObjectsDidChange, object: nil)
+        loadStops()
     }
     
     func loadClosestFavoriteStops()

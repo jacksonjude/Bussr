@@ -127,11 +127,11 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     func fetchRoutes()
     {
-        let nextBusAgency = RouteDataManager.fetchObject(type: "Agency", predicate: NSPredicate(format: "name == %@", RouteConstants.NextBusAgencyTag), moc: CoreDataStack.persistentContainer.viewContext) as! Agency
-        let nextBusAgencyRoutes = (nextBusAgency.routes?.allObjects) as! [Route]
+        guard let nextBusAgency = RouteDataManager.fetchObject(type: "Agency", predicate: NSPredicate(format: "name == %@", RouteConstants.NextBusAgencyTag), moc: CoreDataStack.persistentContainer.viewContext) as? Agency else { return }
+        guard let nextBusAgencyRoutes = (nextBusAgency.routes?.allObjects) as? [Route] else { return }
         
-        let BARTAgency = RouteDataManager.fetchObject(type: "Agency", predicate: NSPredicate(format: "name == %@", RouteConstants.BARTAgencyTag), moc: CoreDataStack.persistentContainer.viewContext) as! Agency
-        let BARTAgencyRoutes = (BARTAgency.routes?.allObjects) as! [Route]
+        guard let BARTAgency = RouteDataManager.fetchObject(type: "Agency", predicate: NSPredicate(format: "name == %@", RouteConstants.BARTAgencyTag), moc: CoreDataStack.persistentContainer.viewContext) as? Agency else { return }
+        guard let BARTAgencyRoutes = (BARTAgency.routes?.allObjects) as? [Route] else { return }
         
         let agencyRoutes = nextBusAgencyRoutes + BARTAgencyRoutes
         self.routeArray = agencyRoutes
@@ -159,7 +159,7 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
                 let sectionNumber = Int(String(routeTag[0]))
                 sortedRouteDictionary[sectionNumber!]!.append(route)
             }
-            else if routeTag.contains("BART")
+            else if routeTag.contains(RouteConstants.BARTAgencyTag)
             {
                 sortedRouteDictionary[11]!.append(route)
             }

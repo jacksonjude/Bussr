@@ -10,7 +10,6 @@ import UIKit
 import NotificationCenter
 import CoreLocation
 
-
 class MuniTrackerExtensionViewController: UITableViewController, NCWidgetProviding {
     var stopDirectionObjects: Array<(stopTag: String, directionTag: String)>?
     var stops: Array<Stop>?
@@ -46,6 +45,7 @@ class MuniTrackerExtensionViewController: UITableViewController, NCWidgetProvidi
         let cell = tableView.dequeueReusableCell(withIdentifier: "RouteCell") as! DirectionStopCell
         
         cell.includeMins = false
+        cell.shouldDisplayDirectionName = true
         
         let stopDirectionObject = stopDirectionObjects![indexPath.row]
         

@@ -141,6 +141,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         mainMapView.delegate = self
         mainMapView.showsUserLocation = true
         mainMapView.isRotateEnabled = false
+        mainMapView.isPitchEnabled = false
         centerMapOnLocation(location: initialLocation, range: 15000)
         
         setupRouteMapUpdateNotifications()
@@ -1431,15 +1432,16 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         if vehicleIndexToSelect == -1
         {
+            updateSelectedVehicle()
             MapState.selectedVehicleID = nil
         }
         else
         {
             MapState.selectedVehicleID = vehicleIDs[vehicleIndexToSelect]
+            updateSelectedVehicle()
         }
         
         reloadPredictionTimesLabel()
-        updateSelectedVehicle()
     }
     
     func updateSelectedVehicle()
@@ -1452,7 +1454,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                 busAnnotation.value.annotationView?.image = UIImage(named: "BusAnnotation")
             }
             
-            if busAnnotation.value.annotation.isMapKitSelected
+            if busAnnotation.value.annotation.isMapKitSelected && MapState.selectedVehicleID != nil
             {
                 mainMapView.deselectAnnotation(busAnnotations[MapState.selectedVehicleID!]?.annotation, animated: false)
             }

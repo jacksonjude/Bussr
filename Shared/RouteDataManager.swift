@@ -16,8 +16,10 @@ struct RouteConstants
     static let nextBusJSONFeedSource = "http://webservices.nextbus.com/service/publicJSONFeed"
     
     static let herokuHashSource = "http://munitracker.herokuapp.com"
-    static let listHash = "/rlhash"
-    static let configHashes = "/rchash"
+    static let NextBusListHash = "/rlnextbushash"
+    static let NextBusConfigHashes = "/rcnextbushash"
+    static let BARTListHash = "/rlbarthash"
+    static let BARTConfigHashes = "/rcbarthash"
     
     static let BARTAgencyTag = "BART"
     static let BARTJSONFeedSource = "http://api.bart.gov/api"
@@ -87,14 +89,17 @@ class RouteDataManager
     {
         self.routesFetched = 0
         
-        let NextBusRouteListHash = fetchRouteListHash()
-        let NextBusRouteConfigHashes = fetchRouteConfigHashes()
+        let NextBusRouteListHash = fetchRouteListHash(agencyTag: RouteConstants.NextBusAgencyTag)
+        let NextBusRouteConfigHashes = fetchRouteConfigHashes(agencyTag: RouteConstants.NextBusAgencyTag)
         
         let NextBusRouteDictionary = fetchNextBusRoutes()
         let NextBusSortedRouteKeys = Array<String>(NextBusRouteDictionary.keys).sorted { (routeTag1, routeTag2) -> Bool in
             return routeTag1.localizedStandardCompare(routeTag2) == .orderedAscending
         }
         print("Received NextBus Routes")
+        
+        let BARTRouteListHash = fetchRouteListHash(agencyTag: RouteConstants.BARTAgencyTag)
+        let BARTRouteConfigHashes = fetchRouteConfigHashes(agencyTag: RouteConstants.BARTAgencyTag)
         
         let BARTRouteDictionary = fetchBARTRoutes()
         let BARTSortedRouteKeys = Array<String>(BARTRouteDictionary.keys).sorted { (routeTag1, routeTag2) -> Bool in
@@ -145,16 +150,51 @@ class RouteDataManager
             return stopObject
         })
         backgroundGroup.wait()
-        self.loadRouteInfo(routeDictionary: BARTRouteDictionary, sortedRouteKeys: BARTSortedRouteKeys, agencyTag: RouteConstants.BARTAgencyTag, listHash: "", configHashes: [:], mainBackgroundGroup: nil, setRouteFields: { (routeKeyValue, backgroundMOC, configHashes, agencyTag) in
+        self.loadRouteInfo(routeDictionary: BARTRouteDictionary, sortedRouteKeys: BARTSortedRouteKeys, agencyTag: RouteConstants.BARTAgencyTag, listHash: BARTRouteListHash, configHashes: BARTRouteConfigHashes, mainBackgroundGroup: nil, setRouteFields: { (routeKeyValue, backgroundMOC, configHashes, agencyTag) in
             var routeAbbr = routeKeyValue.title
             let routeNumber = routeKeyValue.tag
             
             let routeStartEnd = routeAbbr.split(separator: "-")
             let reverseRouteAbbr = String(routeStartEnd[1] + "-" + routeStartEnd[0])
             
-            print(agencyTag + " - " + routeAbbr)
+            var tempRouteAbbr = routeAbbr
+            var reverseRouteAbbrUsed = false
+            var reverseRouteNumber: String?
+            if BARTRouteDictionary.values.contains(reverseRouteAbbr)
+            {
+                reverseRouteNumber = BARTRouteDictionary.keys[BARTRouteDictionary.values.firstIndex(of: reverseRouteAbbr)!]
+                reverseRouteAbbrUsed = routeNumber > reverseRouteNumber!
+                tempRouteAbbr = routeNumber < reverseRouteNumber! ? routeAbbr : reverseRouteAbbr
+            }
             
+            let routeFetchCallback = fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "tag == %@", RouteConstants.BARTAgencyTag + "-" + tempRouteAbbr), moc: backgroundMOC)
+            let routeObject = routeFetchCallback.object as! Route
+            
+            let serverHashSplit = (routeObject.serverHash ?? "").split(separator: "-")
+            if serverHashSplit.count == 2 && String(serverHashSplit[reverseRouteAbbrUsed ? 1 : 0]) == configHashes[RouteConstants.BARTAgencyTag + "-" + routeNumber] && routeObject.directions?.array.count == 2
+            {
+                routesFetched += 1
+                checkForCompletedRoutes(routeTagOn: RouteConstants.BARTAgencyTag + "-" + routeAbbr)
+                
+                return (nil, nil, nil)
+            }
+            else if configHashes.keys.contains(RouteConstants.BARTAgencyTag + "-" + routeNumber)
+            {
+                let updatedHash = configHashes[RouteConstants.BARTAgencyTag + "-" + routeNumber] ?? " "
+                if reverseRouteAbbrUsed
+                {
+                    let serverHash1 = serverHashSplit.count >= 1 ? serverHashSplit[0] : " "
+                    routeObject.serverHash = serverHash1 + "-" + updatedHash
+                }
+                else
+                {
+                    let serverHash2 = serverHashSplit.count >= 2 ? serverHashSplit[1] : " "
+                    routeObject.serverHash = updatedHash + "-" + serverHash2
+                }
+            }
+                        
             var routeConfig = fetchBARTRouteInfo(routeNumber: routeNumber)
+            print(agencyTag + " - " + routeAbbr)
             
             if BARTRouteDictionary.values.contains(reverseRouteAbbr)
             {
@@ -166,10 +206,7 @@ class RouteDataManager
                 routeAbbr = routeNumber < reverseRouteNumber ? routeAbbr : reverseRouteAbbr
             }
             
-            let routeFetchCallback = fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "tag == %@", "BART-" + routeAbbr), moc: backgroundMOC)
-            let routeObject = routeFetchCallback.object as! Route
-            
-            routeObject.tag = "BART-" + routeAbbr
+            routeObject.tag = RouteConstants.BARTAgencyTag + "-" + routeAbbr
             routeObject.title = routeConfig["general"]!["general"]!["title"] as? String
                         
             let generalRouteConfig = routeConfig["general"]
@@ -302,14 +339,14 @@ class RouteDataManager
         return routeDictionary
     }
     
-    static func fetchRouteListHash() -> String
+    static func fetchRouteListHash(agencyTag: String) -> String
     {
         var routeListHash = ""
 
         let backgroundGroup = DispatchGroup()
         backgroundGroup.enter()
         
-        let url = URL(string: RouteConstants.herokuHashSource + RouteConstants.listHash + "?_=" + String(Date().timeIntervalSince1970))!
+        let url = URL(string: RouteConstants.herokuHashSource + (agencyTag == RouteConstants.BARTAgencyTag ? RouteConstants.BARTListHash: RouteConstants.NextBusListHash) + "?_=" + String(Date().timeIntervalSince1970))!
         
         let task = (URLSession.shared.dataTask(with: url) { data, response, error in
             if let data = data, let listHash = String(data: data, encoding: .utf8)
@@ -326,14 +363,14 @@ class RouteDataManager
         return routeListHash
     }
     
-    static func fetchRouteConfigHashes() -> [String:String]
+    static func fetchRouteConfigHashes(agencyTag: String) -> [String:String]
     {
         var routeConfigHashes = Dictionary<String,String>()
         
         let backgroundGroup = DispatchGroup()
         backgroundGroup.enter()
         
-        let url = URL(string: RouteConstants.herokuHashSource + RouteConstants.configHashes + "?_=" + String(Date().timeIntervalSince1970))!
+        let url = URL(string: RouteConstants.herokuHashSource + (agencyTag == RouteConstants.BARTAgencyTag ? RouteConstants.BARTConfigHashes: RouteConstants.NextBusConfigHashes) + "?_=" + String(Date().timeIntervalSince1970))!
         
         let task = (URLSession.shared.dataTask(with: url) { data, response, error in
             if data != nil, let json = try? JSONSerialization.jsonObject(with: data!) as? [String:String]

@@ -39,6 +39,18 @@ class CoreDataStack {
             cloudStoreDescription.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.com.jacksonjude.MuniTracker")
         }
         
+        var firstLaunch = false
+        if UserDefaults.standard.object(forKey: "firstLaunchData") == nil
+        {
+            firstLaunch = true
+            UserDefaults.standard.set(618, forKey: "firstLaunchData")
+        }
+        
+        if firstLaunch
+        {
+            copyPreloadedRouteData()
+        }
+        
         let localStoreDescription = NSPersistentStoreDescription()
         localStoreDescription.configuration = "Local"
         localStoreDescription.shouldInferMappingModelAutomatically = true
@@ -86,6 +98,25 @@ class CoreDataStack {
         }
         
         return nil
+    }
+    
+    static func copyPreloadedRouteData()
+    {
+        let sqlitePath = Bundle.main.path(forResource: "MuniTracker", ofType: "sqlite")
+        let originURL = URL(fileURLWithPath: sqlitePath!)
+        let destinationURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.MuniTracker")!.appendingPathComponent("MuniTracker.sqlite")
+        
+        if !FileManager.default.fileExists(atPath: destinationURL.absoluteString) {
+            do {
+                try FileManager.default.copyItem(at: originURL, to: destinationURL)
+                
+                print("Preloaded route file copied")
+            } catch {
+                print("Preloaded route file copy error: \(error)")
+            }
+        } else {
+            print("CoreData route database already exists")
+        }
     }
     
     // MARK: - Core Data Saving support

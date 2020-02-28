@@ -64,6 +64,7 @@ extension UIColor
 class DirectionStopCell: UITableViewCell
 {
     var includeMins = true
+    var shouldDisplayDirectionName = false
     var directionObject: Direction?
     var stopObject: Stop?
     
@@ -87,7 +88,7 @@ class DirectionStopCell: UITableViewCell
         var directionName = directionObject?.name ?? ""
         if directionName == "Inbound" { directionName = "IB" }
         if directionName == "Outbound" { directionName = "OB" }
-        let routeTagString = routeTag + (((self.viewWithTag(604) as? UILabel) == nil) ? (" – " + directionName) : "")
+        let routeTagString = routeTag + (((self.viewWithTag(604) as? UILabel) == nil && shouldDisplayDirectionName) ? (" – " + directionName) : "")
         (self.viewWithTag(600) as? UILabel)?.text = routeTagString
         (self.viewWithTag(601) as? UILabel)?.text = directionObject?.title
         (self.viewWithTag(602) as? UILabel)?.text = stopObject?.title

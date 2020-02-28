@@ -193,6 +193,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     }
     
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        if row > routeInfoToChange.count-1 { return NSAttributedString(string: "", attributes: [:]) }
         
         var title: String?
         
