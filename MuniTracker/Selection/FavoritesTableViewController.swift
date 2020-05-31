@@ -499,7 +499,11 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         favoriteRouteCell.stopObject = RouteDataManager.fetchStop(stopTag: favoriteStopObject.stopTag ?? "")
         favoriteRouteCell.updateCellText()
         
-        if favoriteRouteCell.stopObject == nil || favoriteRouteCell.directionObject == nil
+        let stopDirections = (favoriteRouteCell.stopObject?.direction?.allObjects as? [Direction] ?? []).map { (direction) -> String in
+            return direction.tag ?? ""
+        }
+        
+        if favoriteRouteCell.stopObject == nil || favoriteRouteCell.directionObject == nil || !stopDirections.contains(favoriteRouteCell.directionObject?.tag ?? "")
         {
             favoriteRouteCell.backgroundColor = UIColor.gray
             favoriteRouteCell.isUserInteractionEnabled = false
