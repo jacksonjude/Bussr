@@ -41,6 +41,11 @@ class FavoritesExtensionViewController: MuniTrackerExtensionViewController, CLLo
     {
         if let userLocation = self.currentUserLocation, var favoriteStops = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext) as? [FavoriteStop]
         {
+            favoriteStops = favoriteStops.filter({ (favoriteStop) -> Bool in
+                if favoriteStop.directionTag == nil || favoriteStop.stopTag == nil { return false }
+                return RouteDataManager.fetchDirection(directionTag: favoriteStop.directionTag!) != nil && RouteDataManager.fetchStop(stopTag: favoriteStop.stopTag!) != nil
+            })
+            
             favoriteStops.sort { (favoriteStop1, favoriteStop2) -> Bool in
                 if let stop1 = RouteDataManager.fetchStop(stopTag: favoriteStop1.stopTag!), let stop2 = RouteDataManager.fetchStop(stopTag: favoriteStop2.stopTag!)
                 {

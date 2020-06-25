@@ -120,8 +120,12 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
                 }
             }
         case .recent:
-            if let recentStops = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext, sortDescriptors: [NSSortDescriptor(key: "timestamp", ascending: false)], fetchLimit: 20) as? [RecentStop]
+            if var recentStops = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext, sortDescriptors: [NSSortDescriptor(key: "timestamp", ascending: false)], fetchLimit: 20) as? [RecentStop]
             {
+                recentStops = recentStops.filter({ (recentStop) -> Bool in
+                    if recentStop.directionTag == nil || recentStop.stopTag == nil { return false }
+                    return RouteDataManager.fetchDirection(directionTag: recentStop.directionTag!) != nil && RouteDataManager.fetchStop(stopTag: recentStop.stopTag!) != nil
+                })
                 for recentStop in recentStops
                 {
                     if let stop = RouteDataManager.fetchStop(stopTag: recentStop.stopTag!), let direction = RouteDataManager.fetchDirection(directionTag: recentStop.directionTag!)

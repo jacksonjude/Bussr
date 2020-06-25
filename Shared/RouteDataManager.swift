@@ -119,7 +119,7 @@ class RouteDataManager
             routeObject.tag = routeKeyValue.tag
             routeObject.title = routeKeyValue.title
             
-            if routeObject.serverHash == configHashes[routeKeyValue.tag]
+            if routeObject.serverHash == configHashes[routeKeyValue.tag] && configHashes[routeKeyValue.tag] != nil
             {
                 routesFetched += 1
                 checkForCompletedRoutes(routeTagOn: routeKeyValue.tag)
@@ -171,7 +171,7 @@ class RouteDataManager
             let routeObject = routeFetchCallback.object as! Route
             
             let serverHashSplit = (routeObject.serverHash ?? "").split(separator: "-")
-            if serverHashSplit.count == 2 && String(serverHashSplit[reverseRouteAbbrUsed ? 1 : 0]) == configHashes[RouteConstants.BARTAgencyTag + "-" + routeNumber] && routeObject.directions?.array.count == 2
+            if serverHashSplit.count == 2 && String(serverHashSplit[reverseRouteAbbrUsed ? 1 : 0]) == configHashes[RouteConstants.BARTAgencyTag + "-" + routeNumber] && routeObject.directions?.array.count == 2 && configHashes[RouteConstants.BARTAgencyTag + "-" + routeNumber] != nil
             {
                 routesFetched += 1
                 checkForCompletedRoutes(routeTagOn: RouteConstants.BARTAgencyTag + "-" + routeAbbr)
@@ -249,6 +249,8 @@ class RouteDataManager
                 
                 for directionInfo in routeConfig["directions"]!
                 {
+                    if directionInfo.value["stops"] == nil { continue }
+                    
                     let directionFetchCallback = fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "tag == %@", directionInfo.key), moc: backgroundMOC)
                     let direction = directionFetchCallback.object as! Direction
                     
@@ -518,7 +520,7 @@ class RouteDataManager
             //routeGeneralConfig["color"]!["oppositeColor"] = "000000"
             
             routeGeneralConfig["general"] = Dictionary<String,String>()
-            routeGeneralConfig["general"]!["shortTitle"] = route["abbr"] as? String ?? route ["title"] as! String
+            routeGeneralConfig["general"]!["shortTitle"] = route["abbr"] as? String ?? route ["title"] as? String
             routeGeneralConfig["general"]!["title"] = route["name"] as? String
                         
             for stop in (route["config"] as? Dictionary<String,Any>)?["station"] as? Array<String> ?? []
@@ -532,10 +534,10 @@ class RouteDataManager
             var routeConfigDirection = Dictionary<String,Any>()
             routeConfigDirection["origin"] = route["origin"] as? String
             routeConfigDirection["destination"] = route["destination"] as? String
-            routeConfigDirection["name"] = (route["origin"] as! String) + "–" + (route["destination"] as! String)
+            routeConfigDirection["name"] = (route["origin"] as? String ?? "") + "–" + (route["destination"] as? String ?? "")
             routeConfigDirection["title"] = route["name"] as? String
             routeConfigDirection["stops"] = (route["config"] as? Dictionary<String,Any>)?["station"]
-            routeDirectionsArray[(route["origin"] as! String) + "–" + (route["destination"] as! String)] = routeConfigDirection
+            routeDirectionsArray[(route["origin"] as? String ?? "") + "–" + (route["destination"] as? String ?? "")] = routeConfigDirection
             
             routeInfoDictionary = Dictionary<String,Dictionary<String,Dictionary<String,Any>>>()
             routeInfoDictionary!["stops"] = routeStopsDictionary

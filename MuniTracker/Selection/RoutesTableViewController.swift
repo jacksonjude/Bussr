@@ -133,7 +133,11 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
         guard let BARTAgency = RouteDataManager.fetchObject(type: "Agency", predicate: NSPredicate(format: "name == %@", RouteConstants.BARTAgencyTag), moc: CoreDataStack.persistentContainer.viewContext) as? Agency else { return }
         guard let BARTAgencyRoutes = (BARTAgency.routes?.allObjects) as? [Route] else { return }
         
-        let agencyRoutes = nextBusAgencyRoutes + BARTAgencyRoutes
+        var agencyRoutes = nextBusAgencyRoutes + BARTAgencyRoutes
+        agencyRoutes.removeAll { (route) -> Bool in
+            return route.title == nil
+        }
+        
         self.routeArray = agencyRoutes
     }
     

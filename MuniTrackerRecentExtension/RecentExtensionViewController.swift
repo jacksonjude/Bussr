@@ -24,8 +24,13 @@ class RecentExtensionViewController: MuniTrackerExtensionViewController {
     
     func loadRecentStops()
     {
-        if let recentStops = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext, sortDescriptors: [NSSortDescriptor(key: "timestamp", ascending: false)], fetchLimit: numStopsToDisplay) as? [RecentStop]
+        if var recentStops = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext, sortDescriptors: [NSSortDescriptor(key: "timestamp", ascending: false)], fetchLimit: numStopsToDisplay) as? [RecentStop]
         {
+            recentStops = recentStops.filter({ (recentStop) -> Bool in
+                if recentStop.directionTag == nil || recentStop.stopTag == nil { return false }
+                return RouteDataManager.fetchDirection(directionTag: recentStop.directionTag!) != nil && RouteDataManager.fetchStop(stopTag: recentStop.stopTag!) != nil
+            })
+            
             self.stopDirectionObjects = recentStops.map({ (recentStop) -> (stopTag: String, directionTag: String) in
                 return (stopTag: recentStop.stopTag!, directionTag: recentStop.directionTag!)
             })

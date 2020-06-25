@@ -764,7 +764,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1130;
-				LastUpgradeCheck = 1000;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = jackson;
 				TargetAttributes = {
 					7A068D1C212697DA00D3425E = {
@@ -1290,7 +1290,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerFavoritesExtension/MuniTrackerFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200530;
+				CURRENT_PROJECT_VERSION = 20200625;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerFavoritesExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1312,7 +1312,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerFavoritesExtension/MuniTrackerFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200530;
+				CURRENT_PROJECT_VERSION = 20200625;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerFavoritesExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1334,7 +1334,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerRecentExtension/MuniTrackerRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200530;
+				CURRENT_PROJECT_VERSION = 20200625;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerRecentExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1356,7 +1356,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerRecentExtension/MuniTrackerRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200530;
+				CURRENT_PROJECT_VERSION = 20200625;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerRecentExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1378,7 +1378,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerNearbyExtension/MuniTrackerNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200530;
+				CURRENT_PROJECT_VERSION = 20200625;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerNearbyExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1400,7 +1400,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerNearbyExtension/MuniTrackerNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200530;
+				CURRENT_PROJECT_VERSION = 20200625;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTrackerNearbyExtension/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1442,6 +1442,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -1502,6 +1503,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -1538,7 +1540,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = MuniTracker/MuniTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200530;
+				CURRENT_PROJECT_VERSION = 20200625;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1562,7 +1564,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = MuniTracker/MuniTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200530;
+				CURRENT_PROJECT_VERSION = 20200625;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = MuniTracker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1585,7 +1587,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "MuniTrackerWatchApp Extension/MuniTrackerWatchApp Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200530;
+				CURRENT_PROJECT_VERSION = 20200625;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = "MuniTrackerWatchApp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1611,7 +1613,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "MuniTrackerWatchApp Extension/MuniTrackerWatchApp Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200530;
+				CURRENT_PROJECT_VERSION = 20200625;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = "MuniTrackerWatchApp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1637,7 +1639,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerWatchApp/BusTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200530;
+				CURRENT_PROJECT_VERSION = 20200625;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				IBSC_MODULE = MuniTrackerWatchApp_Extension;
 				INFOPLIST_FILE = MuniTrackerWatchApp/Info.plist;
@@ -1659,7 +1661,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MuniTrackerWatchApp/BusTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200530;
+				CURRENT_PROJECT_VERSION = 20200625;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				IBSC_MODULE = MuniTrackerWatchApp_Extension;
 				INFOPLIST_FILE = MuniTrackerWatchApp/Info.plist;

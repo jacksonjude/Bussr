@@ -142,7 +142,10 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
     {
         if let favoriteStops = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext) as? [FavoriteStop]
         {
-            favoriteStopObjects = favoriteStops
+            favoriteStopObjects = favoriteStops.filter({ (favoriteStop) -> Bool in
+                if favoriteStop.directionTag == nil || favoriteStop.stopTag == nil { return false }
+                return RouteDataManager.fetchDirection(directionTag: favoriteStop.directionTag!) != nil && RouteDataManager.fetchStop(stopTag: favoriteStop.stopTag!) != nil
+            })
             
             loadedPredictions = Array<Bool>()
             for _ in favoriteStops
