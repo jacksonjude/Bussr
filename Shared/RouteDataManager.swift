@@ -233,7 +233,20 @@ class RouteDataManager
             let agencyFetchCallback = fetchOrCreateObject(type: "Agency", predicate: NSPredicate(format: "name == %@", agencyTag), moc: backgroundMOC)
             let agency = agencyFetchCallback.object as! Agency
             agency.name = agencyTag
-            agency.serverHash = listHash
+            if agency.serverHash != listHash
+            {
+                agency.serverHash = listHash
+                if let routes = fetchLocalObjects(type: "Route", predicate: NSPredicate(format: "agency.name == %@", agencyTag), moc: backgroundMOC) as? [Route]
+                {
+                    for route in routes
+                    {
+                        if !sortedRouteKeys.contains(route.tag ?? "")
+                        {
+                            backgroundMOC.delete(route)
+                        }
+                    }
+                }
+            }
             
             try? backgroundMOC.save()
             
@@ -247,6 +260,8 @@ class RouteDataManager
                 guard let routeJustCreated = routeFieldSetCallback.justCreated else { continue }
                 guard let routeConfig = routeFieldSetCallback.routeConfig else { continue }
                 
+                var updatedDirections = Array<String>()
+                
                 for directionInfo in routeConfig["directions"]!
                 {
                     if directionInfo.value["stops"] == nil { continue }
@@ -257,6 +272,13 @@ class RouteDataManager
                     direction.tag = directionInfo.key
                     direction.name = directionInfo.value["name"] as? String
                     direction.title = directionInfo.value["title"] as? String
+                    
+                    updatedDirections.append(direction.tag ?? "")
+                    
+                    if direction.stops?.count ?? 0 > 0
+                    {
+                        direction.removeFromStops(at: NSIndexSet(indexSet: IndexSet(integersIn: 0...direction.stops!.count-1)))
+                    }
                     
                     for directionStopTag in directionInfo.value["stops"] as! Array<String>
                     {
@@ -274,6 +296,17 @@ class RouteDataManager
                     if directionFetchCallback.justCreated
                     {
                         route.addToDirections(direction)
+                    }
+                }
+                
+                if let directionObjects = fetchLocalObjects(type: "Direction", predicate: NSPredicate(format: "route.tag == %@", route.tag ?? ""), moc: backgroundMOC) as? [Direction]
+                {
+                    for direction in directionObjects
+                    {
+                        if !updatedDirections.contains(direction.tag ?? "")
+                        {
+                            backgroundMOC.delete(direction)
+                        }
                     }
                 }
                 
@@ -729,22 +762,37 @@ class RouteDataManager
                 }
                 else if let directionArray = predictionsMain["direction"] as? Array<Dictionary<String,Any>>
                 {
+                    directionDictionary = Dictionary<String,Any>()
+                    var predictionArray = Array<Dictionary<String,Any>>()
                     for directionDictionaryTmp in directionArray
                     {
-                        if directionDictionaryTmp["title"] as? String == direction.title
+                        if let predictionDictionary = directionDictionaryTmp["prediction"] as? Dictionary<String, Any>
                         {
-                            directionDictionary = directionDictionaryTmp
-                            break
+                            predictionArray.append(predictionDictionary)
+                        }
+                        else if let predictionDictionaryArray = directionDictionaryTmp["prediction"] as? Array<Dictionary<String, Any>>
+                        {
+                            predictionArray.append(contentsOf: predictionDictionaryArray)
                         }
                     }
+                    
+                    predictionArray.sort { (prediction1, prediction2) -> Bool in
+                        return prediction1["minutes"] as? Int ?? 0 < prediction2["minutes"] as? Int ?? 0
+                    }
+                    
+                    directionDictionary?["prediction"] = predictionArray
                 }
                 
-                let predictionsDictionary = directionDictionary?["prediction"] as? Array<Dictionary<String,String>> ?? []
+                var predictionsArray = directionDictionary?["prediction"] as? Array<Dictionary<String,String>> ?? []
+                if let predictionDictionary = directionDictionary?["prediction"] as? Dictionary<String,String>
+                {
+                    predictionsArray = [predictionDictionary]
+                }
                 
                 var predictions = Array<String>()
                 var vehicles = Array<String>()
                 
-                for prediction in predictionsDictionary
+                for prediction in predictionsArray
                 {
                     predictions.append(prediction["minutes"] ?? "nil")
                     vehicles.append(prediction["vehicle"] ?? "nil")

@@ -54,10 +54,8 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <RemoteRunnable
-         runnableDebuggingMode = "2"
-         BundleIdentifier = "com.apple.Carousel"
-         RemotePath = "/$(PRODUCT_NAME)">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7AFD5CA323F009EA00AFFEEF"
@@ -65,7 +63,7 @@
             BlueprintName = "MuniTrackerWatchApp"
             ReferencedContainer = "container:MuniTracker.xcodeproj">
          </BuildableReference>
-      </RemoteRunnable>
+      </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
             argument = "-com.apple.CoreData.Logging.stderr 0"
@@ -86,10 +84,8 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <RemoteRunnable
-         runnableDebuggingMode = "2"
-         BundleIdentifier = "com.apple.Carousel"
-         RemotePath = "/$(PRODUCT_NAME)">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7AFD5CA323F009EA00AFFEEF"
@@ -97,16 +93,7 @@
             BlueprintName = "MuniTrackerWatchApp"
             ReferencedContainer = "container:MuniTracker.xcodeproj">
          </BuildableReference>
-      </RemoteRunnable>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7AFD5CA323F009EA00AFFEEF"
-            BuildableName = "Bussr.app"
-            BlueprintName = "MuniTrackerWatchApp"
-            ReferencedContainer = "container:MuniTracker.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
