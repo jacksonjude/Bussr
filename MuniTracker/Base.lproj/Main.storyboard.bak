@@ -60,7 +60,7 @@
                                 </items>
                             </navigationBar>
                             <activityIndicatorView hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="qgo-qY-04b">
-                                <rect key="frame" x="15" y="57" width="20" height="20"/>
+                                <rect key="frame" x="17" y="56" width="20" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="4yI-4t-Vcc"/>
                                     <constraint firstAttribute="width" constant="20" id="W8t-l1-cp8"/>
@@ -146,7 +146,7 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="n7u-mb-a7Y" secondAttribute="trailing" constant="8" id="5w4-je-6cb"/>
                             <constraint firstItem="Ea2-9E-S1F" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="B1R-tl-dJU"/>
                             <constraint firstItem="NHQ-Gi-Nhr" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="GgD-iC-bBp"/>
-                            <constraint firstItem="qgo-qY-04b" firstAttribute="top" secondItem="Ea2-9E-S1F" secondAttribute="top" constant="13" id="McW-xc-rTe"/>
+                            <constraint firstItem="qgo-qY-04b" firstAttribute="top" secondItem="Ea2-9E-S1F" secondAttribute="top" constant="12" id="McW-xc-rTe"/>
                             <constraint firstItem="NHQ-Gi-Nhr" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Q4X-Yo-Ibx"/>
                             <constraint firstItem="Ea2-9E-S1F" firstAttribute="trailing" secondItem="H9D-HN-JaI" secondAttribute="trailing" constant="13" id="Q6w-Rd-Hws"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="y4A-7Q-DBF" secondAttribute="trailing" constant="16" id="QsX-se-Sa7"/>
@@ -160,7 +160,7 @@
                             <constraint firstAttribute="trailing" secondItem="nx0-EF-QAa" secondAttribute="trailing" id="dMM-dY-4oz"/>
                             <constraint firstItem="y4A-7Q-DBF" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" symbolic="YES" id="g4J-5h-BEo"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="4uu-Hf-ARo" secondAttribute="trailing" constant="8" id="gIH-N6-7xl"/>
-                            <constraint firstItem="qgo-qY-04b" firstAttribute="leading" secondItem="Ea2-9E-S1F" secondAttribute="leading" constant="15" id="hxM-Nn-ZuQ"/>
+                            <constraint firstItem="qgo-qY-04b" firstAttribute="leading" secondItem="Ea2-9E-S1F" secondAttribute="leading" constant="17" id="hxM-Nn-ZuQ"/>
                             <constraint firstItem="4uu-Hf-ARo" firstAttribute="top" secondItem="Ea2-9E-S1F" secondAttribute="bottom" constant="16" id="iMK-o8-DCo"/>
                             <constraint firstItem="NHQ-Gi-Nhr" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="idi-En-4N2"/>
                             <constraint firstItem="5DO-YH-hPg" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="q6m-Os-HvH"/>
@@ -181,7 +181,7 @@
                         <outlet property="predictionTimesNavigationBar" destination="Ea2-9E-S1F" id="YNc-Ev-FqY"/>
                         <outlet property="predictionTimesProgressView" destination="nx0-EF-QAa" id="uNj-ga-YDa"/>
                         <outlet property="predictionTimesProgressViewConstraint" destination="rrK-TM-eij" id="kOB-w3-RAl"/>
-                        <outlet property="refreshButton" destination="uL0-OW-vgM" id="INC-Kh-UNr"/>
+                        <outlet property="refreshButton" destination="uL0-OW-vgM" id="ass-1w-a8X"/>
                         <outlet property="vehicleSelectionButton" destination="H9D-HN-JaI" id="Q9x-HJ-SP1"/>
                         <segue destination="DD3-H0-RfC" kind="show" identifier="showRoutesTableView" id="qw7-kc-Skx"/>
                         <segue destination="KmL-hK-Kfh" kind="show" identifier="showFavoritesTableView" id="PR7-AH-Kk1"/>
@@ -212,7 +212,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="Ovf-Sy-BIg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <label key="tableFooterView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version: 1.0 Build: 20200717" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1th-IY-b4e" userLabel="APP_VERSION">
+                        <label key="tableFooterView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version: 1.0 Build: 20200718" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1th-IY-b4e" userLabel="APP_VERSION">
                             <rect key="frame" x="0.0" y="446.5" width="375" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>

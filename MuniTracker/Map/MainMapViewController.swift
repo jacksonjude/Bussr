@@ -99,7 +99,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     @IBOutlet weak var predictionTimesNavigationBar: UINavigationBar!
     @IBOutlet weak var predictionTimesLabel: UILabel!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var refreshButton: UIBarButtonItem!
+    @IBOutlet var refreshButton: UIBarButtonItem!
     @IBOutlet weak var vehicleSelectionButton: UIButton!
     
     @IBOutlet weak var centerOnLocationButton: UIButton!
@@ -1210,7 +1210,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         OperationQueue.main.addOperation {
             self.refreshButton.isEnabled = false
-            self.refreshButton.tintColor = .clear
+            self.predictionTimesNavigationBar.topItem?.leftBarButtonItem = nil
             
             if self.predictionNavigationBarShowing
             {
@@ -1239,7 +1239,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         OperationQueue.main.addOperation {
             self.refreshButton.isEnabled = true
-            self.refreshButton.tintColor = UIColor(red: 0, green: 0.4, blue: 1.0, alpha: 1)
+            self.predictionTimesNavigationBar.topItem?.leftBarButtonItem = self.refreshButton
+            
             self.activityIndicator.stopAnimating()
         }
         
