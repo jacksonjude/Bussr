@@ -242,6 +242,25 @@ class RouteDataManager
                     {
                         if !sortedRouteKeys.contains(route.tag ?? "")
                         {
+                            if let directions = route.directions?.array as? [Direction]
+                            {
+                                for direction in directions
+                                {
+                                    if let stops = direction.stops?.array as? [Stop]
+                                    {
+                                        for stop in stops
+                                        {
+                                            if stop.direction?.count ?? 0 <= 1
+                                            {
+                                                backgroundMOC.delete(stop)
+                                            }
+                                        }
+                                    }
+                                    
+                                    backgroundMOC.delete(direction)
+                                }
+                            }
+                            
                             backgroundMOC.delete(route)
                         }
                     }

@@ -134,6 +134,11 @@ class NotificationTableViewController: UITableViewController, NSFetchedResultsCo
                 (cell.viewWithTag(603) as! UILabel).textColor = routeOppositeColor
             }
         }
+        else
+        {
+            cell.backgroundColor = UIColor.gray
+            cell.isUserInteractionEnabled = false
+        }
         
         if let stop = RouteDataManager.fetchStop(stopTag: notification.stopTag ?? "")
         {

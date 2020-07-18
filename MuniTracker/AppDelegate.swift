@@ -74,20 +74,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 }
             }
             
+            CoreDataStack.saveContext()
+            
             CloudManager.currentChangeToken = nil
             CloudManager.fetchChangesFromCloud()
             
             UserDefaults.standard.set(618, forKey: "transitionedToCD-CloudKit")
         }
         
-        if RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", "0"), moc: CoreDataStack.persistentContainer.viewContext)?.count == 0
-        {
-            let newGroup = NSEntityDescription.insertNewObject(forEntityName: "FavoriteStopGroup", into: CoreDataStack.persistentContainer.viewContext) as! FavoriteStopGroup
-            newGroup.groupName = "Groups"
-            newGroup.uuid = "0"
-            
-            CoreDataStack.saveContext()
-        }
+//        if let groups = RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", "0"), moc: CoreDataStack.persistentContainer.viewContext) as? [FavoriteStopGroup]
+//        {
+//            for group in groups
+//            {
+//                CoreDataStack.persistentContainer.viewContext.delete(group)
+//            }
+//            CoreDataStack.saveContext()
+//        }
+        
+        print(RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", "0"), moc: CoreDataStack.persistentContainer.viewContext)?.count ?? "nil")
         
         FavoriteState.selectedGroupUUID = "0"
         

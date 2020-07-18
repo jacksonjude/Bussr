@@ -249,11 +249,11 @@ class SettingsViewController: UITableViewController
     {
         if shouldCollapseRoutes
         {
-            nearbyMenuCollapseTypeLabel.text = "Routes"
+            nearbyMenuCollapseTypeLabel.text = "Each Route"
         }
         else
         {
-            nearbyMenuCollapseTypeLabel.text = "Stops"
+            nearbyMenuCollapseTypeLabel.text = "All Stops"
         }
     }
 }

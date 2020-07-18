@@ -261,15 +261,35 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         return nil
     }
     
+    let mocSaveGroup = DispatchGroup()
+    
     func fetchGroupSet()
     {
         favoriteStopObjects = []
         favoriteStopGroupSet = []
         
+        if RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", "0"), moc: CoreDataStack.persistentContainer.viewContext)?.count == 0
+        {
+            let newGroup = NSEntityDescription.insertNewObject(forEntityName: "FavoriteStopGroup", into: CoreDataStack.persistentContainer.viewContext) as! FavoriteStopGroup
+            newGroup.groupName = "Groups"
+            newGroup.uuid = "0"
+            
+            mocSaveGroup.enter()
+            NotificationCenter.default.addObserver(self, selector: #selector(savedBackgroundMOC), name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
+            CoreDataStack.saveContext()
+            mocSaveGroup.wait()
+        }
+        
         if let currentGroup = RouteDataManager.fetchObject(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext) as? FavoriteStopGroup, let childObjects = currentGroup.childGroups?.allObjects as? [FavoriteStopGroup], let favoriteStops = currentGroup.favoriteStops?.allObjects as? [FavoriteStop]
         {
             favoriteStopGroupSet = childObjects + favoriteStops
         }
+    }
+    
+    @objc func savedBackgroundMOC()
+    {
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
+        mocSaveGroup.leave()
     }
     
     func sortGroupSet()
