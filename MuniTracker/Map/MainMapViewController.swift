@@ -331,9 +331,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         self.movePickerPanelPosition(position: .tip, animated: false)
     }
     
-    func movePickerPanelPosition(position: FloatingPanelPosition, animated: Bool)
+    func movePickerPanelPosition(position: FloatingPanelPosition, animated: Bool, shouldAdjustMap: Bool = false)
     {
-        self.shouldNotAdjustMapForPanelMove = true
         self.pickerFloatingPanelController?.move(to: position, animated: animated)
         self.previousPanelPosition = position
     }
@@ -365,9 +364,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             if self.shouldNotAdjustMapForPanelMove
             {
                 self.shouldNotAdjustMapForPanelMove = false
-                return
             }
-            self.moveMapCenter(x: 0, y: DisplayConstants.panelTipSize-DisplayConstants.panelHalfSize)
+            else
+            {
+                self.moveMapCenter(x: 0, y: DisplayConstants.panelTipSize-DisplayConstants.panelHalfSize)
+            }
         }
         else
         {
@@ -375,13 +376,17 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             if self.shouldNotAdjustMapForPanelMove
             {
                 self.shouldNotAdjustMapForPanelMove = false
-                return
             }
-            self.moveMapCenter(x: 0, y: DisplayConstants.panelHalfSize-DisplayConstants.panelTipSize)
+            else
+            {
+                self.moveMapCenter(x: 0, y: DisplayConstants.panelHalfSize-DisplayConstants.panelTipSize)
+            }
         }
         
         self.previousPanelPosition = vc.position
     }
+    
+    //var previousPanelYPos: CGFloat?
     
     func floatingPanelDidMove(_ vc: FloatingPanelController) {
         let y = vc.surfaceView.frame.origin.y
@@ -390,6 +395,16 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             let progress = max(0.0, min((tipY - y) / DisplayConstants.panelTipSize, 1.0))
             self.view.viewWithTag(getTagForRouteInfoView())?.alpha = progress
         }
+        
+//        if self.previousPanelYPos != nil && abs(previousPanelYPos!-y) > 5.0
+//        {
+//            self.moveMapCenter(x: 0, y: previousPanelYPos!-y)
+//            self.previousPanelYPos = y
+//        }
+//        else if self.previousPanelYPos == nil
+//        {
+//            self.previousPanelYPos = y
+//        }
     }
     
     func floatingPanelDidEndDragging(_ vc: FloatingPanelController, withVelocity velocity: CGPoint, targetPosition: FloatingPanelPosition) {
@@ -401,11 +416,13 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         }, completion: nil)
     }
     
-    @objc func showPickerView()
+    @objc func showPickerView(shouldAdjustMap: Bool = false)
     {
         MapState.showingPickerView = true
         
-        self.movePickerPanelPosition(position: .half, animated: false)
+        //animated = pickerFloatingPanelController?.viewIfLoaded?.window != nil
+        
+        self.movePickerPanelPosition(position: .half, animated: true, shouldAdjustMap: shouldAdjustMap)
         self.view.viewWithTag(DisplayConstants.routeInfoPickerViewTag)?.isHidden = false
         self.view.viewWithTag(DisplayConstants.helpInfoViewTag)?.isHidden = true
     }
@@ -447,7 +464,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         let newCenterLocation = mainMapView.convert(centerPoint, toCoordinateFrom: self.view)
         
-        print(centerPoint.y, y)
         centerMapOnLocation(location: CLLocation(latitude: newCenterLocation.latitude, longitude: newCenterLocation.longitude))
     }
     
@@ -1442,7 +1458,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             MapState.routeInfoObject = predictionVehicleArray
             MapState.routeInfoShowing = .vehicles
             
-            showPickerView()
+            showPickerView(shouldAdjustMap: true)
         }
         else if MapState.routeInfoShowing == .vehicles
         {
