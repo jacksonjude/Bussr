@@ -150,8 +150,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         if !appDelegate.hasDownloadedData
         {
-            pickerFloatingPanelController?.move(to: .half, animated: true)
-            downloadAllData = true
+            self.movePickerPanelPosition(position: .half, animated: false)
+            self.downloadAllData = true
         }
         
         setupThemeElements()
@@ -237,7 +237,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         if downloadAllData
         {
-            progressAlertView = UIAlertController(title: "Updating Routes", message: "\n", preferredStyle: .alert)
+            self.progressAlertView = UIAlertController(title: "Updating Routes", message: "\n", preferredStyle: .alert)
             
             self.present(progressAlertView!, animated: true, completion: {
                 let margin: CGFloat = 8.0
@@ -261,7 +261,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                 }
             })
             
-            downloadAllData = false
+            self.downloadAllData = false
         }
         
         setupThemeElements()
@@ -307,25 +307,35 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     //MARK: - Picker View Show/Hide
     
     var pickerFloatingPanelController: FloatingPanelController?
+    var shouldNotAdjustMapForPanelMove = false
+    var previousPanelPosition: FloatingPanelPosition = .tip
     
     func setupPickerPanel()
     {
         self.pickerFloatingPanelController = FloatingPanelController()
         
-        pickerFloatingPanelController?.delegate = self
+        self.pickerFloatingPanelController?.delegate = self
         
         let pickerContentVC = storyboard!.instantiateViewController(withIdentifier: "RouteInfoPickerViewController") as! RouteInfoPickerViewController
         pickerContentVC.mainMapViewController = self
         
-        pickerFloatingPanelController?.set(contentViewController: pickerContentVC)
-        pickerFloatingPanelController?.addPanel(toParent: self)
+        self.pickerFloatingPanelController?.set(contentViewController: pickerContentVC)
+        self.shouldNotAdjustMapForPanelMove = true
+        self.pickerFloatingPanelController?.addPanel(toParent: self)
         
-        pickerFloatingPanelController?.surfaceView.backgroundColor = UIColor.clear
+        self.pickerFloatingPanelController?.surfaceView.backgroundColor = UIColor.clear
         
         self.view.viewWithTag(DisplayConstants.routeInfoPickerViewTag)?.isHidden = true
         self.view.viewWithTag(DisplayConstants.helpInfoViewTag)?.isHidden = false
         
-        pickerFloatingPanelController?.move(to: .tip, animated: false)
+        self.movePickerPanelPosition(position: .tip, animated: false)
+    }
+    
+    func movePickerPanelPosition(position: FloatingPanelPosition, animated: Bool)
+    {
+        self.shouldNotAdjustMapForPanelMove = true
+        self.pickerFloatingPanelController?.move(to: position, animated: animated)
+        self.previousPanelPosition = position
     }
     
     func getTagForRouteInfoView() -> Int
@@ -342,22 +352,42 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     }
     
     func floatingPanelDidChangePosition(_ vc: FloatingPanelController) {
+        if self.previousPanelPosition == vc.position
+        {
+            self.shouldNotAdjustMapForPanelMove = true
+        }
+        
         if vc.position == .tip
         {
             self.view.viewWithTag(getTagForRouteInfoView())?.alpha = 0.0
             NotificationCenter.default.post(name: NSNotification.Name("CollapseFilters"), object: self)
+            
+            if self.shouldNotAdjustMapForPanelMove
+            {
+                self.shouldNotAdjustMapForPanelMove = false
+                return
+            }
+            self.moveMapCenter(x: 0, y: DisplayConstants.panelTipSize-DisplayConstants.panelHalfSize)
         }
         else
         {
             self.view.viewWithTag(getTagForRouteInfoView())?.alpha = 1.0
+            if self.shouldNotAdjustMapForPanelMove
+            {
+                self.shouldNotAdjustMapForPanelMove = false
+                return
+            }
+            self.moveMapCenter(x: 0, y: DisplayConstants.panelHalfSize-DisplayConstants.panelTipSize)
         }
+        
+        self.previousPanelPosition = vc.position
     }
     
     func floatingPanelDidMove(_ vc: FloatingPanelController) {
         let y = vc.surfaceView.frame.origin.y
         let tipY = vc.originYOfSurface(for: .tip)
         if y > tipY - DisplayConstants.panelTipSize {
-            let progress = max(0.0, min((tipY  - y) / DisplayConstants.panelTipSize, 1.0))
+            let progress = max(0.0, min((tipY - y) / DisplayConstants.panelTipSize, 1.0))
             self.view.viewWithTag(getTagForRouteInfoView())?.alpha = progress
         }
     }
@@ -375,7 +405,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     {
         MapState.showingPickerView = true
         
-        self.pickerFloatingPanelController?.move(to: .half, animated: false)
+        self.movePickerPanelPosition(position: .half, animated: false)
         self.view.viewWithTag(DisplayConstants.routeInfoPickerViewTag)?.isHidden = false
         self.view.viewWithTag(DisplayConstants.helpInfoViewTag)?.isHidden = true
     }
@@ -385,7 +415,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         NotificationCenter.default.post(name: NSNotification.Name("CollapseFilters"), object: self)
         
         MapState.showingPickerView = false
-        self.pickerFloatingPanelController?.move(to: .tip, animated: false)
+        self.movePickerPanelPosition(position: .tip, animated: false)
     }
     
     //MARK: - Update Notifications
@@ -405,6 +435,21 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     }
     
     //MARK: - Location Centering
+    
+    func moveMapCenter(x: CGFloat, y: CGFloat)
+    {
+        var centerPoint = mainMapView.convert(mainMapView.region.center, toPointTo: self.view)
+        centerPoint.x += x
+        centerPoint.y += y/2
+        
+        let offset = (pickerFloatingPanelController?.position == .half) ? DisplayConstants.panelHalfSize : DisplayConstants.panelTipSize
+        centerPoint.y -= offset/2
+        
+        let newCenterLocation = mainMapView.convert(centerPoint, toCoordinateFrom: self.view)
+        
+        print(centerPoint.y, y)
+        centerMapOnLocation(location: CLLocation(latitude: newCenterLocation.latitude, longitude: newCenterLocation.longitude))
+    }
     
     @IBAction func centerMapOnCurrentLocation()
     {
@@ -572,7 +617,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                 reloadCurrentStopHeader(stopLocation: stopLocation)
                 bringSelectedStopHeaderToFront()
                 
-                selectedAnnotationLocation = stopLocation.coordinate.convertToString()
+                self.selectedAnnotationLocation = stopLocation.coordinate.convertToString()
             }
             
             predictionTimesLabel.text = ""
@@ -698,12 +743,12 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                                 
                 if showBorderPolyline
                 {
-                    borderPolyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
+                    self.borderPolyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
                     mainMapView.addOverlay(borderPolyline!)
                 }
             }
             
-            directionPolyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
+            self.directionPolyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
             mainMapView.addOverlay(directionPolyline!)
         }
     }
@@ -714,7 +759,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         {
             self.mainMapView.removeAnnotation(selectedStopHeading!)
         }
-        selectedStopHeading = SelectedStopHeadingAnnotation(coordinate: stopLocation.coordinate, heading: calculateCurrentStopHeading())
+        self.selectedStopHeading = SelectedStopHeadingAnnotation(coordinate: stopLocation.coordinate, heading: calculateCurrentStopHeading())
         self.mainMapView.addAnnotation(selectedStopHeading!)
     }
     
@@ -996,7 +1041,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     }
     
     @IBAction func nearbyButtonPressed(_ sender: Any) {
-        locationToUse = self.mainMapView.userLocation.location
+        self.locationToUse = self.mainMapView.userLocation.location
         self.performSegue(withIdentifier: "showNearbyStopTableView", sender: self)
     }
     
@@ -1028,7 +1073,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         {
             let latitude = currentStop.latitude
             let longitude = currentStop.longitude
-            locationToUse = CLLocation(latitude: latitude, longitude: longitude)
+            self.locationToUse = CLLocation(latitude: latitude, longitude: longitude)
             self.performSegue(withIdentifier: "showNearbyStopTableView", sender: self)
         }
     }
