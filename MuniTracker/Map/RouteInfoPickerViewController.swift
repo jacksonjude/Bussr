@@ -382,42 +382,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         }
     }
     
-    @IBAction func directionButtonPressed(_ sender: Any) {
-        switch MapState.routeInfoShowing
-        {
-        case .direction:
-            MapState.routeInfoShowing = .stop
-            MapState.routeInfoObject = routeInfoToChange[routeInfoPicker.selectedRow(inComponent: 0)] as? Direction
-        case .stop:
-            let route = (MapState.routeInfoObject as? Direction)?.route
-            
-            if route?.directions?.count == 2
-            {
-                var directionArray = route!.directions!.array as! [Direction]
-                directionArray.remove(at: directionArray.firstIndex(of: (MapState.routeInfoObject as! Direction))!)
-                MapState.routeInfoObject = directionArray[0]
-                MapState.selectedDirectionTag = directionArray[0].tag
-                
-                if let selectedStop = MapState.getCurrentStop(), let stops = directionArray[0].stops?.array as? [Stop]
-                {
-                    let sortedStops = RouteDataManager.sortStopsByDistanceFromLocation(stops: stops, locationToTest: CLLocation(latitude: selectedStop.latitude, longitude: selectedStop.longitude))
-                    MapState.selectedStopTag = sortedStops[0].tag
-                }
-                
-                NotificationCenter.default.post(name: NSNotification.Name("ReloadAnnotations"), object: nil)
-            }
-            else
-            {
-                MapState.routeInfoShowing = .direction
-                MapState.routeInfoObject = (MapState.routeInfoObject as? Direction)?.route
-            }
-        default:
-            break
-        }
-        
-        reloadRouteData()
-    }
-    
     @IBAction func directionButtonSingleTap()
     {
         switch MapState.routeInfoShowing
@@ -444,17 +408,11 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     
     @IBAction func directionButtonDoubleTap()
     {
-        switch MapState.routeInfoShowing
+        if MapState.routeInfoShowing == .stop
         {
-        case .direction:
-            switchRouteInfoDirectionToStop()
-        case .stop:
             switchRouteInfoStopToDirection()
-        default:
-            break
+            reloadRouteData()
         }
-        
-        reloadRouteData()
     }
     
     func switchRouteInfoDirectionToStop()
@@ -918,12 +876,18 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     
     //MARK: - Other Directions
     
-    @IBAction func otherDirectionsButtonPressed(_ sender: Any) {
+    @IBAction func otherDirectionsButtonPressed(_ sender: Any)
+    {
         if let selectedStop = MapState.getCurrentStop()
         {
             MapState.routeInfoObject = selectedStop.direction?.allObjects
             appDelegate.mainMapViewController?.performSegue(withIdentifier: "showOtherDirectionsTableView", sender: self)
         }
+    }
+    
+    @IBAction func otherDirectionsButtonDoubleTapped(_ sender: Any)
+    {
+        appDelegate.mainMapViewController?.openNearbyStopViewFromSelectedStop(sender)
     }
     
     //MARK: - Add Favorite / Notification
@@ -980,9 +944,5 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 appDelegate.mainMapViewController?.performSegue(withIdentifier: "openNewNotificationEditor", sender: self)
             }
         }
-    }
-    
-    @IBAction func stopButtonDoubleTapPressed(_ sender: Any) {
-        appDelegate.mainMapViewController?.openNearbyStopViewFromSelectedStop(sender)
     }
 }

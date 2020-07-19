@@ -1090,7 +1090,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             let latitude = currentStop.latitude
             let longitude = currentStop.longitude
             self.locationToUse = CLLocation(latitude: latitude, longitude: longitude)
-            self.performSegue(withIdentifier: "showNearbyStopTableView", sender: self)
+            self.performSegue(withIdentifier: "showNearToStopTableView", sender: self)
         }
     }
     
@@ -1104,7 +1104,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             let stopsTableView = segue.destination as! StopsTableViewController
             stopsTableView.stopFetchType = .recent
         }
-        else if segue.identifier == "showNearbyStopTableView"
+        else if segue.identifier == "showNearbyStopTableView" || segue.identifier == "showNearToStopTableView"
         {
             let stopsTableView = segue.destination as! StopsTableViewController
             stopsTableView.stopFetchType = .nearby

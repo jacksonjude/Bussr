@@ -189,6 +189,7 @@
                         <segue destination="xzQ-6I-qok" kind="show" identifier="showRecentStopTableView" id="TfM-V3-OSE"/>
                         <segue destination="1er-42-KIJ" kind="show" identifier="openNewNotificationEditor" id="IdA-st-vvj"/>
                         <segue destination="xzQ-6I-qok" kind="show" identifier="showNearbyStopTableView" id="6fX-oF-13I"/>
+                        <segue destination="xzQ-6I-qok" kind="presentation" identifier="showNearToStopTableView" modalPresentationStyle="fullScreen" id="8mG-LM-eqa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -212,7 +213,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="Ovf-Sy-BIg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <label key="tableFooterView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version: 1.0 Build: 20200718" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1th-IY-b4e" userLabel="APP_VERSION">
+                        <label key="tableFooterView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version: 1.0 Build: 20200719" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1th-IY-b4e" userLabel="APP_VERSION">
                             <rect key="frame" x="0.0" y="446.33333206176758" width="375" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -820,8 +821,8 @@
                                         </constraints>
                                         <state key="normal" image="DirectionIcon"/>
                                         <connections>
-                                            <outletCollection property="gestureRecognizers" destination="ImV-23-HzV" appends="YES" id="iXK-ja-yC1"/>
-                                            <outletCollection property="gestureRecognizers" destination="gyk-dm-sN2" appends="YES" id="nO6-FQ-D4j"/>
+                                            <action selector="directionButtonSingleTap" destination="4Mg-kq-ULL" eventType="touchUpInside" id="vEw-dx-U7N"/>
+                                            <outletCollection property="gestureRecognizers" destination="l4X-ph-qKr" appends="YES" id="CjE-u3-xfB"/>
                                         </connections>
                                     </button>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nba-YH-9qK">
@@ -834,7 +835,7 @@
                                         <state key="normal" image="BusStopIcon"/>
                                         <connections>
                                             <action selector="otherDirectionsButtonPressed:" destination="4Mg-kq-ULL" eventType="touchUpInside" id="R6i-GQ-ujl"/>
-                                            <outletCollection property="gestureRecognizers" destination="YUd-VC-dC9" appends="YES" id="aa5-vo-MmK"/>
+                                            <outletCollection property="gestureRecognizers" destination="73p-iC-Lyc" appends="YES" id="pIe-Ef-fzv"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -891,21 +892,16 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G6y-H5-O0s" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer numberOfTapsRequired="2" id="YUd-VC-dC9">
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.29999999999999999" id="73p-iC-Lyc">
                     <connections>
-                        <action selector="stopButtonDoubleTapPressed:" destination="4Mg-kq-ULL" id="wHJ-Cb-PXY"/>
+                        <action selector="otherDirectionsButtonDoubleTapped:" destination="4Mg-kq-ULL" id="esG-cY-wTZ"/>
                     </connections>
-                </tapGestureRecognizer>
-                <tapGestureRecognizer id="gyk-dm-sN2">
+                </pongPressGestureRecognizer>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.29999999999999999" id="l4X-ph-qKr">
                     <connections>
-                        <action selector="directionButtonSingleTap" destination="4Mg-kq-ULL" id="75A-cg-1HY"/>
+                        <action selector="directionButtonDoubleTap" destination="4Mg-kq-ULL" id="5TQ-us-Sgi"/>
                     </connections>
-                </tapGestureRecognizer>
-                <tapGestureRecognizer numberOfTapsRequired="2" id="ImV-23-HzV">
-                    <connections>
-                        <action selector="directionButtonDoubleTap" destination="4Mg-kq-ULL" id="xT2-B0-PPt"/>
-                    </connections>
-                </tapGestureRecognizer>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="31" y="695"/>
         </scene>
@@ -1144,11 +1140,11 @@
             <objects>
                 <viewController id="m3x-Re-5zf" customClass="DirectionsTableViewController" customModule="Bussr" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="E8x-zF-Kf0">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5qK-51-TZ1">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                                 <items>
                                     <navigationItem title="Stop Name" id="4r9-cq-e4l">
                                         <barButtonItem key="leftBarButtonItem" title="Back" id="hQ6-ZA-xwS">
@@ -1160,7 +1156,7 @@
                                 </items>
                             </navigationBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="p0X-PC-C9g">
-                                <rect key="frame" x="0.0" y="56" width="375" height="668"/>
+                                <rect key="frame" x="0.0" y="88" width="375" height="724"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="OtherDirectionCell" rowHeight="90" id="35Y-8f-aWk" customClass="DirectionStopCell" customModule="Bussr" customModuleProvider="target">
@@ -1225,7 +1221,7 @@
                         <constraints>
                             <constraint firstItem="p0X-PC-C9g" firstAttribute="leading" secondItem="gcx-de-8Vo" secondAttribute="leading" id="3mI-AM-kQo"/>
                             <constraint firstItem="5qK-51-TZ1" firstAttribute="top" secondItem="gcx-de-8Vo" secondAttribute="top" id="8kN-8v-NO4"/>
-                            <constraint firstItem="p0X-PC-C9g" firstAttribute="bottom" secondItem="gcx-de-8Vo" secondAttribute="bottom" id="RRR-xq-Ro0"/>
+                            <constraint firstItem="p0X-PC-C9g" firstAttribute="bottom" secondItem="E8x-zF-Kf0" secondAttribute="bottom" id="RRR-xq-Ro0"/>
                             <constraint firstItem="5qK-51-TZ1" firstAttribute="leading" secondItem="gcx-de-8Vo" secondAttribute="leading" id="c1o-jO-xSe"/>
                             <constraint firstItem="p0X-PC-C9g" firstAttribute="top" secondItem="5qK-51-TZ1" secondAttribute="bottom" id="gxz-2T-xye"/>
                             <constraint firstItem="5qK-51-TZ1" firstAttribute="trailing" secondItem="gcx-de-8Vo" secondAttribute="trailing" id="rYp-YL-av6"/>
@@ -1268,7 +1264,7 @@
                                 </items>
                             </navigationBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="1RM-2o-3Sp">
-                                <rect key="frame" x="0.0" y="56" width="375" height="668"/>
+                                <rect key="frame" x="0.0" y="56" width="375" height="702"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="StopCell" rowHeight="90" id="cKD-3F-zgV" customClass="DirectionStopCell" customModule="Bussr" customModuleProvider="target">
@@ -1341,7 +1337,7 @@
                         <viewLayoutGuide key="safeArea" id="Sq3-gC-Gir"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="1RM-2o-3Sp" firstAttribute="bottom" secondItem="Sq3-gC-Gir" secondAttribute="bottom" id="M1s-GR-kpl"/>
+                            <constraint firstItem="1RM-2o-3Sp" firstAttribute="bottom" secondItem="SUZ-fY-Ho9" secondAttribute="bottom" id="M1s-GR-kpl"/>
                             <constraint firstItem="ZhZ-8B-HDV" firstAttribute="trailing" secondItem="Sq3-gC-Gir" secondAttribute="trailing" id="QIU-PC-Rjn"/>
                             <constraint firstItem="1RM-2o-3Sp" firstAttribute="trailing" secondItem="Sq3-gC-Gir" secondAttribute="trailing" id="S8n-Sc-EYj"/>
                             <constraint firstItem="1RM-2o-3Sp" firstAttribute="leading" secondItem="Sq3-gC-Gir" secondAttribute="leading" id="TQE-0P-fGf"/>
@@ -1351,6 +1347,7 @@
                             <constraint firstItem="ZhZ-8B-HDV" firstAttribute="leading" secondItem="Sq3-gC-Gir" secondAttribute="leading" id="ySY-mj-EZj"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="svc-w6-ncX"/>
                     <connections>
                         <outlet property="mainNavigationBar" destination="ZhZ-8B-HDV" id="QC9-uL-Lxt"/>
                         <outlet property="mainNavigationItem" destination="KbQ-yO-dGk" id="Oaw-ch-nGY"/>
@@ -1560,8 +1557,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="coT-D9-Khz"/>
-        <segue reference="FM7-3T-SSq"/>
+        <segue reference="TfM-V3-OSE"/>
+        <segue reference="UJx-fY-8v6"/>
         <segue reference="IdA-st-vvj"/>
     </inferredMetricsTieBreakers>
     <resources>

@@ -223,7 +223,20 @@ class SettingsViewController: UITableViewController
     
     func setAppIconTitle(appIcon: Int)
     {
-        appIconLabel.text = "Icon " + String(appIcon)
+        appIconLabel.text = getAppIconName(appIcon: appIcon)
+    }
+    
+    func getAppIconName(appIcon: Int) -> String
+    {
+        switch appIcon
+        {
+        case 1:
+            return "Pink-Gold"
+        case 2:
+            return "Red-Blue"
+        default:
+            return String(appIcon)
+        }
     }
     
     func setPredictionRefreshTimeTitle(refreshTime: Double)
