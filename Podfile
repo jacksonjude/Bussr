@@ -4,45 +4,45 @@ def shared_pods
     pod 'CloudCore'
 end
 
-target 'MuniTracker' do
+target 'Bussr' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
   platform :ios, '12.0'
 
-  # Pods for MuniTracker
+  # Pods for Bussr
   shared_pods
   pod 'FloatingPanel'
 
 end
 
-target 'MuniTrackerFavoritesExtension' do
+target 'BussrFavoritesExtension' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
   platform :ios, '12.0'
 
-  # Pods for MuniTrackerFavoritesExtension
+  # Pods for BussrFavoritesExtension
   shared_pods
 end
 
-target 'MuniTrackerNearbyExtension' do
+target 'BussrNearbyExtension' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
   platform :ios, '12.0'
 
-  # Pods for MuniTrackerNearbyExtension
+  # Pods for BussrNearbyExtension
   shared_pods
 end
 
-target 'MuniTrackerRecentExtension' do
+target 'BussrRecentExtension' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
   platform :ios, '12.0'
 
-  # Pods for MuniTrackerRecentExtension
+  # Pods for BussrRecentExtension
   shared_pods
 end
 
-target 'MuniTrackerWatchApp Extension' do
+target 'BussrWatchApp Extension' do
   use_frameworks!
   platform :watchos, '6.1'
   

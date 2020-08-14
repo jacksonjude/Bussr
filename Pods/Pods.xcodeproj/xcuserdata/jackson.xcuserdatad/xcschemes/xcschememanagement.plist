@@ -19,27 +19,27 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-MuniTracker.xcscheme</key>
+		<key>Pods-Bussr.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-MuniTrackerFavoritesExtension.xcscheme</key>
+		<key>Pods-BussrFavoritesExtension.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-MuniTrackerNearbyExtension.xcscheme</key>
+		<key>Pods-BussrNearbyExtension.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-MuniTrackerRecentExtension.xcscheme</key>
+		<key>Pods-BussrRecentExtension.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-MuniTrackerWatchApp Extension.xcscheme</key>
+		<key>Pods-BussrWatchApp Extension.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
