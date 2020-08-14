@@ -1,6 +1,0 @@
-framework module Pods_MuniTrackerFavoritesExtension {
-  umbrella header "Pods-MuniTrackerFavoritesExtension-umbrella.h"
-
-  export *
-  module * { export * }
-}
