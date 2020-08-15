@@ -1,6 +1,6 @@
 //
 //  TodayViewController.swift
-//  MuniTrackerNearbyExtension
+//  BussrNearbyExtension
 //
 //  Created by jackson on 8/16/18.
 //  Copyright © 2018 jackson. All rights reserved.

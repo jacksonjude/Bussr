@@ -1,6 +1,6 @@
 //
 //  FilterButton.swift
-//  MuniTracker
+//  Bussr
 //
 //  Created by jackson on 1/6/19.
 //  Copyright © 2019 jackson. All rights reserved.

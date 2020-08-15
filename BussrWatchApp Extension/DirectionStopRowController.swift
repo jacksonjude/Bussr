@@ -1,6 +1,6 @@
 //
 //  StopRowController.swift
-//  MuniTrackerWatchApp Extension
+//  BussrWatchApp Extension
 //
 //  Created by jackson on 2/9/20.
 //  Copyright © 2020 jackson. All rights reserved.

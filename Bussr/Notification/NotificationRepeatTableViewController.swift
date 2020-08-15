@@ -1,6 +1,6 @@
 //
 //  NotificationRepeatTableViewController.swift
-//  MuniTracker
+//  Bussr
 //
 //  Created by jackson on 10/11/18.
 //  Copyright © 2018 jackson. All rights reserved.

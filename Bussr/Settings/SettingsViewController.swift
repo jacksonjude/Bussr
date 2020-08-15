@@ -1,6 +1,6 @@
 //
 //  SettingsViewController.swift
-//  MuniTracker
+//  Bussr
 //
 //  Created by jackson on 6/25/18.
 //  Copyright © 2018 jackson. All rights reserved.

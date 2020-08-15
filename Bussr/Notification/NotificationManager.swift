@@ -1,6 +1,6 @@
 //
 //  NotificationManager.swift
-//  MuniTracker
+//  Bussr
 //
 //  Created by jackson on 10/7/18.
 //  Copyright © 2018 jackson. All rights reserved.

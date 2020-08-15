@@ -1,6 +1,6 @@
 //
 //  RouteCell.swift
-//  MuniTracker
+//  Bussr
 //
 //  Created by jackson on 2/18/20.
 //  Copyright © 2020 jackson. All rights reserved.

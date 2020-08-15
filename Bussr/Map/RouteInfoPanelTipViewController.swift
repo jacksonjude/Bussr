@@ -1,6 +1,6 @@
 //
 //  RouteInfoPanelTipViewController.swift
-//  MuniTracker
+//  Bussr
 //
 //  Created by jackson on 2/8/20.
 //  Copyright © 2020 jackson. All rights reserved.

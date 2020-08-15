@@ -1,6 +1,6 @@
 //
 //  FavoritesState.swift
-//  MuniTracker
+//  Bussr
 //
 //  Created by jackson on 7/23/18.
 //  Copyright © 2018 jackson. All rights reserved.

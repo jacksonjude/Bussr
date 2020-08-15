@@ -1,6 +1,6 @@
 //
 //  MapState.swift
-//  MuniTracker
+//  Bussr
 //
 //  Created by jackson on 6/20/18.
 //  Copyright © 2018 jackson. All rights reserved.

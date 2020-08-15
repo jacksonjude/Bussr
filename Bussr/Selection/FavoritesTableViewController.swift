@@ -1,6 +1,6 @@
 //
 //  FavoritesTableViewController.swift
-//  MuniTracker
+//  Bussr
 //
 //  Created by jackson on 7/14/18.
 //  Copyright © 2018 jackson. All rights reserved.
