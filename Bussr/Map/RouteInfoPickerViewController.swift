@@ -261,7 +261,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             switch MapState.routeInfoShowing
             {
             case .none:
-                break
+                mainMapViewController?.showPickerHelpInfoView()
             case .direction:
                 routeInfoToChange = (MapState.routeInfoObject as? Route)?.directions?.array as? Array<Direction> ?? Array<Direction>()
                 
@@ -417,6 +417,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     
     func switchRouteInfoDirectionToStop()
     {
+        if routeInfoToChange.count == 0 { return }
         MapState.routeInfoShowing = .stop
         MapState.routeInfoObject = routeInfoToChange[routeInfoPicker.selectedRow(inComponent: 0)] as? Direction
     }

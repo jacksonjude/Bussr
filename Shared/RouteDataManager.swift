@@ -167,6 +167,14 @@ class RouteDataManager
                 tempRouteAbbr = routeNumber < reverseRouteNumber! ? routeAbbr : reverseRouteAbbr
             }
             
+            if reverseRouteAbbrUsed
+            {
+                routesFetched += 1
+                checkForCompletedRoutes(routeTagOn: RouteConstants.BARTAgencyTag + "-" + routeAbbr)
+                
+                return (nil, nil, nil)
+            }
+            
             let routeFetchCallback = fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "tag == %@", RouteConstants.BARTAgencyTag + "-" + tempRouteAbbr), moc: backgroundMOC)
             let routeObject = routeFetchCallback.object as! Route
             
@@ -200,11 +208,18 @@ class RouteDataManager
             {
                 let reverseRouteNumber = BARTRouteDictionary.keys[BARTRouteDictionary.values.firstIndex(of: reverseRouteAbbr)!]
                 let reverseRouteConfig = fetchBARTRouteInfo(routeNumber: reverseRouteNumber)
-                routeConfig["directions"]![reverseRouteAbbr] = reverseRouteConfig["directions"]![reverseRouteAbbr]
+                routeConfig["directions"]![reverseRouteNumber] = reverseRouteConfig["directions"]![reverseRouteNumber]
                 
                 //Checking for ordering (lowest routeNumber)
                 routeAbbr = routeNumber < reverseRouteNumber ? routeAbbr : reverseRouteAbbr
             }
+            
+            let mainDirectionRouteConfig = routeConfig["directions"]?[routeNumber]
+            let reverseDirectionRouteConfig = routeConfig["directions"]?[reverseRouteNumber ?? ""]
+            routeConfig["directions"]?[routeAbbr] = mainDirectionRouteConfig
+            routeConfig["directions"]?[reverseRouteAbbr] = reverseDirectionRouteConfig
+            routeConfig["directions"]?[routeNumber] = nil
+            routeConfig["directions"]?[reverseRouteNumber ?? ""] = nil
             
             routeObject.tag = RouteConstants.BARTAgencyTag + "-" + routeAbbr
             routeObject.title = routeConfig["general"]!["general"]!["title"] as? String
@@ -589,7 +604,8 @@ class RouteDataManager
             routeConfigDirection["name"] = (route["origin"] as? String ?? "") + "–" + (route["destination"] as? String ?? "")
             routeConfigDirection["title"] = route["name"] as? String
             routeConfigDirection["stops"] = (route["config"] as? Dictionary<String,Any>)?["station"]
-            routeDirectionsArray[(route["origin"] as? String ?? "") + "–" + (route["destination"] as? String ?? "")] = routeConfigDirection
+            routeDirectionsArray[routeNumber] = routeConfigDirection
+            // Should start using route numbers instead of origin - destination since it can be inconsistent
             
             routeInfoDictionary = Dictionary<String,Dictionary<String,Dictionary<String,Any>>>()
             routeInfoDictionary!["stops"] = routeStopsDictionary
@@ -848,7 +864,7 @@ class RouteDataManager
                 guard let routeHexColor = route.color else { return }
                 
                 guard let directionTag = direction.tag else { return }
-                let directionTagSplit = directionTag.split(separator: "–")
+                let directionTagSplit = directionTag.split(separator: "-")
                 if directionTagSplit.count < 2 { return }
                 let directionDestination = String(directionTagSplit[1])
                 

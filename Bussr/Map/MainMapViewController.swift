@@ -435,6 +435,13 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         self.movePickerPanelPosition(position: .tip, animated: false)
     }
     
+    func showPickerHelpInfoView()
+    {
+        self.movePickerPanelPosition(position: .half, animated: true, shouldAdjustMap: false)
+        self.view.viewWithTag(DisplayConstants.routeInfoPickerViewTag)?.isHidden = true
+        self.view.viewWithTag(DisplayConstants.helpInfoViewTag)?.isHidden = false
+    }
+    
     //MARK: - Update Notifications
     
     func setupRouteMapUpdateNotifications()
@@ -1146,7 +1153,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     
     @IBAction func unwindFromSettingsView(_ segue: UIStoryboardSegue)
     {
-        
+        showPickerView()
+        reloadAllAnnotations()
+        NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
     }
     
     @IBAction func unwindFromOtherDirectionsView(_ segue: UIStoryboardSegue)

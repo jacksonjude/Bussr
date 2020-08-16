@@ -145,6 +145,8 @@ class SettingsViewController: UITableViewController
         UserDefaults.standard.set(nil, forKey: "LastServerChangeToken")
         CloudManager.currentChangeToken = nil
         
+        MapState.routeInfoShowing = .none
+        
         self.present(deletionAlertView, animated: true, completion: nil)
     }
     

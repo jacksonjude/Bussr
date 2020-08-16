@@ -44,7 +44,7 @@ class MapState: NSObject
             }
             else
             {
-                direction = route.directions?.array[0] as? Direction
+                direction = (route.directions?.array.count ?? 0 > 0 ? route.directions?.array[0] as? Direction : nil)
             }
             
             return direction
