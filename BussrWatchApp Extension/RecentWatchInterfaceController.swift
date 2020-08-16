@@ -1,25 +1,32 @@
 //
-//  TodayViewController.swift
-//  BussrRecentExtension
+//  RecentWatchInterfaceController.swift
+//  BussrWatchApp Extension
 //
-//  Created by jackson on 8/16/18.
-//  Copyright © 2018 jackson. All rights reserved.
+//  Created by jackson on 8/15/20.
+//  Copyright © 2020 jackson. All rights reserved.
 //
 
-import UIKit
-import NotificationCenter
+import Foundation
+import Foundation
+import WatchKit
+import CoreLocation
 
-class RecentExtensionViewController: BussrExtensionViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.loadRecentStops()
+class RecentWatchInterfaceController: BussrWatchInterfaceController
+{
+    @IBOutlet weak var stopsTable: WKInterfaceTable!
+    
+    override func awake(withContext context: Any?) {
+        super.awake(withContext: context)
     }
     
-    override func widgetPerformUpdate(completionHandler: @escaping ((NCUpdateResult) -> Void)) {
-        super.widgetPerformUpdate(completionHandler: completionHandler)
-        
-        self.loadRecentStops()
+    override func willActivate() {
+        super.willActivate()
+    }
+    
+    @objc override func loadStops()
+    {
+        super.loadStops()
+        loadRecentStops()
     }
     
     func loadRecentStops()
@@ -31,9 +38,11 @@ class RecentExtensionViewController: BussrExtensionViewController {
                 return RouteDataManager.fetchDirection(directionTag: recentStop.directionTag!) != nil && RouteDataManager.fetchStop(stopTag: recentStop.stopTag!) != nil
             })
             
-            self.stopDirectionObjects = recentStops.map({ (recentStop) -> (stopTag: String, directionTag: String) in
+            self.directionStopObjects = recentStops.map({ (recentStop) -> (stopTag: String, directionTag: String) in
                 return (stopTag: recentStop.stopTag!, directionTag: recentStop.directionTag!)
             })
+            
+            self.updateTable(directionStopTable: self.stopsTable)
         }
     }
 }

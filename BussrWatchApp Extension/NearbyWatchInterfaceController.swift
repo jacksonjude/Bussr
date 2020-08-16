@@ -1,47 +1,33 @@
 //
-//  TodayViewController.swift
-//  BussrNearbyExtension
+//  NearbyWatchInterfaceController.swift
+//  BussrWatchApp Extension
 //
-//  Created by jackson on 8/16/18.
-//  Copyright © 2018 jackson. All rights reserved.
+//  Created by jackson on 8/15/20.
+//  Copyright © 2020 jackson. All rights reserved.
 //
 
-import UIKit
-import NotificationCenter
+import Foundation
+import WatchKit
 import CoreLocation
 
-class NearbyExtensionViewController: BussrExtensionViewController, CLLocationManagerDelegate {
-    let locationManager = CLLocationManager()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        locationManager.requestWhenInUseAuthorization()
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-            locationManager.startUpdatingLocation()
-        }
-        
-        self.loadNearbyStops()
+class NearbyWatchInterfaceController: BussrWatchInterfaceController
+{
+    @IBOutlet weak var stopsTable: WKInterfaceTable!
+    
+    override func awake(withContext context: Any?) {
+        super.awake(withContext: context)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        locationManager.stopUpdatingLocation()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
+    override func willActivate() {
+        super.willActivate()
+        
         locationManager.startUpdatingLocation()
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        self.loadNearbyStops()
-    }
-    
-    override func widgetPerformUpdate(completionHandler: @escaping ((NCUpdateResult) -> Void)) {
-        super.widgetPerformUpdate(completionHandler: completionHandler)
-        
-        self.loadNearbyStops()
+    @objc override func loadStops()
+    {
+        super.loadStops()
+        loadNearbyStops()
     }
     
     func loadNearbyStops()
@@ -88,11 +74,11 @@ class NearbyExtensionViewController: BussrExtensionViewController, CLLocationMan
                     defaultCut = nearbyDirectionStops.count
                 }
                 
-                self.stopDirectionObjects = nearbyDirectionStops.map({ (directionStop) -> (stopTag: String, directionTag: String) in
+                self.directionStopObjects = nearbyDirectionStops.map({ (directionStop) -> (stopTag: String, directionTag: String) in
                     return (stopTag: directionStop.stop.tag ?? "", directionTag: directionStop.direction.tag ?? "")
                 })
                 
-                self.tableView.reloadData()
+                self.updateTable(directionStopTable: self.stopsTable)
             }
         }
     }

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		44930FC04972DDB3346E7274 /* Pods_BussrWatchApp_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66A143C10EE4129545A91048 /* Pods_BussrWatchApp_Extension.framework */; };
 		76B26CD0D128BAA9958A68A3 /* Pods_BussrNearbyExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E690C9C1E035C828AE0B9871 /* Pods_BussrNearbyExtension.framework */; };
 		7A068D1521266AC400D3425E /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D1421266AC400D3425E /* CoreDataStack.swift */; };
 		7A068D1E212697DA00D3425E /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A068D01212646A700D3425E /* NotificationCenter.framework */; };
@@ -22,9 +21,9 @@
 		7A068D472126980900D3425E /* NearbyExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D462126980900D3425E /* NearbyExtensionViewController.swift */; };
 		7A068D4A2126980900D3425E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A068D482126980900D3425E /* MainInterface.storyboard */; };
 		7A068D4E2126980900D3425E /* Bussr – Nearby.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D432126980900D3425E /* Bussr – Nearby.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		7A068D52212698B900D3425E /* MuniTrackerExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D04212646A700D3425E /* MuniTrackerExtensionViewController.swift */; };
-		7A068D53212698BA00D3425E /* MuniTrackerExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D04212646A700D3425E /* MuniTrackerExtensionViewController.swift */; };
-		7A068D54212698BA00D3425E /* MuniTrackerExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D04212646A700D3425E /* MuniTrackerExtensionViewController.swift */; };
+		7A068D52212698B900D3425E /* BussrExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D04212646A700D3425E /* BussrExtensionViewController.swift */; };
+		7A068D53212698BA00D3425E /* BussrExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D04212646A700D3425E /* BussrExtensionViewController.swift */; };
+		7A068D54212698BA00D3425E /* BussrExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D04212646A700D3425E /* BussrExtensionViewController.swift */; };
 		7A0E8C6A20E0AAAC00C28465 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A0E8C6920E0AAAB00C28465 /* CoreLocation.framework */; };
 		7A0EF1FD20E80AC90039212B /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A0EF1FC20E80AC90039212B /* CloudKit.framework */; };
 		7A0EF1FF20E818500039212B /* CloudManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0EF1FE20E818500039212B /* CloudManager.swift */; };
@@ -43,6 +42,9 @@
 		7A50EECD2107DAE700B69B92 /* StopsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A50EECC2107DAE700B69B92 /* StopsTableViewController.swift */; };
 		7A61EF8420D77BE100481037 /* RouteInfoPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */; };
 		7A71722B20D70943002144D5 /* RoutesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A71722A20D70943002144D5 /* RoutesTableViewController.swift */; };
+		7A7C9BDB24E8885500752C3A /* FavoritesWatchInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7C9BDA24E8885500752C3A /* FavoritesWatchInterfaceController.swift */; };
+		7A7C9BDD24E88A5E00752C3A /* RecentWatchInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7C9BDC24E88A5E00752C3A /* RecentWatchInterfaceController.swift */; };
+		7A7C9BDF24E88A9D00752C3A /* NearbyWatchInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7C9BDE24E88A9D00752C3A /* NearbyWatchInterfaceController.swift */; };
 		7A7FE2B520DB4761005B654C /* MapState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7FE2B420DB4761005B654C /* MapState.swift */; };
 		7A9F21E72106B0B00000E971 /* FavoriteState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9F21E62106B0B00000E971 /* FavoriteState.swift */; };
 		7A9F7E79216FA40200DF093D /* NotificationRepeatTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9F7E78216FA40200DF093D /* NotificationRepeatTableViewController.swift */; };
@@ -54,7 +56,6 @@
 		7AAAB74724C26057003ED858 /* MuniTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AAAB74024C26057003ED858 /* MuniTracker.xcdatamodeld */; };
 		7AAAB74824C26057003ED858 /* MuniTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AAAB74024C26057003ED858 /* MuniTracker.xcdatamodeld */; };
 		7AAD586323FD1182002F3FAF /* RouteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AAD586223FD1182002F3FAF /* RouteCell.swift */; };
-		7AAD586923FDC51F002F3FAF /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AAD586823FDC51F002F3FAF /* CloudKit.framework */; };
 		7AAD58C523FE1952002F3FAF /* Activity13@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58A723FE1952002F3FAF /* Activity13@2x.png */; };
 		7AAD58C623FE1952002F3FAF /* Activity29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58A823FE1952002F3FAF /* Activity29@2x.png */; };
 		7AAD58C723FE1952002F3FAF /* Activity25@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58A923FE1952002F3FAF /* Activity25@2x.png */; };
@@ -111,7 +112,7 @@
 		7AFD5CA823F009EA00AFFEEF /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AFD5CA623F009EA00AFFEEF /* Interface.storyboard */; };
 		7AFD5CAA23F009EB00AFFEEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7AFD5CA923F009EB00AFFEEF /* Assets.xcassets */; };
 		7AFD5CB123F009EB00AFFEEF /* Bussr WatchApp Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7AFD5CB023F009EB00AFFEEF /* Bussr WatchApp Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		7AFD5CB623F009EB00AFFEEF /* MuniTrackerWatchInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CB523F009EB00AFFEEF /* MuniTrackerWatchInterfaceController.swift */; };
+		7AFD5CB623F009EB00AFFEEF /* BussrWatchInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CB523F009EB00AFFEEF /* BussrWatchInterfaceController.swift */; };
 		7AFD5CB823F009EB00AFFEEF /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CB723F009EB00AFFEEF /* ExtensionDelegate.swift */; };
 		7AFD5CBA23F009EB00AFFEEF /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CB923F009EB00AFFEEF /* ComplicationController.swift */; };
 		7AFD5CBC23F009EC00AFFEEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7AFD5CBB23F009EC00AFFEEF /* Assets.xcassets */; };
@@ -120,7 +121,6 @@
 		7AFD5CCB23F0AF5200AFFEEF /* RouteDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */; };
 		7AFD5CCE23F0AF9200AFFEEF /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D1421266AC400D3425E /* CoreDataStack.swift */; };
 		7AFD5CCF23F0B2EA00AFFEEF /* MapState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7FE2B420DB4761005B654C /* MapState.swift */; };
-		7AFD5CD123F0B39600AFFEEF /* StopsWatchInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CD023F0B39600AFFEEF /* StopsWatchInterfaceController.swift */; };
 		917F22F746F845E87B2C2B50 /* Pods_BussrFavoritesExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1C5898B61AD1B4D7F0B8A3B /* Pods_BussrFavoritesExtension.framework */; };
 		B7A02CA8F9906E4CBC374969 /* Pods_BussrRecentExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EDF971F55EB24292543B6A6 /* Pods_BussrRecentExtension.framework */; };
 		C81C4C25B3D1F10351A75311 /* Pods_Bussr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C015383FBAAF4773EE2EA87A /* Pods_Bussr.framework */; };
@@ -208,9 +208,8 @@
 		2EB325B0FC06BFC608945FF0 /* Pods-BussrNearbyExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BussrNearbyExtension.release.xcconfig"; path = "Target Support Files/Pods-BussrNearbyExtension/Pods-BussrNearbyExtension.release.xcconfig"; sourceTree = "<group>"; };
 		327D1F9E9AE207854F2B0312 /* Pods-BussrNearbyExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BussrNearbyExtension.debug.xcconfig"; path = "Target Support Files/Pods-BussrNearbyExtension/Pods-BussrNearbyExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		39A121CC53794824C0BD68A3 /* Pods-BussrFavoritesExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BussrFavoritesExtension.debug.xcconfig"; path = "Target Support Files/Pods-BussrFavoritesExtension/Pods-BussrFavoritesExtension.debug.xcconfig"; sourceTree = "<group>"; };
-		66A143C10EE4129545A91048 /* Pods_BussrWatchApp_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BussrWatchApp_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A068D01212646A700D3425E /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
-		7A068D04212646A700D3425E /* MuniTrackerExtensionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuniTrackerExtensionViewController.swift; sourceTree = "<group>"; };
+		7A068D04212646A700D3425E /* BussrExtensionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BussrExtensionViewController.swift; sourceTree = "<group>"; };
 		7A068D07212646A700D3425E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		7A068D1421266AC400D3425E /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		7A068D1721266F9B00D3425E /* RoutePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutePageViewController.swift; sourceTree = "<group>"; };
@@ -239,6 +238,9 @@
 		7A5A32E024A563D500740067 /* Bussr.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Bussr.entitlements; sourceTree = "<group>"; };
 		7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoPickerViewController.swift; sourceTree = "<group>"; };
 		7A71722A20D70943002144D5 /* RoutesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutesTableViewController.swift; sourceTree = "<group>"; };
+		7A7C9BDA24E8885500752C3A /* FavoritesWatchInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesWatchInterfaceController.swift; sourceTree = "<group>"; };
+		7A7C9BDC24E88A5E00752C3A /* RecentWatchInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentWatchInterfaceController.swift; sourceTree = "<group>"; };
+		7A7C9BDE24E88A9D00752C3A /* NearbyWatchInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyWatchInterfaceController.swift; sourceTree = "<group>"; };
 		7A7FE2B420DB4761005B654C /* MapState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapState.swift; sourceTree = "<group>"; };
 		7A9F21E62106B0B00000E971 /* FavoriteState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteState.swift; sourceTree = "<group>"; };
 		7A9F7E78216FA40200DF093D /* NotificationRepeatTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRepeatTableViewController.swift; sourceTree = "<group>"; };
@@ -251,7 +253,6 @@
 		7AAAB74224C26057003ED858 /* MuniTracker3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MuniTracker3.xcdatamodel; sourceTree = "<group>"; };
 		7AAAB74324C26057003ED858 /* MuniTracker2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MuniTracker2.xcdatamodel; sourceTree = "<group>"; };
 		7AAD586223FD1182002F3FAF /* RouteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteCell.swift; sourceTree = "<group>"; };
-		7AAD586823FDC51F002F3FAF /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS6.1.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		7AAD58A723FE1952002F3FAF /* Activity13@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity13@2x.png"; sourceTree = "<group>"; };
 		7AAD58A823FE1952002F3FAF /* Activity29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity29@2x.png"; sourceTree = "<group>"; };
 		7AAD58A923FE1952002F3FAF /* Activity25@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity25@2x.png"; sourceTree = "<group>"; };
@@ -302,13 +303,12 @@
 		7AFD5CA923F009EB00AFFEEF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7AFD5CAB23F009EB00AFFEEF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AFD5CB023F009EB00AFFEEF /* Bussr WatchApp Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Bussr WatchApp Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7AFD5CB523F009EB00AFFEEF /* MuniTrackerWatchInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuniTrackerWatchInterfaceController.swift; sourceTree = "<group>"; };
+		7AFD5CB523F009EB00AFFEEF /* BussrWatchInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BussrWatchInterfaceController.swift; sourceTree = "<group>"; };
 		7AFD5CB723F009EB00AFFEEF /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
 		7AFD5CB923F009EB00AFFEEF /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
 		7AFD5CBB23F009EC00AFFEEF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7AFD5CBD23F009EC00AFFEEF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AFD5CC823F00C3200AFFEEF /* DirectionStopRowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionStopRowController.swift; sourceTree = "<group>"; };
-		7AFD5CD023F0B39600AFFEEF /* StopsWatchInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopsWatchInterfaceController.swift; sourceTree = "<group>"; };
 		7AFD5CD223F0B5CD00AFFEEF /* BussrWatchApp Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "BussrWatchApp Extension.entitlements"; sourceTree = "<group>"; };
 		7AFD5CD323F0B86700AFFEEF /* Bussr.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Bussr.entitlements; sourceTree = "<group>"; };
 		7FA950184CDD16312EC4D8C2 /* Pods-BussrWatchApp Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BussrWatchApp Extension.debug.xcconfig"; path = "Target Support Files/Pods-BussrWatchApp Extension/Pods-BussrWatchApp Extension.debug.xcconfig"; sourceTree = "<group>"; };
@@ -365,8 +365,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7AAD586923FDC51F002F3FAF /* CloudKit.framework in Frameworks */,
-				44930FC04972DDB3346E7274 /* Pods_BussrWatchApp_Extension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,7 +390,7 @@
 		7A068D03212646A700D3425E /* BussrExtension */ = {
 			isa = PBXGroup;
 			children = (
-				7A068D04212646A700D3425E /* MuniTrackerExtensionViewController.swift */,
+				7A068D04212646A700D3425E /* BussrExtensionViewController.swift */,
 				7A068D06212646A700D3425E /* MainInterface.storyboard */,
 				7A068D1721266F9B00D3425E /* RoutePageViewController.swift */,
 			);
@@ -592,8 +590,10 @@
 			children = (
 				7AAD58A623FE1952002F3FAF /* Activity */,
 				7AFD5CD223F0B5CD00AFFEEF /* BussrWatchApp Extension.entitlements */,
-				7AFD5CB523F009EB00AFFEEF /* MuniTrackerWatchInterfaceController.swift */,
-				7AFD5CD023F0B39600AFFEEF /* StopsWatchInterfaceController.swift */,
+				7AFD5CB523F009EB00AFFEEF /* BussrWatchInterfaceController.swift */,
+				7A7C9BDA24E8885500752C3A /* FavoritesWatchInterfaceController.swift */,
+				7A7C9BDC24E88A5E00752C3A /* RecentWatchInterfaceController.swift */,
+				7A7C9BDE24E88A9D00752C3A /* NearbyWatchInterfaceController.swift */,
 				7AFD5CC823F00C3200AFFEEF /* DirectionStopRowController.swift */,
 				7AFD5CB723F009EB00AFFEEF /* ExtensionDelegate.swift */,
 				7AFD5CB923F009EB00AFFEEF /* ComplicationController.swift */,
@@ -623,7 +623,6 @@
 		BF88086283A00694C5C2DF7F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				7AAD586823FDC51F002F3FAF /* CloudKit.framework */,
 				7A0EF1FC20E80AC90039212B /* CloudKit.framework */,
 				7A0E8C6920E0AAAB00C28465 /* CoreLocation.framework */,
 				7A4930C320D788EA008208D1 /* MapKit.framework */,
@@ -632,7 +631,6 @@
 				F1C5898B61AD1B4D7F0B8A3B /* Pods_BussrFavoritesExtension.framework */,
 				E690C9C1E035C828AE0B9871 /* Pods_BussrNearbyExtension.framework */,
 				8EDF971F55EB24292543B6A6 /* Pods_BussrRecentExtension.framework */,
-				66A143C10EE4129545A91048 /* Pods_BussrWatchApp_Extension.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1111,7 +1109,7 @@
 			files = (
 				7AD00467212758B000DCB08E /* CoreDataStack.swift in Sources */,
 				7AD00464212758AD00DCB08E /* RouteDataManager.swift in Sources */,
-				7A068D52212698B900D3425E /* MuniTrackerExtensionViewController.swift in Sources */,
+				7A068D52212698B900D3425E /* BussrExtensionViewController.swift in Sources */,
 				7A068D21212697DA00D3425E /* FavoritesExtensionViewController.swift in Sources */,
 				7A46D8622273CBB7008A41C1 /* DirectionStopCell.swift in Sources */,
 				7A46D8652273CCF9008A41C1 /* MapState.swift in Sources */,
@@ -1125,7 +1123,7 @@
 			files = (
 				7AD00468212758B100DCB08E /* CoreDataStack.swift in Sources */,
 				7AD00465212758AD00DCB08E /* RouteDataManager.swift in Sources */,
-				7A068D53212698BA00D3425E /* MuniTrackerExtensionViewController.swift in Sources */,
+				7A068D53212698BA00D3425E /* BussrExtensionViewController.swift in Sources */,
 				7A068D34212697F000D3425E /* RecentExtensionViewController.swift in Sources */,
 				7A46D8632273CBB8008A41C1 /* DirectionStopCell.swift in Sources */,
 				7A46D8662273CCF9008A41C1 /* MapState.swift in Sources */,
@@ -1139,7 +1137,7 @@
 			files = (
 				7AD00469212758B100DCB08E /* CoreDataStack.swift in Sources */,
 				7AD00466212758AE00DCB08E /* RouteDataManager.swift in Sources */,
-				7A068D54212698BA00D3425E /* MuniTrackerExtensionViewController.swift in Sources */,
+				7A068D54212698BA00D3425E /* BussrExtensionViewController.swift in Sources */,
 				7A068D472126980900D3425E /* NearbyExtensionViewController.swift in Sources */,
 				7A46D8642273CBB8008A41C1 /* DirectionStopCell.swift in Sources */,
 				7A46D8672273CCF9008A41C1 /* MapState.swift in Sources */,
@@ -1184,10 +1182,12 @@
 			files = (
 				7AAAB74824C26057003ED858 /* MuniTracker.xcdatamodeld in Sources */,
 				7AFD5CCF23F0B2EA00AFFEEF /* MapState.swift in Sources */,
+				7A7C9BDD24E88A5E00752C3A /* RecentWatchInterfaceController.swift in Sources */,
 				7AFD5CC923F00C3200AFFEEF /* DirectionStopRowController.swift in Sources */,
-				7AFD5CD123F0B39600AFFEEF /* StopsWatchInterfaceController.swift in Sources */,
+				7A7C9BDF24E88A9D00752C3A /* NearbyWatchInterfaceController.swift in Sources */,
 				7AFD5CB823F009EB00AFFEEF /* ExtensionDelegate.swift in Sources */,
-				7AFD5CB623F009EB00AFFEEF /* MuniTrackerWatchInterfaceController.swift in Sources */,
+				7A7C9BDB24E8885500752C3A /* FavoritesWatchInterfaceController.swift in Sources */,
+				7AFD5CB623F009EB00AFFEEF /* BussrWatchInterfaceController.swift in Sources */,
 				7AFD5CCE23F0AF9200AFFEEF /* CoreDataStack.swift in Sources */,
 				7AFD5CCB23F0AF5200AFFEEF /* RouteDataManager.swift in Sources */,
 				7AFD5CBA23F009EB00AFFEEF /* ComplicationController.swift in Sources */,

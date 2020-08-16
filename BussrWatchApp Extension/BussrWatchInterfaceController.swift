@@ -10,21 +10,68 @@ import WatchKit
 import Foundation
 
 
-class MuniTrackerWatchInterfaceController: WKInterfaceController {
+class BussrWatchInterfaceController: WKInterfaceController, CLLocationManagerDelegate {
     var directionStopObjects: Array<(stopTag: String, directionTag: String)>?
     var stops: Array<Stop>?
     
     let numStopsToDisplay = 10
     
+    var currentUserLocation: CLLocation?
+    var locationManager = CLLocationManager()
+    
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
         
         // Configure interface objects here.
+        
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.delegate = self
     }
     
+    var justLoaded = true
+    
     override func willActivate() {
-        // This method is called when watch view controller is about to be visible to user
-        super.willActivate()
+        if justLoaded
+        {
+            justLoaded = false
+            NotificationCenter.default.addObserver(self, selector: #selector(loadStops), name: NSNotification.Name("FinishedUpdatingRoutes"), object: nil)
+            DispatchQueue.global(qos: .background).async
+            {
+                RouteDataManager.updateAllData()
+            }
+        }        
+    }
+    
+    @objc func loadStops()
+    {
+        directionStopObjects = []
+        if directionStopObjects?.count == 0 { setupMOCSaveNotification() }
+    }
+    
+    func setupMOCSaveNotification()
+    {
+        NotificationCenter.default.addObserver(self, selector: #selector(mocDidSave), name: NSNotification.Name.NSManagedObjectContextObjectsDidChange, object: nil)
+    }
+    
+    @objc func mocDidSave()
+    {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.NSManagedObjectContextObjectsDidChange, object: nil)
+        loadStops()
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let newLocation = locations.first else { return }
+        let oldUserLocation = currentUserLocation
+        currentUserLocation = locations.first
+        
+        if oldUserLocation == nil || newLocation.distance(from: oldUserLocation!) >= 100
+        {
+            loadStops()
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        
     }
     
     override func didDeactivate() {

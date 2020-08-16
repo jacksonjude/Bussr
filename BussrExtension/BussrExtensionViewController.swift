@@ -10,7 +10,7 @@ import UIKit
 import NotificationCenter
 import CoreLocation
 
-class MuniTrackerExtensionViewController: UITableViewController, NCWidgetProviding {
+class BussrExtensionViewController: UITableViewController, NCWidgetProviding {
     var stopDirectionObjects: Array<(stopTag: String, directionTag: String)>?
     var stops: Array<Stop>?
     

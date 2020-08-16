@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="15705" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="17147" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
     <device id="watch38"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="15501"/>
+        <deployment identifier="watchOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17120"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="17032"/>
     </dependencies>
     <scenes>
-        <!--Stops-->
+        <!--Favorites-->
         <scene sceneID="aou-V4-d1y">
             <objects>
-                <controller identifier="Stops" title="Stops" id="AgC-eL-Hgc" customClass="StopsWatchInterfaceController" customModule="Bussr_WatchApp_Extension">
+                <controller identifier="Favorites" title="Favorites" id="AgC-eL-Hgc" customClass="FavoritesWatchInterfaceController" customModule="Bussr_WatchApp_Extension">
                     <items>
                         <table alignment="left" id="Syl-eJ-5gE">
                             <items>
@@ -48,36 +49,112 @@
                             </items>
                         </table>
                     </items>
-                    <menu key="menu" id="Oaq-mP-V7s">
-                        <items>
-                            <menuItem title="Favorite" image="Favorite" id="eh6-66-3cm">
-                                <connections>
-                                    <action selector="favoriteSelected" destination="AgC-eL-Hgc" id="HkN-b6-8dU"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Nearby" image="Nearby" id="Mte-k9-AnF">
-                                <connections>
-                                    <action selector="nearbySelected" destination="AgC-eL-Hgc" id="N4B-nR-62R"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Recent" image="Recent" id="jnS-db-EXL">
-                                <connections>
-                                    <action selector="recentSelected" destination="AgC-eL-Hgc" id="02B-iC-iId"/>
-                                </connections>
-                            </menuItem>
-                        </items>
-                    </menu>
                     <connections>
-                        <outlet property="stopsTable" destination="Syl-eJ-5gE" id="y8s-1i-ibX"/>
+                        <outlet property="stopsTable" destination="Syl-eJ-5gE" id="mEf-NN-Ll8"/>
+                        <segue destination="bcO-OA-O1g" kind="relationship" relationship="nextPage" id="gYi-Ee-1lZ"/>
                     </connections>
                 </controller>
             </objects>
             <point key="canvasLocation" x="34" y="83"/>
         </scene>
+        <!--Recent Watch Interface Controller-->
+        <scene sceneID="fy7-0M-vs6">
+            <objects>
+                <controller id="bcO-OA-O1g" customClass="RecentWatchInterfaceController" customModule="Bussr_WatchApp_Extension">
+                    <items>
+                        <table alignment="left" id="KdF-vj-CHs">
+                            <items>
+                                <tableRow identifier="DirectionStopRow" id="2JF-dS-XFf" customClass="DirectionStopRowController" customModule="Bussr_WatchApp_Extension">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" id="16z-RY-O7j">
+                                        <items>
+                                            <group width="1" alignment="left" layout="vertical" id="VPB-rd-6UM">
+                                                <items>
+                                                    <group width="1" alignment="left" id="n4u-lF-lLU">
+                                                        <items>
+                                                            <label alignment="left" text="5R – OB" minimumScaleFactor="0.5" id="H0d-hx-Gf3"/>
+                                                            <separator alignment="left" id="JgJ-Mb-eVK">
+                                                                <color key="color" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </separator>
+                                                            <label alignment="right" minimumScaleFactor="0.5" id="RJK-ir-e4F">
+                                                                <fontDescription key="font" type="system" pointSize="15"/>
+                                                            </label>
+                                                            <imageView width="18" height="18" alignment="right" verticalAlignment="bottom" id="rMV-eG-R9W"/>
+                                                        </items>
+                                                    </group>
+                                                    <label alignment="left" text="Fulton St &amp; Masonic Ave" minimumScaleFactor="0.40000000000000002" id="gqs-xj-0fz">
+                                                        <fontDescription key="font" type="system" pointSize="14"/>
+                                                    </label>
+                                                </items>
+                                            </group>
+                                        </items>
+                                    </group>
+                                    <connections>
+                                        <outlet property="activityIndicatorImage" destination="rMV-eG-R9W" id="4py-tV-hyz"/>
+                                        <outlet property="directionStopRowGroup" destination="16z-RY-O7j" id="ORc-8a-Twd"/>
+                                        <outlet property="predictionTimesLabel" destination="RJK-ir-e4F" id="ZfA-wh-QTK"/>
+                                        <outlet property="routeLabel" destination="H0d-hx-Gf3" id="bqe-du-FE5"/>
+                                        <outlet property="stopLabel" destination="gqs-xj-0fz" id="x87-eG-kyl"/>
+                                    </connections>
+                                </tableRow>
+                            </items>
+                        </table>
+                    </items>
+                    <connections>
+                        <outlet property="stopsTable" destination="KdF-vj-CHs" id="Ilw-aR-JCG"/>
+                        <segue destination="FdI-yH-FzC" kind="relationship" relationship="nextPage" id="REp-ks-Dcb"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="308" y="83"/>
+        </scene>
+        <!--Nearby Watch Interface Controller-->
+        <scene sceneID="FTy-JP-o6i">
+            <objects>
+                <controller id="FdI-yH-FzC" customClass="NearbyWatchInterfaceController" customModule="Bussr_WatchApp_Extension">
+                    <items>
+                        <table alignment="left" id="yEG-R7-gc2">
+                            <items>
+                                <tableRow identifier="DirectionStopRow" id="UTg-Rc-fVY" customClass="DirectionStopRowController" customModule="Bussr_WatchApp_Extension">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" id="Gml-Mr-qpt">
+                                        <items>
+                                            <group width="1" alignment="left" layout="vertical" id="nx8-AI-R4Z">
+                                                <items>
+                                                    <group width="1" alignment="left" id="gyN-BH-AA3">
+                                                        <items>
+                                                            <label alignment="left" text="5R – OB" minimumScaleFactor="0.5" id="eDq-TF-Syp"/>
+                                                            <separator alignment="left" id="gRJ-9L-haT">
+                                                                <color key="color" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            </separator>
+                                                            <label alignment="right" minimumScaleFactor="0.5" id="Vfq-qQ-ZOU">
+                                                                <fontDescription key="font" type="system" pointSize="15"/>
+                                                            </label>
+                                                            <imageView width="18" height="18" alignment="right" verticalAlignment="bottom" id="WIQ-MK-v6x"/>
+                                                        </items>
+                                                    </group>
+                                                    <label alignment="left" text="Fulton St &amp; Masonic Ave" minimumScaleFactor="0.40000000000000002" id="GlQ-GY-PPO">
+                                                        <fontDescription key="font" type="system" pointSize="14"/>
+                                                    </label>
+                                                </items>
+                                            </group>
+                                        </items>
+                                    </group>
+                                    <connections>
+                                        <outlet property="activityIndicatorImage" destination="WIQ-MK-v6x" id="TBr-av-Vbc"/>
+                                        <outlet property="directionStopRowGroup" destination="Gml-Mr-qpt" id="M3J-9q-HzY"/>
+                                        <outlet property="predictionTimesLabel" destination="Vfq-qQ-ZOU" id="8Uv-Wt-A6S"/>
+                                        <outlet property="routeLabel" destination="eDq-TF-Syp" id="97U-RW-xc1"/>
+                                        <outlet property="stopLabel" destination="GlQ-GY-PPO" id="SkT-hu-EHV"/>
+                                    </connections>
+                                </tableRow>
+                            </items>
+                        </table>
+                    </items>
+                    <connections>
+                        <outlet property="stopsTable" destination="yEG-R7-gc2" id="Upb-O8-cjl"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="578" y="83"/>
+        </scene>
     </scenes>
-    <resources>
-        <image name="Favorite" width="40" height="38"/>
-        <image name="Nearby" width="40" height="40"/>
-        <image name="Recent" width="40" height="40"/>
-    </resources>
 </document>

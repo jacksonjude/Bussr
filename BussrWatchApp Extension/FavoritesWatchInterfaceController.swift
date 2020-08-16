@@ -1,40 +1,33 @@
 //
-//  TodayViewController.swift
-//  BussrFavoritesExtension
+//  FavoritesWatchInterfaceController.swift
+//  BussrWatchApp Extension
 //
-//  Created by jackson on 8/16/18.
-//  Copyright © 2018 jackson. All rights reserved.
+//  Created by jackson on 8/15/20.
+//  Copyright © 2020 jackson. All rights reserved.
 //
 
-import UIKit
-import NotificationCenter
+import Foundation
+import WatchKit
 import CoreLocation
 
-class FavoritesExtensionViewController: BussrExtensionViewController, CLLocationManagerDelegate {
-    var currentUserLocation: CLLocation?
-    var locationManager = CLLocationManager()
+class FavoritesWatchInterfaceController: BussrWatchInterfaceController
+{
+    @IBOutlet weak var stopsTable: WKInterfaceTable!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func awake(withContext context: Any?) {
+        super.awake(withContext: context)
+    }
+    
+    override func willActivate() {
+        super.willActivate()
         
-        locationManager.delegate = self
         locationManager.startUpdatingLocation()
     }
     
-    override func widgetPerformUpdate(completionHandler: @escaping ((NCUpdateResult) -> Void)) {
-        self.loadClosestFavoriteStops()
-        
-        super.widgetPerformUpdate(completionHandler: completionHandler)
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        currentUserLocation = locations[0]
-        
+    @objc override func loadStops()
+    {
+        super.loadStops()
         loadClosestFavoriteStops()
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        
     }
     
     func loadClosestFavoriteStops()
@@ -57,11 +50,11 @@ class FavoritesExtensionViewController: BussrExtensionViewController, CLLocation
                 return false
             }
             
-            self.stopDirectionObjects = favoriteStops.map({ (favoriteStop) -> (stopTag: String, directionTag: String) in
+            self.directionStopObjects = favoriteStops.map({ (favoriteStop) -> (stopTag: String, directionTag: String) in
                 return (stopTag: favoriteStop.stopTag!, directionTag: favoriteStop.directionTag!)
             })
             
-            self.tableView.reloadData()
+            self.updateTable(directionStopTable: self.stopsTable)
         }
     }
 }
