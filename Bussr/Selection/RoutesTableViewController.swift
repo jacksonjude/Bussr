@@ -127,11 +127,17 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     func fetchRoutes()
     {
-        guard let nextBusAgency = RouteDataManager.fetchObject(type: "Agency", predicate: NSPredicate(format: "name == %@", RouteConstants.NextBusAgencyTag), moc: CoreDataStack.persistentContainer.viewContext) as? Agency else { return }
-        guard let nextBusAgencyRoutes = (nextBusAgency.routes?.allObjects) as? [Route] else { return }
+        var nextBusAgencyRoutes = [Route]()
+        if let nextBusAgency = RouteDataManager.fetchObject(type: "Agency", predicate: NSPredicate(format: "name == %@", RouteConstants.NextBusAgencyTag), moc: CoreDataStack.persistentContainer.viewContext) as? Agency
+        {
+            nextBusAgencyRoutes = (nextBusAgency.routes?.allObjects) as? [Route] ?? []
+        }
         
-        guard let BARTAgency = RouteDataManager.fetchObject(type: "Agency", predicate: NSPredicate(format: "name == %@", RouteConstants.BARTAgencyTag), moc: CoreDataStack.persistentContainer.viewContext) as? Agency else { return }
-        guard let BARTAgencyRoutes = (BARTAgency.routes?.allObjects) as? [Route] else { return }
+        var BARTAgencyRoutes = [Route]()
+        if let BARTAgency = RouteDataManager.fetchObject(type: "Agency", predicate: NSPredicate(format: "name == %@", RouteConstants.BARTAgencyTag), moc: CoreDataStack.persistentContainer.viewContext) as? Agency
+        {
+            BARTAgencyRoutes = (BARTAgency.routes?.allObjects) as? [Route] ?? []
+        }
         
         var agencyRoutes = nextBusAgencyRoutes + BARTAgencyRoutes
         agencyRoutes.removeAll { (route) -> Bool in

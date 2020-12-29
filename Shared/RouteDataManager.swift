@@ -32,6 +32,30 @@ class RouteDataManager
     
     //MARK: - Feed Source
     
+    static func getDataFromNextBusSource(_ command: String, _ arguments: Dictionary<String,String>, _ callback: @escaping (_ data: Data?) -> Void)
+    {
+        var commandString = ""
+        for commandArgument in arguments
+        {
+            commandString += "&" + commandArgument.key + "=" + commandArgument.value
+        }
+                
+        let url = URL(string: RouteConstants.nextBusJSONFeedSource + "?_=" + String(Date().timeIntervalSince1970) + "&command=" + command + commandString)!
+        
+        let task = (URLSession.shared.dataTask(with: url) { data, response, error in
+            if data != nil
+            {
+                callback(data)
+            }
+            else
+            {
+                callback(nil)
+            }
+        })
+        
+        task.resume()
+    }
+    
     static func getJSONFromNextBusSource(_ command: String, _ arguments: Dictionary<String,String>, _ callback: @escaping (_ json: [String : Any]?) -> Void)
     {
         var commandString = ""
@@ -46,6 +70,30 @@ class RouteDataManager
             if data != nil, let json = try? JSONSerialization.jsonObject(with: data!) as? [String:Any]
             {
                 callback(json)
+            }
+            else
+            {
+                callback(nil)
+            }
+        })
+        
+        task.resume()
+    }
+    
+    static func getDataFromBARTSource(_ path: String, _ command: String, _ arguments: Dictionary<String,String>, _ callback: @escaping (_ data: Data?) -> Void)
+    {
+        var commandString = ""
+        for commandArgument in arguments
+        {
+            commandString += "&" + commandArgument.key + "=" + commandArgument.value
+        }
+                
+        let url = URL(string: RouteConstants.BARTJSONFeedSource + path + "?_=" + String(Date().timeIntervalSince1970) + "&cmd=" + command + commandString + "&json=y")!
+        
+        let task = (URLSession.shared.dataTask(with: url) { data, response, error in
+            if data != nil
+            {
+                callback(data)
             }
             else
             {
@@ -105,7 +153,7 @@ class RouteDataManager
         let BARTSortedRouteKeys = Array<String>(BARTRouteDictionary.keys).sorted { (routeTag1, routeTag2) -> Bool in
             return routeTag1.localizedStandardCompare(routeTag2) == .orderedAscending
         }
-        let BARTStopDictionary = fetchBARTStops()
+        let BARTStopConfig = fetchBARTStops()
         print("Received BART Routes")
         
         self.totalRoutes = NextBusRouteDictionary.count + BARTRouteDictionary.count
@@ -124,7 +172,7 @@ class RouteDataManager
                 routesFetched += 1
                 checkForCompletedRoutes(routeTagOn: routeKeyValue.tag)
                 
-                return (nil, nil, nil)
+                return nil
             }
             else if configHashes.keys.contains(routeKeyValue.tag)
             {
@@ -133,30 +181,22 @@ class RouteDataManager
             
             print(agencyTag + " - " + routeKeyValue.tag)
             
-            let routeConfig = fetchNextBusRouteInfo(routeTag: routeKeyValue.tag)
+            guard let routeConfig = fetchNextBusRouteInfo(routeTag: routeKeyValue.tag) else { return nil }
             
-            let generalRouteConfig = routeConfig["general"]
-            routeObject.color = generalRouteConfig!["color"]!["color"] as? String
-            routeObject.oppositeColor = generalRouteConfig!["color"]!["oppositeColor"] as? String
+            routeObject.color = routeConfig.color
+            routeObject.oppositeColor = routeConfig.oppositeColor
             
             return (routeObject, routeFetchCallback.justCreated, routeConfig)
-        }, setStopFields: { (stopObject, stopDictionary) in
-            stopObject.latitude = Double(stopDictionary["lat"]!)!
-            stopObject.longitude = Double(stopDictionary["lon"]!)!
-            stopObject.id = stopDictionary["stopId"]
-            stopObject.title = stopDictionary["title"]
-            stopObject.shortTitle = stopDictionary["shortTitle"]
-            
-            return stopObject
         })
         backgroundGroup.wait()
-        self.loadRouteInfo(routeDictionary: BARTRouteDictionary, sortedRouteKeys: BARTSortedRouteKeys, agencyTag: RouteConstants.BARTAgencyTag, listHash: BARTRouteListHash, configHashes: BARTRouteConfigHashes, mainBackgroundGroup: nil, setRouteFields: { (routeKeyValue, backgroundMOC, configHashes, agencyTag) in
+                
+        self.loadRouteInfo(routeDictionary: BARTRouteDictionary, sortedRouteKeys: BARTSortedRouteKeys, agencyTag: RouteConstants.BARTAgencyTag, listHash: BARTRouteListHash, configHashes: BARTRouteConfigHashes, mainBackgroundGroup: nil) { (routeKeyValue, backgroundMOC, configHashes, agencyTag) -> (route: Route, justCreated: Bool, routeConfig: RouteConfiguation)? in
             var routeAbbr = routeKeyValue.title
             let routeNumber = routeKeyValue.tag
-            
+
             let routeStartEnd = routeAbbr.split(separator: "-")
             let reverseRouteAbbr = String(routeStartEnd[1] + "-" + routeStartEnd[0])
-            
+
             var tempRouteAbbr = routeAbbr
             var reverseRouteAbbrUsed = false
             var reverseRouteNumber: String?
@@ -166,83 +206,74 @@ class RouteDataManager
                 reverseRouteAbbrUsed = routeNumber > reverseRouteNumber!
                 tempRouteAbbr = routeNumber < reverseRouteNumber! ? routeAbbr : reverseRouteAbbr
             }
-            
+
             if reverseRouteAbbrUsed
             {
                 routesFetched += 1
                 checkForCompletedRoutes(routeTagOn: RouteConstants.BARTAgencyTag + "-" + routeAbbr)
-                
-                return (nil, nil, nil)
+
+                return nil
             }
-            
+
             let routeFetchCallback = fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "tag == %@", RouteConstants.BARTAgencyTag + "-" + tempRouteAbbr), moc: backgroundMOC)
             let routeObject = routeFetchCallback.object as! Route
             
-            let serverHashSplit = (routeObject.serverHash ?? "").split(separator: "-")
-            if serverHashSplit.count == 2 && String(serverHashSplit[reverseRouteAbbrUsed ? 1 : 0]) == configHashes[RouteConstants.BARTAgencyTag + "-" + routeNumber] && routeObject.directions?.array.count == 2 && configHashes[RouteConstants.BARTAgencyTag + "-" + routeNumber] != nil
+            let serverHash = routeObject.serverHash
+            let serverHashSplit = serverHash?.split(separator: "-")
+                        
+            if serverHashSplit?.count == 2 && String(serverHashSplit?[reverseRouteAbbrUsed ? 1 : 0] ?? "") == configHashes[RouteConstants.BARTAgencyTag + "-" + routeNumber] && routeObject.directions?.array.count == 2 && configHashes[RouteConstants.BARTAgencyTag + "-" + routeNumber] != nil
             {
                 routesFetched += 1
                 checkForCompletedRoutes(routeTagOn: RouteConstants.BARTAgencyTag + "-" + routeAbbr)
-                
-                return (nil, nil, nil)
+
+                return nil
             }
             else if configHashes.keys.contains(RouteConstants.BARTAgencyTag + "-" + routeNumber)
             {
                 let updatedHash = configHashes[RouteConstants.BARTAgencyTag + "-" + routeNumber] ?? " "
                 if reverseRouteAbbrUsed
                 {
-                    let serverHash1 = serverHashSplit.count >= 1 ? serverHashSplit[0] : " "
+                    let serverHash1 = serverHashSplit?.count ?? 0 >= 1 ? serverHashSplit![0] : " "
                     routeObject.serverHash = serverHash1 + "-" + updatedHash
                 }
                 else
                 {
-                    let serverHash2 = serverHashSplit.count >= 2 ? serverHashSplit[1] : " "
+                    let serverHash2 = serverHashSplit?.count ?? 0 >= 2 ? serverHashSplit![1] : " "
                     routeObject.serverHash = updatedHash + "-" + serverHash2
                 }
             }
-                        
-            var routeConfig = fetchBARTRouteInfo(routeNumber: routeNumber)
+
+            guard let routeConfig = fetchBARTRouteInfo(routeNumber: routeNumber) else { return nil }
             print(agencyTag + " - " + routeAbbr)
-            
+
             if BARTRouteDictionary.values.contains(reverseRouteAbbr)
             {
                 let reverseRouteNumber = BARTRouteDictionary.keys[BARTRouteDictionary.values.firstIndex(of: reverseRouteAbbr)!]
-                let reverseRouteConfig = fetchBARTRouteInfo(routeNumber: reverseRouteNumber)
-                routeConfig["directions"]![reverseRouteNumber] = reverseRouteConfig["directions"]![reverseRouteNumber]
-                
+                if let reverseRouteConfig = fetchBARTRouteInfo(routeNumber: reverseRouteNumber), let reverseRouteDirection = reverseRouteConfig.directions.first
+                {
+                    routeConfig.directions.append(reverseRouteDirection)
+                }
+
                 //Checking for ordering (lowest routeNumber)
                 routeAbbr = routeNumber < reverseRouteNumber ? routeAbbr : reverseRouteAbbr
             }
-            
-            let mainDirectionRouteConfig = routeConfig["directions"]?[routeNumber]
-            let reverseDirectionRouteConfig = routeConfig["directions"]?[reverseRouteNumber ?? ""]
-            routeConfig["directions"]?[routeAbbr] = mainDirectionRouteConfig
-            routeConfig["directions"]?[reverseRouteAbbr] = reverseDirectionRouteConfig
-            routeConfig["directions"]?[routeNumber] = nil
-            routeConfig["directions"]?[reverseRouteNumber ?? ""] = nil
-            
+
             routeObject.tag = RouteConstants.BARTAgencyTag + "-" + routeAbbr
-            routeObject.title = routeConfig["general"]!["general"]!["title"] as? String
-                        
-            let generalRouteConfig = routeConfig["general"]
-            routeObject.color = generalRouteConfig!["color"]!["color"] as? String
-            routeObject.oppositeColor = generalRouteConfig!["color"]!["oppositeColor"] as? String
+            routeObject.title = routeConfig.title
             
+            routeObject.color = routeConfig.color
+            routeObject.oppositeColor = routeConfig.oppositeColor
+            
+            if let stopArray = BARTStopConfig
+            {
+                try? routeConfig.loadStops(from: stopArray)
+            }
+
             return (routeObject, routeFetchCallback.justCreated, routeConfig)
-        }, setStopFields: { (stopObject, stopDictionary) in
-            guard let stopDictionary = BARTStopDictionary[stopDictionary["stopId"]!] else { return stopObject }
-            
-            stopObject.latitude = Double(stopDictionary["gtfs_latitude"]!)!
-            stopObject.longitude = Double(stopDictionary["gtfs_longitude"]!)!
-            stopObject.id = stopDictionary["abbr"]
-            stopObject.title = stopDictionary["name"]
-            stopObject.shortTitle = stopDictionary["abbr"]
-            
-            return stopObject
-        })
+        }
     }
     
-    static func loadRouteInfo(routeDictionary: Dictionary<String,String>, sortedRouteKeys: Array<String>, agencyTag: String, listHash: String, configHashes: Dictionary<String,String>, mainBackgroundGroup: DispatchGroup?, setRouteFields: @escaping (_ routeKeyValue: (tag: String, title: String), _ backgroundMOC: NSManagedObjectContext, _ configHashes: Dictionary<String,String>, _ agencyTag: String) -> (route: Route?, justCreated: Bool?, routeConfig: Dictionary<String,Dictionary<String,Dictionary<String,Any>>>?), setStopFields: @escaping (_ stopObject: Stop, _ stopDictionary: Dictionary<String,String>) -> Stop)
+    static func loadRouteInfo(routeDictionary: Dictionary<String,String>, sortedRouteKeys: Array<String>, agencyTag: String, listHash: String, configHashes: Dictionary<String,String>, mainBackgroundGroup: DispatchGroup?, setRouteFields: @escaping (_ routeKeyValue: (tag: String, title: String), _ backgroundMOC: NSManagedObjectContext, _ configHashes: Dictionary<String,String>, _ agencyTag: String) -> (route: Route, justCreated: Bool, routeConfig: RouteConfiguation)?)
     {
         CoreDataStack.persistentContainer.performBackgroundTask({ (backgroundMOC) in
             let agencyFetchCallback = fetchOrCreateObject(type: "Agency", predicate: NSPredicate(format: "name == %@", agencyTag), moc: backgroundMOC)
@@ -288,48 +319,53 @@ class RouteDataManager
             {
                 let routeTitle = routeDictionary[routeTag] ?? ""
                 
-                let routeFieldSetCallback = setRouteFields((tag: routeTag, title: routeTitle), backgroundMOC, configHashes, agency.name!)
+                guard let routeFieldSetCallback = setRouteFields((tag: routeTag, title: routeTitle), backgroundMOC, configHashes, agency.name!) else { continue }
                 
-                guard let route = routeFieldSetCallback.route else { continue }
-                guard let routeJustCreated = routeFieldSetCallback.justCreated else { continue }
-                guard let routeConfig = routeFieldSetCallback.routeConfig else { continue }
+                let route = routeFieldSetCallback.route
+                let routeJustCreated = routeFieldSetCallback.justCreated
+                let routeConfig = routeFieldSetCallback.routeConfig
                 
                 var updatedDirections = Array<String>()
                 
-                for directionInfo in routeConfig["directions"]!
+                for directionConfig in routeConfig.directions
                 {
-                    if directionInfo.value["stops"] == nil { continue }
+                    if directionConfig.stopTags.count == 0 { continue } // Not sure if this is needed
                     
-                    let directionFetchCallback = fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "tag == %@", directionInfo.key), moc: backgroundMOC)
-                    let direction = directionFetchCallback.object as! Direction
+                    let directionFetchCallback = fetchOrCreateObject(type: "Direction", predicate: NSPredicate(format: "tag == %@", directionConfig.tag), moc: backgroundMOC)
+                    let directionObject = directionFetchCallback.object as! Direction
                     
-                    direction.tag = directionInfo.key
-                    direction.name = directionInfo.value["name"] as? String
-                    direction.title = directionInfo.value["title"] as? String
+                    directionObject.tag = directionConfig.tag
+                    directionObject.name = directionConfig.name
+                    directionObject.title = directionConfig.title
                     
-                    updatedDirections.append(direction.tag ?? "")
+                    updatedDirections.append(directionObject.tag ?? "")
                     
-                    if direction.stops?.count ?? 0 > 0
+                    if directionObject.stops?.count ?? 0 > 0
                     {
-                        direction.removeFromStops(at: NSIndexSet(indexSet: IndexSet(integersIn: 0...direction.stops!.count-1)))
+                        directionObject.removeFromStops(at: NSIndexSet(indexSet: IndexSet(integersIn: 0...directionObject.stops!.count-1)))
                     }
                     
-                    for directionStopTag in directionInfo.value["stops"] as! Array<String>
+                    for stopTagConfig in directionConfig.stopTags
                     {
-                        let stopConfig = routeConfig["stops"]![directionStopTag]
-                                                
-                        let stopFetchCallback = fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "tag == %@", directionStopTag), moc: backgroundMOC)
-                        var stop = stopFetchCallback.object as! Stop
-                        stop.tag = directionStopTag
+                        guard let stopConfig = routeConfig.stops.first(where: { (stopConfig) -> Bool in
+                            return stopConfig.tag == stopTagConfig.tag
+                        }) else { continue }
                         
-                        stop = setStopFields(stop, stopConfig as! Dictionary<String, String>)
+                        let stopFetchCallback = fetchOrCreateObject(type: "Stop", predicate: NSPredicate(format: "tag == %@", stopConfig.tag), moc: backgroundMOC)
+                        let stopObject = stopFetchCallback.object as! Stop
+                        stopObject.tag = stopConfig.tag
+                        stopObject.latitude = stopConfig.latitude
+                        stopObject.longitude = stopConfig.longitude
+                        stopObject.id = stopConfig.id
+                        stopObject.title = stopConfig.title
+                        stopObject.shortTitle = stopConfig.shortTitle
                         
-                        direction.addToStops(stop)
+                        directionObject.addToStops(stopObject)
                     }
                     
                     if directionFetchCallback.justCreated
                     {
-                        route.addToDirections(direction)
+                        route.addToDirections(directionObject)
                     }
                 }
                 
@@ -390,14 +426,21 @@ class RouteDataManager
         let backgroundGroup = DispatchGroup()
         backgroundGroup.enter()
         
-        getJSONFromNextBusSource("routeList", ["a":RouteConstants.NextBusAgencyTag]) { (json) in
-            guard let json = json else { return }
+        getDataFromNextBusSource("routeList", ["a":RouteConstants.NextBusAgencyTag]) { (data) in
+            guard let data = data else { return }
+            
+            let decoder = JSONDecoder()
+            guard let routeList = try? decoder.decode(NextBusRouteList.self, from: data) else
+            {
+                backgroundGroup.leave()
+                return
+            }
             
             routeDictionary = Dictionary<String,String>()
             
-            for route in json["route"] as? [Dictionary<String,String>] ?? []
+            for route in routeList.routeObjects
             {
-                routeDictionary[route["tag"]!] = route["title"]!
+                routeDictionary[route.tag] = route.title
             }
             
             backgroundGroup.leave()
@@ -456,84 +499,25 @@ class RouteDataManager
         return routeConfigHashes
     }
     
-    static func fetchNextBusRouteInfo(routeTag: String) -> Dictionary<String,Dictionary<String,Dictionary<String,Any>>>
+    static func fetchNextBusRouteInfo(routeTag: String) -> NextBusRouteConfiguration?
     {
-        var routeInfoDictionary: Dictionary<String,Dictionary<String,Dictionary<String,Any>>>?
+        var routeConfiguration: NextBusRouteConfiguration?
         
         let backgroundGroup = DispatchGroup()
         backgroundGroup.enter()
         
-        getJSONFromNextBusSource("routeConfig", ["a":RouteConstants.NextBusAgencyTag,"r":routeTag,"terse":"618"]) { (json) in
-            guard let json = json else { return }
+        getDataFromNextBusSource("routeConfig", ["a":RouteConstants.NextBusAgencyTag,"r":routeTag,"terse":"618"]) { (data) in
+            guard let data = data else { return }
             
-            var routeDirectionsArray = Dictionary<String,Dictionary<String,Any>>()
-            var routeStopsArray = Dictionary<String,Dictionary<String,String>>()
-            var routeGeneralConfig = Dictionary<String,Dictionary<String,String>>()
-            
-            let route = json["route"] as? Dictionary<String,Any> ?? [:]
-            
-            routeGeneralConfig["color"] = Dictionary<String,String>()
-            routeGeneralConfig["color"]!["color"] = route["color"] as? String
-            //routeGeneralConfig["color"]!["oppositeColor"] = route["oppositeColor"] as? String
-            routeGeneralConfig["color"]!["oppositeColor"] = "FFFFFF"
-            routeGeneralConfig["general"] = Dictionary<String,String>()
-            routeGeneralConfig["general"]!["shortTitle"] = route["shortTitle"] as? String ?? route ["title"] as! String
-            
-            for stop in route["stop"] as? Array<Dictionary<String,String>> ?? []
-            {
-                var routeStopDictionary = Dictionary<String,String>()
-                let attributesToSet = ["title", "shortTitle", "lon", "lat", "stopId"]
-                
-                for attribute in attributesToSet
-                {
-                    routeStopDictionary[attribute] = stop[attribute]
-                }
-                
-                routeStopsArray[stop["tag"]!] = routeStopDictionary
-            }
-            
-            var routeConfigDirections: Array<Dictionary<String,Any>>?
-            if route["direction"] is Array<Dictionary<String,Any>>
-            {
-                routeConfigDirections = route["direction"] as? Array<Dictionary<String, Any>>
-            }
-            else if route["direction"] is Dictionary<String,Any>
-            {
-                routeConfigDirections = [route["direction"]] as? Array<Dictionary<String, Any>>
-            }
-            
-            for direction in routeConfigDirections ?? []
-            {
-                var routeDirectionDictionary = Dictionary<String,Any>()
-                
-                let attributesToSet = ["title", "name"]
-                for attribute in attributesToSet
-                {
-                    routeDirectionDictionary[attribute] = direction[attribute]
-                }
-                
-                var directionStops = Array<String>()
-                for directionStop in direction["stop"] as? Array<Dictionary<String,String>> ?? []
-                {
-                    directionStops.append(directionStop["tag"]!)
-                }
-                
-                routeDirectionDictionary["stops"] = directionStops
-                
-                routeDirectionsArray[direction["tag"] as! String] = routeDirectionDictionary
-            }
-            
-            routeInfoDictionary = Dictionary<String,Dictionary<String,Dictionary<String,Any>>>()
-            routeInfoDictionary!["stops"] = routeStopsArray
-            routeInfoDictionary!["directions"] = routeDirectionsArray
-            routeInfoDictionary!["general"] = routeGeneralConfig
+            let decoder = JSONDecoder()
+            routeConfiguration = try? decoder.decode(NextBusRouteConfiguration.self, from: data)
             
             backgroundGroup.leave()
         }
         
         backgroundGroup.wait()
         
-        return routeInfoDictionary!
+        return routeConfiguration
     }
     
     static func fetchBARTRoutes() -> Dictionary<String,String>
@@ -543,16 +527,21 @@ class RouteDataManager
         let backgroundGroup = DispatchGroup()
         backgroundGroup.enter()
         
-        getJSONFromBARTSource("/route.aspx", "routes", ["key":RouteConstants.BARTAPIKey]) { (json) in
-            guard let json = json else { return }
+        getDataFromBARTSource("/route.aspx", "routes", ["key":RouteConstants.BARTAPIKey]) { (data) in
+            guard let data = data else { return }
+            
+            let decoder = JSONDecoder()
+            guard let routeList = try? decoder.decode(BARTRouteList.self, from: data) else
+            {
+                backgroundGroup.leave()
+                return
+            }
             
             routeDictionary = Dictionary<String,String>()
-            
-            let jsonRouteArray = ((json["root"] as? Dictionary<String,Any>)?["routes"] as? Dictionary<String,Any>)?["route"] as? [Dictionary<String,Any>] ?? []
-            
-            for route in jsonRouteArray
+                        
+            for route in routeList.routeObjects
             {
-                routeDictionary[route["number"] as! String] = route["abbr"]! as? String
+                routeDictionary[route.number] = route.abbr
             }
             
             backgroundGroup.leave()
@@ -563,86 +552,47 @@ class RouteDataManager
         return routeDictionary
     }
     
-    static func fetchBARTRouteInfo(routeNumber: String) -> Dictionary<String,Dictionary<String,Dictionary<String,Any>>>
+    static func fetchBARTRouteInfo(routeNumber: String) -> BARTRouteConfiguration?
     {
-        var routeInfoDictionary: Dictionary<String,Dictionary<String,Dictionary<String,Any>>>?
+        var routeConfiguration: BARTRouteConfiguration?
         
         let backgroundGroup = DispatchGroup()
         backgroundGroup.enter()
         
-        getJSONFromBARTSource("/route.aspx", "routeinfo", ["key":RouteConstants.BARTAPIKey,"route":routeNumber]) { (json) in
-            guard let json = json else { return }
+        getDataFromBARTSource("/route.aspx", "routeinfo", ["key":RouteConstants.BARTAPIKey,"route":routeNumber]) { (data) in
+            guard let data = data else { return }
             
-            var routeDirectionsArray = Dictionary<String,Dictionary<String,Any>>()
-            var routeStopsDictionary = Dictionary<String,Dictionary<String,String>>()
-            var routeGeneralConfig = Dictionary<String,Dictionary<String,String>>()
+            let decoder = JSONDecoder()
+            routeConfiguration = try? decoder.decode(BARTRouteConfiguration.self, from: data)
             
-            let route = ((json["root"] as? Dictionary<String,Any>)?["routes"] as? Dictionary<String,Any>)?["route"] as? Dictionary<String,Any> ?? [:]
-            
-            routeGeneralConfig["color"] = Dictionary<String,String>()
-            let hexColorSplit = (route["hexcolor"] as? String)?.split(separator: "#") ?? ["000000"]
-            if hexColorSplit.count < 1 { backgroundGroup.leave(); return }
-            routeGeneralConfig["color"]!["color"] = String(hexColorSplit[0])
-            routeGeneralConfig["color"]!["oppositeColor"] = ((UIColor(hexString: routeGeneralConfig["color"]!["color"]!).hsba.b > 0.8) ? "000000" : "ffffff")
-            //routeGeneralConfig["color"]!["oppositeColor"] = "000000"
-            
-            routeGeneralConfig["general"] = Dictionary<String,String>()
-            routeGeneralConfig["general"]!["shortTitle"] = route["abbr"] as? String ?? route ["title"] as? String
-            routeGeneralConfig["general"]!["title"] = route["name"] as? String
-                        
-            for stop in (route["config"] as? Dictionary<String,Any>)?["station"] as? Array<String> ?? []
-            {
-                var routeStopDictionary = Dictionary<String,String>()
-                routeStopDictionary["stopId"] = stop
-                
-                routeStopsDictionary[stop] = routeStopDictionary
-            }
-            
-            var routeConfigDirection = Dictionary<String,Any>()
-            routeConfigDirection["origin"] = route["origin"] as? String
-            routeConfigDirection["destination"] = route["destination"] as? String
-            routeConfigDirection["name"] = (route["origin"] as? String ?? "") + "–" + (route["destination"] as? String ?? "")
-            routeConfigDirection["title"] = route["name"] as? String
-            routeConfigDirection["stops"] = (route["config"] as? Dictionary<String,Any>)?["station"]
-            routeDirectionsArray[routeNumber] = routeConfigDirection
-            // Should start using route numbers instead of origin - destination since it can be inconsistent
-            
-            routeInfoDictionary = Dictionary<String,Dictionary<String,Dictionary<String,Any>>>()
-            routeInfoDictionary!["stops"] = routeStopsDictionary
-            routeInfoDictionary!["directions"] = routeDirectionsArray
-            routeInfoDictionary!["general"] = routeGeneralConfig
-                        
             backgroundGroup.leave()
         }
         
         backgroundGroup.wait()
-                
-        return routeInfoDictionary!
+        
+        return routeConfiguration
     }
     
-    static func fetchBARTStops() -> Dictionary<String,Dictionary<String,String>>
+    static func fetchBARTStops() -> [BARTStopConfiguration]?
     {
-        var stopsDictionary = Dictionary<String,Dictionary<String,String>>()
-        
+        var stopArray: [BARTStopConfiguration]?
+
         let backgroundGroup = DispatchGroup()
         backgroundGroup.enter()
         
-        getJSONFromBARTSource("/stn.aspx", "stns", ["key":RouteConstants.BARTAPIKey]) { (json) in
-            guard let json = json else { return }
+        getDataFromBARTSource("/stn.aspx", "stns", ["key":RouteConstants.BARTAPIKey]) { (data) in
+            guard let data = data else { return }
             
-            let stopArray = ((json["root"] as? Dictionary<String,Any>)?["stations"] as? Dictionary<String,Any>)?["station"] as? Array<Dictionary<String,String>> ?? []
-            for stop in stopArray
-            {
-                if !stop.keys.contains("abbr") { continue }
-                stopsDictionary[stop["abbr"]!] = stop
-            }
+            let decoder = JSONDecoder()
+            let stopArrayContainer = try? decoder.decode(BARTStopArray.self, from: data)
+            stopArray = stopArrayContainer?.stops
             
             backgroundGroup.leave()
         }
-        
+
         backgroundGroup.wait()
-        
-        return stopsDictionary
+
+        return stopArray
     }
     
     //MARK: - Core Data
