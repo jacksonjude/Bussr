@@ -175,14 +175,14 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         switch appDelegate.getCurrentTheme()
         {
         case .light:
-            self.activityIndicator.style = .gray
+            self.activityIndicator.color = .gray
             self.vehicleSelectionButton.setImage(UIImage(named: "BusIcon" + darkImageAppend()), for: UIControl.State.normal)
             
             self.predictionTimesLabel.textColor = UIColor.black
             self.centerOnLocationButton.backgroundColor = UIColor.white.withAlphaComponent(DisplayConstants.mapAlphaValue)
             self.centerOnStopButton.backgroundColor = UIColor.white.withAlphaComponent(DisplayConstants.mapAlphaValue)
         case .dark:
-            self.activityIndicator.style = .white
+            self.activityIndicator.color = .white
             self.vehicleSelectionButton.setImage(UIImage(named: "BusIcon" + darkImageAppend()), for: UIControl.State.normal)
             
             self.predictionTimesLabel.textColor = UIColor.white

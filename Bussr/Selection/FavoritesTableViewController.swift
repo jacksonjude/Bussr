@@ -643,10 +643,10 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         self.performSegue(withIdentifier: "SelectedFavoriteUnwind", sender: self)
     }
     
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         if FavoriteState.favoritesOrganizeType == .group
         {
-            let delete = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
+            let delete = UIContextualAction(style: .destructive, title: "Delete") { (action, view, boolValue) in
                 if let groupObject = self.favoriteStopGroupSet?[indexPath.row]
                 {
                     if groupObject is FavoriteStopGroup
@@ -667,11 +667,11 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
                 }
             }
             
-            return [delete]
+            return UISwipeActionsConfiguration(actions: [delete])
         }
         else if FavoriteState.favoritesOrganizeType == .list
         {
-            let delete = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
+            let delete = UIContextualAction(style: .destructive, title: "Delete") { (action, view, boolValue) in
                 if let favoriteStop = self.favoriteStopObjects?[indexPath.row]
                 {
                     CoreDataStack.persistentContainer.viewContext.delete(favoriteStop)
@@ -680,7 +680,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
                 }
             }
             
-            return [delete]
+            return UISwipeActionsConfiguration(actions: [delete])
         }
         
         return nil
