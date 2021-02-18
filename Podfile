@@ -11,7 +11,7 @@ target 'Bussr' do
 
   # Pods for Bussr
   shared_pods
-  pod 'FloatingPanel'
+  pod 'FloatingPanel', '1.7.6'
 
 end
 

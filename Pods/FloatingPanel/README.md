@@ -138,13 +138,6 @@ class ViewController: UIViewController, FloatingPanelControllerDelegate {
         // Add and show the views managed by the `FloatingPanelController` object to self.view.
         fpc.addPanel(toParent: self)
     }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        // Remove the views managed by the `FloatingPanelController` object from self.view.
-        fpc.removePanelFromParent()
-    }
 }
 ```
 
@@ -447,7 +440,7 @@ The feature can be used for these 2 kind panels
 You can disable the pan gesture recognizer directly
 
 ```swift
-fpc.panGestureRecognizer.isEnable = false
+fpc.panGestureRecognizer.isEnabled = false
 ```
 
 Or use this `FloatingPanelControllerDelegate` method.
