@@ -1338,7 +1338,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrFavoritesExtension/BussrFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210218;
+				CURRENT_PROJECT_VERSION = 20210715;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = BussrFavoritesExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1361,7 +1361,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrFavoritesExtension/BussrFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210218;
+				CURRENT_PROJECT_VERSION = 20210715;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = BussrFavoritesExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1384,7 +1384,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrRecentExtension/BussrRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210218;
+				CURRENT_PROJECT_VERSION = 20210715;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = BussrRecentExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1407,7 +1407,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrRecentExtension/BussrRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210218;
+				CURRENT_PROJECT_VERSION = 20210715;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = BussrRecentExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1430,7 +1430,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrNearbyExtension/BussrNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210218;
+				CURRENT_PROJECT_VERSION = 20210715;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = BussrNearbyExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1453,7 +1453,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrNearbyExtension/BussrNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210218;
+				CURRENT_PROJECT_VERSION = 20210715;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = BussrNearbyExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1595,7 +1595,7 @@
 				CODE_SIGN_ENTITLEMENTS = Bussr/Bussr.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210218;
+				CURRENT_PROJECT_VERSION = 20210715;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = Bussr/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1621,7 +1621,7 @@
 				CODE_SIGN_ENTITLEMENTS = Bussr/Bussr.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210218;
+				CURRENT_PROJECT_VERSION = 20210715;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = Bussr/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1645,7 +1645,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "BussrWatchApp Extension/BussrWatchApp Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210218;
+				CURRENT_PROJECT_VERSION = 20210715;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = "BussrWatchApp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1671,7 +1671,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "BussrWatchApp Extension/BussrWatchApp Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210218;
+				CURRENT_PROJECT_VERSION = 20210715;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				INFOPLIST_FILE = "BussrWatchApp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1697,7 +1697,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = BussrWatchApp/Bussr.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210218;
+				CURRENT_PROJECT_VERSION = 20210715;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				IBSC_MODULE = MuniTrackerWatchApp_Extension;
 				INFOPLIST_FILE = BussrWatchApp/Info.plist;
@@ -1719,7 +1719,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = BussrWatchApp/Bussr.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210218;
+				CURRENT_PROJECT_VERSION = 20210715;
 				DEVELOPMENT_TEAM = 26Y8AQV29F;
 				IBSC_MODULE = MuniTrackerWatchApp_Extension;
 				INFOPLIST_FILE = BussrWatchApp/Info.plist;

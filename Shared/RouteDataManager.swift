@@ -13,7 +13,7 @@ import MapKit
 struct RouteConstants
 {
     static let NextBusAgencyTag = "sf-muni"
-    static let nextBusJSONFeedSource = "http://webservices.nextbus.com/service/publicJSONFeed"
+    static let nextBusJSONFeedSource = "https://retro.umoiq.com/service/publicJSONFeed"
     
     static let herokuHashSource = "http://munitracker.herokuapp.com"
     static let NextBusListHash = "/rlnextbushash"
@@ -761,10 +761,6 @@ class RouteDataManager
                         }
                     }
                     
-                    predictionArray.sort { (prediction1, prediction2) -> Bool in
-                        return prediction1["minutes"] as? Int ?? 0 < prediction2["minutes"] as? Int ?? 0
-                    }
-                    
                     directionDictionary?["prediction"] = predictionArray
                 }
                 
@@ -772,6 +768,10 @@ class RouteDataManager
                 if let predictionDictionary = directionDictionary?["prediction"] as? Dictionary<String,String>
                 {
                     predictionsArray = [predictionDictionary]
+                }
+                
+                predictionsArray.sort { (prediction1, prediction2) -> Bool in
+                    return Int(prediction1["minutes"] ?? "0") ?? 0 < Int(prediction2["minutes"] ?? "0") ?? 0
                 }
                 
                 var predictions = Array<String>()
