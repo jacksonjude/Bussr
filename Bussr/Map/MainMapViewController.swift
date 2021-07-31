@@ -142,7 +142,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         mainMapView.showsUserLocation = true
         mainMapView.isRotateEnabled = false
         mainMapView.isPitchEnabled = false
-        centerMapOnLocation(location: initialLocation, range: 15000)
         
         setupRouteMapUpdateNotifications()
                 
@@ -271,6 +270,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             self.setupPredictionRefreshTimer()
             self.refreshPredictionNavigationBar()
         }
+        
+        centerMapOnLocation(location: initialLocation, range: 15000, animated: false)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -575,7 +576,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         return (latDistance, longDistance)
     }
     
-    func centerMapOnLocation(location: CLLocation, range: CLLocationDistance)
+    func centerMapOnLocation(location: CLLocation, range: CLLocationDistance, animated: Bool = true)
     {
         let prevMapRegion = mainMapView.region
         
@@ -589,7 +590,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         mainMapView.setRegion(prevMapRegion, animated: false)
         
-        mainMapView.setRegion(MKCoordinateRegion(center: offsetCoordinate, latitudinalMeters: range, longitudinalMeters: range), animated: true)
+        mainMapView.setRegion(MKCoordinateRegion(center: offsetCoordinate, latitudinalMeters: range, longitudinalMeters: range), animated: animated)
         
         showHideStopAnnotations(mapView: mainMapView, animated: false, range: range)
     }
