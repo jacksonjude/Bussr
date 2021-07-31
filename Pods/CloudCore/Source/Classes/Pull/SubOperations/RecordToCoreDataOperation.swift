@@ -82,30 +82,30 @@ public class RecordToCoreDataOperation: AsynchronousOperation {
 			let recordValue = record.value(forKey: key)
 			
 			let ckAttribute = CloudKitAttribute(value: recordValue, fieldName: key, entityName: entityName, serviceAttributes: serviceAttributeNames, context: context)
-            if let coreDataValue = try? ckAttribute.makeCoreDataValue() {
-                if let cdAttribute = object.entity.attributesByName[key], cdAttribute.attributeType == .transformableAttributeType,
-                    let data = coreDataValue as? Data {
-                    if let name = cdAttribute.valueTransformerName, let transformer = ValueTransformer(forName: NSValueTransformerName(rawValue: name)) {
-                        let value = transformer.transformedValue(coreDataValue)
-                        object.setValue(value, forKey: key)
-                    } else if let unarchivedObject = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: [NSObject.classForKeyedUnarchiver()], from: data) {
-                        object.setValue(unarchivedObject, forKey: key)
-                    } else {
-                        object.setValue(coreDataValue, forKey: key)
-                    }
+			let coreDataValue = try ckAttribute.makeCoreDataValue()
+            
+            if let cdAttribute = object.entity.attributesByName[key], cdAttribute.attributeType == .transformableAttributeType,
+                let data = coreDataValue as? Data {
+                if let name = cdAttribute.valueTransformerName, let transformer = ValueTransformer(forName: NSValueTransformerName(rawValue: name)) {
+                    let value = transformer.transformedValue(coreDataValue)
+                    object.setValue(value, forKey: key)
+                } else if let unarchivedObject = NSKeyedUnarchiver.unarchiveObject(with: data) {
+                    object.setValue(unarchivedObject, forKey: key)
                 } else {
-                    if object.entity.attributesByName[key] != nil || object.entity.relationshipsByName[key] != nil {
-                        object.setValue(coreDataValue, forKey: key)
-                    }
-                    missingObjectsPerEntities[object] = ckAttribute.notFoundRecordNamesForAttribute
+                    object.setValue(coreDataValue, forKey: key)
                 }
+            } else {
+                if object.entity.attributesByName[key] != nil || object.entity.relationshipsByName[key] != nil {
+                    object.setValue(coreDataValue, forKey: key)
+                }
+                missingObjectsPerEntities[object] = ckAttribute.notFoundRecordNamesForAttribute
             }
 		}
 		
 		// Set system headers
         object.setValue(record.recordID.recordName, forKey: serviceAttributeNames.recordName)
         object.setValue(record.recordID.zoneID.ownerName, forKey: serviceAttributeNames.ownerName)
-        if record.recordID.zoneID.zoneName == CKRecordZone.default().zoneID.zoneName {
+        if record.recordID.zoneID == CKRecordZone.default().zoneID {
             object.setValue(record.encdodedSystemFields, forKey: serviceAttributeNames.publicRecordData)
         } else {
             object.setValue(record.encdodedSystemFields, forKey: serviceAttributeNames.privateRecordData)

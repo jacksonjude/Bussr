@@ -19,8 +19,6 @@ class CoreDataObserver {
 
 	let cloudContextName = "CloudCoreSync"
 	
-    let processSemaphore = DispatchSemaphore(value: 1)
-    
 	// Used for errors delegation
 	weak var delegate: CloudCoreDelegate?
 	
@@ -84,11 +82,6 @@ class CoreDataObserver {
     }
     
     func processChanges() -> Bool {
-        processSemaphore.wait()
-        defer {
-            processSemaphore.signal()
-        }
-        
         var success = true
         
         CloudCore.delegate?.willSyncToCloud()
@@ -232,7 +225,7 @@ class CoreDataObserver {
                 let settings = UserDefaults.standard
                 var token: NSPersistentHistoryToken? = nil
                 if let data = settings.object(forKey: key) as? Data {
-                    token = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: [NSPersistentHistoryToken.classForKeyedUnarchiver()], from: data) as? NSPersistentHistoryToken
+                     token = NSKeyedUnarchiver.unarchiveObject(with: data) as? NSPersistentHistoryToken
                 }
                 let historyRequest = NSPersistentHistoryChangeRequest.fetchHistory(after: token)
                 do {
@@ -244,9 +237,8 @@ class CoreDataObserver {
                                 let deleteRequest = NSPersistentHistoryChangeRequest.deleteHistory(before: transaction)
                                 try moc.execute(deleteRequest)
                                 
-                                if let data = try? NSKeyedArchiver.archivedData(withRootObject: transaction.token, requiringSecureCoding: false) {
-                                    settings.set(data, forKey: key)
-                                }
+                                let data = NSKeyedArchiver.archivedData(withRootObject: transaction.token)
+                                settings.set(data, forKey: key)
                             } else {
                                 break
                             }
@@ -284,10 +276,12 @@ class CoreDataObserver {
 			}
 			
 			// Subscribe operation
-            let subscribeOperation = SubscribeOperation()
-            subscribeOperation.errorBlock = { self.delegate?.error(error: $0, module: .some(.pushToCloud)) }
-            subscribeOperation.addDependency(createZoneOperation)
-            pushOperationQueue.addOperation(subscribeOperation)
+			#if !os(watchOS)
+				let subscribeOperation = SubscribeOperation()
+				subscribeOperation.errorBlock = { self.delegate?.error(error: $0, module: .some(.pushToCloud)) }
+				subscribeOperation.addDependency(createZoneOperation)
+				pushOperationQueue.addOperation(subscribeOperation)
+			#endif
 			
 			// Upload all local data
 			let uploadOperation = PushAllLocalDataOperation(parentContext: parentContext, managedObjectModel: container.managedObjectModel)

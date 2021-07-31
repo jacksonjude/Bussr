@@ -60,7 +60,7 @@ CloudCore is built using a "black box" architecture, so it works invisibly for y
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'CloudCore'
+pod 'CloudCore', :git => 'https://github.com/deeje/CloudCore.git'
 ```
 
 ## How to help?

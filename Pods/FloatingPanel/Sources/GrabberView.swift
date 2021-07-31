@@ -1,11 +1,10 @@
-//
-//  Created by Shin Yamamoto on 2018/09/19.
-//  Copyright © 2018 Shin Yamamoto. All rights reserved.
-//
+// Copyright 2018-Present Shin Yamamoto. All rights reserved. MIT license.
 
 import UIKit
 
-public class GrabberHandleView: UIView {
+/// A view that presents a grabber handle in the surface of a panel.
+@objc(FloatingPanelGrabberView)
+public class GrabberView: UIView {
 
     public var barColor = UIColor(displayP3Red: 0.76, green: 0.77, blue: 0.76, alpha: 1.0) { didSet { backgroundColor = barColor } }
 
@@ -30,6 +29,5 @@ public class GrabberHandleView: UIView {
 
     private func render() {
         self.layer.masksToBounds = true
-        self.layer.cornerRadius = frame.size.height * 0.5
     }
 }

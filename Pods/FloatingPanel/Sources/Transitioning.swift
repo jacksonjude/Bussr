@@ -1,36 +1,33 @@
-//
-//  Created by Shin Yamamoto on 2018/11/21.
-//  Copyright © 2018 Shin Yamamoto. All rights reserved.
-//
+// Copyright 2018-Present Shin Yamamoto. All rights reserved. MIT license.
 
 import UIKit
 
-class FloatingPanelModalTransition: NSObject, UIViewControllerTransitioningDelegate {
+class ModalTransition: NSObject, UIViewControllerTransitioningDelegate {
     func animationController(forPresented presented: UIViewController,
                              presenting: UIViewController,
                              source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return FloatingPanelModalPresentTransition()
+        return ModalPresentTransition()
     }
 
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return FloatingPanelModalDismissTransition()
+        return ModalDismissTransition()
     }
 
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        return FloatingPanelPresentationController(presentedViewController: presented, presenting: presenting)
+        return PresentationController(presentedViewController: presented, presenting: presenting)
     }
 }
 
-class FloatingPanelPresentationController: UIPresentationController {
+class PresentationController: UIPresentationController {
     override func presentationTransitionWillBegin() {
         // Must call here even if duplicating on in containerViewWillLayoutSubviews()
-        // Because it let the floating panel present correctly with the presentation animation
+        // Because it let the panel present correctly with the presentation animation
         addFloatingPanel()
     }
 
     override func presentationTransitionDidEnd(_ completed: Bool) {
         // For non-animated presentation
-        if let fpc = presentedViewController as? FloatingPanelController, fpc.position == .hidden {
+        if let fpc = presentedViewController as? FloatingPanelController, fpc.state == .hidden {
             fpc.show(animated: false, completion: nil)
         }
     }
@@ -38,7 +35,7 @@ class FloatingPanelPresentationController: UIPresentationController {
     override func dismissalTransitionDidEnd(_ completed: Bool) {
         if let fpc = presentedViewController as? FloatingPanelController {
             // For non-animated dismissal
-            if fpc.position != .hidden {
+            if fpc.state != .hidden {
                 fpc.hide(animated: false, completion: nil)
             }
             fpc.view.removeFromSuperview()
@@ -64,9 +61,7 @@ class FloatingPanelPresentationController: UIPresentationController {
         addFloatingPanel()
 
         // Forward touch events to the presenting view controller
-        (fpc.view as? FloatingPanelPassThroughView)?.eventForwardingView = presentingViewController.view
-
-        fpc.backdropView.dismissalTapGestureRecognizer.isEnabled = true
+        (fpc.view as? PassthroughView)?.eventForwardingView = presentingViewController.view
     }
 
     @objc func handleBackdrop(tapGesture: UITapGestureRecognizer) {
@@ -85,45 +80,67 @@ class FloatingPanelPresentationController: UIPresentationController {
     }
 }
 
-class FloatingPanelModalPresentTransition: NSObject, UIViewControllerAnimatedTransitioning {
+class ModalPresentTransition: NSObject, UIViewControllerAnimatedTransitioning {
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         guard
             let fpc = transitionContext?.viewController(forKey: .to) as? FloatingPanelController
         else { fatalError()}
 
-        let animator = fpc.behavior.addAnimator(fpc, to: fpc.layout.initialPosition)
+        let animator = fpc.animatorForPresenting(to: fpc.layout.initialState)
         return TimeInterval(animator.duration)
     }
 
-    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+    func interruptibleAnimator(using transitionContext: UIViewControllerContextTransitioning) -> UIViewImplicitlyAnimating {
         guard
             let fpc = transitionContext.viewController(forKey: .to) as? FloatingPanelController
         else { fatalError() }
 
-        fpc.show(animated: true) {
+        if let animator = fpc.transitionAnimator {
+            return animator
+        }
+
+        fpc.suspendTransitionAnimator(true)
+        fpc.show(animated: true) { [weak fpc] in
+            fpc?.suspendTransitionAnimator(false)
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
+        return fpc.transitionAnimator!
+    }
+
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        self.interruptibleAnimator(using: transitionContext).startAnimation()
     }
 }
 
-class FloatingPanelModalDismissTransition: NSObject, UIViewControllerAnimatedTransitioning {
+class ModalDismissTransition: NSObject, UIViewControllerAnimatedTransitioning {
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         guard
             let fpc = transitionContext?.viewController(forKey: .from) as? FloatingPanelController
         else { fatalError()}
 
-        let animator = fpc.behavior.removeAnimator(fpc, from: fpc.position)
+        let animator = fpc.animatorForDismissing(with: .zero)
         return TimeInterval(animator.duration)
     }
 
-    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+    func interruptibleAnimator(using transitionContext: UIViewControllerContextTransitioning) -> UIViewImplicitlyAnimating {
         guard
             let fpc = transitionContext.viewController(forKey: .from) as? FloatingPanelController
         else { fatalError() }
 
-        fpc.hide(animated: true) {
+        if let animator = fpc.transitionAnimator {
+            return animator
+        }
+
+        fpc.suspendTransitionAnimator(true)
+        fpc.hide(animated: true) { [weak fpc] in
+            fpc?.suspendTransitionAnimator(false)
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
+        return fpc.transitionAnimator!
+    }
+
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        self.interruptibleAnimator(using: transitionContext).startAnimation()
     }
 }
 

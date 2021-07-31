@@ -1,11 +1,9 @@
-//
-//  Created by Shin Yamamoto on 2018/11/21.
-//  Copyright © 2018 Shin Yamamoto. All rights reserved.
-//
+// Copyright 2018-Present Shin Yamamoto. All rights reserved. MIT license.
 
 import UIKit
 
-class FloatingPanelPassThroughView: UIView {
+@objc(FloatingPanelPassthroughView)
+class PassthroughView: UIView {
     public weak var eventForwardingView: UIView?
     public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let hitView = super.hitTest(point, with: event)

@@ -17,7 +17,7 @@ import CloudKit
 	* tokens per record inside *Record Data* attribute, it is managed automatically you don't need to take any actions about that token
 */
 
-open class Tokens: NSObject, NSSecureCoding {
+open class Tokens: NSObject, NSCoding {
 	
     var tokensByDatabaseScope = [Int: CKServerChangeToken]()
     var tokensByRecordZoneID = [CKRecordZone.ID: CKServerChangeToken]()
@@ -27,10 +27,6 @@ open class Tokens: NSObject, NSSecureCoding {
         static let tokensByRecordZoneID = "tokensByRecordZoneID"
 	}
 	
-    public static var supportsSecureCoding: Bool {
-        return true
-    }
-    
 	/// Create fresh object without any Tokens inside. Can be used to fetch full data.
 	public override init() {
 		super.init()
@@ -42,29 +38,19 @@ open class Tokens: NSObject, NSSecureCoding {
 	///
 	/// - Returns: previously saved `Token` object, if tokens weren't saved before newly initialized `Tokens` object will be returned
 	public static func loadFromUserDefaults() -> Tokens {
-        if let tokensData = UserDefaults.standard.data(forKey: CloudCore.config.userDefaultsKeyTokens) {
-            do {
-                let allowableClasses = [Tokens.classForKeyedUnarchiver(),
-                                        NSDictionary.classForKeyedUnarchiver(),
-                                        CKRecordZone.ID.classForKeyedUnarchiver(),
-                                        CKServerChangeToken.classForKeyedUnarchiver()]
-                let tokens = try NSKeyedUnarchiver.unarchivedObject(ofClasses: allowableClasses, from: tokensData) as! Tokens
-                
-                return tokens
-            } catch {
-//                print("\(error)")
-            }
+		guard let tokensData = UserDefaults.standard.data(forKey: CloudCore.config.userDefaultsKeyTokens),
+			let tokens = NSKeyedUnarchiver.unarchiveObject(with: tokensData) as? Tokens else {
+				return Tokens()
 		}
 		
-        return Tokens()
+		return tokens
 	}
 	
 	/// Save tokens to UserDefaults and synchronize. Key is used from `CloudCoreConfig.userDefaultsKeyTokens`
 	open func saveToUserDefaults() {
-        if let tokensData = try? NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: true) {
-            UserDefaults.standard.set(tokensData, forKey: CloudCore.config.userDefaultsKeyTokens)
-            UserDefaults.standard.synchronize()
-        }
+		let tokensData = NSKeyedArchiver.archivedData(withRootObject: self)
+		UserDefaults.standard.set(tokensData, forKey: CloudCore.config.userDefaultsKeyTokens)
+		UserDefaults.standard.synchronize()
 	}
 	
 	// MARK: NSCoding

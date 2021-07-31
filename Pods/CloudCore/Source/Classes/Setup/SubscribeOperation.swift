@@ -9,6 +9,8 @@
 import Foundation
 import CloudKit
 
+#if !os(watchOS)
+@available(watchOS, unavailable)
 class SubscribeOperation: AsynchronousOperation {
 	
 	var errorBlock: ErrorBlock?
@@ -85,3 +87,4 @@ class SubscribeOperation: AsynchronousOperation {
 	}
 	
 }
+#endif

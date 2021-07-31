@@ -10,6 +10,7 @@ import CloudKit
 
 // Use that class to manage subscriptions to public CloudKit database.
 // If you want to sync some records with public database you need to subsrcibe for notifications on that changes to enable iCloud -> Local database syncing.
+#if !os(watchOS)
 public class PublicDatabaseSubscriptions {
     
     private static var prefix: String { return CloudCore.config.publicSubscriptionIDPrefix }
@@ -42,10 +43,7 @@ public class PublicDatabaseSubscriptions {
             completion?(subscription.subscriptionID, error)
         }
         
-        let config = CKOperation.Configuration()
-        config.timeoutIntervalForResource = 20
-        operation.configuration = config
-        
+        operation.timeoutIntervalForResource = 20
         CKContainer.default().publicCloudDatabase.add(operation)
     }
     
@@ -65,10 +63,7 @@ public class PublicDatabaseSubscriptions {
             completion?(error)
         }
         
-        let config = CKOperation.Configuration()
-        config.timeoutIntervalForResource = 20
-        operation.configuration = config
-        
+        operation.timeoutIntervalForResource = 20
         CKContainer.default().publicCloudDatabase.add(operation)
     }
     
@@ -99,3 +94,4 @@ public class PublicDatabaseSubscriptions {
     }
     
 }
+#endif

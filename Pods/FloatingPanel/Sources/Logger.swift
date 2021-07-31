@@ -1,11 +1,9 @@
-//
-//  Created by Shin Yamamoto on 2018/10/09.
-//  Copyright © 2018 Shin Yamamoto. All rights reserved.
-//
+// Copyright 2018-Present Shin Yamamoto. All rights reserved. MIT license.
 
 import Foundation
 import os.log
 
+// Must be a variable to use `hook` property in testing
 var log = {
     return Logger()
 }()
@@ -23,9 +21,9 @@ struct Logger {
         var displayName: String {
             switch self {
             case .debug:
-                return "D/"
+                return "Debug:"
             case .info:
-                return "I/"
+                return "Info:"
             case .warning:
                 return "Warning:"
             case .error:
@@ -54,23 +52,24 @@ struct Logger {
         osLog = OSLog(subsystem: "com.scenee.FloatingPanel", category: "FloatingPanel")
     }
 
-    private func log(_ level: Level, _ message: Any, _ arguments: [Any], function: String, line: UInt) {
+    private func log(_ level: Level, _ message: Any, _ arguments: [Any], tag: String, function: String, line: UInt) {
         _ = s.wait(timeout: .now() + 0.033)
         defer { s.signal() }
 
         let extraMessage: String = arguments.map({ String(describing: $0) }).joined(separator: " ")
+        let _tag = tag.isEmpty ? "" : "\(tag):"
         let log: String = {
             switch level {
             case .debug:
-                return "\(level.displayName) \(message) \(extraMessage) (\(function):\(line))"
+                return "\(level.displayName)\(_tag) \(message) \(extraMessage) (\(function):\(line))"
             default:
-                return "\(level.displayName) \(message) \(extraMessage)"
+                return "\(level.displayName)\(_tag) \(message) \(extraMessage)"
             }
         }()
 
         hook?(log, level)
 
-        os_log("%@", log: osLog, type: level.osLogType, log)
+        os_log("%{public}@", log: osLog, type: level.osLogType, log)
     }
 
     private func getPrettyFunction(_ function: String, _ file: String) -> String {
@@ -81,21 +80,21 @@ struct Logger {
         }
     }
 
-    func debug(_ log: Any, _ arguments: Any..., function: String = #function, file: String  = #file, line: UInt = #line) {
+    func debug(_ log: Any, _ arguments: Any..., tag: String = "", function: String = #function, file: String  = #file, line: UInt = #line) {
         #if __FP_LOG
-        self.log(.debug, log, arguments, function: getPrettyFunction(function, file), line: line)
+        self.log(.debug, log, arguments, tag: tag, function: getPrettyFunction(function, file), line: line)
         #endif
     }
 
-    func info(_ log: Any, _ arguments: Any..., function: String = #function, file: String  = #file, line: UInt = #line) {
-        self.log(.info, log, arguments, function: getPrettyFunction(function, file), line: line)
+    func info(_ log: Any, _ arguments: Any..., tag: String = "",  function: String = #function, file: String  = #file, line: UInt = #line) {
+        self.log(.info, log, arguments, tag: tag, function: getPrettyFunction(function, file), line: line)
     }
 
     func warning(_ log: Any, _ arguments: Any..., function: String = #function, file: String  = #file, line: UInt = #line) {
-        self.log(.warning, log, arguments, function: getPrettyFunction(function, file), line: line)
+        self.log(.warning, log, arguments, tag: "", function: getPrettyFunction(function, file), line: line)
     }
 
     func error(_ log: Any, _ arguments: Any..., function: String = #function, file: String  = #file, line: UInt = #line) {
-        self.log(.error, log, arguments, function: getPrettyFunction(function, file), line: line)
+        self.log(.error, log, arguments, tag: "", function: getPrettyFunction(function, file), line: line)
     }
 }

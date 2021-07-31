@@ -309,7 +309,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     
     var pickerFloatingPanelController: FloatingPanelController?
     var shouldNotAdjustMapForPanelMove = false
-    var previousPanelPosition: FloatingPanelPosition = .tip
+    var previousPanelPosition: FloatingPanelState = .tip
     
     func setupPickerPanel()
     {
@@ -332,7 +332,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         self.movePickerPanelPosition(position: .tip, animated: false)
     }
     
-    func movePickerPanelPosition(position: FloatingPanelPosition, animated: Bool, shouldAdjustMap: Bool = false)
+    func movePickerPanelPosition(position: FloatingPanelState, animated: Bool, shouldAdjustMap: Bool = false)
     {
         self.pickerFloatingPanelController?.move(to: position, animated: animated)
         self.previousPanelPosition = position
@@ -347,17 +347,17 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         return DisplayConstants.routeInfoPickerViewTag
     }
     
-    func floatingPanel(_ vc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout? {
+    func floatingPanel(_ vc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout {
         return RouteInfoPickerFloatingPanelLayout()
     }
     
     func floatingPanelDidChangePosition(_ vc: FloatingPanelController) {
-        if self.previousPanelPosition == vc.position
+        if self.previousPanelPosition == vc.state
         {
             self.shouldNotAdjustMapForPanelMove = true
         }
         
-        if vc.position == .tip
+        if vc.state == .tip
         {
             self.view.viewWithTag(getTagForRouteInfoView())?.alpha = 0.0
             NotificationCenter.default.post(name: NSNotification.Name("CollapseFilters"), object: self)
@@ -384,14 +384,19 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             }
         }
         
-        self.previousPanelPosition = vc.position
+        self.previousPanelPosition = vc.state
     }
     
     //var previousPanelYPos: CGFloat?
     
     func floatingPanelDidMove(_ vc: FloatingPanelController) {
+        let loc = vc.surfaceLocation
+        let minY = vc.surfaceLocation(for: .half).y
+        let maxY = vc.surfaceLocation(for: .tip).y
+        vc.surfaceLocation = CGPoint(x: loc.x, y: min(max(loc.y, minY), maxY))
+        
         let y = vc.surfaceView.frame.origin.y
-        let tipY = vc.originYOfSurface(for: .tip)
+        let tipY = vc.surfaceLocation(for: .tip).y
         if y > tipY - DisplayConstants.panelTipSize {
             let progress = max(0.0, min((tipY - y) / DisplayConstants.panelTipSize, 1.0))
             self.view.viewWithTag(getTagForRouteInfoView())?.alpha = progress
@@ -408,10 +413,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
 //        }
     }
     
-    func floatingPanelDidEndDragging(_ vc: FloatingPanelController, withVelocity velocity: CGPoint, targetPosition: FloatingPanelPosition) {
+    func floatingPanelDidEndDragging(_ fpc: FloatingPanelController, willAttract attract: Bool) {
         if MapState.routeInfoShowing == .none { return }
-
-        let progress = ((targetPosition == .tip) ? 0.0 : 1.0)
+        
+        let progress = ((fpc.state == .tip) ? 0.0 : 1.0)
+        print(progress)
         UIView.animate(withDuration: 0.25, delay: 0.0, options: .allowUserInteraction, animations: {
             self.view.viewWithTag(self.getTagForRouteInfoView())?.alpha = CGFloat(progress)
         }, completion: nil)
@@ -467,7 +473,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         centerPoint.x += x
         centerPoint.y += y/2
         
-        let offset = (pickerFloatingPanelController?.position == .half) ? DisplayConstants.panelHalfSize : DisplayConstants.panelTipSize
+        let offset = (pickerFloatingPanelController?.state == .half) ? DisplayConstants.panelHalfSize : DisplayConstants.panelTipSize
         centerPoint.y -= offset/2
         
         let newCenterLocation = mainMapView.convert(centerPoint, toCoordinateFrom: self.view)
@@ -582,7 +588,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         mainMapView.setRegion(MKCoordinateRegion(center: mainMapView.region.center, latitudinalMeters: range, longitudinalMeters: range), animated: false)
         
-        let offset = (pickerFloatingPanelController?.position == .half) ? DisplayConstants.panelHalfSize : DisplayConstants.panelTipSize
+        let offset = (pickerFloatingPanelController?.state == .half) ? DisplayConstants.panelHalfSize : DisplayConstants.panelTipSize
         
         var point = mainMapView.convert(location.coordinate, toPointTo: self.view)
         point.y += offset/2
@@ -1626,31 +1632,24 @@ class SelectedStopHeadingAnnotation: NSObject, MKAnnotation
     }
 }
 
-class RouteInfoPickerFloatingPanelLayout: FloatingPanelIntrinsicLayout {
-    var initialPosition: FloatingPanelPosition {
+class RouteInfoPickerFloatingPanelLayout: FloatingPanelBottomLayout {
+    override var initialState: FloatingPanelState {
         return .tip
     }
     
-    var supportedPositions: Set<FloatingPanelPosition> {
-        return [.tip, .half]
-    }
-
-    func insetFor(position: FloatingPanelPosition) -> CGFloat? {
-        switch position {
-            case .half: return DisplayConstants.panelHalfSize
-            case .tip: return DisplayConstants.panelTipSize
-            default: return nil
-        }
-    }
-    
-    var positionReference: FloatingPanelLayoutReference {
-        return .fromSafeArea
+    override var anchors: [FloatingPanelState : FloatingPanelLayoutAnchoring] {
+        return [
+            .half : FloatingPanelLayoutAnchor(absoluteInset: DisplayConstants.panelHalfSize, edge: .bottom, referenceGuide: .safeArea),
+            .tip : FloatingPanelLayoutAnchor(absoluteInset: DisplayConstants.panelTipSize, edge: .bottom, referenceGuide: .safeArea)
+        ]
     }
 }
 
 class RouteInfoPickerTipFloatingPanelLayout: RouteInfoPickerFloatingPanelLayout
 {
-    override var supportedPositions: Set<FloatingPanelPosition> {
-        return [.tip]
+    override var anchors: [FloatingPanelState : FloatingPanelLayoutAnchoring] {
+        return [
+            .tip : FloatingPanelIntrinsicLayoutAnchor(absoluteOffset: DisplayConstants.panelTipSize, referenceGuide: .safeArea)
+        ]
     }
 }

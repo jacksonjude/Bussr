@@ -1,7 +1,7 @@
 # Uncomment the next line to define a global platform for your project
 
 def shared_pods
-    pod 'CloudCore', :git => 'https://github.com/deeje/CloudCore.git', :branch => 'feature/Xcode11', :inhibit_warnings => true
+    pod 'CloudCore'
 end
 
 target 'Bussr' do
@@ -11,7 +11,7 @@ target 'Bussr' do
 
   # Pods for Bussr
   shared_pods
-  pod 'FloatingPanel', '1.7.6'
+  pod 'FloatingPanel', '2.4.0'
 
 end
 

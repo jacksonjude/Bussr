@@ -1,29 +1,20 @@
 PODS:
-  - CloudCore (3.1)
-  - FloatingPanel (1.7.6)
+  - CloudCore (3.0.1)
+  - FloatingPanel (2.4.0)
 
 DEPENDENCIES:
-  - CloudCore (from `https://github.com/deeje/CloudCore.git`, branch `feature/Xcode11`)
-  - FloatingPanel (= 1.7.6)
+  - CloudCore
+  - FloatingPanel (= 2.4.0)
 
 SPEC REPOS:
   trunk:
+    - CloudCore
     - FloatingPanel
 
-EXTERNAL SOURCES:
-  CloudCore:
-    :branch: feature/Xcode11
-    :git: https://github.com/deeje/CloudCore.git
-
-CHECKOUT OPTIONS:
-  CloudCore:
-    :commit: 32cdd72ae86c0463a511c7ea498776049bb3bc71
-    :git: https://github.com/deeje/CloudCore.git
-
 SPEC CHECKSUMS:
-  CloudCore: ecaf5056198f4a1c5cf7c0041846f1e20a914fa2
-  FloatingPanel: 9016eac88f21ca9fce53f5709e1f49485c0c355e
+  CloudCore: 605345ab755affeb1d8320c467d87c7d0aa746a9
+  FloatingPanel: fa60183672ed86313b9e241e34465e82211260e8
 
-PODFILE CHECKSUM: 1c56b2813be6cd6205572e111b90b7e77b24ee82
+PODFILE CHECKSUM: fd97bd19a8d02f2950f348943ec107cb9a39512b
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.2

@@ -10,6 +10,7 @@ import CloudKit
 
 /// Fetch CloudCore's subscriptions from Public CKDatabase
 
+#if !os(watchOS)
 class FetchPublicSubscriptionsOperation: AsynchronousOperation {
     var errorBlock: ErrorBlock?
     var fetchCompletionBlock: (([CKSubscription]) -> Void)?
@@ -44,3 +45,4 @@ class FetchPublicSubscriptionsOperation: AsynchronousOperation {
         }
     }
 }
+#endif
