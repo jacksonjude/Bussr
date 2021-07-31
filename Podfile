@@ -4,6 +4,8 @@ def shared_pods
     pod 'CloudCore', :git => 'https://github.com/deeje/CloudCore.git', :branch => 'feature/Xcode11', :inhibit_warnings => true
 end
 
+inhibit_all_warnings!
+
 target 'Bussr' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
