@@ -133,7 +133,6 @@
 		7AFD5CB823F009EB00AFFEEF /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CB723F009EB00AFFEEF /* ExtensionDelegate.swift */; };
 		7AFD5CBA23F009EB00AFFEEF /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CB923F009EB00AFFEEF /* ComplicationController.swift */; };
 		7AFD5CBC23F009EC00AFFEEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7AFD5CBB23F009EC00AFFEEF /* Assets.xcassets */; };
-		7AFD5CC023F009EC00AFFEEF /* Bussr.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 7AFD5CA423F009EA00AFFEEF /* Bussr.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7AFD5CC923F00C3200AFFEEF /* DirectionStopRowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CC823F00C3200AFFEEF /* DirectionStopRowController.swift */; };
 		7AFD5CCB23F0AF5200AFFEEF /* RouteDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */; };
 		7AFD5CCE23F0AF9200AFFEEF /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D1421266AC400D3425E /* CoreDataStack.swift */; };
@@ -172,13 +171,6 @@
 			remoteGlobalIDString = 7AFD5CAF23F009EB00AFFEEF;
 			remoteInfo = "MuniTrackerWatchApp Extension";
 		};
-		7AFD5CBE23F009EC00AFFEEF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7AD81DFE20D6E60C004BAB1E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7AFD5CA323F009EA00AFFEEF;
-			remoteInfo = MuniTrackerWatchApp;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -201,7 +193,6 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				7AFD5CC023F009EC00AFFEEF /* Bussr.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -744,7 +735,6 @@
 				7A068D27212697DA00D3425E /* PBXTargetDependency */,
 				7A068D3A212697F000D3425E /* PBXTargetDependency */,
 				7A068D4D2126980900D3425E /* PBXTargetDependency */,
-				7AFD5CBF23F009EC00AFFEEF /* PBXTargetDependency */,
 			);
 			name = Bussr;
 			productName = MuniTracker;
@@ -1265,11 +1255,6 @@
 			target = 7AFD5CAF23F009EB00AFFEEF /* BussrWatchApp Extension */;
 			targetProxy = 7AFD5CB223F009EB00AFFEEF /* PBXContainerItemProxy */;
 		};
-		7AFD5CBF23F009EC00AFFEEF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7AFD5CA323F009EA00AFFEEF /* BussrWatchApp */;
-			targetProxy = 7AFD5CBE23F009EC00AFFEEF /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -1330,7 +1315,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrFavoritesExtension/BussrFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801;
+				CURRENT_PROJECT_VERSION = 20210801.1;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrFavoritesExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1353,7 +1338,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrFavoritesExtension/BussrFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801;
+				CURRENT_PROJECT_VERSION = 20210801.1;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrFavoritesExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1376,7 +1361,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrRecentExtension/BussrRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801;
+				CURRENT_PROJECT_VERSION = 20210801.1;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrRecentExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1399,7 +1384,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrRecentExtension/BussrRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801;
+				CURRENT_PROJECT_VERSION = 20210801.1;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrRecentExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1422,7 +1407,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrNearbyExtension/BussrNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801;
+				CURRENT_PROJECT_VERSION = 20210801.1;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrNearbyExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1445,7 +1430,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrNearbyExtension/BussrNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801;
+				CURRENT_PROJECT_VERSION = 20210801.1;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrNearbyExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1587,7 +1572,7 @@
 				CODE_SIGN_ENTITLEMENTS = Bussr/Bussr.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801;
+				CURRENT_PROJECT_VERSION = 20210801.1;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = Bussr/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1613,7 +1598,7 @@
 				CODE_SIGN_ENTITLEMENTS = Bussr/Bussr.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801;
+				CURRENT_PROJECT_VERSION = 20210801.1;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = Bussr/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1637,7 +1622,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "BussrWatchApp Extension/BussrWatchApp Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801;
+				CURRENT_PROJECT_VERSION = 20210801.1;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = "BussrWatchApp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1663,7 +1648,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "BussrWatchApp Extension/BussrWatchApp Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801;
+				CURRENT_PROJECT_VERSION = 20210801.1;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = "BussrWatchApp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1689,7 +1674,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = BussrWatchApp/Bussr.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801;
+				CURRENT_PROJECT_VERSION = 20210801.1;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				IBSC_MODULE = Bussr_WatchApp_Extension;
 				INFOPLIST_FILE = BussrWatchApp/Info.plist;
@@ -1711,7 +1696,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = BussrWatchApp/Bussr.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801;
+				CURRENT_PROJECT_VERSION = 20210801.1;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				IBSC_MODULE = Bussr_WatchApp_Extension;
 				INFOPLIST_FILE = BussrWatchApp/Info.plist;
