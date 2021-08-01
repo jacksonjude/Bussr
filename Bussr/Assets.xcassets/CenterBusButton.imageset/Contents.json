@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "favaddfill60-1x.png",
+      "filename" : "busicon40-1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "favaddfill60-2x.png",
+      "filename" : "busicon40-2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "favaddfill60-3x.png",
+      "filename" : "busicon40-3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

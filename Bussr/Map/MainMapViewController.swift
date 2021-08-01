@@ -104,6 +104,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     
     @IBOutlet weak var centerOnLocationButton: UIButton!
     @IBOutlet weak var centerOnStopButton: UIButton!
+    @IBOutlet weak var centerOnVehicleButton: UIButton!
     
     @IBOutlet weak var predictionBarTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var predictionTimesProgressView: UIProgressView!
@@ -180,6 +181,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             self.predictionTimesLabel.textColor = UIColor.black
             self.centerOnLocationButton.backgroundColor = UIColor.white.withAlphaComponent(DisplayConstants.mapAlphaValue)
             self.centerOnStopButton.backgroundColor = UIColor.white.withAlphaComponent(DisplayConstants.mapAlphaValue)
+            self.centerOnVehicleButton.backgroundColor = UIColor.white.withAlphaComponent(DisplayConstants.mapAlphaValue)
         case .dark:
             self.activityIndicator.color = .white
             self.vehicleSelectionButton.setImage(UIImage(named: "BusIcon" + darkImageAppend()), for: UIControl.State.normal)
@@ -187,6 +189,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             self.predictionTimesLabel.textColor = UIColor.white
             self.centerOnLocationButton.backgroundColor = UIColor.black.withAlphaComponent(DisplayConstants.mapAlphaValue)
             self.centerOnStopButton.backgroundColor = UIColor.black.withAlphaComponent(DisplayConstants.mapAlphaValue)
+            self.centerOnVehicleButton.backgroundColor = UIColor.black.withAlphaComponent(DisplayConstants.mapAlphaValue)
         }
     }
     
@@ -216,6 +219,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     {
         centerOnLocationButton.layer.cornerRadius = 8
         centerOnStopButton.layer.cornerRadius = 8
+        centerOnVehicleButton.layer.cornerRadius = 8
         self.predictionBarTopConstraint.constant = -1*(self.predictionTimesNavigationBar.frame.size.height)
         self.view.layoutSubviews()
     }
@@ -488,6 +492,15 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         let stopLocation = CLLocation(latitude: currentStop.latitude, longitude: currentStop.longitude)
         centerMapOnLocation(location: stopLocation)
+    }
+    
+    @IBAction func centerMapOnSelectedVehicleButton()
+    {
+        if MapState.routeInfoShowing != .stop { return }
+        guard let selectedVehicleID = MapState.selectedVehicleID else { return }
+        guard let selectedVehicleCoordinate = self.busAnnotations[selectedVehicleID]?.annotation.coordinate else { return }
+        
+        centerMapOnLocation(location: CLLocation(latitude: selectedVehicleCoordinate.latitude, longitude: selectedVehicleCoordinate.longitude))
     }
     
     func zoomMapOnCurrentStop()
@@ -1235,6 +1248,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             self.centerOnStopButton.isHidden = true
             self.centerOnStopButton.isEnabled = false
             
+            self.centerOnVehicleButton.isHidden = true
+            self.centerOnVehicleButton.isEnabled = false
+            
             self.predictionBarTopConstraint.constant = -1*(self.predictionTimesNavigationBar.frame.size.height)
             
             UIView.animate(withDuration: 0.5, animations: {
@@ -1354,6 +1370,26 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             {
                 self.predictionTimesLabel.attributedText = nil
                 self.predictionTimesLabel.text = predictionsString
+            }
+            
+            if MapState.selectedVehicleID != nil && self.vehicleIDs.contains(MapState.selectedVehicleID!)
+            {
+                self.centerOnVehicleButton.alpha = 0
+                self.centerOnVehicleButton.isHidden = false
+                self.centerOnVehicleButton.isEnabled = true
+                
+                UIView.animate(withDuration: 0.2, animations: {
+                    self.centerOnVehicleButton.alpha = 1
+                })
+            }
+            else
+            {
+                UIView.animate(withDuration: 0.2, animations: {
+                    self.centerOnVehicleButton.alpha = 0
+                }, completion: { (bool) in
+                    self.centerOnVehicleButton.isHidden = false
+                    self.centerOnVehicleButton.isEnabled = true
+                })
             }
         }
     }
@@ -1549,7 +1585,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     @IBAction func vehiclesButtonDoubleTap(_ sender: Any) {
         toggleVehiclesMenu()
     }
-    
 }
 
 class StopAnnotation: NSObject, MKAnnotation
