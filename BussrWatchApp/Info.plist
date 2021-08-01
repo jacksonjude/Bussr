@@ -26,7 +26,7 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 	<key>WKCompanionAppBundleIdentifier</key>
-	<string>com.jacksonjude.MuniTracker</string>
+	<string>com.jacksonjude.Bussr</string>
 	<key>WKWatchKitApp</key>
 	<true/>
 </dict>

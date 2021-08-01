@@ -16,7 +16,7 @@
 	<true/>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.com.jacksonjude.MuniTracker</string>
+		<string>group.com.jacksonjude.Bussr</string>
 	</array>
 </dict>
 </plist>

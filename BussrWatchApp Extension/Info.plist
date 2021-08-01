@@ -46,7 +46,7 @@
 		<key>NSExtensionAttributes</key>
 		<dict>
 			<key>WKAppBundleIdentifier</key>
-			<string>com.jacksonjude.MuniTracker.watchkitapp</string>
+			<string>com.jacksonjude.Bussr.watchkitapp</string>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.watchkit</string>

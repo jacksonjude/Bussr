@@ -25,18 +25,18 @@ class CoreDataStack {
         var container: NSPersistentContainer
         
         if #available(iOS 13.0, *) {
-            container = NSPersistentCloudKitContainer(name: "MuniTracker")
+            container = NSPersistentCloudKitContainer(name: "Bussr")
         } else {
-            container = NSPersistentContainer(name: "MuniTracker")
+            container = NSPersistentContainer(name: "Bussr")
         }
         
         let cloudStoreDescription = NSPersistentStoreDescription()
         cloudStoreDescription.configuration = "Cloud"
         cloudStoreDescription.shouldInferMappingModelAutomatically = true
         cloudStoreDescription.shouldMigrateStoreAutomatically = true
-        cloudStoreDescription.url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.MuniTracker")!.appendingPathComponent("MuniTracker_Cloud.sqlite")
+        cloudStoreDescription.url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.Bussr")!.appendingPathComponent("Bussr_Cloud.sqlite")
         if #available(iOS 13.0, *) {
-            cloudStoreDescription.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.com.jacksonjude.MuniTracker")
+            cloudStoreDescription.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.com.jacksonjude.Bussr")
         }
         
         var firstLaunch = false
@@ -55,7 +55,7 @@ class CoreDataStack {
         localStoreDescription.configuration = "Local"
         localStoreDescription.shouldInferMappingModelAutomatically = true
         localStoreDescription.shouldMigrateStoreAutomatically = true
-        localStoreDescription.url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.MuniTracker")!.appendingPathComponent("MuniTracker.sqlite")
+        localStoreDescription.url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.Bussr")!.appendingPathComponent("Bussr.sqlite")
         
         container.persistentStoreDescriptions = [localStoreDescription, cloudStoreDescription]
         
@@ -102,9 +102,9 @@ class CoreDataStack {
     
     static func copyPreloadedRouteData()
     {
-        let sqlitePath = Bundle.main.path(forResource: "MuniTracker", ofType: "sqlite")
+        let sqlitePath = Bundle.main.path(forResource: "Bussr", ofType: "sqlite")
         let originURL = URL(fileURLWithPath: sqlitePath!)
-        let destinationURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.MuniTracker")!.appendingPathComponent("MuniTracker.sqlite")
+        let destinationURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.Bussr")!.appendingPathComponent("Bussr.sqlite")
         
         if !FileManager.default.fileExists(atPath: destinationURL.absoluteString) {
             do {
