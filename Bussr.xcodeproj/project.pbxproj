@@ -52,11 +52,11 @@
 		7A9F7E79216FA40200DF093D /* NotificationRepeatTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9F7E78216FA40200DF093D /* NotificationRepeatTableViewController.swift */; };
 		7A9F7E7B216FA49E00DF093D /* NotificationTimePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9F7E7A216FA49E00DF093D /* NotificationTimePickerViewController.swift */; };
 		7AA5E4B821E2D28E0039CCDD /* FilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5E4B721E2D28E0039CCDD /* FilterButton.swift */; };
-		7AAAB74424C26057003ED858 /* MuniTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AAAB74024C26057003ED858 /* MuniTracker.xcdatamodeld */; };
-		7AAAB74524C26057003ED858 /* MuniTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AAAB74024C26057003ED858 /* MuniTracker.xcdatamodeld */; };
-		7AAAB74624C26057003ED858 /* MuniTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AAAB74024C26057003ED858 /* MuniTracker.xcdatamodeld */; };
-		7AAAB74724C26057003ED858 /* MuniTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AAAB74024C26057003ED858 /* MuniTracker.xcdatamodeld */; };
-		7AAAB74824C26057003ED858 /* MuniTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AAAB74024C26057003ED858 /* MuniTracker.xcdatamodeld */; };
+		7AAA2AF426B66420005C2B1C /* Bussr.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AAA2AF226B66420005C2B1C /* Bussr.xcdatamodeld */; };
+		7AAA2AF526B66420005C2B1C /* Bussr.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AAA2AF226B66420005C2B1C /* Bussr.xcdatamodeld */; };
+		7AAA2AF626B66420005C2B1C /* Bussr.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AAA2AF226B66420005C2B1C /* Bussr.xcdatamodeld */; };
+		7AAA2AF726B66420005C2B1C /* Bussr.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AAA2AF226B66420005C2B1C /* Bussr.xcdatamodeld */; };
+		7AAA2AF826B66420005C2B1C /* Bussr.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7AAA2AF226B66420005C2B1C /* Bussr.xcdatamodeld */; };
 		7AAD586323FD1182002F3FAF /* RouteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AAD586223FD1182002F3FAF /* RouteCell.swift */; };
 		7AAD58C523FE1952002F3FAF /* Activity13@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58A723FE1952002F3FAF /* Activity13@2x.png */; };
 		7AAD58C623FE1952002F3FAF /* Activity29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58A823FE1952002F3FAF /* Activity29@2x.png */; };
@@ -89,11 +89,11 @@
 		7AAD58E123FE1952002F3FAF /* Activity16@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58C323FE1952002F3FAF /* Activity16@2x.png */; };
 		7AAD58E223FE1952002F3FAF /* Activity20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7AAD58C423FE1952002F3FAF /* Activity20@2x.png */; };
 		7AB9E9A323EFF30B002E7D67 /* RouteInfoPanelTipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB9E9A223EFF30B002E7D67 /* RouteInfoPanelTipViewController.swift */; };
-		7AC95C482408A70F00AC364F /* MuniTracker.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 7AC95C472408A70F00AC364F /* MuniTracker.sqlite */; };
-		7AC95C492408A70F00AC364F /* MuniTracker.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 7AC95C472408A70F00AC364F /* MuniTracker.sqlite */; };
-		7AC95C4A2408A70F00AC364F /* MuniTracker.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 7AC95C472408A70F00AC364F /* MuniTracker.sqlite */; };
-		7AC95C4B2408A70F00AC364F /* MuniTracker.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 7AC95C472408A70F00AC364F /* MuniTracker.sqlite */; };
-		7AC95C4C2408A70F00AC364F /* MuniTracker.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 7AC95C472408A70F00AC364F /* MuniTracker.sqlite */; };
+		7AC95C482408A70F00AC364F /* Bussr.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 7AC95C472408A70F00AC364F /* Bussr.sqlite */; };
+		7AC95C492408A70F00AC364F /* Bussr.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 7AC95C472408A70F00AC364F /* Bussr.sqlite */; };
+		7AC95C4A2408A70F00AC364F /* Bussr.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 7AC95C472408A70F00AC364F /* Bussr.sqlite */; };
+		7AC95C4B2408A70F00AC364F /* Bussr.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 7AC95C472408A70F00AC364F /* Bussr.sqlite */; };
+		7AC95C4C2408A70F00AC364F /* Bussr.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 7AC95C472408A70F00AC364F /* Bussr.sqlite */; };
 		7ACA8F6324ED212E00608B61 /* RouteConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACA8F6224ED212E00608B61 /* RouteConfiguration.swift */; };
 		7ACA8F6424ED212E00608B61 /* RouteConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACA8F6224ED212E00608B61 /* RouteConfiguration.swift */; };
 		7ACA8F6524ED212E00608B61 /* RouteConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACA8F6224ED212E00608B61 /* RouteConfiguration.swift */; };
@@ -266,9 +266,7 @@
 		7AA5601E212FCAA200C6E47E /* BussrFavoritesExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BussrFavoritesExtension.entitlements; sourceTree = "<group>"; };
 		7AA5601F212FCAB300C6E47E /* BussrNearbyExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BussrNearbyExtension.entitlements; sourceTree = "<group>"; };
 		7AA5E4B721E2D28E0039CCDD /* FilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterButton.swift; sourceTree = "<group>"; };
-		7AAAB74124C26057003ED858 /* MuniTracker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MuniTracker.xcdatamodel; sourceTree = "<group>"; };
-		7AAAB74224C26057003ED858 /* MuniTracker3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MuniTracker3.xcdatamodel; sourceTree = "<group>"; };
-		7AAAB74324C26057003ED858 /* MuniTracker2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MuniTracker2.xcdatamodel; sourceTree = "<group>"; };
+		7AAA2AF326B66420005C2B1C /* Bussr.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Bussr.xcdatamodel; sourceTree = "<group>"; };
 		7AAD586223FD1182002F3FAF /* RouteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteCell.swift; sourceTree = "<group>"; };
 		7AAD58A723FE1952002F3FAF /* Activity13@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity13@2x.png"; sourceTree = "<group>"; };
 		7AAD58A823FE1952002F3FAF /* Activity29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity29@2x.png"; sourceTree = "<group>"; };
@@ -301,7 +299,7 @@
 		7AAD58C323FE1952002F3FAF /* Activity16@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity16@2x.png"; sourceTree = "<group>"; };
 		7AAD58C423FE1952002F3FAF /* Activity20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Activity20@2x.png"; sourceTree = "<group>"; };
 		7AB9E9A223EFF30B002E7D67 /* RouteInfoPanelTipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoPanelTipViewController.swift; sourceTree = "<group>"; };
-		7AC95C472408A70F00AC364F /* MuniTracker.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = MuniTracker.sqlite; sourceTree = "<group>"; };
+		7AC95C472408A70F00AC364F /* Bussr.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = Bussr.sqlite; sourceTree = "<group>"; };
 		7ACA8F6224ED212E00608B61 /* RouteConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteConfiguration.swift; sourceTree = "<group>"; };
 		7ACA8F6824ED268900608B61 /* DirectionConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionConfiguration.swift; sourceTree = "<group>"; };
 		7ACA8F6E24ED2C4B00608B61 /* StopConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopConfiguration.swift; sourceTree = "<group>"; };
@@ -548,8 +546,8 @@
 		7ACA8F6124ED207500608B61 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				7AC95C472408A70F00AC364F /* MuniTracker.sqlite */,
-				7AAAB74024C26057003ED858 /* MuniTracker.xcdatamodeld */,
+				7AC95C472408A70F00AC364F /* Bussr.sqlite */,
+				7AAA2AF226B66420005C2B1C /* Bussr.xcdatamodeld */,
 				7A068D1421266AC400D3425E /* CoreDataStack.swift */,
 				7ACA8F6224ED212E00608B61 /* RouteConfiguration.swift */,
 				7ACA8F6824ED268900608B61 /* DirectionConfiguration.swift */,
@@ -888,7 +886,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A068D24212697DA00D3425E /* MainInterface.storyboard in Resources */,
-				7AC95C492408A70F00AC364F /* MuniTracker.sqlite in Resources */,
+				7AC95C492408A70F00AC364F /* Bussr.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -897,7 +895,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A068D37212697F000D3425E /* MainInterface.storyboard in Resources */,
-				7AC95C4A2408A70F00AC364F /* MuniTracker.sqlite in Resources */,
+				7AC95C4A2408A70F00AC364F /* Bussr.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -906,7 +904,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A068D4A2126980900D3425E /* MainInterface.storyboard in Resources */,
-				7AC95C4B2408A70F00AC364F /* MuniTracker.sqlite in Resources */,
+				7AC95C4B2408A70F00AC364F /* Bussr.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -919,7 +917,7 @@
 				7AD81E1420D6E60D004BAB1E /* Assets.xcassets in Resources */,
 				7AD81E0F20D6E60C004BAB1E /* Main.storyboard in Resources */,
 				7AD54E2C2404B48000968615 /* AppIcon-2@3x.png in Resources */,
-				7AC95C482408A70F00AC364F /* MuniTracker.sqlite in Resources */,
+				7AC95C482408A70F00AC364F /* Bussr.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -959,7 +957,7 @@
 				7AAD58D523FE1952002F3FAF /* Activity24@2x.png in Resources */,
 				7AAD58DD23FE1952002F3FAF /* Activity22@2x.png in Resources */,
 				7AAD58D023FE1952002F3FAF /* Activity17@2x.png in Resources */,
-				7AC95C4C2408A70F00AC364F /* MuniTracker.sqlite in Resources */,
+				7AC95C4C2408A70F00AC364F /* Bussr.sqlite in Resources */,
 				7AAD58D323FE1952002F3FAF /* Activity1@2x.png in Resources */,
 				7AAD58C823FE1952002F3FAF /* Activity2@2x.png in Resources */,
 				7AAD58C723FE1952002F3FAF /* Activity25@2x.png in Resources */,
@@ -1144,6 +1142,7 @@
 			files = (
 				7ACA8F7024ED2C4B00608B61 /* StopConfiguration.swift in Sources */,
 				7AD00467212758B000DCB08E /* CoreDataStack.swift in Sources */,
+				7AAA2AF526B66420005C2B1C /* Bussr.xcdatamodeld in Sources */,
 				7AD00464212758AD00DCB08E /* RouteDataManager.swift in Sources */,
 				7ACA8F6A24ED268900608B61 /* DirectionConfiguration.swift in Sources */,
 				7ACA8F6424ED212E00608B61 /* RouteConfiguration.swift in Sources */,
@@ -1151,7 +1150,6 @@
 				7A068D21212697DA00D3425E /* FavoritesExtensionViewController.swift in Sources */,
 				7A46D8622273CBB7008A41C1 /* DirectionStopCell.swift in Sources */,
 				7A46D8652273CCF9008A41C1 /* MapState.swift in Sources */,
-				7AAAB74524C26057003ED858 /* MuniTracker.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1161,6 +1159,7 @@
 			files = (
 				7ACA8F7124ED2C4B00608B61 /* StopConfiguration.swift in Sources */,
 				7AD00468212758B100DCB08E /* CoreDataStack.swift in Sources */,
+				7AAA2AF626B66420005C2B1C /* Bussr.xcdatamodeld in Sources */,
 				7AD00465212758AD00DCB08E /* RouteDataManager.swift in Sources */,
 				7ACA8F6B24ED268900608B61 /* DirectionConfiguration.swift in Sources */,
 				7ACA8F6524ED212E00608B61 /* RouteConfiguration.swift in Sources */,
@@ -1168,7 +1167,6 @@
 				7A068D34212697F000D3425E /* RecentExtensionViewController.swift in Sources */,
 				7A46D8632273CBB8008A41C1 /* DirectionStopCell.swift in Sources */,
 				7A46D8662273CCF9008A41C1 /* MapState.swift in Sources */,
-				7AAAB74624C26057003ED858 /* MuniTracker.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1178,6 +1176,7 @@
 			files = (
 				7ACA8F7224ED2C4B00608B61 /* StopConfiguration.swift in Sources */,
 				7AD00469212758B100DCB08E /* CoreDataStack.swift in Sources */,
+				7AAA2AF726B66420005C2B1C /* Bussr.xcdatamodeld in Sources */,
 				7AD00466212758AE00DCB08E /* RouteDataManager.swift in Sources */,
 				7ACA8F6C24ED268900608B61 /* DirectionConfiguration.swift in Sources */,
 				7ACA8F6624ED212E00608B61 /* RouteConfiguration.swift in Sources */,
@@ -1185,7 +1184,6 @@
 				7A068D472126980900D3425E /* NearbyExtensionViewController.swift in Sources */,
 				7A46D8642273CBB8008A41C1 /* DirectionStopCell.swift in Sources */,
 				7A46D8672273CCF9008A41C1 /* MapState.swift in Sources */,
-				7AAAB74724C26057003ED858 /* MuniTracker.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1202,6 +1200,7 @@
 				7AE57F8C2270D17600F1B42B /* DirectionStopCell.swift in Sources */,
 				7A24529020FA73170033E333 /* FavoritesTableViewController.swift in Sources */,
 				7A61EF8420D77BE100481037 /* RouteInfoPickerViewController.swift in Sources */,
+				7AAA2AF426B66420005C2B1C /* Bussr.xcdatamodeld in Sources */,
 				7A9F7E79216FA40200DF093D /* NotificationRepeatTableViewController.swift in Sources */,
 				7A068D1521266AC400D3425E /* CoreDataStack.swift in Sources */,
 				7A193A29216AFA4F009D866A /* NotificationTableViewController.swift in Sources */,
@@ -1217,7 +1216,6 @@
 				7A23176A2171212F00D12F21 /* NotificationEditorState.swift in Sources */,
 				7A193A26216AE4B6009D866A /* NotificationManager.swift in Sources */,
 				7A7FE2B520DB4761005B654C /* MapState.swift in Sources */,
-				7AAAB74424C26057003ED858 /* MuniTracker.xcdatamodeld in Sources */,
 				7A9F7E7B216FA49E00DF093D /* NotificationTimePickerViewController.swift in Sources */,
 				7AF50BE220E1B71E00E4BFD1 /* SettingsViewController.swift in Sources */,
 			);
@@ -1228,9 +1226,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				7ACA8F6D24ED268900608B61 /* DirectionConfiguration.swift in Sources */,
-				7AAAB74824C26057003ED858 /* MuniTracker.xcdatamodeld in Sources */,
 				7AFD5CCF23F0B2EA00AFFEEF /* MapState.swift in Sources */,
 				7A7C9BDD24E88A5E00752C3A /* RecentWatchInterfaceController.swift in Sources */,
+				7AAA2AF826B66420005C2B1C /* Bussr.xcdatamodeld in Sources */,
 				7AFD5CC923F00C3200AFFEEF /* DirectionStopRowController.swift in Sources */,
 				7A7C9BDF24E88A9D00752C3A /* NearbyWatchInterfaceController.swift in Sources */,
 				7AFD5CB823F009EB00AFFEEF /* ExtensionDelegate.swift in Sources */,
@@ -1332,7 +1330,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrFavoritesExtension/BussrFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210731;
+				CURRENT_PROJECT_VERSION = 20210801;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrFavoritesExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1355,7 +1353,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrFavoritesExtension/BussrFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210731;
+				CURRENT_PROJECT_VERSION = 20210801;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrFavoritesExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1378,7 +1376,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrRecentExtension/BussrRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210731;
+				CURRENT_PROJECT_VERSION = 20210801;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrRecentExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1401,7 +1399,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrRecentExtension/BussrRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210731;
+				CURRENT_PROJECT_VERSION = 20210801;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrRecentExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1424,7 +1422,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrNearbyExtension/BussrNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210731;
+				CURRENT_PROJECT_VERSION = 20210801;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrNearbyExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1447,7 +1445,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrNearbyExtension/BussrNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210731;
+				CURRENT_PROJECT_VERSION = 20210801;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrNearbyExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1589,7 +1587,7 @@
 				CODE_SIGN_ENTITLEMENTS = Bussr/Bussr.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210731;
+				CURRENT_PROJECT_VERSION = 20210801;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = Bussr/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1615,7 +1613,7 @@
 				CODE_SIGN_ENTITLEMENTS = Bussr/Bussr.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210731;
+				CURRENT_PROJECT_VERSION = 20210801;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = Bussr/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1639,7 +1637,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "BussrWatchApp Extension/BussrWatchApp Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210731;
+				CURRENT_PROJECT_VERSION = 20210801;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = "BussrWatchApp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1665,7 +1663,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "BussrWatchApp Extension/BussrWatchApp Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210731;
+				CURRENT_PROJECT_VERSION = 20210801;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = "BussrWatchApp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1691,9 +1689,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = BussrWatchApp/Bussr.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210731;
+				CURRENT_PROJECT_VERSION = 20210801;
 				DEVELOPMENT_TEAM = GE52T476WJ;
-				IBSC_MODULE = MuniTrackerWatchApp_Extension;
+				IBSC_MODULE = Bussr_WatchApp_Extension;
 				INFOPLIST_FILE = BussrWatchApp/Info.plist;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.Bussr.watchkitapp;
@@ -1713,9 +1711,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = BussrWatchApp/Bussr.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210731;
+				CURRENT_PROJECT_VERSION = 20210801;
 				DEVELOPMENT_TEAM = GE52T476WJ;
-				IBSC_MODULE = MuniTrackerWatchApp_Extension;
+				IBSC_MODULE = Bussr_WatchApp_Extension;
 				INFOPLIST_FILE = BussrWatchApp/Info.plist;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.Bussr.watchkitapp;
@@ -1797,15 +1795,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		7AAAB74024C26057003ED858 /* MuniTracker.xcdatamodeld */ = {
+		7AAA2AF226B66420005C2B1C /* Bussr.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				7AAAB74124C26057003ED858 /* MuniTracker.xcdatamodel */,
-				7AAAB74224C26057003ED858 /* MuniTracker3.xcdatamodel */,
-				7AAAB74324C26057003ED858 /* MuniTracker2.xcdatamodel */,
+				7AAA2AF326B66420005C2B1C /* Bussr.xcdatamodel */,
 			);
-			currentVersion = 7AAAB74224C26057003ED858 /* MuniTracker3.xcdatamodel */;
-			path = MuniTracker.xcdatamodeld;
+			currentVersion = 7AAA2AF326B66420005C2B1C /* Bussr.xcdatamodel */;
+			path = Bussr.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

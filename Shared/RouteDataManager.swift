@@ -243,7 +243,12 @@ class RouteDataManager
                 }
             }
 
-            guard let routeConfig = fetchBARTRouteInfo(routeNumber: routeNumber) else { return nil }
+            guard let routeConfig = fetchBARTRouteInfo(routeNumber: routeNumber) else {
+                routesFetched += 1
+                checkForCompletedRoutes(routeTagOn: RouteConstants.BARTAgencyTag + "-" + routeAbbr)
+                
+                return nil
+            }
             print(agencyTag + " - " + routeAbbr)
 
             if BARTRouteDictionary.values.contains(reverseRouteAbbr)
