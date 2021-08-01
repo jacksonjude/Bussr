@@ -22,6 +22,7 @@ class SettingsViewController: UITableViewController
     @IBOutlet weak var predictionRefreshTimeLabel: UILabel!
     @IBOutlet weak var lastUpdatedRoutesLabel: UILabel!
     @IBOutlet weak var nearbyMenuCollapseTypeLabel: UILabel!
+    @IBOutlet weak var showListPredictionsLabel: UILabel!
     
     var progressAlertView: UIAlertController?
     var progressView: UIProgressView?
@@ -37,6 +38,9 @@ class SettingsViewController: UITableViewController
         
         let collapseRoutes = UserDefaults.standard.object(forKey: "ShouldCollapseRoutes") as? Bool ?? true
         setNearbyCollapseTypeTitle(shouldCollapseRoutes: collapseRoutes)
+        
+        let showListPredictions = UserDefaults.standard.object(forKey: "ShowListPredictions") as? Bool ?? false
+        setShowListPredictionsTitle(showListPredictions: showListPredictions)
         
         let appIcon = UserDefaults.standard.object(forKey: "AppIcon") as? Int ?? 1
         setAppIconTitle(appIcon: appIcon)
@@ -75,8 +79,10 @@ class SettingsViewController: UITableViewController
             clearRoutes(tableView)
         case "LocationFilterCell":
             toggleLocationSortType(tableView)
-        case "NearbyMenu":
+        case "NearbyMenuCell":
             toggleNearbyCollapseType(tableView)
+        case "ShowListPredictionsCell":
+            toggleShowListPredictions(tableView)
         default:
             break
         }
@@ -210,6 +216,14 @@ class SettingsViewController: UITableViewController
         setNearbyCollapseTypeTitle(shouldCollapseRoutes: !collapseRoutes)
     }
     
+    func toggleShowListPredictions(_ sender: Any) {
+        let showListPredictions = UserDefaults.standard.object(forKey: "ShowListPredictions") as? Bool ?? false
+        
+        UserDefaults.standard.set(!showListPredictions, forKey: "ShowListPredictions")
+        
+        setShowListPredictionsTitle(showListPredictions: !showListPredictions)
+    }
+    
     //MARK: - Set Titles
     
     func setLocationSortTypeTitle(locationSortType: LocationSortType)
@@ -269,6 +283,18 @@ class SettingsViewController: UITableViewController
         else
         {
             nearbyMenuCollapseTypeLabel.text = "All Stops"
+        }
+    }
+    
+    func setShowListPredictionsTitle(showListPredictions: Bool)
+    {
+        if (showListPredictions)
+        {
+            showListPredictionsLabel.text = "Show"
+        }
+        else
+        {
+            showListPredictionsLabel.text = "Hide"
         }
     }
 }

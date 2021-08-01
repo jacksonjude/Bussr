@@ -97,7 +97,7 @@ class DirectionStopCell: UITableViewCell
     
     func refreshTimes()
     {
-        if let stopObject = self.stopObject, let directionObject = self.directionObject
+        if UserDefaults.standard.object(forKey: "ShowListPredictions") as? Bool ?? false, let stopObject = self.stopObject, let directionObject = self.directionObject
         {
             fetchPrediction(stopObject: stopObject, directionObject: directionObject)
         }
