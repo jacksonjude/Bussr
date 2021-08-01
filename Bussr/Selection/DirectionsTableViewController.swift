@@ -86,9 +86,9 @@ class DirectionsTableViewController: UIViewController, UITableViewDelegate, UITa
             for direction in directions
             {
                 let index = directions.firstIndex(of: direction)!
-                if let directionCell = directionsTableView.cellForRow(at: IndexPath(row: index, section: 0)) as? DirectionStopCell, let stop = RouteDataManager.fetchStop(stopTag: MapState.selectedStopTag!)
+                if let directionCell = directionsTableView.cellForRow(at: IndexPath(row: index, section: 0)) as? DirectionStopCell
                 {
-                    directionCell.fetchPrediction(stopObject: stop, directionObject: direction)
+                    directionCell.refreshTimes()
                     self.loadedPredictions[index] = true
                 }
             }
@@ -98,11 +98,7 @@ class DirectionsTableViewController: UIViewController, UITableViewDelegate, UITa
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if !loadedPredictions[indexPath.row]
         {
-            let direction = directionObjects![indexPath.row]
-            if let stop = MapState.getCurrentStop()
-            {
-                (cell as! DirectionStopCell).fetchPrediction(stopObject: stop, directionObject: direction)
-            }            
+            (cell as! DirectionStopCell).refreshTimes()
         }
     }
     

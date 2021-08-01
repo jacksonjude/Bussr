@@ -319,36 +319,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         }
     }
     
-    @objc func receiveFavoritesPrediction(_ notification: Notification)
-    {
-        NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
-        
-        if let predictions = notification.userInfo?["predictions"] as? [String], FavoriteState.favoritesOrganizeType == .list || FavoriteState.favoritesOrganizeType == .group
-        {
-            OperationQueue.main.addOperation {
-                let predictionsString = RouteDataManager.formatPredictions(predictions: predictions).predictionsString
-                let indexRow = Int(notification.name.rawValue.split(separator: ";")[1]) ?? 0
-                
-                if let favoritesPredictionLabel = self.favoriteStopsTableView.cellForRow(at: IndexPath(row: indexRow, section: 0))?.viewWithTag(603) as? UILabel
-                {
-                    self.loadedPredictions[indexRow] = true
-                    favoritesPredictionLabel.text = predictionsString
-                }
-                
-                if self.refreshingStopsLeft > 0
-                {
-                    self.refreshingStopsLeft -= 1
-                    if self.refreshingStopsLeft == 0
-                    {
-                        self.refreshControl?.endRefreshing()
-                    }
-                }
-            }
-        }
-    }
-    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let predictionTimesReturnUUID = UUID().uuidString + ";" + String(indexPath.row)
         var favoriteStop: FavoriteStop?
         if FavoriteState.favoritesOrganizeType == .list && !loadedPredictions[indexPath.row]
         {
@@ -365,21 +336,9 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             (cell.viewWithTag(603) as? UILabel)?.text = ""
         }
         
-        if favoriteStop != nil
+        if favoriteStop != nil, let cell = cell as? DirectionStopCell
         {
-            fetchPredictionTime(favoriteStop: favoriteStop!, predictionTimesReturnUUID: predictionTimesReturnUUID)
-        }
-    }
-    
-    func fetchPredictionTime(favoriteStop: FavoriteStop, predictionTimesReturnUUID: String)
-    {
-        guard let stopTag = favoriteStop.stopTag else { return }
-        guard let directionTag = favoriteStop.directionTag else { return }
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(receiveFavoritesPrediction(_:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
-        if let stop = RouteDataManager.fetchStop(stopTag: stopTag), let direction = RouteDataManager.fetchDirection(directionTag: directionTag)
-        {
-            RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: stop, direction: direction)
+            cell.refreshTimes()
         }
     }
     
@@ -734,11 +693,13 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
     
     @objc func addToGroupButtonPressed()
     {
-        let alertViewController = UIAlertController(title: "Add \(FavoriteState.selectedGroupUUID ?? "0" == "0" ? "Group" : "Group")", message: nil, preferredStyle: .actionSheet)
-        alertViewController.addAction(UIAlertAction(title: "Add \(FavoriteState.selectedGroupUUID ?? "0" == "0" ? "Group" : "Group")", style: .default, handler: { (action) in
+        let currentGroupName = (FavoriteState.favoriteObject as? FavoriteStopGroup)?.groupName ?? "Group"
+        
+        let alertViewController = UIAlertController(title: "New \(currentGroupName)", message: nil, preferredStyle: .actionSheet)
+        alertViewController.addAction(UIAlertAction(title: "New \(currentGroupName)", style: .default, handler: { (action) in
             self.displayAddGroupAlert()
         }))
-        alertViewController.addAction(UIAlertAction(title: "Add To \(FavoriteState.selectedGroupUUID ?? "0" == "0" ? "Group" : "Group")", style: .default, handler: { (action) in
+        alertViewController.addAction(UIAlertAction(title: "Add To \(currentGroupName)", style: .default, handler: { (action) in
             FavoriteState.favoritesOrganizeType = .addingToGroup
             self.performSegue(withIdentifier: "openFavoriteStopGroup", sender: self)
         }))
@@ -748,38 +709,31 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         
         self.present(alertViewController, animated: true, completion: nil)
     }
-    
-    var refreshingStopsLeft = 0
-    
+        
     @objc func reloadGroupPredictions()
     {
         for object in favoriteStopGroupSet!
         {
-            let predictionTimesReturnUUID = UUID().uuidString + ";" + String(favoriteStopGroupSet!.firstIndex(of: object) ?? 0)
-            if object is FavoriteStop
+            if object is FavoriteStop, let cell = favoriteStopsTableView.cellForRow(at: IndexPath(index: (favoriteStopGroupSet?.firstIndex(of: object))!)) as? DirectionStopCell
             {
-                refreshingStopsLeft += 1
-                fetchPredictionTime(favoriteStop: object as! FavoriteStop, predictionTimesReturnUUID: predictionTimesReturnUUID)
+                cell.refreshTimes()
             }
         }
         
-        if refreshingStopsLeft == 0
-        {
-            self.refreshControl?.endRefreshing()
-        }
+        self.refreshControl?.endRefreshing()
     }
     
     func displayAddGroupAlert()
     {
-        let newGroupAlert = UIAlertController(title: "New \(FavoriteState.selectedGroupUUID ?? "0" == "0" ? "Group" : "Group")", message: nil, preferredStyle: .alert)
+        let newGroupAlert = UIAlertController(title: "New Group", message: nil, preferredStyle: .alert)
         newGroupAlert.addTextField { (textField) in
-            textField.placeholder = "New \(FavoriteState.selectedGroupUUID ?? "0" == "0" ? "Group" : "Group")"
+            textField.placeholder = "New Group"
         }
         newGroupAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
             
         }))
         newGroupAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
-            let groupTitle = newGroupAlert.textFields![0].text ?? "New \(FavoriteState.selectedGroupUUID ?? "0" == "0" ? "Group" : "Group")"
+            let groupTitle = newGroupAlert.textFields![0].text ?? "New Group"
             self.createNewGroup(title: groupTitle)
         }))
         
