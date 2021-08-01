@@ -1357,20 +1357,13 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     {
         let predictionsFormatCallback = RouteDataManager.formatPredictions(predictions: self.predictions, vehicleIDs: self.vehicleIDs)
         let predictionsString = predictionsFormatCallback.predictionsString
-        let selectedVehicleRange = predictionsFormatCallback.selectedVehicleRange
+        let selectedVehicleRange = predictionsFormatCallback.selectedVehicleRange ?? NSRange(location: 0, length: 0)
         
         OperationQueue.main.addOperation {
-            if selectedVehicleRange != nil
-            {
-                let predictionsAttributedString = NSMutableAttributedString(string: predictionsString, attributes: [:])
-                predictionsAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor(red: 0, green: 0.5, blue: 1, alpha: 1), range: selectedVehicleRange!)
-                self.predictionTimesLabel.attributedText = predictionsAttributedString
-            }
-            else
-            {
-                self.predictionTimesLabel.attributedText = nil
-                self.predictionTimesLabel.text = predictionsString
-            }
+            let predictionsAttributedString = NSMutableAttributedString(string: predictionsString, attributes: [:])
+            predictionsAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor(red: 0, green: 0.5, blue: 1, alpha: 1), range: selectedVehicleRange)
+            self.predictionTimesLabel.attributedText = predictionsAttributedString
+
             
             if MapState.selectedVehicleID != nil && self.vehicleIDs.contains(MapState.selectedVehicleID!)
             {
