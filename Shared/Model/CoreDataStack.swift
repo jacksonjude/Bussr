@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import CloudKit
 
 class CoreDataStack {
     static let localRouteEntityTypes = ["Agency", "Route", "Direction", "Stop"]
@@ -30,13 +31,23 @@ class CoreDataStack {
             container = NSPersistentContainer(name: "Bussr")
         }
         
-        let cloudStoreDescription = NSPersistentStoreDescription()
-        cloudStoreDescription.configuration = "Cloud"
-        cloudStoreDescription.shouldInferMappingModelAutomatically = true
-        cloudStoreDescription.shouldMigrateStoreAutomatically = true
-        cloudStoreDescription.url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.Bussr")!.appendingPathComponent("Bussr_Cloud.sqlite")
+        let cloudPrivateStoreDescription = NSPersistentStoreDescription()
+        cloudPrivateStoreDescription.configuration = "Cloud_Private"
+        cloudPrivateStoreDescription.shouldInferMappingModelAutomatically = true
+        cloudPrivateStoreDescription.shouldMigrateStoreAutomatically = true
+        cloudPrivateStoreDescription.url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.Bussr")!.appendingPathComponent("Bussr_Cloud.sqlite")
         if #available(iOS 13.0, *) {
-            cloudStoreDescription.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.com.jacksonjude.Bussr")
+            cloudPrivateStoreDescription.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.com.jacksonjude.Bussr")
+        }
+        
+        let cloudPublicStoreDescription = NSPersistentStoreDescription()
+        cloudPublicStoreDescription.configuration = "Cloud_Public"
+        cloudPublicStoreDescription.shouldInferMappingModelAutomatically = true
+        cloudPublicStoreDescription.shouldMigrateStoreAutomatically = true
+        cloudPublicStoreDescription.url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.Bussr")!.appendingPathComponent("Bussr_Cloud_Public.sqlite")
+        if #available(iOS 14.0, *) {
+            cloudPublicStoreDescription.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.com.jacksonjude.Bussr")
+            cloudPublicStoreDescription.cloudKitContainerOptions?.databaseScope = CKDatabase.Scope.public            
         }
         
         var firstLaunch = false
@@ -57,7 +68,7 @@ class CoreDataStack {
         localStoreDescription.shouldMigrateStoreAutomatically = true
         localStoreDescription.url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.Bussr")!.appendingPathComponent("Bussr.sqlite")
         
-        container.persistentStoreDescriptions = [localStoreDescription, cloudStoreDescription]
+        container.persistentStoreDescriptions = [localStoreDescription, cloudPrivateStoreDescription, cloudPublicStoreDescription]
         
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {

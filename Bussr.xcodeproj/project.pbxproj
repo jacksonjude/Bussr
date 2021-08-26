@@ -237,6 +237,7 @@
 		7A0EF1FE20E818500039212B /* CloudManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudManager.swift; sourceTree = "<group>"; };
 		7A193A25216AE4B6009D866A /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		7A193A28216AFA4F009D866A /* NotificationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableViewController.swift; sourceTree = "<group>"; };
+		7A2155BE26D7651100047585 /* Bussr 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Bussr 2.xcdatamodel"; sourceTree = "<group>"; };
 		7A2317692171212F00D12F21 /* NotificationEditorState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEditorState.swift; sourceTree = "<group>"; };
 		7A24528F20FA73170033E333 /* FavoritesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesTableViewController.swift; sourceTree = "<group>"; };
 		7A42C933210521090022FC96 /* DirectionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsTableViewController.swift; sourceTree = "<group>"; };
@@ -1315,7 +1316,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrFavoritesExtension/BussrFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801.1;
+				CURRENT_PROJECT_VERSION = 20210826;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrFavoritesExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1338,7 +1339,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrFavoritesExtension/BussrFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801.1;
+				CURRENT_PROJECT_VERSION = 20210826;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrFavoritesExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1361,7 +1362,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrRecentExtension/BussrRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801.1;
+				CURRENT_PROJECT_VERSION = 20210826;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrRecentExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1384,7 +1385,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrRecentExtension/BussrRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801.1;
+				CURRENT_PROJECT_VERSION = 20210826;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrRecentExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1407,7 +1408,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrNearbyExtension/BussrNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801.1;
+				CURRENT_PROJECT_VERSION = 20210826;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrNearbyExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1430,7 +1431,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrNearbyExtension/BussrNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801.1;
+				CURRENT_PROJECT_VERSION = 20210826;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrNearbyExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1572,7 +1573,7 @@
 				CODE_SIGN_ENTITLEMENTS = Bussr/Bussr.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801.1;
+				CURRENT_PROJECT_VERSION = 20210826;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = Bussr/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1598,7 +1599,7 @@
 				CODE_SIGN_ENTITLEMENTS = Bussr/Bussr.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801.1;
+				CURRENT_PROJECT_VERSION = 20210826;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = Bussr/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1622,7 +1623,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "BussrWatchApp Extension/BussrWatchApp Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801.1;
+				CURRENT_PROJECT_VERSION = 20210826;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = "BussrWatchApp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1648,7 +1649,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "BussrWatchApp Extension/BussrWatchApp Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801.1;
+				CURRENT_PROJECT_VERSION = 20210826;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = "BussrWatchApp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1674,7 +1675,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = BussrWatchApp/Bussr.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801.1;
+				CURRENT_PROJECT_VERSION = 20210826;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				IBSC_MODULE = Bussr_WatchApp_Extension;
 				INFOPLIST_FILE = BussrWatchApp/Info.plist;
@@ -1696,7 +1697,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = BussrWatchApp/Bussr.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20210801.1;
+				CURRENT_PROJECT_VERSION = 20210826;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				IBSC_MODULE = Bussr_WatchApp_Extension;
 				INFOPLIST_FILE = BussrWatchApp/Info.plist;
@@ -1783,9 +1784,10 @@
 		7AAA2AF226B66420005C2B1C /* Bussr.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				7A2155BE26D7651100047585 /* Bussr 2.xcdatamodel */,
 				7AAA2AF326B66420005C2B1C /* Bussr.xcdatamodel */,
 			);
-			currentVersion = 7AAA2AF326B66420005C2B1C /* Bussr.xcdatamodel */;
+			currentVersion = 7A2155BE26D7651100047585 /* Bussr 2.xcdatamodel */;
 			path = Bussr.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

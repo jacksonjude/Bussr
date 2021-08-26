@@ -193,7 +193,7 @@ class SettingsViewController: UITableViewController
     func setPredictionRefreshTime(_ sender: Any) {
         var refreshTime = UserDefaults.standard.object(forKey: "PredictionRefreshTime") as? Double ?? 60.0
         
-        let possibleRefreshTimes = [0.0, 15.0, 30.0, 60.0]
+        let possibleRefreshTimes = [15.0, 30.0, 60.0]
         if let refreshTimeIndex = possibleRefreshTimes.firstIndex(of: refreshTime), refreshTimeIndex+1 < possibleRefreshTimes.count
         {
             refreshTime = possibleRefreshTimes[refreshTimeIndex+1]

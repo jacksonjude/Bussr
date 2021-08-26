@@ -120,6 +120,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     var routeOnLabel: UILabel?
     var updateAllRouteDataOperation: BlockOperation?
     
+    var shouldDoInitialCenter = true
+    
     var selectedAnnotationLocation: String?
     var stopAnnotations = Dictionary<String,StopAnnotation>()
     var directionPolyline: MKPolyline?
@@ -275,7 +277,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             self.refreshPredictionNavigationBar()
         }
         
-        centerMapOnLocation(location: initialLocation, range: 15000, animated: false)
+        if shouldDoInitialCenter
+        {
+            centerMapOnLocation(location: initialLocation, range: 15000, animated: false)
+            shouldDoInitialCenter = false
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -1118,7 +1124,14 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     var newStopNotificationID: NSManagedObjectID?
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        self.predictionRefreshTimer?.invalidate()
+        switch segue.identifier
+        {
+            case "showRoutesTableView", "showFavoritesTableView", "showNearbyStopTableView", "showRecentStopTableView":
+            break
+            
+            default:
+            self.predictionRefreshTimer?.invalidate()
+        }
         
         if segue.identifier == "showRecentStopTableView"
         {
@@ -1235,7 +1248,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     {
         if predictionRefreshTimer?.isValid ?? false { return }
         
-        if let refreshTime = UserDefaults.standard.object(forKey: "PredictionRefreshTime") as? TimeInterval, refreshTime > 0.0
+        let refreshTime = UserDefaults.standard.object(forKey: "PredictionRefreshTime") as? TimeInterval ?? 60.0
+        
+        if refreshTime > 0.0
         {
             self.predictionRefreshTimer?.invalidate()
             self.predictionRefreshTimer = Timer.scheduledTimer(timeInterval: refreshTime, target: self, selector: #selector(self.refreshPredictionNavigationBar), userInfo: nil, repeats: true)
@@ -1272,7 +1287,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         NotificationCenter.default.addObserver(self, selector: #selector(fetchVehicleLocations), name: NSNotification.Name("FetchVehicleLocations"), object: nil)
         
         OperationQueue.main.addOperation {
+            self.predictionTimesProgressView.layer.sublayers?.forEach { $0.removeAllAnimations() }
             self.predictionTimesProgressView.setProgress(0, animated: false)
+            self.predictionTimesProgressView.tintColor = UIColor.systemGreen
             self.predictionTimesProgressView.isHidden = false
             self.predictionTimesProgressViewConstraint.constant = 0
             
@@ -1392,8 +1409,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
         
         OperationQueue.main.addOperation {
-            self.predictionTimesProgressView.setProgress(1, animated: true)
-            self.hidePredictionTimesProgressView()
+            self.handlePredictionTimesProgressViewAfterFetch()
             
             var annotationsToSave = Dictionary<String,(annotation: BusAnnotation, annotationView: MKAnnotationView?, headingAnnotationView: MKAnnotationView?)>()
             
@@ -1466,6 +1482,32 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             }
             
             self.busAnnotations = annotationsToSave
+        }
+    }
+    
+    func handlePredictionTimesProgressViewAfterFetch()
+    {
+        self.predictionTimesProgressView.setProgress(1, animated: true)
+        
+        let shouldShowRefreshTimeOnPredictionTimesProgressView = true
+        
+        if shouldShowRefreshTimeOnPredictionTimesProgressView, let nextPredictionRefreshTime = self.predictionRefreshTimer?.fireDate
+        {
+            self.predictionTimesProgressView.tintColor = UIColor.systemBlue
+            UIView.animate(withDuration: 0.5, animations: {
+                self.predictionTimesProgressView.layoutIfNeeded()
+            })
+            
+            let timeLeftToPredictionRefresh = nextPredictionRefreshTime.timeIntervalSince1970-Date().timeIntervalSince1970
+            
+            self.predictionTimesProgressView.setProgress(0.001, animated: false)
+            UIView.animate(withDuration: timeLeftToPredictionRefresh, delay: 0, options: [.curveLinear]) {
+                self.predictionTimesProgressView.layoutIfNeeded()
+            }
+        }
+        else
+        {
+            self.hidePredictionTimesProgressView()
         }
     }
     

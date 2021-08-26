@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>aps-environment</key>
-	<string>development</string>
+	<string>production</string>
 	<key>com.apple.developer.icloud-container-identifiers</key>
 	<array>
 		<string>iCloud.com.jacksonjude.Bussr</string>
@@ -16,5 +16,7 @@
 	<array>
 		<string>group.com.jacksonjude.Bussr</string>
 	</array>
+	<key>com.apple.developer.icloud-container-environment</key>
+	<string>Production</string>
 </dict>
 </plist>
