@@ -188,6 +188,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             
             routeStopToOpen = nil
         }
+        
+        NotificationCenter.default.post(name: NSNotification.Name("UpdateCountdownProgressBar"), object: nil)
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

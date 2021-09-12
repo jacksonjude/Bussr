@@ -461,12 +461,14 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         NotificationCenter.default.addObserver(self, selector: #selector(reloadAllAnnotations), name: NSNotification.Name("ReloadAnnotations"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(showPickerView), name: NSNotification.Name("ShowRouteInfoPickerView"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hidePickerView), name: NSNotification.Name("HideRouteInfoPickerView"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handlePredictionTimesProgressViewAfterFetch), name: NSNotification.Name("UpdateCountdownProgressBar"), object: nil)
     }
     
     func removeRouteMapUpdateNotifications()
     {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("UpdateRouteMap"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("ReloadAnnotations"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("UpdateCountdownProgressBar"), object: nil)
     }
     
     //MARK: - Location Centering
@@ -1485,8 +1487,10 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         }
     }
     
-    func handlePredictionTimesProgressViewAfterFetch()
+    @objc func handlePredictionTimesProgressViewAfterFetch()
     {
+        if self.predictionTimesProgressView.isHidden { return }
+        
         self.predictionTimesProgressView.setProgress(1, animated: true)
         
         let shouldShowRefreshTimeOnPredictionTimesProgressView = true
