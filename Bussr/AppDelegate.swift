@@ -11,7 +11,7 @@ import CoreData
 import CoreLocation
 import CloudKit
 import UserNotifications
-import CloudCore
+import BackgroundTasks
 
 enum ThemeType: Int
 {
@@ -257,13 +257,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        if CloudCore.isCloudCoreNotification(withUserInfo: userInfo) {
-          // Fetch changed data from iCloud
-            CloudCore.pull(using: userInfo, to: CoreDataStack.persistentContainer, error: nil, completion: { (fetchResult) in
-            completionHandler(fetchResult.uiBackgroundFetchResult)
-          })
-        }
-        
         if let stopTag = userInfo["stop"] as? String, let routeTag = userInfo["route"] as? String
         {
             routeStopToOpen = (stopTag: stopTag, routeTag: routeTag)

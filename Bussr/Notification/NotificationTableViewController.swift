@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreData
-import CloudCore
 
 class NotificationTableViewController: UITableViewController, NSFetchedResultsControllerDelegate
 {
@@ -196,9 +195,7 @@ class NotificationTableViewController: UITableViewController, NSFetchedResultsCo
         let notification = fetchedResultsController.object(at: indexPath)
         let notificationID = notification.objectID
         
-        CoreDataStack.persistentContainer.performBackgroundTask { moc in
-            moc.name = CloudCore.config.pushContextName
-            
+        CoreDataStack.persistentContainer.performBackgroundTask { moc in            
             guard let stopNotification = moc.object(with: notificationID) as? StopNotification else { return }
             
             moc.delete(stopNotification)

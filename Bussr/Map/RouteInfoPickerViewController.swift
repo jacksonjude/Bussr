@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 import CoreData
 import CoreLocation
-import CloudCore
 
 class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate
 {
@@ -924,9 +923,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     }
     
     @IBAction func addNotificationButtonPressed(_ sender: Any) {
-        CoreDataStack.persistentContainer.performBackgroundTask { moc in
-            moc.name = CloudCore.config.pushContextName
-            
+        CoreDataStack.persistentContainer.performBackgroundTask { moc in            
             let newNotification = StopNotification(context: moc)
             newNotification.daysOfWeek = try? JSONSerialization.data(withJSONObject: [true, true, true, true, true, true, true], options: JSONSerialization.WritingOptions.sortedKeys)
             newNotification.directionTag = MapState.selectedDirectionTag

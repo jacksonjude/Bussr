@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CloudCore
 import CoreData
 
 class NotificationEditorViewController: UIViewController
@@ -73,9 +72,7 @@ class NotificationEditorViewController: UIViewController
     {
         guard let stopNotificationID = stopNotificationID else { return }
         
-        CoreDataStack.persistentContainer.performBackgroundTask { moc in
-            moc.name = CloudCore.config.pushContextName
-            
+        CoreDataStack.persistentContainer.performBackgroundTask { moc in            
             let stopNotification = try? moc.existingObject(with: stopNotificationID) as? StopNotification
             stopNotification?.hour = NotificationEditorState.notificationHour ?? 0
             stopNotification?.minute = NotificationEditorState.notificationMinute ?? 0
