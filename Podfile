@@ -1,7 +1,6 @@
 # Uncomment the next line to define a global platform for your project
 
 def shared_pods
-    pod 'CloudCore', :git => 'https://github.com/deeje/CloudCore.git', :branch => 'feature/Xcode11', :inhibit_warnings => true
 end
 
 inhibit_all_warnings!

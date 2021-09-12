@@ -122,7 +122,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         
         application.registerForRemoteNotifications()
-        CloudCore.enable(persistentContainer: CoreDataStack.persistentContainer)
         
         return true
     }
