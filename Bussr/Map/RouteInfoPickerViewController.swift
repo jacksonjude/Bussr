@@ -293,8 +293,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 
                 addFavoriteButton.isHidden = false
                 addFavoriteButton.isEnabled = true
-                addNotificationButton.isHidden = false
-                addNotificationButton.isEnabled = true
+//                addNotificationButton.isHidden = false
+//                addNotificationButton.isEnabled = true
                 
                 rowToSelect = (routeInfoToChange as! Array<Stop>).firstIndex(of: (routeInfoToChange as! Array<Stop>).filter({$0.tag == MapState.selectedStopTag}).first ?? (routeInfoToChange as! Array<Stop>)[0]) ?? 0
             case .otherDirections:

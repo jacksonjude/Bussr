@@ -173,7 +173,7 @@ class SettingsViewController: UITableViewController
     }
     
     func toggleAppIcon(_ sender: Any) {
-        let appIcon = UserDefaults.standard.object(forKey: "AppIcon") as? Int ?? 1
+        let appIcon = UserDefaults.standard.object(forKey: "AppIcon") as? Int ?? 2
         
         switch appIcon
         {
