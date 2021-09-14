@@ -259,7 +259,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                 
                 NotificationCenter.default.addObserver(self, selector: #selector(self.addToProgress(notification:)), name: NSNotification.Name("CompletedRoute"), object: nil)
                 
-                NotificationCenter.default.addObserver(self, selector: #selector(self.dismissAlertView), name: NSNotification.Name("FinishedUpdatingRoutes"), object: nil)
+                NotificationCenter.default.addObserver(self, selector: #selector(self.dismissDownloadDataAlertView), name: NSNotification.Name("FinishedUpdatingRoutes"), object: nil)
                 
                 DispatchQueue.global(qos: .background).async {
                     RouteDataManager.updateAllData()
@@ -300,7 +300,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         }
     }
     
-    @objc func dismissAlertView()
+    @objc func dismissDownloadDataAlertView()
     {
         progressAlertView?.dismiss(animated: true, completion: {
             NotificationCenter.default.removeObserver(self, name: NSNotification.Name("CompletedRoute"), object: nil)

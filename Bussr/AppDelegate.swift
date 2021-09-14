@@ -82,15 +82,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             UserDefaults.standard.set(618, forKey: "transitionedToCD-CloudKit")
         }
         
-//        if let groups = RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", "0"), moc: CoreDataStack.persistentContainer.viewContext) as? [FavoriteStopGroup]
-//        {
-//            for group in groups
-//            {
-//                CoreDataStack.persistentContainer.viewContext.delete(group)
-//            }
-//            CoreDataStack.saveContext()
-//        }
-        
         print(RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", "0"), moc: CoreDataStack.persistentContainer.viewContext)?.count ?? "nil")
         
         FavoriteState.selectedGroupUUID = "0"
@@ -123,7 +114,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         application.registerForRemoteNotifications()
         
+        registerRouteUpdateBackgroundTask()
+        
         return true
+    }
+    
+    func registerRouteUpdateBackgroundTask()
+    {
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.jacksonjude.Bussr.update_route_data", using: nil) { task in
+            RouteDataManager.executeRouteUpdateBackgroundTask(task: task)
+        }
+        
+        if UserDefaults.standard.object(forKey: "NextRouteUpdate") == nil
+        {
+            RouteDataManager.submitNextRouteUpdateBackgroundTask()
+        }
     }
     
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {

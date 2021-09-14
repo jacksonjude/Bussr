@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 import MapKit
+import BackgroundTasks
 
 struct RouteConstants
 {
@@ -417,6 +418,7 @@ class RouteDataManager
         {
             print("Complete")
             UserDefaults.standard.set(Date(), forKey: "RoutesUpdatedAt")
+            RouteDataManager.submitNextRouteUpdateBackgroundTask()
             
             OperationQueue.main.addOperation {
                 NotificationCenter.default.post(name: NSNotification.Name("FinishedUpdatingRoutes"), object: self)
@@ -974,6 +976,50 @@ class RouteDataManager
         }
         
         return (predictionsString, selectedVehicleRange)
+    }
+    
+    static var currentRouteUpdateBackgroundTask: BGTask?
+    
+    static func executeRouteUpdateBackgroundTask(task: BGTask)
+    {
+        UserDefaults.standard.set(nil, forKey: "NextRouteUpdate")
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(RouteDataManager.finishRouteUpdateBackgroundTask), name: NSNotification.Name("FinishedUpdatingRoutes"), object: nil)
+        
+        RouteDataManager.currentRouteUpdateBackgroundTask = task
+        task.expirationHandler = {
+            RouteDataManager.submitNextRouteUpdateBackgroundTask()
+        }
+        
+        RouteDataManager.updateAllData()
+    }
+    
+    @objc static func finishRouteUpdateBackgroundTask()
+    {
+        RouteDataManager.currentRouteUpdateBackgroundTask?.setTaskCompleted(success: true)
+        RouteDataManager.currentRouteUpdateBackgroundTask = nil
+        
+        RouteDataManager.submitNextRouteUpdateBackgroundTask()
+    }
+    
+    static func submitNextRouteUpdateBackgroundTask()
+    {
+        BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: "com.jacksonjude.Bussr.update_route_data")
+        
+        let lastRouteUpdate = UserDefaults.standard.object(forKey: "RoutesUpdatedAt") as? Date
+        let nextRouteUpdate = lastRouteUpdate?.addingTimeInterval(60*60*20)
+        
+        let nextTaskRequest = BGProcessingTaskRequest(identifier: "com.jacksonjude.Bussr.update_route_data")
+        nextTaskRequest.earliestBeginDate = nextRouteUpdate ?? Date() > Date() ? nextRouteUpdate : nil
+        nextTaskRequest.requiresNetworkConnectivity = true
+        do {
+            try BGTaskScheduler.shared.submit(nextTaskRequest)
+        }
+        catch {
+            print(error.localizedDescription, error)
+        }
+        
+        UserDefaults.standard.set(nextRouteUpdate ?? Date(), forKey: "NextRouteUpdate")
     }
 }
 
