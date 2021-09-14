@@ -53,49 +53,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         {
             firstLaunch = true
             UserDefaults.standard.set(618, forKey: "firstLaunch")
-            
-            if #available(iOS 13.0, *)
-            {
-                UserDefaults.standard.set(618, forKey: "transitionedToCD-CloudKit")
-            }
-            else
-            {
-                CloudManager.addFavoritesZone()
-            }
-        }
-        
-        if #available(iOS 13.0, *), UserDefaults.standard.object(forKey: "transitionedToCD-CloudKit") == nil
-        {
-            if let favoriteStops = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext) as? [NSManagedObject]
-            {
-                for favoriteStop in favoriteStops
-                {
-                    CoreDataStack.persistentContainer.viewContext.delete(favoriteStop)
-                }
-            }
-            
-            CoreDataStack.saveContext()
-            
-            CloudManager.currentChangeToken = nil
-            CloudManager.fetchChangesFromCloud()
-            
-            UserDefaults.standard.set(618, forKey: "transitionedToCD-CloudKit")
         }
         
         print(RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", "0"), moc: CoreDataStack.persistentContainer.viewContext)?.count ?? "nil")
         
         FavoriteState.selectedGroupUUID = "0"
-        
-        if #available(iOS 13.0, *) {}
-        else
-        {
-            if let lastServerChangeToken = UserDefaults.standard.object(forKey: "LastServerChangeToken") as? Data
-            {
-                CloudManager.currentChangeToken = try? NSKeyedUnarchiver.unarchivedObject(ofClass: CKServerChangeToken.self, from: lastServerChangeToken)
-            }
-            
-            CloudManager.fetchChangesFromCloud()
-        }
         
         if let favoritesOrganizeTypeInt = UserDefaults.standard.object(forKey: "FavoritesOrganizeType") as? Int
         {

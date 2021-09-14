@@ -734,12 +734,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 {
                     CoreDataStack.persistentContainer.viewContext.delete(favoriteStopCallback[0])
                     
-                    if #available(iOS 13.0, *) {}
-                    else
-                    {
-                        CloudManager.addToLocalChanges(type: ManagedObjectChangeType.delete, uuid: favoriteStopCallback[0].uuid!)
-                    }
-                    
                     NotificationCenter.default.addObserver(self, selector: #selector(didSaveFavoriteStop), name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
                 }
                 else
@@ -748,12 +742,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                     newFavoriteStop.directionTag = selectedDirection.tag
                     newFavoriteStop.stopTag = selectedStop.tag
                     newFavoriteStop.uuid = UUID().uuidString
-                    
-                    if #available(iOS 13.0, *) {}
-                    else
-                    {
-                        CloudManager.addToLocalChanges(type: ManagedObjectChangeType.insert, uuid: newFavoriteStop.uuid!)
-                    }
                     
                     NotificationCenter.default.addObserver(self, selector: #selector(didSaveFavoriteStop), name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
                 }
@@ -766,12 +754,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     @objc func didSaveFavoriteStop(notification: Notification)
     {
         NotificationCenter.default.removeObserver(self, name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
-        
-        if #available(iOS 13.0, *) {}
-        else
-        {
-            CloudManager.syncToCloud()
-        }
     }
     
     func filterByFavorites()

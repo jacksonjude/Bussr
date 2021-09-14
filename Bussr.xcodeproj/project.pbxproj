@@ -27,7 +27,6 @@
 		7A068D54212698BA00D3425E /* BussrExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D04212646A700D3425E /* BussrExtensionViewController.swift */; };
 		7A0E8C6A20E0AAAC00C28465 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A0E8C6920E0AAAB00C28465 /* CoreLocation.framework */; };
 		7A0EF1FD20E80AC90039212B /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A0EF1FC20E80AC90039212B /* CloudKit.framework */; };
-		7A0EF1FF20E818500039212B /* CloudManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0EF1FE20E818500039212B /* CloudManager.swift */; };
 		7A193A26216AE4B6009D866A /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A193A25216AE4B6009D866A /* NotificationManager.swift */; };
 		7A193A29216AFA4F009D866A /* NotificationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A193A28216AFA4F009D866A /* NotificationTableViewController.swift */; };
 		7A23176A2171212F00D12F21 /* NotificationEditorState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2317692171212F00D12F21 /* NotificationEditorState.swift */; };
@@ -234,7 +233,6 @@
 		7A068D4B2126980900D3425E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7A0E8C6920E0AAAB00C28465 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		7A0EF1FC20E80AC90039212B /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
-		7A0EF1FE20E818500039212B /* CloudManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudManager.swift; sourceTree = "<group>"; };
 		7A193A25216AE4B6009D866A /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		7A193A28216AFA4F009D866A /* NotificationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableViewController.swift; sourceTree = "<group>"; };
 		7A2155BE26D7651100047585 /* Bussr 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Bussr 2.xcdatamodel"; sourceTree = "<group>"; };
@@ -586,7 +584,6 @@
 				7A9F7E77216FA2C600DF093D /* Notification */,
 				7A193A23216ADE79009D866A /* Selection */,
 				7A193A27216AF9F8009D866A /* Settings */,
-				7A0EF1FE20E818500039212B /* CloudManager.swift */,
 				7AD81E0920D6E60C004BAB1E /* AppDelegate.swift */,
 				7AD81E0D20D6E60C004BAB1E /* Main.storyboard */,
 				7AD81E1520D6E60D004BAB1E /* LaunchScreen.storyboard */,
@@ -1165,7 +1162,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7ACA8F6924ED268900608B61 /* DirectionConfiguration.swift in Sources */,
-				7A0EF1FF20E818500039212B /* CloudManager.swift in Sources */,
 				7A50EECD2107DAE700B69B92 /* StopsTableViewController.swift in Sources */,
 				7A42C934210521090022FC96 /* DirectionsTableViewController.swift in Sources */,
 				7AAD586323FD1182002F3FAF /* RouteCell.swift in Sources */,

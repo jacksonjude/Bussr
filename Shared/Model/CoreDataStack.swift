@@ -23,22 +23,14 @@ class CoreDataStack {
          application to it. This property is optional since there are legitimate
          error conditions that could cause the creation of the store to fail.
          */
-        var container: NSPersistentContainer
-        
-        if #available(iOS 13.0, *) {
-            container = NSPersistentCloudKitContainer(name: "Bussr")
-        } else {
-            container = NSPersistentContainer(name: "Bussr")
-        }
+        var container = NSPersistentCloudKitContainer(name: "Bussr")
         
         let cloudPrivateStoreDescription = NSPersistentStoreDescription()
         cloudPrivateStoreDescription.configuration = "Cloud_Private"
         cloudPrivateStoreDescription.shouldInferMappingModelAutomatically = true
         cloudPrivateStoreDescription.shouldMigrateStoreAutomatically = true
         cloudPrivateStoreDescription.url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.Bussr")!.appendingPathComponent("Bussr_Cloud.sqlite")
-        if #available(iOS 13.0, *) {
-            cloudPrivateStoreDescription.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.com.jacksonjude.Bussr")
-        }
+        cloudPrivateStoreDescription.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.com.jacksonjude.Bussr")
         
         let cloudPublicStoreDescription = NSPersistentStoreDescription()
         cloudPublicStoreDescription.configuration = "Cloud_Public"
@@ -47,7 +39,7 @@ class CoreDataStack {
         cloudPublicStoreDescription.url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.Bussr")!.appendingPathComponent("Bussr_Cloud_Public.sqlite")
         if #available(iOS 14.0, *) {
             cloudPublicStoreDescription.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.com.jacksonjude.Bussr")
-            cloudPublicStoreDescription.cloudKitContainerOptions?.databaseScope = CKDatabase.Scope.public            
+            cloudPublicStoreDescription.cloudKitContainerOptions?.databaseScope = CKDatabase.Scope.public
         }
         
         var firstLaunch = false

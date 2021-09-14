@@ -29,12 +29,6 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         {
             reloadTableView()
             NotificationCenter.default.addObserver(self, selector: #selector(finishedCloudFetch(_:)), name: NSNotification.Name("FinishedFetchingFromCloud"), object: nil)
-            
-            if #available(iOS 13.0, *) {}
-            else
-            {
-                CloudManager.fetchChangesFromCloud()
-            }
         }
         
         organizeSegmentControl.selectedSegmentIndex = FavoriteState.favoritesOrganizeType.rawValue
