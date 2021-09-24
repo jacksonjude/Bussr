@@ -835,7 +835,7 @@ class RouteDataManager
         let averageBusSpeed = 225.0 // Rough bus speed estimate in meters/minute
         let scheduleToCurrentPredictionMarginOfError = 4 // Margin of error between scheduled time and exact time in minutes, so that a scheduled time can be excluded if a corresponding exact time is available
         
-        getJSONFromNextBusSource("schedule", ["a":RouteConstants.NextBusAgencyTag,"s":stop.tag!,"r":route.tag!]) { (json) in
+        getJSONFromNextBusSource("schedule", ["a":RouteConstants.NextBusAgencyTag,"r":route.tag!]) { (json) in
             let directionStopID = (stop.tag ?? "") + "-" + (direction.tag ?? "")
             
             if let json = json
@@ -861,8 +861,7 @@ class RouteDataManager
                 let schedulesArray = json["route"] as? Array<Dictionary<String,Any>> ?? []
                 var schedulePredictionMinutes = Array<(stopTag: String, minutes: Int)>()
                 
-                for scheduleDictionary in schedulesArray
-                {
+                schedulesArray.forEach { scheduleDictionary in
                     if scheduleDictionary["serviceClass"] as? String != weekdayCode { return }
                     
                     let scheduleBlocks = scheduleDictionary["tr"] as? Array<Dictionary<String,Any>> ?? []

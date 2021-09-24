@@ -1495,6 +1495,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     
     @objc func predictionTimesFinishedRefreshing()
     {
+        if MapState.routeInfoShowing != .stop { return }
+        
         setupPredictionRefreshTimer()
         
         if self.predictionTimesProgressView.isHidden || self.currentlyAnimatingPredictionTimesProgressView { return }
