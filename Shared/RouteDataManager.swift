@@ -701,6 +701,19 @@ class RouteDataManager
     
     //MARK: - Data Fetch
     
+    enum PredictionTimeType
+    {
+        case exact
+        case schedule
+    }
+    
+    struct PredictionTime
+    {
+        var time: String
+        var type: PredictionTimeType
+        var vehicleID: String?
+    }
+    
     static var fetchPredictionTimesOperations = Dictionary<String,BlockOperation>()
     static var fetchPredictionTimesReturnUUIDS = Dictionary<String,Array<String>>()
     
@@ -740,6 +753,8 @@ class RouteDataManager
     
     static func fetchNextBusPredictionTimes(route: Route, direction: Direction, stop: Stop)
     {
+        let minimumExactPredictionsToAvoidScheduleFallback = 3
+        
         getJSONFromNextBusSource("predictions", ["a":RouteConstants.NextBusAgencyTag,"s":stop.tag!,"r":route.tag!]) { (json) in
             let directionStopID = (stop.tag ?? "") + "-" + (direction.tag ?? "")
             
@@ -781,18 +796,155 @@ class RouteDataManager
                     return Int(prediction1["minutes"] ?? "0") ?? 0 < Int(prediction2["minutes"] ?? "0") ?? 0
                 }
                 
-                var predictions = Array<String>()
-                var vehicles = Array<String>()
+                var predictions = Array<PredictionTime>()
                 
                 for prediction in predictionsArray
                 {
-                    predictions.append(prediction["minutes"] ?? "nil")
-                    vehicles.append(prediction["vehicle"] ?? "nil")
+                    predictions.append(PredictionTime(time: prediction["minutes"] ?? "nil", type: .exact, vehicleID: prediction["vehicle"]))
+                }
+                
+                if predictions.count < minimumExactPredictionsToAvoidScheduleFallback
+                {
+                    fetchNextBusSchedulePredictionTimes(route: route, direction: direction, stop: stop, exactPredictions: predictions)
+                    return
                 }
                 
                 for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
                 {
-                    NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictions,"vehicleIDs":vehicles])
+                    NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictions])
+                    
+                    guard let uuidIndex = fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID) else { continue }
+                    
+                    fetchPredictionTimesReturnUUIDS[directionStopID]!.remove(at: uuidIndex)
+                }
+            }
+            else
+            {
+                for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
+                {
+                    NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["error":"Connection Error"])
+                    
+                    fetchPredictionTimesReturnUUIDS[directionStopID]!.remove(at: fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID)!)
+                }
+            }
+        }
+    }
+    
+    static func fetchNextBusSchedulePredictionTimes(route: Route, direction: Direction, stop: Stop, exactPredictions: Array<PredictionTime>?)
+    {
+        let averageBusSpeed = 225.0 // Rough bus speed estimate in meters/minute
+        let scheduleToCurrentPredictionMarginOfError = 4 // Margin of error between scheduled time and exact time in minutes, so that a scheduled time can be excluded if a corresponding exact time is available
+        
+        getJSONFromNextBusSource("schedule", ["a":RouteConstants.NextBusAgencyTag,"s":stop.tag!,"r":route.tag!]) { (json) in
+            let directionStopID = (stop.tag ?? "") + "-" + (direction.tag ?? "")
+            
+            if let json = json
+            {
+                let dayOfWeek = Calendar.current.dateComponents([.weekday], from: Date()).weekday
+                var weekdayCode = ""
+                switch dayOfWeek
+                {
+                case 1:
+                    weekdayCode = "sun"
+                case 2:
+                    weekdayCode = "sat"
+                default:
+                    weekdayCode = "wkd"
+                }
+                
+                let dayComponents = Calendar.current.dateComponents([.hour, .minute, .second], from: Date())
+                
+                let currentEpochDayTime = 1000*(dayComponents.hour!*60*60+dayComponents.minute!*60+dayComponents.second!)
+                let minEpochDayTime = currentEpochDayTime
+                let maxEpochDayTime = currentEpochDayTime + 1000*60*60
+                
+                let schedulesArray = json["route"] as? Array<Dictionary<String,Any>> ?? []
+                var schedulePredictionMinutes = Array<(stopTag: String, minutes: Int)>()
+                
+                for scheduleDictionary in schedulesArray
+                {
+                    if scheduleDictionary["serviceClass"] as? String != weekdayCode { return }
+                    
+                    let scheduleBlocks = scheduleDictionary["tr"] as? Array<Dictionary<String,Any>> ?? []
+                    for scheduleBlock in scheduleBlocks
+                    {
+                        let scheduleStopsData = scheduleBlock["stop"] as? Array<Dictionary<String,String>> ?? []
+                        for stopData in scheduleStopsData
+                        {
+                            if let stopTag = stopData["tag"], let epochTimeString = stopData["epochTime"], let epochTimeInt = Int(epochTimeString), epochTimeInt >= minEpochDayTime && epochTimeInt < maxEpochDayTime
+                            {
+                                schedulePredictionMinutes.append((stopTag: stopTag, minutes: (epochTimeInt-currentEpochDayTime)/1000/60))
+                            }
+                        }
+                    }
+                }
+                
+                schedulePredictionMinutes = schedulePredictionMinutes.filter { stopMinutesTuple in
+                    let stopObject = RouteDataManager.fetchStop(stopTag: stopMinutesTuple.stopTag)
+                    if let testDirection = stopObject?.direction?.allObjects.first(where: { direction in
+                        guard let direction = direction as? Direction else { return false }
+                        
+                        return direction.route?.tag == route.tag
+                    }) as? Direction, testDirection == direction
+                    {
+                        guard var stops = direction.stops?.array as? [Stop] else { return false }
+                        stops = stops.filter { testStop in
+                            return stops.firstIndex { testStop2 in
+                                return testStop2.tag == testStop.tag
+                            } ?? 0 >= stops.firstIndex { testStop2 in
+                                return testStop2.tag == stop.tag
+                            } ?? 0
+                        }
+                        
+                        return stops.contains { stop in
+                            stop.tag == stopMinutesTuple.stopTag
+                        }
+                    }
+                    
+                    return false
+                }
+                
+                schedulePredictionMinutes.sort { stopMinutesTuple1, stopMinutesTuple2 in
+                    guard let stops = direction.stops?.array as? [Stop] else { return false }
+                    
+                    return stops.firstIndex { testStop2 in
+                        return stopMinutesTuple1.stopTag == testStop2.tag
+                    } ?? 0 <= stops.firstIndex { testStop2 in
+                        return stopMinutesTuple2.stopTag == testStop2.tag
+                    } ?? 0
+                }
+                
+                var schedulePredictionTimes = Array<PredictionTime>()
+                if let firstStopTag = schedulePredictionMinutes.first?.stopTag, let nearestEarlyStop = RouteDataManager.fetchStop(stopTag: firstStopTag)
+                {
+                    let nearestEarlyStopLocation = CLLocation(latitude: nearestEarlyStop.latitude, longitude: nearestEarlyStop.longitude)
+                    let currentStopLocation = CLLocation(latitude: stop.latitude, longitude: stop.longitude)
+                    
+                    let stopDistance = nearestEarlyStopLocation.distance(from: currentStopLocation)
+                    let minutesToAccountForDistance = Int(round(stopDistance / averageBusSpeed))
+                    
+                    print(stopDistance, minutesToAccountForDistance)
+                    
+                    schedulePredictionMinutes.forEach { stopMinutesTuple in
+                        if stopMinutesTuple.stopTag == firstStopTag
+                        {
+                            let predictionMinutes = stopMinutesTuple.minutes-minutesToAccountForDistance
+                            if predictionMinutes < 0 { return }
+                            if let lastPredictionTimeString = exactPredictions?.last?.time, let lastPredictionTime = Int(lastPredictionTimeString), predictionMinutes >= lastPredictionTime-scheduleToCurrentPredictionMarginOfError && predictionMinutes <= lastPredictionTime+scheduleToCurrentPredictionMarginOfError { return }
+                                
+                            schedulePredictionTimes.append(PredictionTime(time: String(predictionMinutes), type: .schedule))
+                        }
+                    }
+                }
+                
+                var fullPredictionTimes = (schedulePredictionTimes+(exactPredictions ?? []))
+                fullPredictionTimes.sort(by: { time1, time2 in
+                    Int(time1.time) ?? 0 < Int(time2.time) ?? 0
+                })
+                
+                for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
+                {
+                    NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":fullPredictionTimes])
                     
                     guard let uuidIndex = fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID) else { continue }
                     
@@ -828,7 +980,7 @@ class RouteDataManager
                 let predictionsMain = (json["root"] as? Dictionary<String,Any> ?? [:])["station"] as? Array<Dictionary<String,Any>> ?? []
                 if predictionsMain.count < 1 { return }
                 
-                var predictionTimes = Array<String>()
+                var predictionTimes = Array<PredictionTime>()
                 if let etdArray = predictionsMain[0]["etd"] as? Array<Dictionary<String,Any>>
                 {
                     for estimateTmp in etdArray
@@ -844,7 +996,7 @@ class RouteDataManager
                             
                             if directionDestination == destination && routeHexColor.lowercased() == hexColor.lowercased()
                             {
-                                predictionTimes.append(estimate["minutes"] ?? "nil")
+                                predictionTimes.append(PredictionTime(time: estimate["minutes"] ?? "nil", type: .exact))
                             }
                         }
                     }
@@ -921,7 +1073,7 @@ class RouteDataManager
         }
     }
     
-    static func formatPredictions(predictions: Array<String>, vehicleIDs: Array<String>? = nil, predictionsToShow: Int = 5) -> (predictionsString: String, selectedVehicleRange: NSRange?)
+    static func formatPredictions(predictions: Array<PredictionTime>, predictionsToShow: Int = 5) -> NSAttributedString
     {
         var predictionsString = ""
         var predictionOn = 0
@@ -929,10 +1081,12 @@ class RouteDataManager
         var predictions = predictions
         if predictions.count > predictionsToShow && predictions.count > 0
         {
-            predictions = Array<String>(predictions[0...predictionsToShow-1])
+            predictions = Array<PredictionTime>(predictions[0...predictionsToShow-1])
         }
         
         var selectedVehicleRange: NSRange?
+        
+        var schedulePredictionRanges = Array<NSRange>()
         
         for prediction in predictions
         {
@@ -941,23 +1095,31 @@ class RouteDataManager
                 predictionsString += ", "
             }
             
-            if vehicleIDs != nil && vehicleIDs!.count > predictionOn && vehicleIDs![predictionOn] == MapState.selectedVehicleID && selectedVehicleRange == nil
+            if selectedVehicleRange == nil && prediction.vehicleID != nil && prediction.vehicleID == MapState.selectedVehicleID
             {
-                selectedVehicleRange = NSRange(location: predictionsString.count, length: prediction.count)
+                selectedVehicleRange = NSRange(location: predictionsString.count, length: prediction.time.count)
+            }
+            else if prediction.type == .schedule
+            {
+                schedulePredictionRanges.append(NSRange(location: predictionsString.count, length: prediction.time.count))
             }
             
-            if prediction == "0"
+            if prediction.time == "0"
             {
                 if selectedVehicleRange?.location == predictionsString.count
                 {
                     selectedVehicleRange?.length = "Now".count
+                }
+                else if schedulePredictionRanges.last?.location == predictionsString.count
+                {
+                    schedulePredictionRanges[schedulePredictionRanges.count-1].length = "Now".count
                 }
                 
                 predictionsString += "Now"
             }
             else
             {
-                predictionsString += prediction
+                predictionsString += prediction.time
             }
             
             predictionOn += 1
@@ -965,7 +1127,7 @@ class RouteDataManager
         
         if predictions.count > 0
         {
-            if predictions.count > 1 || predictions[0] != "0"
+            if predictions.count > 1 || predictions[0].time != "0"
             {
                 predictionsString += " mins"
             }
@@ -975,7 +1137,17 @@ class RouteDataManager
             predictionsString = "No Predictions"
         }
         
-        return (predictionsString, selectedVehicleRange)
+        let predictionsAttributedString = NSMutableAttributedString(string: predictionsString, attributes: [:])
+        if selectedVehicleRange != nil
+        {
+            predictionsAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor(red: 0, green: 0.5, blue: 1, alpha: 1), range: selectedVehicleRange!)
+        }
+        for scheduleRange in schedulePredictionRanges
+        {
+            predictionsAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 1), range: scheduleRange)
+        }
+        
+        return predictionsAttributedString
     }
     
     static var currentRouteUpdateBackgroundTask: BGTask?

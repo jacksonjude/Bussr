@@ -114,10 +114,10 @@ class DirectionStopCell: UITableViewCell
     {
         NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
         
-        if let predictions = notification.userInfo!["predictions"] as? [String]
+        if let predictions = notification.userInfo!["predictions"] as? [RouteDataManager.PredictionTime]
         {
             OperationQueue.main.addOperation {
-                var predictionsString = RouteDataManager.formatPredictions(predictions: predictions).predictionsString
+                var predictionsString = RouteDataManager.formatPredictions(predictions: predictions).string
                 
                 if !self.includeMins && predictionsString.contains(" mins")
                 {

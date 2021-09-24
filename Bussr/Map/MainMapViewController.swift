@@ -128,12 +128,13 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     var borderPolyline: MKPolyline?
     var busAnnotations = Dictionary<String,(annotation: BusAnnotation, annotationView: MKAnnotationView?, headingAnnotationView: MKAnnotationView?)>()
     var vehicleIDs = Array<String>()
-    var predictions = Array<String>()
+    var predictions = Array<RouteDataManager.PredictionTime>()
     var selectedStopHeading: SelectedStopHeadingAnnotation?
     
     var locationManager = CLLocationManager()
     
     var predictionRefreshTimer: Timer?
+    var currentlyAnimatingPredictionTimesProgressView = false
     
     //MARK: - View
 
@@ -461,7 +462,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         NotificationCenter.default.addObserver(self, selector: #selector(reloadAllAnnotations), name: NSNotification.Name("ReloadAnnotations"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(showPickerView), name: NSNotification.Name("ShowRouteInfoPickerView"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hidePickerView), name: NSNotification.Name("HideRouteInfoPickerView"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handlePredictionTimesProgressViewAfterFetch), name: NSNotification.Name("UpdateCountdownProgressBar"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(predictionTimesFinishedRefreshing), name: NSNotification.Name("UpdateCountdownProgressBar"), object: nil)
     }
     
     func removeRouteMapUpdateNotifications()
@@ -1300,12 +1301,13 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             })
         }
         
-        setupPredictionRefreshTimer()
         fetchPredictionTimes()
     }
     
     func fetchPredictionTimes()
     {
+        self.predictionRefreshTimer?.invalidate()
+        
         OperationQueue.main.addOperation {
             self.predictionTimesProgressView.setProgress(0.33, animated: true)
         }
@@ -1350,15 +1352,24 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             self.activityIndicator.stopAnimating()
         }
         
-        if let predictions = notification.userInfo!["predictions"] as? Array<String>
+        if let predictions = notification.userInfo!["predictions"] as? Array<RouteDataManager.PredictionTime>
         {
             self.predictions = predictions
             
-            if let vehicleIDs = notification.userInfo!["vehicleIDs"] as? Array<String>
+            let vehicleIDs = predictions.map({ prediction in
+                return prediction.vehicleID ?? ""
+            })
+            if vehicleIDs.count > 0
             {
                 self.vehicleIDs = vehicleIDs
                 
                 NotificationCenter.default.post(name: NSNotification.Name("FetchVehicleLocations"), object: nil)
+            }
+            else
+            {
+                OperationQueue.main.addOperation {
+                    self.predictionTimesFinishedRefreshing()
+                }
             }
             
             reloadPredictionTimesLabel()
@@ -1374,15 +1385,10 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     
     func reloadPredictionTimesLabel()
     {
-        let predictionsFormatCallback = RouteDataManager.formatPredictions(predictions: self.predictions, vehicleIDs: self.vehicleIDs)
-        let predictionsString = predictionsFormatCallback.predictionsString
-        let selectedVehicleRange = predictionsFormatCallback.selectedVehicleRange ?? NSRange(location: 0, length: 0)
+        let formattedPredictionsString = RouteDataManager.formatPredictions(predictions: self.predictions)
         
         OperationQueue.main.addOperation {
-            let predictionsAttributedString = NSMutableAttributedString(string: predictionsString, attributes: [:])
-            predictionsAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor(red: 0, green: 0.5, blue: 1, alpha: 1), range: selectedVehicleRange)
-            self.predictionTimesLabel.attributedText = predictionsAttributedString
-
+            self.predictionTimesLabel.attributedText = formattedPredictionsString
             
             if MapState.selectedVehicleID != nil && self.vehicleIDs.contains(MapState.selectedVehicleID!)
             {
@@ -1411,7 +1417,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
         
         OperationQueue.main.addOperation {
-            self.handlePredictionTimesProgressViewAfterFetch()
+            self.predictionTimesFinishedRefreshing()
             
             var annotationsToSave = Dictionary<String,(annotation: BusAnnotation, annotationView: MKAnnotationView?, headingAnnotationView: MKAnnotationView?)>()
             
@@ -1487,9 +1493,12 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         }
     }
     
-    @objc func handlePredictionTimesProgressViewAfterFetch()
+    @objc func predictionTimesFinishedRefreshing()
     {
-        if self.predictionTimesProgressView.isHidden { return }
+        setupPredictionRefreshTimer()
+        
+        if self.predictionTimesProgressView.isHidden || self.currentlyAnimatingPredictionTimesProgressView { return }
+        currentlyAnimatingPredictionTimesProgressView = true
         
         self.predictionTimesProgressView.setProgress(1, animated: true)
         
@@ -1507,6 +1516,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             self.predictionTimesProgressView.setProgress(0.001, animated: false)
             UIView.animate(withDuration: timeLeftToPredictionRefresh, delay: 0, options: [.curveLinear]) {
                 self.predictionTimesProgressView.layoutIfNeeded()
+            } completion: { complete in
+                self.currentlyAnimatingPredictionTimesProgressView = false
             }
         }
         else
@@ -1536,7 +1547,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             var vehicleOn = 0
             while vehicleOn < vehicleIDs.count
             {
-                predictionVehicleArray.append((vehicleID: vehicleIDs[vehicleOn], prediction: predictions[vehicleOn]))
+                predictionVehicleArray.append((vehicleID: vehicleIDs[vehicleOn], prediction: predictions[vehicleOn].time))
                 vehicleOn += 1
             }
             
