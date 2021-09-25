@@ -833,7 +833,8 @@ class RouteDataManager
     static func fetchNextBusSchedulePredictionTimes(route: Route, direction: Direction, stop: Stop, exactPredictions: Array<PredictionTime>?)
     {
         let averageBusSpeed = 225.0 // Rough bus speed estimate in meters/minute
-        let scheduleToCurrentPredictionMarginOfError = 4 // Margin of error between scheduled time and exact time in minutes, so that a scheduled time can be excluded if a corresponding exact time is available
+        let minPredictionTimeToIncludeSchedulesBefore = 25 // Schedule times will be excluded before the first prediction time if the that prediction is less than this value
+        let scheduleToCurrentPredictionMarginOfError = 5 // Margin of error between scheduled time and exact time in minutes, so that a scheduled time can be excluded if a corresponding exact time is available
         
         getJSONFromNextBusSource("schedule", ["a":RouteConstants.NextBusAgencyTag,"r":route.tag!]) { (json) in
             let directionStopID = (stop.tag ?? "") + "-" + (direction.tag ?? "")
@@ -846,7 +847,7 @@ class RouteDataManager
                 {
                 case 1:
                     weekdayCode = "sun"
-                case 2:
+                case 7:
                     weekdayCode = "sat"
                 default:
                     weekdayCode = "wkd"
@@ -855,7 +856,11 @@ class RouteDataManager
                 let dayComponents = Calendar.current.dateComponents([.hour, .minute, .second], from: Date())
                 
                 let currentEpochDayTime = 1000*(dayComponents.hour!*60*60+dayComponents.minute!*60+dayComponents.second!)
-                let minEpochDayTime = currentEpochDayTime
+                var minEpochDayTime = currentEpochDayTime
+                if let firstPredictionTimeString = exactPredictions?.first?.time, let firstPredictionTime = Int(firstPredictionTimeString), firstPredictionTime < minPredictionTimeToIncludeSchedulesBefore
+                {
+                    minEpochDayTime = currentEpochDayTime + 1000*60*firstPredictionTime
+                }
                 let maxEpochDayTime = currentEpochDayTime + 1000*60*60
                 
                 let schedulesArray = json["route"] as? Array<Dictionary<String,Any>> ?? []
@@ -922,14 +927,21 @@ class RouteDataManager
                     let stopDistance = nearestEarlyStopLocation.distance(from: currentStopLocation)
                     let minutesToAccountForDistance = Int(round(stopDistance / averageBusSpeed))
                     
-                    print(stopDistance, minutesToAccountForDistance)
-                    
                     schedulePredictionMinutes.forEach { stopMinutesTuple in
                         if stopMinutesTuple.stopTag == firstStopTag
                         {
                             let predictionMinutes = stopMinutesTuple.minutes-minutesToAccountForDistance
                             if predictionMinutes < 0 { return }
-                            if let lastPredictionTimeString = exactPredictions?.last?.time, let lastPredictionTime = Int(lastPredictionTimeString), predictionMinutes >= lastPredictionTime-scheduleToCurrentPredictionMarginOfError && predictionMinutes <= lastPredictionTime+scheduleToCurrentPredictionMarginOfError { return }
+                            
+                            for extactPredictionTime in exactPredictions ?? []
+                            {
+                                guard let exactPredictionMinutes = Int(extactPredictionTime.time) else { continue }
+                                
+                                let minPredictionTimeToExclude = exactPredictionMinutes-scheduleToCurrentPredictionMarginOfError
+                                let maxPredictionTimeToExclude = exactPredictionMinutes+scheduleToCurrentPredictionMarginOfError
+                                
+                                if predictionMinutes >= minPredictionTimeToExclude && predictionMinutes <= maxPredictionTimeToExclude { return }
+                            }
                                 
                             schedulePredictionTimes.append(PredictionTime(time: String(predictionMinutes), type: .schedule))
                         }
