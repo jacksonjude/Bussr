@@ -42,7 +42,7 @@ class SettingsViewController: UITableViewController
         let showListPredictions = UserDefaults.standard.object(forKey: "ShowListPredictions") as? Bool ?? false
         setShowListPredictionsTitle(showListPredictions: showListPredictions)
         
-        let appIcon = UserDefaults.standard.object(forKey: "AppIcon") as? Int ?? 1
+        let appIcon = UserDefaults.standard.object(forKey: "AppIcon") as? Int ?? 2
         setAppIconTitle(appIcon: appIcon)
         
         let refreshTime = UserDefaults.standard.object(forKey: "PredictionRefreshTime") as? Double ?? 60.0

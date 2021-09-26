@@ -171,17 +171,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func updateAppIcon()
     {
-        switch UserDefaults.standard.object(forKey: "AppIcon") as? Int ?? 1
+        switch UserDefaults.standard.object(forKey: "AppIcon") as? Int ?? 2
         {
-        case 1:
+        case 2:
             UIApplication.shared.setAlternateIconName(nil) { (error) in
                 if error != nil
                 {
                     print(error!.localizedDescription)
                 }
             }
-        case 2:
-            UIApplication.shared.setAlternateIconName("AppIcon-2") { (error) in
+        case 1:
+            UIApplication.shared.setAlternateIconName("AppIcon-1") { (error) in
                 if error != nil
                 {
                     print(error!.localizedDescription)
