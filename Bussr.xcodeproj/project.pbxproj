@@ -238,6 +238,7 @@
 		7A2155BE26D7651100047585 /* Bussr 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Bussr 2.xcdatamodel"; sourceTree = "<group>"; };
 		7A2317692171212F00D12F21 /* NotificationEditorState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEditorState.swift; sourceTree = "<group>"; };
 		7A24528F20FA73170033E333 /* FavoritesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesTableViewController.swift; sourceTree = "<group>"; };
+		7A2B84BC27012338009E5392 /* Bussr 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Bussr 3.xcdatamodel"; sourceTree = "<group>"; };
 		7A42C933210521090022FC96 /* DirectionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsTableViewController.swift; sourceTree = "<group>"; };
 		7A4930C320D788EA008208D1 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		7A50EECC2107DAE700B69B92 /* StopsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopsTableViewController.swift; sourceTree = "<group>"; };
@@ -1764,10 +1765,11 @@
 		7AAA2AF226B66420005C2B1C /* Bussr.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				7A2B84BC27012338009E5392 /* Bussr 3.xcdatamodel */,
 				7A2155BE26D7651100047585 /* Bussr 2.xcdatamodel */,
 				7AAA2AF326B66420005C2B1C /* Bussr.xcdatamodel */,
 			);
-			currentVersion = 7A2155BE26D7651100047585 /* Bussr 2.xcdatamodel */;
+			currentVersion = 7A2B84BC27012338009E5392 /* Bussr 3.xcdatamodel */;
 			path = Bussr.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

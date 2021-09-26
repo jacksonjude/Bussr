@@ -65,9 +65,8 @@ class RouteDataManager
             commandString += "&" + commandArgument.key + "=" + commandArgument.value
         }
                 
-        let url = URL(string: RouteConstants.nextBusJSONFeedSource + "?_=" + String(Date().timeIntervalSince1970) + "&command=" + command + commandString)!
-        
-        let task = (URLSession.shared.dataTask(with: url) { data, response, error in
+        let url = URL(string: RouteConstants.nextBusJSONFeedSource + "&command=" + command + commandString)!
+        let task = (URLSession.shared.dataTask(with: URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 10), completionHandler: { data, response, error in
             if data != nil, let json = try? JSONSerialization.jsonObject(with: data!) as? [String:Any]
             {
                 callback(json)
@@ -76,7 +75,7 @@ class RouteDataManager
             {
                 callback(nil)
             }
-        })
+        }))
         
         task.resume()
     }
@@ -186,6 +185,7 @@ class RouteDataManager
             
             routeObject.color = routeConfig.color
             routeObject.oppositeColor = routeConfig.oppositeColor
+//            routeObject.scheduleJSON = routeConfig.scheduleJSON
             
             return (routeObject, routeFetchCallback.justCreated, routeConfig)
         })
@@ -523,6 +523,21 @@ class RouteDataManager
         }
         
         backgroundGroup.wait()
+//        backgroundGroup.enter()
+//
+//        getJSONFromNextBusSource("schedule", ["a":RouteConstants.NextBusAgencyTag,"r":routeTag]) { (json) in
+//            do {
+//                let jsonData = try JSONSerialization.data(withJSONObject: json ?? [:], options: JSONSerialization.WritingOptions.prettyPrinted)
+//                let jsonString = String(data: jsonData, encoding: String.Encoding.utf8)
+//                routeConfiguration?.scheduleJSON = jsonString
+//            } catch let jsonError {
+//                print(jsonError)
+//            }
+//
+//            backgroundGroup.leave()
+//        }
+//
+//        backgroundGroup.wait()
         
         return routeConfiguration
     }
@@ -803,19 +818,28 @@ class RouteDataManager
                     predictions.append(PredictionTime(time: prediction["minutes"] ?? "nil", type: .exact, vehicleID: prediction["vehicle"]))
                 }
                 
+                var shouldLoadSchedule = false
+                
                 if predictions.count < minimumExactPredictionsToAvoidScheduleFallback
                 {
-                    fetchNextBusSchedulePredictionTimes(route: route, direction: direction, stop: stop, exactPredictions: predictions)
-                    return
+                    shouldLoadSchedule = true
                 }
                 
                 for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
                 {
-                    NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictions])
+                    NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictions, "willLoadSchedule": shouldLoadSchedule])
                     
                     guard let uuidIndex = fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID) else { continue }
                     
-                    fetchPredictionTimesReturnUUIDS[directionStopID]!.remove(at: uuidIndex)
+                    if !shouldLoadSchedule
+                    {
+                        fetchPredictionTimesReturnUUIDS[directionStopID]!.remove(at: uuidIndex)
+                    }
+                }
+                
+                if shouldLoadSchedule
+                {
+                    fetchNextBusSchedulePredictionTimes(route: route, direction: direction, stop: stop, exactPredictions: predictions)
                 }
             }
             else
@@ -836,141 +860,194 @@ class RouteDataManager
         let minPredictionTimeToIncludeSchedulesBefore = 25 // Schedule times will be excluded before the first prediction time if the that prediction is less than this value
         let scheduleToCurrentPredictionMarginOfError = 5 // Margin of error between scheduled time and exact time in minutes, so that a scheduled time can be excluded if a corresponding exact time is available
         
-        getJSONFromNextBusSource("schedule", ["a":RouteConstants.NextBusAgencyTag,"r":route.tag!]) { (json) in
-            let directionStopID = (stop.tag ?? "") + "-" + (direction.tag ?? "")
+        let directionStopID = (stop.tag ?? "") + "-" + (direction.tag ?? "")
+        
+        let backgroundGroup = DispatchGroup()
+        var routeScheduleJSON: [String : Any]?
+        
+        if let scheduleJSONData = route.schedule?.scheduleJSON, let expireDate = route.schedule?.expireDate, Date().compare(expireDate) == .orderedAscending
+        {
+            routeScheduleJSON = try? JSONSerialization.jsonObject(with: scheduleJSONData, options: .fragmentsAllowed) as? [String : Any]
+        }
+        else
+        {
+            backgroundGroup.enter()
             
-            if let json = json
+            getJSONFromNextBusSource("schedule", ["a":RouteConstants.NextBusAgencyTag,"r":route.tag!]) { (json) in
+                if let json = json
+                {
+                    routeScheduleJSON = json
+                }
+                else
+                {
+                    for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
+                    {
+                        NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":exactPredictions ?? []])
+                        
+                        fetchPredictionTimesReturnUUIDS[directionStopID]!.remove(at: fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID)!)
+                    }
+                }
+                
+                backgroundGroup.leave()
+            }
+            
+            backgroundGroup.wait()
+            
+            if let routeTag = route.tag, let routeScheduleJSON = routeScheduleJSON
             {
-                let dayOfWeek = Calendar.current.dateComponents([.weekday], from: Date()).weekday
-                var weekdayCode = ""
-                switch dayOfWeek
-                {
-                case 1:
-                    weekdayCode = "sun"
-                case 7:
-                    weekdayCode = "sat"
-                default:
-                    weekdayCode = "wkd"
-                }
-                
-                let dayComponents = Calendar.current.dateComponents([.hour, .minute, .second], from: Date())
-                
-                let currentEpochDayTime = 1000*(dayComponents.hour!*60*60+dayComponents.minute!*60+dayComponents.second!)
-                var minEpochDayTime = currentEpochDayTime
-                if let firstPredictionTimeString = exactPredictions?.first?.time, let firstPredictionTime = Int(firstPredictionTimeString), firstPredictionTime < minPredictionTimeToIncludeSchedulesBefore
-                {
-                    minEpochDayTime = currentEpochDayTime + 1000*60*firstPredictionTime
-                }
-                let maxEpochDayTime = currentEpochDayTime + 1000*60*60
-                
-                let schedulesArray = json["route"] as? Array<Dictionary<String,Any>> ?? []
-                var schedulePredictionMinutes = Array<(stopTag: String, minutes: Int)>()
-                
-                schedulesArray.forEach { scheduleDictionary in
-                    if scheduleDictionary["serviceClass"] as? String != weekdayCode { return }
-                    
-                    let scheduleBlocks = scheduleDictionary["tr"] as? Array<Dictionary<String,Any>> ?? []
-                    for scheduleBlock in scheduleBlocks
+                CoreDataStack.persistentContainer.performBackgroundTask { backgroundMOC in
+                    let routeScheduleCallback = fetchOrCreateObject(type: "Schedule", predicate: NSPredicate(format: "route.tag == %@", routeTag), moc: backgroundMOC)
+                    if let routeSchedule = routeScheduleCallback.object as? RouteSchedule
                     {
-                        let scheduleStopsData = scheduleBlock["stop"] as? Array<Dictionary<String,String>> ?? []
-                        for stopData in scheduleStopsData
+                        routeSchedule.scheduleJSON = try? JSONSerialization.data(withJSONObject: routeScheduleJSON, options: .fragmentsAllowed)
+                        
+                        var dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: Date())
+                        dateComponents.hour = 0
+                        dateComponents.minute = 0
+                        let nextDay = Calendar.current.date(from: dateComponents)?.addingTimeInterval(60*60*24)
+                        routeSchedule.expireDate = nextDay
+                        
+                        if routeScheduleCallback.justCreated, let routeObject = fetchObject(type: "Route", predicate: NSPredicate(format: "tag == %@", routeTag), moc: backgroundMOC) as? Route
                         {
-                            if let stopTag = stopData["tag"], let epochTimeString = stopData["epochTime"], let epochTimeInt = Int(epochTimeString), epochTimeInt >= minEpochDayTime && epochTimeInt < maxEpochDayTime
-                            {
-                                schedulePredictionMinutes.append((stopTag: stopTag, minutes: (epochTimeInt-currentEpochDayTime)/1000/60))
-                            }
+                            routeObject.schedule = routeSchedule
                         }
                     }
+                    
+                    try? backgroundMOC.save()
                 }
+            }
+        }
+        
+        guard let routeScheduleJSON = routeScheduleJSON else
+        {
+            for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
+            {
+                NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":exactPredictions ?? []])
                 
-                schedulePredictionMinutes = schedulePredictionMinutes.filter { stopMinutesTuple in
-                    let stopObject = RouteDataManager.fetchStop(stopTag: stopMinutesTuple.stopTag)
-                    if let testDirection = stopObject?.direction?.allObjects.first(where: { direction in
-                        guard let direction = direction as? Direction else { return false }
-                        
-                        return direction.route?.tag == route.tag
-                    }) as? Direction, testDirection == direction
+                fetchPredictionTimesReturnUUIDS[directionStopID]!.remove(at: fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID)!)
+            }
+            return
+        }
+        
+        let dayOfWeek = Calendar.current.dateComponents([.weekday], from: Date()).weekday
+        var weekdayCode = ""
+        switch dayOfWeek
+        {
+        case 1:
+            weekdayCode = "sun"
+        case 7:
+            weekdayCode = "sat"
+        default:
+            weekdayCode = "wkd"
+        }
+        
+        let dayComponents = Calendar.current.dateComponents([.hour, .minute, .second], from: Date())
+        
+        let currentEpochDayTime = 1000*(dayComponents.hour!*60*60+dayComponents.minute!*60+dayComponents.second!)
+        var minEpochDayTime = currentEpochDayTime
+        if let firstPredictionTimeString = exactPredictions?.first?.time, let firstPredictionTime = Int(firstPredictionTimeString), firstPredictionTime < minPredictionTimeToIncludeSchedulesBefore
+        {
+            minEpochDayTime = currentEpochDayTime + 1000*60*firstPredictionTime
+        }
+        let maxEpochDayTime = currentEpochDayTime + 1000*60*60
+        
+        let schedulesArray = routeScheduleJSON["route"] as? Array<Dictionary<String,Any>> ?? []
+        var schedulePredictionMinutes = Array<(stopTag: String, minutes: Int)>()
+        
+        schedulesArray.forEach { scheduleDictionary in
+            if scheduleDictionary["serviceClass"] as? String != weekdayCode { return }
+            
+            let scheduleBlocks = scheduleDictionary["tr"] as? Array<Dictionary<String,Any>> ?? []
+            for scheduleBlock in scheduleBlocks
+            {
+                let scheduleStopsData = scheduleBlock["stop"] as? Array<Dictionary<String,String>> ?? []
+                for stopData in scheduleStopsData
+                {
+                    if let stopTag = stopData["tag"], let epochTimeString = stopData["epochTime"], let epochTimeInt = Int(epochTimeString), epochTimeInt >= minEpochDayTime && epochTimeInt < maxEpochDayTime
                     {
-                        guard var stops = direction.stops?.array as? [Stop] else { return false }
-                        stops = stops.filter { testStop in
-                            return stops.firstIndex { testStop2 in
-                                return testStop2.tag == testStop.tag
-                            } ?? 0 >= stops.firstIndex { testStop2 in
-                                return testStop2.tag == stop.tag
-                            } ?? 0
-                        }
-                        
-                        return stops.contains { stop in
-                            stop.tag == stopMinutesTuple.stopTag
-                        }
+                        schedulePredictionMinutes.append((stopTag: stopTag, minutes: (epochTimeInt-currentEpochDayTime)/1000/60))
                     }
-                    
-                    return false
                 }
+            }
+        }
+        
+        schedulePredictionMinutes = schedulePredictionMinutes.filter { stopMinutesTuple in
+            let stopObject = RouteDataManager.fetchStop(stopTag: stopMinutesTuple.stopTag)
+            if let testDirection = stopObject?.direction?.allObjects.first(where: { direction in
+                guard let direction = direction as? Direction else { return false }
                 
-                schedulePredictionMinutes.sort { stopMinutesTuple1, stopMinutesTuple2 in
-                    guard let stops = direction.stops?.array as? [Stop] else { return false }
-                    
+                return direction.route?.tag == route.tag
+            }) as? Direction, testDirection == direction
+            {
+                guard var stops = direction.stops?.array as? [Stop] else { return false }
+                stops = stops.filter { testStop in
                     return stops.firstIndex { testStop2 in
-                        return stopMinutesTuple1.stopTag == testStop2.tag
-                    } ?? 0 <= stops.firstIndex { testStop2 in
-                        return stopMinutesTuple2.stopTag == testStop2.tag
+                        return testStop2.tag == testStop.tag
+                    } ?? 0 >= stops.firstIndex { testStop2 in
+                        return testStop2.tag == stop.tag
                     } ?? 0
                 }
                 
-                var schedulePredictionTimes = Array<PredictionTime>()
-                if let firstStopTag = schedulePredictionMinutes.first?.stopTag, let nearestEarlyStop = RouteDataManager.fetchStop(stopTag: firstStopTag)
+                return stops.contains { stop in
+                    stop.tag == stopMinutesTuple.stopTag
+                }
+            }
+            
+            return false
+        }
+        
+        schedulePredictionMinutes.sort { stopMinutesTuple1, stopMinutesTuple2 in
+            guard let stops = direction.stops?.array as? [Stop] else { return false }
+            
+            return stops.firstIndex { testStop2 in
+                return stopMinutesTuple1.stopTag == testStop2.tag
+            } ?? 0 <= stops.firstIndex { testStop2 in
+                return stopMinutesTuple2.stopTag == testStop2.tag
+            } ?? 0
+        }
+        
+        var schedulePredictionTimes = Array<PredictionTime>()
+        if let firstStopTag = schedulePredictionMinutes.first?.stopTag, let nearestEarlyStop = RouteDataManager.fetchStop(stopTag: firstStopTag)
+        {
+            let nearestEarlyStopLocation = CLLocation(latitude: nearestEarlyStop.latitude, longitude: nearestEarlyStop.longitude)
+            let currentStopLocation = CLLocation(latitude: stop.latitude, longitude: stop.longitude)
+            
+            let stopDistance = nearestEarlyStopLocation.distance(from: currentStopLocation)
+            let minutesToAccountForDistance = Int(round(stopDistance / averageBusSpeed))
+            
+            schedulePredictionMinutes.forEach { stopMinutesTuple in
+                if stopMinutesTuple.stopTag == firstStopTag
                 {
-                    let nearestEarlyStopLocation = CLLocation(latitude: nearestEarlyStop.latitude, longitude: nearestEarlyStop.longitude)
-                    let currentStopLocation = CLLocation(latitude: stop.latitude, longitude: stop.longitude)
+                    let predictionMinutes = stopMinutesTuple.minutes-minutesToAccountForDistance
+                    if predictionMinutes < 0 { return }
                     
-                    let stopDistance = nearestEarlyStopLocation.distance(from: currentStopLocation)
-                    let minutesToAccountForDistance = Int(round(stopDistance / averageBusSpeed))
-                    
-                    schedulePredictionMinutes.forEach { stopMinutesTuple in
-                        if stopMinutesTuple.stopTag == firstStopTag
-                        {
-                            let predictionMinutes = stopMinutesTuple.minutes-minutesToAccountForDistance
-                            if predictionMinutes < 0 { return }
-                            
-                            for extactPredictionTime in exactPredictions ?? []
-                            {
-                                guard let exactPredictionMinutes = Int(extactPredictionTime.time) else { continue }
-                                
-                                let minPredictionTimeToExclude = exactPredictionMinutes-scheduleToCurrentPredictionMarginOfError
-                                let maxPredictionTimeToExclude = exactPredictionMinutes+scheduleToCurrentPredictionMarginOfError
-                                
-                                if predictionMinutes >= minPredictionTimeToExclude && predictionMinutes <= maxPredictionTimeToExclude { return }
-                            }
-                                
-                            schedulePredictionTimes.append(PredictionTime(time: String(predictionMinutes), type: .schedule))
-                        }
+                    for extactPredictionTime in exactPredictions ?? []
+                    {
+                        guard let exactPredictionMinutes = Int(extactPredictionTime.time) else { continue }
+                        
+                        let minPredictionTimeToExclude = exactPredictionMinutes-scheduleToCurrentPredictionMarginOfError
+                        let maxPredictionTimeToExclude = exactPredictionMinutes+scheduleToCurrentPredictionMarginOfError
+                        
+                        if predictionMinutes >= minPredictionTimeToExclude && predictionMinutes <= maxPredictionTimeToExclude { return }
                     }
-                }
-                
-                var fullPredictionTimes = (schedulePredictionTimes+(exactPredictions ?? []))
-                fullPredictionTimes.sort(by: { time1, time2 in
-                    Int(time1.time) ?? 0 < Int(time2.time) ?? 0
-                })
-                
-                for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
-                {
-                    NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":fullPredictionTimes])
-                    
-                    guard let uuidIndex = fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID) else { continue }
-                    
-                    fetchPredictionTimesReturnUUIDS[directionStopID]!.remove(at: uuidIndex)
+                        
+                    schedulePredictionTimes.append(PredictionTime(time: String(predictionMinutes), type: .schedule))
                 }
             }
-            else
-            {
-                for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
-                {
-                    NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["error":"Connection Error"])
-                    
-                    fetchPredictionTimesReturnUUIDS[directionStopID]!.remove(at: fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID)!)
-                }
-            }
+        }
+        
+        var fullPredictionTimes = (schedulePredictionTimes+(exactPredictions ?? []))
+        fullPredictionTimes.sort(by: { time1, time2 in
+            Int(time1.time) ?? 0 < Int(time2.time) ?? 0
+        })
+        
+        for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
+        {
+            NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":fullPredictionTimes])
+            
+            guard let uuidIndex = fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID) else { continue }
+            
+            fetchPredictionTimesReturnUUIDS[directionStopID]!.remove(at: uuidIndex)
         }
     }
     
@@ -1055,7 +1132,7 @@ class RouteDataManager
     {
         print("↓ - Fetching " + (direction?.tag ?? "") + " Locations")
         DispatchQueue.global(qos: .background).async {
-            if let direction = direction, let route = direction.route
+            if let direction = direction, let route = direction.route, vehicleIDs.count > 0
             {
                 getJSONFromNextBusSource("vehicleLocations", ["a":RouteConstants.NextBusAgencyTag,"r":route.tag!,"t":lastVehicleTime ?? "0"]) { (json) in
                     guard let json = json else { return }
@@ -1080,6 +1157,10 @@ class RouteDataManager
                     
                     NotificationCenter.default.post(name: NSNotification.Name("FoundVehicleLocations:" + returnUUID), object: nil, userInfo: ["vehicleLocations":vehiclesInDirection])
                 }
+            }
+            else
+            {
+                NotificationCenter.default.post(name: NSNotification.Name("FoundVehicleLocations:" + returnUUID), object: nil, userInfo: ["vehicleLocations":[]])
             }
         }
     }

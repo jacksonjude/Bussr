@@ -50,6 +50,12 @@
         <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="agency" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Agency" inverseName="routes" inverseEntity="Agency"/>
         <relationship name="directions" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Direction" inverseName="route" inverseEntity="Direction"/>
+        <relationship name="schedule" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RouteSchedule" inverseName="route" inverseEntity="RouteSchedule"/>
+    </entity>
+    <entity name="RouteSchedule" representedClassName="RouteSchedule" syncable="YES" codeGenerationType="class">
+        <attribute name="expireDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="scheduleJSON" optional="YES" attributeType="Binary"/>
+        <relationship name="route" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Route" inverseName="schedule" inverseEntity="Route"/>
     </entity>
     <entity name="Stop" representedClassName="Stop" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="String"/>
@@ -103,8 +109,9 @@
         <element name="FavoriteStop" positionX="-181.19140625" positionY="129.7265625" width="128" height="103"/>
         <element name="FavoriteStopGroup" positionX="-33.3359375" positionY="128.07421875" width="128" height="119"/>
         <element name="RecentStop" positionX="-323.39453125" positionY="127.953125" width="128" height="105"/>
-        <element name="Route" positionX="-177.62890625" positionY="-55.05078125" width="128" height="134"/>
+        <element name="Route" positionX="-177.62890625" positionY="-55.05078125" width="128" height="149"/>
         <element name="Stop" positionX="139.30859375" positionY="-59.54296875" width="128" height="148"/>
         <element name="StopNotification" positionX="133.44921875" positionY="128.21484375" width="128" height="179"/>
+        <element name="RouteSchedule" positionX="-117" positionY="99" width="128" height="74"/>
     </elements>
 </model>

@@ -61,6 +61,7 @@ class NextBusRouteConfiguration: RouteConfiguation
     var oppositeColor: String
     var directions: [DirectionConfiguration]
     var stops: [StopConfiguration]
+    var scheduleJSON: String?
     
     enum BaseRouteCodingKeys: String, CodingKey
     {

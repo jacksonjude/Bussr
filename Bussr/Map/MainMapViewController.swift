@@ -1309,7 +1309,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         self.predictionRefreshTimer?.invalidate()
         
         OperationQueue.main.addOperation {
-            self.predictionTimesProgressView.setProgress(0.33, animated: true)
+            self.predictionTimesProgressView.setProgress(0.25, animated: true)
         }
         
         let predictionTimesReturnUUID = UUID().uuidString
@@ -1330,7 +1330,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     @objc func fetchVehicleLocations()
     {
         OperationQueue.main.addOperation {
-            self.predictionTimesProgressView.setProgress(0.66, animated: true)
+            self.predictionTimesProgressView.setProgress(0.75, animated: true)
         }
         
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("FetchVehicleLocations"), object: nil)
@@ -1343,13 +1343,24 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     
     @objc func receivePredictionTimes(_ notification: Notification)
     {
-        NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
+        let willLoadSchedule = notification.userInfo!["willLoadSchedule"] as? Bool ?? false
         
-        OperationQueue.main.addOperation {
-            self.refreshButton.isEnabled = true
-            self.predictionTimesNavigationBar.topItem?.leftBarButtonItem = self.refreshButton
+        if !willLoadSchedule
+        {
+            NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
             
-            self.activityIndicator.stopAnimating()
+            OperationQueue.main.addOperation {
+                self.refreshButton.isEnabled = true
+                self.predictionTimesNavigationBar.topItem?.leftBarButtonItem = self.refreshButton
+                
+                self.activityIndicator.stopAnimating()
+            }
+        }
+        else
+        {
+            OperationQueue.main.addOperation {
+                self.predictionTimesProgressView.setProgress(0.5, animated: true)
+            }
         }
         
         if let predictions = notification.userInfo!["predictions"] as? Array<RouteDataManager.PredictionTime>
@@ -1362,7 +1373,14 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             if vehicleIDs.count > 0
             {
                 self.vehicleIDs = vehicleIDs
-                
+            }
+            
+            reloadPredictionTimesLabel()
+            
+            if willLoadSchedule { return }
+            
+            if vehicleIDs.count > 0
+            {
                 NotificationCenter.default.post(name: NSNotification.Name("FetchVehicleLocations"), object: nil)
             }
             else
@@ -1371,14 +1389,12 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                     self.predictionTimesFinishedRefreshing()
                 }
             }
-            
-            reloadPredictionTimesLabel()
         }
         else if let error = notification.userInfo!["error"] as? String
         {
             OperationQueue.main.addOperation {
                 self.predictionTimesLabel.text = error
-                self.hidePredictionTimesProgressView()
+                self.predictionTimesFinishedRefreshing()
             }
         }
     }

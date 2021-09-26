@@ -119,7 +119,12 @@ class DirectionStopRowController: NSObject
     
     @objc func receivePrediction(_ notification: Notification)
     {
-        NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
+        let willLoadSchedule = notification.userInfo!["willLoadSchedule"] as? Bool ?? false
+        
+        if !willLoadSchedule
+        {
+            NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
+        }
         
         if let predictions = notification.userInfo!["predictions"] as? [RouteDataManager.PredictionTime]
         {
@@ -133,7 +138,11 @@ class DirectionStopRowController: NSObject
                 
                 if self.predictionTimesLabel == nil { return }
                 self.predictionTimesLabel.setText(predictionsString)
-                self.stopActivityIndicator()
+                
+                if !willLoadSchedule
+                {
+                    self.stopActivityIndicator()
+                }
             }
         }
     }
