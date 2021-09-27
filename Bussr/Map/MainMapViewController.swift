@@ -1343,6 +1343,17 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     
     @objc func receivePredictionTimes(_ notification: Notification)
     {
+        var isCorrectDirectionStopID = true
+        if let notificationDirectionStopID = notification.userInfo!["directionStopID"] as? String, let currentDirectionTag = MapState.getCurrentDirection()?.tag, let currentStopTag = MapState.getCurrentStop()?.tag
+        {
+            isCorrectDirectionStopID = notificationDirectionStopID == currentStopTag + "-" + currentDirectionTag
+        }
+        if !isCorrectDirectionStopID
+        {
+            NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
+            return
+        }
+        
         let willLoadSchedule = notification.userInfo!["willLoadSchedule"] as? Bool ?? false
         
         if !willLoadSchedule
@@ -1431,6 +1442,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     @objc func receiveVehicleLocations(_ notification: Notification)
     {
         NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
+        
+        if let notificationDirection = notification.userInfo!["direction"] as? String, let currentDirectionTag = MapState.getCurrentDirection()?.tag, notificationDirection != currentDirectionTag
+        {
+            return
+        }
         
         OperationQueue.main.addOperation {
             self.predictionTimesFinishedRefreshing()

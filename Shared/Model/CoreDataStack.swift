@@ -11,7 +11,7 @@ import CoreData
 import CloudKit
 
 class CoreDataStack {
-    static let localRouteEntityTypes = ["Agency", "Route", "Direction", "Stop"]
+    static let localRouteEntityTypes = ["Agency", "Route", "Direction", "Stop", "RouteSchedule"]
     static let cloudEntityTypes = ["FavoriteStop", "FavoriteStopGroup", "RecentStop", "StopNotification"]
     
     // MARK: - Core Data stack

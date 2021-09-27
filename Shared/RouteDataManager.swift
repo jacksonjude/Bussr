@@ -824,7 +824,7 @@ class RouteDataManager
                 
                 for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
                 {
-                    NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictions, "willLoadSchedule": shouldLoadSchedule])
+                    NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictions, "willLoadSchedule": shouldLoadSchedule, "directionStopID": directionStopID])
                     
                     guard let uuidIndex = fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID) else { continue }
                     
@@ -843,7 +843,7 @@ class RouteDataManager
             {
                 for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
                 {
-                    NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["error":"Connection Error"])
+                    NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["error":"Connection Error", "directionStopID": directionStopID])
                     
                     fetchPredictionTimesReturnUUIDS[directionStopID]!.remove(at: fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID)!)
                 }
@@ -879,7 +879,7 @@ class RouteDataManager
                 {
                     for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
                     {
-                        NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":exactPredictions ?? []])
+                        NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":exactPredictions ?? [], "directionStopID": directionStopID])
                         
                         fetchPredictionTimesReturnUUIDS[directionStopID]!.remove(at: fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID)!)
                     }
@@ -915,7 +915,6 @@ class RouteDataManager
                     } catch let saveError {
                         print(saveError)
                     }
-                    
                 }
             }
         }
@@ -924,7 +923,7 @@ class RouteDataManager
         {
             for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
             {
-                NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":exactPredictions ?? []])
+                NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":exactPredictions ?? [], "directionStopID": directionStopID])
                 
                 fetchPredictionTimesReturnUUIDS[directionStopID]!.remove(at: fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID)!)
             }
@@ -973,30 +972,37 @@ class RouteDataManager
             }
         }
         
-        schedulePredictionMinutes = schedulePredictionMinutes.filter { stopMinutesTuple in
-            let stopObject = RouteDataManager.fetchStop(stopTag: stopMinutesTuple.stopTag)
-            if let directionSet = stopObject?.direction, let testDirection = directionSet.first(where: { direction in
-                guard let direction = direction as? Direction else { return false }
-                
-                return direction.route?.tag == route.tag
-            }) as? Direction, testDirection == direction
-            {
-                guard var stops = direction.stops?.array as? [Stop] else { return false }
-                stops = stops.filter { testStop in
-                    return stops.firstIndex { testStop2 in
-                        return testStop2.tag == testStop.tag
-                    } ?? 0 >= stops.firstIndex { testStop2 in
-                        return testStop2.tag == stop.tag
-                    } ?? 0
+        backgroundGroup.enter()
+        
+        CoreDataStack.persistentContainer.performBackgroundTask { backgroundMOC in
+            schedulePredictionMinutes = schedulePredictionMinutes.filter { stopMinutesTuple in
+                if let stopObject = RouteDataManager.fetchStop(stopTag: stopMinutesTuple.stopTag, moc: backgroundMOC), let directionSet = stopObject.direction, directionSet.contains(where: { testDirection in
+                    guard let testDirection = testDirection as? Direction else { return false }
+                    
+                    return testDirection.tag == direction.tag
+                })
+                {
+                    guard var stops = direction.stops?.array as? [Stop] else { return false }
+                    stops = stops.filter { testStop in
+                        return stops.firstIndex { testStop2 in
+                            return testStop2.tag == testStop.tag
+                        } ?? 0 >= stops.firstIndex { testStop2 in
+                            return testStop2.tag == stop.tag
+                        } ?? 0
+                    }
+                    
+                    return stops.contains { stop in
+                        stop.tag == stopMinutesTuple.stopTag
+                    }
                 }
                 
-                return stops.contains { stop in
-                    stop.tag == stopMinutesTuple.stopTag
-                }
+                return false
             }
             
-            return false
+            backgroundGroup.leave()
         }
+        
+        backgroundGroup.wait()
         
         schedulePredictionMinutes.sort { stopMinutesTuple1, stopMinutesTuple2 in
             guard let stops = direction.stops?.array as? [Stop] else { return false }
@@ -1045,7 +1051,7 @@ class RouteDataManager
         
         for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
         {
-            NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":fullPredictionTimes])
+            NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":fullPredictionTimes, "directionStopID": directionStopID])
             
             guard let uuidIndex = fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID) else { continue }
             
@@ -1094,7 +1100,7 @@ class RouteDataManager
                 
                 for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
                 {
-                    NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictionTimes,"vehicleIDs":[]])
+                    NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictionTimes,"vehicleIDs":[], "directionStopID": directionStopID])
                     
                     guard let uuidIndex = fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID) else { continue }
                     
@@ -1105,7 +1111,7 @@ class RouteDataManager
             {
                 for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
                 {
-                    NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["error":"Connection Error"])
+                    NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["error":"Connection Error", "directionStopID": directionStopID])
                     
                     fetchPredictionTimesReturnUUIDS[directionStopID]!.remove(at: fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID)!)
                 }
@@ -1157,12 +1163,12 @@ class RouteDataManager
                         }
                     }
                     
-                    NotificationCenter.default.post(name: NSNotification.Name("FoundVehicleLocations:" + returnUUID), object: nil, userInfo: ["vehicleLocations":vehiclesInDirection])
+                    NotificationCenter.default.post(name: NSNotification.Name("FoundVehicleLocations:" + returnUUID), object: nil, userInfo: ["vehicleLocations":vehiclesInDirection, "direction": direction.tag ?? ""])
                 }
             }
             else
             {
-                NotificationCenter.default.post(name: NSNotification.Name("FoundVehicleLocations:" + returnUUID), object: nil, userInfo: ["vehicleLocations":[]])
+                NotificationCenter.default.post(name: NSNotification.Name("FoundVehicleLocations:" + returnUUID), object: nil, userInfo: ["vehicleLocations":[], "direction": direction?.tag ?? ""])
             }
         }
     }
