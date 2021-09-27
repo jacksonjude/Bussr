@@ -32,26 +32,21 @@ class NextBusDirectionConfiguration: DirectionConfiguration
     enum DirectionCodingKeys: String, CodingKey
     {
         case title
-        case tag
-        case name
+        case tag = "id"
+        case name = "shortTitle"
         
-        case stops = "stop"
+        case stops
     }
     
     class NextBusStopTagConfiguration: StopTagConfiguration
     {
         var tag: String
         
-        enum StopTagCodingKeys: String, CodingKey
-        {
-            case tag
-        }
-        
         required init(from decoder: Decoder) throws
         {
-            let decodedContainer = try decoder.container(keyedBy: StopTagCodingKeys.self)
+            let decodedContainer = try decoder.singleValueContainer()
             
-            self.tag = try decodedContainer.decode(String.self, forKey: .tag)
+            self.tag = try decodedContainer.decode(String.self)
         }
     }
     

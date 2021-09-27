@@ -14,7 +14,7 @@ import BackgroundTasks
 struct RouteConstants
 {
     static let NextBusAgencyTag = "sf-muni"
-    static let nextBusJSONFeedSource = "https://retro.umoiq.com/service/publicJSONFeed"
+    static let nextBusJSONFeedSource = "http://restbus.info/api/" //"https://retro.umoiq.com/service/publicJSONFeed"
     
     static let herokuHashSource = "http://munitracker.herokuapp.com"
     static let NextBusListHash = "/rlnextbushash"
@@ -35,13 +35,32 @@ class RouteDataManager
     
     static func getDataFromNextBusSource(_ command: String, _ arguments: Dictionary<String,String>, _ callback: @escaping (_ data: Data?) -> Void)
     {
-        var commandString = ""
-        for commandArgument in arguments
+        var urlString = RouteConstants.nextBusJSONFeedSource
+        
+        switch command
         {
-            commandString += "&" + commandArgument.key + "=" + commandArgument.value
+            case "routeList":
+            if let agencyArgument = arguments["a"]
+            {
+                urlString += "/agencies"
+                urlString += "/" + agencyArgument
+                urlString += "/routes"
+            }
+            
+            case "routeConfig":
+            if let agencyArgument = arguments["a"], let routeArgument = arguments["r"]
+            {
+                urlString += "/agencies"
+                urlString += "/" + agencyArgument
+                urlString += "/routes"
+                urlString += "/" + routeArgument
+            }
+            
+            default:
+            break
         }
-                
-        let url = URL(string: RouteConstants.nextBusJSONFeedSource + "?_=" + String(Date().timeIntervalSince1970) + "&command=" + command + commandString)!
+        
+        let url = URL(string: urlString)!
         
         let task = (URLSession.shared.dataTask(with: url) { data, response, error in
             if data != nil
@@ -57,17 +76,46 @@ class RouteDataManager
         task.resume()
     }
     
-    static func getJSONFromNextBusSource(_ command: String, _ arguments: Dictionary<String,String>, _ callback: @escaping (_ json: [String : Any]?) -> Void)
+    static func getJSONFromNextBusSource(_ command: String, _ arguments: Dictionary<String,String>, _ callback: @escaping (_ json: Any?) -> Void)
     {
-        var commandString = ""
-        for commandArgument in arguments
+        var urlString = RouteConstants.nextBusJSONFeedSource
+        
+        switch command
         {
-            commandString += "&" + commandArgument.key + "=" + commandArgument.value
+            case "predictions":
+            if let agencyArgument = arguments["a"], let routeArgument = arguments["r"], let stopArgument = arguments["s"]
+            {
+                urlString += "/agencies"
+                urlString += "/" + agencyArgument
+                urlString += "/routes"
+                urlString += "/" + routeArgument
+                urlString += "/stops"
+                urlString += "/" + stopArgument
+                urlString += "/predictions"
+            }
+            
+            case "vehicleLocations":
+            if let agencyArgument = arguments["a"], let routeArgument = arguments["r"]
+            {
+                urlString += "/agencies"
+                urlString += "/" + agencyArgument
+                urlString += "/routes"
+                urlString += "/" + routeArgument
+                urlString += "/vehicles"
+            }
+            
+            case "schedule":
+            callback(nil)
+            return
+            
+            default:
+            break
         }
-                
-        let url = URL(string: RouteConstants.nextBusJSONFeedSource + "&command=" + command + commandString)!
+        
+        let url = URL(string: urlString)!
+        
         let task = (URLSession.shared.dataTask(with: URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 10), completionHandler: { data, response, error in
-            if data != nil, let json = try? JSONSerialization.jsonObject(with: data!) as? [String:Any]
+            if data != nil, let json = try? JSONSerialization.jsonObject(with: data!)
             {
                 callback(json)
             }
@@ -76,7 +124,7 @@ class RouteDataManager
                 callback(nil)
             }
         }))
-        
+
         task.resume()
     }
     
@@ -775,47 +823,19 @@ class RouteDataManager
             
             if let json = json
             {
-                let predictionsMain = json["predictions"] as? Dictionary<String,Any> ?? [:]
-                
-                var directionDictionary: Dictionary<String,Any>?
-                if let directionDictionaryTmp = predictionsMain["direction"] as? Dictionary<String,Any>
-                {
-                    directionDictionary = directionDictionaryTmp
-                }
-                else if let directionArray = predictionsMain["direction"] as? Array<Dictionary<String,Any>>
-                {
-                    directionDictionary = Dictionary<String,Any>()
-                    var predictionArray = Array<Dictionary<String,Any>>()
-                    for directionDictionaryTmp in directionArray
-                    {
-                        if let predictionDictionary = directionDictionaryTmp["prediction"] as? Dictionary<String, Any>
-                        {
-                            predictionArray.append(predictionDictionary)
-                        }
-                        else if let predictionDictionaryArray = directionDictionaryTmp["prediction"] as? Array<Dictionary<String, Any>>
-                        {
-                            predictionArray.append(contentsOf: predictionDictionaryArray)
-                        }
-                    }
-                    
-                    directionDictionary?["prediction"] = predictionArray
-                }
-                
-                var predictionsArray = directionDictionary?["prediction"] as? Array<Dictionary<String,String>> ?? []
-                if let predictionDictionary = directionDictionary?["prediction"] as? Dictionary<String,String>
-                {
-                    predictionsArray = [predictionDictionary]
-                }
-                
-                predictionsArray.sort { (prediction1, prediction2) -> Bool in
-                    return Int(prediction1["minutes"] ?? "0") ?? 0 < Int(prediction2["minutes"] ?? "0") ?? 0
-                }
-                
+                let predictionsMain = (json as? Array<Dictionary<String,Any>> ?? []).first
                 var predictions = Array<PredictionTime>()
-                
-                for prediction in predictionsArray
+                for predictionData in predictionsMain?["values"] as? Array<Dictionary<String,Any>> ?? []
                 {
-                    predictions.append(PredictionTime(time: prediction["minutes"] ?? "nil", type: .exact, vehicleID: prediction["vehicle"]))
+                    guard let minutes = predictionData["minutes"] as? Int else { continue }
+                    let isScheduleBased = predictionData["isScheduleBased"] as? Bool ?? false
+                    let vehicleID = (predictionData["vehicle"] as? Dictionary<String,String> ?? [:])["id"]
+                    
+                    predictions.append(PredictionTime(time: String(minutes), type: !isScheduleBased ? .exact : .schedule, vehicleID: vehicleID))
+                }
+                
+                predictions.sort { (prediction1, prediction2) -> Bool in
+                    return Int(prediction1.time) ?? 0 < Int(prediction2.time) ?? 0
                 }
                 
                 var shouldLoadSchedule = false
@@ -874,7 +894,7 @@ class RouteDataManager
             backgroundGroup.enter()
             
             getJSONFromNextBusSource("schedule", ["a":RouteConstants.NextBusAgencyTag,"r":route.tag!]) { (json) in
-                if let json = json
+                if let json = json as? [String:Any]
                 {
                     routeScheduleJSON = json
                 }
@@ -1135,21 +1155,25 @@ class RouteDataManager
             if let direction = direction, let route = direction.route, vehicleIDs.count > 0
             {
                 getJSONFromNextBusSource("vehicleLocations", ["a":RouteConstants.NextBusAgencyTag,"r":route.tag!,"t":lastVehicleTime ?? "0"]) { (json) in
-                    guard let json = json else { return }
+                    guard let json = json else
+                    {
+                        NotificationCenter.default.post(name: NSNotification.Name("FoundVehicleLocations:" + returnUUID), object: nil, userInfo: ["vehicleLocations":[]])
+                        return
+                    }
                     
-                    let vehicles = json["vehicle"] as? Array<Dictionary<String,String>> ?? []
+                    let vehicles = json as? Array<Dictionary<String,Any>> ?? []
                     
                     var vehiclesInDirection = Array<(id: String, location: CLLocation, heading: Int)>()
                     
                     for vehicle in vehicles
                     {
-                        if vehicleIDs.contains(vehicle["id"]!)
+                        if let vehicleID = vehicle["id"] as? String, vehicleIDs.contains(vehicleID)
                         {
-                            let id = vehicle["id"]!
-                            let lat = Double(vehicle["lat"]!) ?? 0
-                            let lon = Double(vehicle["lon"]!) ?? 0
+                            let id = vehicleID
+                            guard let lat = vehicle["lat"] as? Double else { continue }
+                            guard let lon = vehicle["lon"] as? Double else { continue }
                             let location = CLLocation(latitude: lat, longitude: lon)
-                            let heading = Int(vehicle["heading"]!) ?? 0
+                            guard let heading = vehicle["heading"] as? Int else { continue }
                             
                             vehiclesInDirection.append((id: id, location: location, heading: heading))
                         }
