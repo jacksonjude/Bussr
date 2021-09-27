@@ -31,8 +31,8 @@ class NextBusStopConfiguration: StopConfiguration
     {
         case title
         case shortTitle
-        case id = "code"
-        case tag = "id"
+        case id = "stopId"
+        case tag
         case latitude = "lat"
         case longitude = "lon"
     }
@@ -46,8 +46,8 @@ class NextBusStopConfiguration: StopConfiguration
         self.shortTitle = try decodedContainer.decodeIfPresent(String.self, forKey: .shortTitle) ?? title
         self.id = try decodedContainer.decode(String.self, forKey: .id)
         self.tag = try decodedContainer.decode(String.self, forKey: .tag)
-        self.latitude = try decodedContainer.decode(Double.self, forKey: .latitude)
-        self.longitude = try decodedContainer.decode(Double.self, forKey: .longitude)
+        self.latitude = Double(try decodedContainer.decode(String.self, forKey: .latitude))!
+        self.longitude = Double(try decodedContainer.decode(String.self, forKey: .longitude))!
     }
 }
 

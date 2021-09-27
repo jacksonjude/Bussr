@@ -12,6 +12,11 @@ class NextBusRouteList: Decodable
 {
     var routeObjects: [NextBusRouteInfo]
     
+    enum BaseRouteCodingKeys: String, CodingKey
+    {
+        case route
+    }
+    
     class NextBusRouteInfo: Decodable
     {
         var tag: String
@@ -19,7 +24,7 @@ class NextBusRouteList: Decodable
         
         enum RouteInfoCodingKeys: String, CodingKey
         {
-            case tag = "id"
+            case tag
             case title
         }
         
@@ -34,8 +39,8 @@ class NextBusRouteList: Decodable
     
     required init(from decoder: Decoder) throws
     {
-        let baseContainer = try decoder.singleValueContainer()
-        self.routeObjects = try baseContainer.decode([NextBusRouteInfo].self)
+        let baseContainer = try decoder.container(keyedBy: BaseRouteCodingKeys.self)
+        self.routeObjects = try baseContainer.decode([NextBusRouteInfo].self, forKey: .route)
     }
 }
 
@@ -58,24 +63,29 @@ class NextBusRouteConfiguration: RouteConfiguation
     var stops: [StopConfiguration]
     var scheduleJSON: String?
     
+    enum BaseRouteCodingKeys: String, CodingKey
+    {
+        case route
+    }
+    
     enum RouteCodingKeys: String, CodingKey
     {
         case title
         case color
-        case oppositeColor = "textColor"
+        case oppositeColor
         
-        case directionConfiguration = "directions"
-        case stopConfiguration = "stops"
+        case directionConfiguration = "direction"
+        case stopConfiguration = "stop"
     }
     
     required init(from decoder: Decoder) throws
     {
-        let routeContainer = try decoder.container(keyedBy: RouteCodingKeys.self)
+        let baseContainer = try decoder.container(keyedBy: BaseRouteCodingKeys.self)
+        let routeContainer = try baseContainer.nestedContainer(keyedBy: RouteCodingKeys.self, forKey: .route)
         
         self.title = try routeContainer.decode(String.self, forKey: .title)
-        var hexPrefixColor = try routeContainer.decode(String.self, forKey: .color)
-        hexPrefixColor.remove(at: hexPrefixColor.startIndex)
-        self.color = hexPrefixColor
+        self.color = try routeContainer.decode(String.self, forKey: .color)
+        //self.oppositeColor = try routeContainer.decode(String.self, forKey: .oppositeColor)
         self.oppositeColor = "FFFFFF"
         
         var directions = try? routeContainer.decode([NextBusDirectionConfiguration].self, forKey: .directionConfiguration)
