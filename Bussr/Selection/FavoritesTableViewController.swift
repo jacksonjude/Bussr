@@ -475,9 +475,9 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         favoriteRouteCell.stopObject = RouteDataManager.fetchStop(stopTag: favoriteStopObject.stopTag ?? "")
         favoriteRouteCell.updateCellText()
         
-        let stopDirections = (favoriteRouteCell.stopObject?.direction?.allObjects as? [Direction] ?? []).map { (direction) -> String in
-            return direction.tag ?? ""
-        }
+        let stopDirections = favoriteRouteCell.stopObject?.direction?.map { (direction) -> String in
+            return (direction as? Direction)?.tag ?? ""
+        } ?? []
         
         if favoriteRouteCell.stopObject == nil || favoriteRouteCell.directionObject == nil || !stopDirections.contains(favoriteRouteCell.directionObject?.tag ?? "")
         {

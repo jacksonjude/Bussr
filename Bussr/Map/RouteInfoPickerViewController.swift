@@ -765,9 +765,9 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             for favoriteStop in favoriteStopCallback
             {
                 guard let stop = RouteDataManager.fetchStop(stopTag: favoriteStop.stopTag!) else { return }
-                let stopDirections = (stop.direction?.allObjects as? [Direction] ?? []).map { (direction) -> String in
-                    return direction.tag ?? ""
-                }
+                let stopDirections = stop.direction?.map { (direction) -> String in
+                    return (direction as? Direction)?.tag ?? ""
+                } ?? []
                 
                 if !stopDirections.contains(selectedDirection.tag!) { continue }
                 
