@@ -10,6 +10,7 @@ import Foundation
 import CoreData
 import MapKit
 import BackgroundTasks
+import Alamofire
 
 struct RouteConstants
 {
@@ -40,22 +41,21 @@ class RouteDataManager
         {
             commandString += "&" + commandArgument.key + "=" + commandArgument.value
         }
-                
-        let url = URL(string: RouteConstants.nextBusJSONFeedSource + "?_=" + String(Date().timeIntervalSince1970) + "&command=" + command + commandString)!
         
-        let task = (URLSession.shared.dataTask(with: url) { data, response, error in
-            if data != nil
+        AF.requestWithoutCache(RouteConstants.nextBusJSONFeedSource + "?command=" + command + commandString).response(queue: .global(qos: .background)) { response in
+            if response.data != nil
             {
-                callback(data)
+                callback(response.data)
             }
             else
             {
                 callback(nil)
             }
-        })
-        
-        task.resume()
+        }
     }
+    
+    static var urlSessionDataTasks = Dictionary<String,URLSessionDataTask>()
+    static var urlSessionTask: URLSessionDataTask?
     
     static func getJSONFromNextBusSource(_ command: String, _ arguments: Dictionary<String,String>, _ callback: @escaping (_ json: [String : Any]?) -> Void)
     {
@@ -64,10 +64,9 @@ class RouteDataManager
         {
             commandString += "&" + commandArgument.key + "=" + commandArgument.value
         }
-                
-        let url = URL(string: RouteConstants.nextBusJSONFeedSource + "&command=" + command + commandString)!
-        let task = (URLSession.shared.dataTask(with: URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 10), completionHandler: { data, response, error in
-            if data != nil, let json = try? JSONSerialization.jsonObject(with: data!) as? [String:Any]
+        
+        AF.requestWithoutCache(RouteConstants.nextBusJSONFeedSource + "?command=" + command + commandString).response(queue: .global(qos: .background)) { response in
+            if response.data != nil, let json = try? JSONSerialization.jsonObject(with: response.data!) as? [String:Any]
             {
                 callback(json)
             }
@@ -75,9 +74,7 @@ class RouteDataManager
             {
                 callback(nil)
             }
-        }))
-        
-        task.resume()
+        }
     }
     
     static func getDataFromBARTSource(_ path: String, _ command: String, _ arguments: Dictionary<String,String>, _ callback: @escaping (_ data: Data?) -> Void)
@@ -896,7 +893,7 @@ class RouteDataManager
             if let routeTag = route.tag, let routeScheduleJSON = routeScheduleJSON
             {
                 CoreDataStack.persistentContainer.performBackgroundTask { backgroundMOC in
-                    let routeScheduleCallback = fetchOrCreateObject(type: "Schedule", predicate: NSPredicate(format: "route.tag == %@", routeTag), moc: backgroundMOC)
+                    let routeScheduleCallback = fetchOrCreateObject(type: "RouteSchedule", predicate: NSPredicate(format: "route.tag == %@", routeTag), moc: backgroundMOC)
                     if let routeSchedule = routeScheduleCallback.object as? RouteSchedule
                     {
                         routeSchedule.scheduleJSON = try? JSONSerialization.data(withJSONObject: routeScheduleJSON, options: .fragmentsAllowed)
@@ -913,7 +910,12 @@ class RouteDataManager
                         }
                     }
                     
-                    try? backgroundMOC.save()
+                    do {
+                        try backgroundMOC.save()
+                    } catch let saveError {
+                        print(saveError)
+                    }
+                    
                 }
             }
         }
@@ -973,7 +975,7 @@ class RouteDataManager
         
         schedulePredictionMinutes = schedulePredictionMinutes.filter { stopMinutesTuple in
             let stopObject = RouteDataManager.fetchStop(stopTag: stopMinutesTuple.stopTag)
-            if let testDirection = stopObject?.direction?.allObjects.first(where: { direction in
+            if let directionSet = stopObject?.direction, let testDirection = directionSet.first(where: { direction in
                 guard let direction = direction as? Direction else { return false }
                 
                 return direction.route?.tag == route.tag
@@ -1305,6 +1307,29 @@ extension Dictionary
         else
         {
             return nil
+        }
+    }
+}
+
+extension Alamofire.Session
+{
+    @discardableResult
+    open func requestWithoutCache(
+        _ url: URLConvertible,
+        method: HTTPMethod = .get,
+        parameters: Parameters? = nil,
+        encoding: ParameterEncoding = URLEncoding.default,
+        headers: HTTPHeaders? = nil)// also you can add URLRequest.CachePolicy here as parameter
+        -> DataRequest
+    {
+        do {
+            var urlRequest = try URLRequest(url: url, method: method, headers: headers)
+            urlRequest.cachePolicy = .reloadIgnoringCacheData // <<== Cache disabled
+            let encodedURLRequest = try encoding.encode(urlRequest, with: parameters)
+            return request(encodedURLRequest)
+        } catch {
+            print(error)
+            return request("")
         }
     }
 }

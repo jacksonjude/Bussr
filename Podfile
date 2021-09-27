@@ -1,6 +1,7 @@
 # Uncomment the next line to define a global platform for your project
 
 def shared_pods
+  pod 'Alamofire', '~> 5.4'
 end
 
 inhibit_all_warnings!

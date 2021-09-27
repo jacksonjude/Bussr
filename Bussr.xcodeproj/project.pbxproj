@@ -766,6 +766,7 @@
 				7AFD5CAC23F009EB00AFFEEF /* Sources */,
 				7AFD5CAD23F009EB00AFFEEF /* Frameworks */,
 				7AFD5CAE23F009EB00AFFEEF /* Resources */,
+				25584860F049E8763DB469B9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -960,6 +961,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		25584860F049E8763DB469B9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BussrWatchApp Extension/Pods-BussrWatchApp Extension-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BussrWatchApp Extension/Pods-BussrWatchApp Extension-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BussrWatchApp Extension/Pods-BussrWatchApp Extension-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		3F1AA1A52B78A770C7A5A7B6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
