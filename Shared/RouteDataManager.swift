@@ -28,6 +28,13 @@ struct RouteConstants
     static let BARTAPIKey = "Z7RK-596L-9WNT-DWE9"
 }
 
+enum ScheduledPredictionsDisplayType: Int
+{
+    case always
+    case whenNeeded
+    case never
+}
+
 class RouteDataManager
 {
     static var mocSaveGroup = DispatchGroup()
@@ -822,6 +829,12 @@ class RouteDataManager
                     shouldLoadSchedule = true
                 }
                 
+                let scheduledPredictionsDisplayType: ScheduledPredictionsDisplayType = (UserDefaults.standard.object(forKey: "ScheduledPredictions") as? Int).map { ScheduledPredictionsDisplayType(rawValue: $0)  ?? .whenNeeded } ?? .whenNeeded
+                if scheduledPredictionsDisplayType == .always
+                {
+                    shouldLoadSchedule = true
+                }
+                
                 for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
                 {
                     NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":predictions, "willLoadSchedule": shouldLoadSchedule, "directionStopID": directionStopID])
@@ -853,11 +866,25 @@ class RouteDataManager
     
     static func fetchNextBusSchedulePredictionTimes(route: Route, direction: Direction, stop: Stop, exactPredictions: Array<PredictionTime>?)
     {
+        let directionStopID = (stop.tag ?? "") + "-" + (direction.tag ?? "")
+        
+        let scheduledPredictionsDisplayType: ScheduledPredictionsDisplayType = (UserDefaults.standard.object(forKey: "ScheduledPredictions") as? Int).map { ScheduledPredictionsDisplayType(rawValue: $0)  ?? .whenNeeded } ?? .whenNeeded
+        if scheduledPredictionsDisplayType == .never
+        {
+            for returnUUID in fetchPredictionTimesReturnUUIDS[directionStopID] ?? []
+            {
+                NotificationCenter.default.post(name: NSNotification.Name("FoundPredictions:" + returnUUID), object: self, userInfo: ["predictions":exactPredictions ?? [], "directionStopID": directionStopID])
+                
+                guard let uuidIndex = fetchPredictionTimesReturnUUIDS[directionStopID]!.firstIndex(of: returnUUID) else { continue }
+                
+                fetchPredictionTimesReturnUUIDS[directionStopID]!.remove(at: uuidIndex)
+            }
+            return
+        }
+        
         let averageBusSpeed = 225.0 // Rough bus speed estimate in meters/minute
         let minPredictionTimeToIncludeSchedulesBefore = 25 // Schedule times will be excluded before the first prediction time if the that prediction is less than this value
         let scheduleToCurrentPredictionMarginOfError = 5 // Margin of error between scheduled time and exact time in minutes, so that a scheduled time can be excluded if a corresponding exact time is available
-        
-        let directionStopID = (stop.tag ?? "") + "-" + (direction.tag ?? "")
         
         let backgroundGroup = DispatchGroup()
         var routeScheduleJSON: [String : Any]?
@@ -946,9 +973,9 @@ class RouteDataManager
         
         let currentEpochDayTime = 1000*(dayComponents.hour!*60*60+dayComponents.minute!*60+dayComponents.second!)
         var minEpochDayTime = currentEpochDayTime
-        if let firstPredictionTimeString = exactPredictions?.first?.time, let firstPredictionTime = Int(firstPredictionTimeString), firstPredictionTime < minPredictionTimeToIncludeSchedulesBefore
+        if scheduledPredictionsDisplayType != .always, let firstPredictionTimeString = exactPredictions?.first?.time, let firstPredictionTime = Int(firstPredictionTimeString), firstPredictionTime < minPredictionTimeToIncludeSchedulesBefore, let lastPredictionTimeString = exactPredictions?.last?.time, let lastPredictionTime = Int(lastPredictionTimeString)
         {
-            minEpochDayTime = currentEpochDayTime + 1000*60*firstPredictionTime
+            minEpochDayTime = currentEpochDayTime + 1000*60*lastPredictionTime
         }
         let maxEpochDayTime = currentEpochDayTime + 1000*60*60
         

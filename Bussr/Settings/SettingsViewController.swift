@@ -20,6 +20,7 @@ class SettingsViewController: UITableViewController
     @IBOutlet weak var locationSortTypeLabel: UILabel!
     @IBOutlet weak var appIconLabel: UILabel!
     @IBOutlet weak var predictionRefreshTimeLabel: UILabel!
+    @IBOutlet weak var scheduledPredictionsDisplayTypeLabel: UILabel!
     @IBOutlet weak var lastUpdatedRoutesLabel: UILabel!
     @IBOutlet weak var nearbyMenuCollapseTypeLabel: UILabel!
     @IBOutlet weak var showListPredictionsLabel: UILabel!
@@ -48,6 +49,9 @@ class SettingsViewController: UITableViewController
         let refreshTime = UserDefaults.standard.object(forKey: "PredictionRefreshTime") as? Double ?? 60.0
         setPredictionRefreshTimeTitle(refreshTime: refreshTime)
         
+        let scheduledPredictionsDisplay: ScheduledPredictionsDisplayType = (UserDefaults.standard.object(forKey: "ScheduledPredictions") as? Int).map { ScheduledPredictionsDisplayType(rawValue: $0)  ?? .whenNeeded } ?? .whenNeeded
+        setScheduledPredictionsTitle(scheduledPredictionsDisplayType: scheduledPredictionsDisplay)
+        
         setLastUpdatedRoutesLabel()
         
         NotificationCenter.default.addObserver(self, selector: #selector(setLastUpdatedRoutesLabel), name: NSNotification.Name("FinishedUpdatingRoutes"), object: nil)
@@ -71,6 +75,8 @@ class SettingsViewController: UITableViewController
         {
         case "PredictionRefreshCell":
             setPredictionRefreshTime(tableView)
+        case "ScheduledPredictionsCell":
+            setScheduledPredictionsSetting(tableView)
         case "AppIconCell":
             toggleAppIcon(tableView)
         case "UpdateRoutesCell":
@@ -204,6 +210,24 @@ class SettingsViewController: UITableViewController
         setPredictionRefreshTimeTitle(refreshTime: refreshTime)
     }
     
+    func setScheduledPredictionsSetting(_ sender: Any)
+    {
+        let scheduledPredictionsDisplay: ScheduledPredictionsDisplayType = (UserDefaults.standard.object(forKey: "ScheduledPredictions") as? Int).map { ScheduledPredictionsDisplayType(rawValue: $0)  ?? .whenNeeded } ?? .whenNeeded
+        
+        switch scheduledPredictionsDisplay
+        {
+        case .always:
+            UserDefaults.standard.set(ScheduledPredictionsDisplayType.whenNeeded.rawValue, forKey: "ScheduledPredictions")
+            setScheduledPredictionsTitle(scheduledPredictionsDisplayType: .whenNeeded)
+        case .whenNeeded:
+            UserDefaults.standard.set(ScheduledPredictionsDisplayType.never.rawValue, forKey: "ScheduledPredictions")
+            setScheduledPredictionsTitle(scheduledPredictionsDisplayType: .never)
+        case .never:
+            UserDefaults.standard.set(ScheduledPredictionsDisplayType.always.rawValue, forKey: "ScheduledPredictions")
+            setScheduledPredictionsTitle(scheduledPredictionsDisplayType: .always)
+        }
+    }
+    
     func toggleNearbyCollapseType(_ sender: Any)
     {
         let collapseRoutes = UserDefaults.standard.object(forKey: "ShouldCollapseRoutes") as? Bool ?? true
@@ -237,6 +261,19 @@ class SettingsViewController: UITableViewController
     func setAppIconTitle(appIcon: Int)
     {
         appIconLabel.text = getAppIconName(appIcon: appIcon)
+    }
+    
+    func setScheduledPredictionsTitle(scheduledPredictionsDisplayType: ScheduledPredictionsDisplayType)
+    {
+        switch scheduledPredictionsDisplayType
+        {
+        case .always:
+            scheduledPredictionsDisplayTypeLabel.text = "Always"
+        case .whenNeeded:
+            scheduledPredictionsDisplayTypeLabel.text = "When Needed"
+        case .never:
+            scheduledPredictionsDisplayTypeLabel.text = "Never"
+        }
     }
     
     func getAppIconName(appIcon: Int) -> String
