@@ -17,6 +17,17 @@ class CoreDataStack {
     // MARK: - Core Data stack
     
     static var persistentContainer: NSPersistentContainer = {
+        var firstLaunch = false
+        if UserDefaults.standard.object(forKey: "firstLaunchData") == nil
+        {
+            firstLaunch = true
+            UserDefaults.standard.set(618, forKey: "firstLaunchData")
+        }
+        
+        guard let appGroupContainerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.Bussr") else {
+            fatalError("App group container URL could not be created.")
+        }
+        
         /*
          The persistent container for the application. This implementation
          creates and returns a container, having loaded the store for the
@@ -29,36 +40,29 @@ class CoreDataStack {
         cloudPrivateStoreDescription.configuration = "Cloud_Private"
         cloudPrivateStoreDescription.shouldInferMappingModelAutomatically = true
         cloudPrivateStoreDescription.shouldMigrateStoreAutomatically = true
-        cloudPrivateStoreDescription.url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.Bussr")!.appendingPathComponent("Bussr_Cloud.sqlite")
+        cloudPrivateStoreDescription.url = appGroupContainerURL.appendingPathComponent("Bussr_Cloud.sqlite")
         cloudPrivateStoreDescription.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.com.jacksonjude.Bussr")
         
         let cloudPublicStoreDescription = NSPersistentStoreDescription()
         cloudPublicStoreDescription.configuration = "Cloud_Public"
         cloudPublicStoreDescription.shouldInferMappingModelAutomatically = true
         cloudPublicStoreDescription.shouldMigrateStoreAutomatically = true
-        cloudPublicStoreDescription.url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.Bussr")!.appendingPathComponent("Bussr_Cloud_Public.sqlite")
-        if #available(iOS 14.0, *) {
+        cloudPublicStoreDescription.url = appGroupContainerURL.appendingPathComponent("Bussr_Cloud_Public.sqlite")
+        if #available(iOS 15.0, *) {
             cloudPublicStoreDescription.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.com.jacksonjude.Bussr")
             cloudPublicStoreDescription.cloudKitContainerOptions?.databaseScope = CKDatabase.Scope.public
         }
         
-        var firstLaunch = false
-        if UserDefaults.standard.object(forKey: "firstLaunchData") == nil
-        {
-            firstLaunch = true
-            UserDefaults.standard.set(618, forKey: "firstLaunchData")
-        }
-        
         if firstLaunch
         {
-            copyPreloadedRouteData()
+            copyPreloadedRouteData(appGroupContainerURL: appGroupContainerURL)
         }
         
         let localStoreDescription = NSPersistentStoreDescription()
         localStoreDescription.configuration = "Local"
         localStoreDescription.shouldInferMappingModelAutomatically = true
         localStoreDescription.shouldMigrateStoreAutomatically = true
-        localStoreDescription.url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.Bussr")!.appendingPathComponent("Bussr.sqlite")
+        localStoreDescription.url = appGroupContainerURL.appendingPathComponent("Bussr.sqlite")
         
         container.persistentStoreDescriptions = [localStoreDescription, cloudPrivateStoreDescription, cloudPublicStoreDescription]
         
@@ -103,11 +107,11 @@ class CoreDataStack {
         return nil
     }
     
-    static func copyPreloadedRouteData()
+    static func copyPreloadedRouteData(appGroupContainerURL: URL)
     {
-        let sqlitePath = Bundle.main.path(forResource: "Bussr", ofType: "sqlite")
-        let originURL = URL(fileURLWithPath: sqlitePath!)
-        let destinationURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.Bussr")!.appendingPathComponent("Bussr.sqlite")
+        guard let sqlitePath = Bundle.main.path(forResource: "Bussr", ofType: "sqlite") else { return }
+        let originURL = URL(fileURLWithPath: sqlitePath)
+        let destinationURL = appGroupContainerURL.appendingPathComponent("Bussr.sqlite")
         
         if !FileManager.default.fileExists(atPath: destinationURL.absoluteString) {
             do {
