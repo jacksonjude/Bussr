@@ -1206,7 +1206,7 @@ class RouteDataManager
         var predictionOn = 0
         
         var predictions = predictions
-        if predictions.count > predictionsToShow && predictions.count > 0
+        if predictions.count > predictionsToShow && predictions.count > 0 && predictionsToShow > 0
         {
             predictions = Array<PredictionTime>(predictions[0...predictionsToShow-1])
         }

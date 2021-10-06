@@ -102,7 +102,14 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
                         defaultCut = nearbyDirectionStops.count
                     }
                     
-                    self.stopDirectionObjects = Array<(stop: Stop, direction: Direction)>(nearbyDirectionStops[0...defaultCut-1])
+                    if defaultCut > 0
+                    {
+                        self.stopDirectionObjects = Array<(stop: Stop, direction: Direction)>(nearbyDirectionStops[0...defaultCut-1])
+                    }
+                    else
+                    {
+                        self.stopDirectionObjects = Array<(stop: Stop, direction: Direction)>()
+                    }
                 }
             }
             
@@ -243,12 +250,15 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
                 CoreDataStack.persistentContainer.viewContext.delete(recentStop)
             }
         }
-                
-        let stopDirectionCount = stopDirectionObjects?.count ?? 0
+        
         stopDirectionObjects = []
-        stopsTableView.deleteRows(at: Array(0...stopDirectionCount-1).map({ (row) -> IndexPath in
-            return IndexPath(row: row, section: 0)
-        }), with: .automatic)
+        let stopDirectionCount = stopDirectionObjects?.count ?? 0
+        if stopDirectionCount > 0
+        {
+            stopsTableView.deleteRows(at: Array(0...stopDirectionCount-1).map({ (row) -> IndexPath in
+                return IndexPath(row: row, section: 0)
+            }), with: .automatic)
+        }
         
         CoreDataStack.saveContext()
     }

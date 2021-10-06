@@ -84,7 +84,7 @@ class BussrWatchInterfaceController: WKInterfaceController, CLLocationManagerDel
         guard var directionStopObjects = self.directionStopObjects else { return }
         
         directionStopTable.setNumberOfRows(min(self.directionStopObjects?.count ?? 0, numStopsToDisplay), withRowType: "DirectionStopRow")
-        if self.directionStopObjects?.count ?? 0 > numStopsToDisplay && self.directionStopObjects?.count ?? 0 > 0
+        if self.directionStopObjects?.count ?? 0 > numStopsToDisplay && self.directionStopObjects?.count ?? 0 > 0 && numStopsToDisplay > 0
         {
             directionStopObjects = Array<(stopTag: String, directionTag: String)>(directionStopObjects[0...numStopsToDisplay])
         }
