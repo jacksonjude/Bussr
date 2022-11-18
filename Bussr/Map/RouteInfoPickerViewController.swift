@@ -493,7 +493,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     func updateRecentStops()
     {
         CoreDataStack.persistentContainer.performBackgroundTask { (backgroundMOC) in
-            if let mapStateDirectionTag = MapState.selectedDirectionTag, let currentRecentStopUUID = MapState.currentRecentStopUUID, let currentRecentStopArray = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(format: "uuid == %@", currentRecentStopUUID), moc: backgroundMOC) as? [RecentStop], currentRecentStopArray.count > 0
+            if let mapStateDirectionTag = MapState.selectedDirectionTag, let currentRecentStopUUID = MapState.currentRecentStopUUID, let currentRecentStopArray = CoreDataStack.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(format: "uuid == %@", currentRecentStopUUID), moc: backgroundMOC) as? [RecentStop], currentRecentStopArray.count > 0
             {
                 let currentRecentStop = currentRecentStopArray[0]
                 
@@ -526,7 +526,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 }
             }
             
-            if var oldRecentStops = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(value: true), moc: backgroundMOC, sortDescriptors: [NSSortDescriptor(key: "timestamp", ascending: false)]) as? [RecentStop], oldRecentStops.count > 20
+            if var oldRecentStops = CoreDataStack.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(value: true), moc: backgroundMOC, sortDescriptors: [NSSortDescriptor(key: "timestamp", ascending: false)]) as? [RecentStop], oldRecentStops.count > 20
             {
                 oldRecentStops = Array<RecentStop>(oldRecentStops[20...oldRecentStops.count-1])
                 for oldStop in oldRecentStops
@@ -556,7 +556,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         {
             predicateFormat += " AND uuid != %@"
         }
-        if MapState.selectedDirectionTag != nil && MapState.selectedStopTag != nil, let duplicateRecentStopArray = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(format: predicateFormat, MapState.selectedDirectionTag!, MapState.selectedStopTag!, uuidToNotMatch ?? ""), moc: backgroundMOC) as? [RecentStop]
+        if MapState.selectedDirectionTag != nil && MapState.selectedStopTag != nil, let duplicateRecentStopArray = CoreDataStack.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(format: predicateFormat, MapState.selectedDirectionTag!, MapState.selectedStopTag!, uuidToNotMatch ?? ""), moc: backgroundMOC) as? [RecentStop]
         {
             if duplicateRecentStopArray.count > 0
             {

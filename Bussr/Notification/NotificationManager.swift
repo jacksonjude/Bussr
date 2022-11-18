@@ -130,7 +130,7 @@ class NotificationManager
                 switch change.value
                 {
                 case NotificationChangeType.updated:
-                    if let stopNotification = RouteDataManager.fetchLocalObjects(type: "StopNotification", predicate: NSPredicate(format: "uuid == %@", change.key), moc: backgroundMOC) as? [StopNotification], stopNotification.count > 0
+                    if let stopNotification = CoreDataStack.fetchLocalObjects(type: "StopNotification", predicate: NSPredicate(format: "uuid == %@", change.key), moc: backgroundMOC) as? [StopNotification], stopNotification.count > 0
                     {
                         updateNotification(stopNotification: stopNotification[0], moc: backgroundMOC, callback: { (error) in
                             if error == nil

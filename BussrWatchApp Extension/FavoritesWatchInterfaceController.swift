@@ -32,7 +32,7 @@ class FavoritesWatchInterfaceController: BussrWatchInterfaceController
     
     func loadClosestFavoriteStops()
     {
-        if let userLocation = self.currentUserLocation, var favoriteStops = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext) as? [FavoriteStop]
+        if let userLocation = self.currentUserLocation, var favoriteStops = CoreDataStack.fetchLocalObjects(type: "FavoriteStop", predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext) as? [FavoriteStop]
         {
             favoriteStops = favoriteStops.filter({ (favoriteStop) -> Bool in
                 if favoriteStop.directionTag == nil || favoriteStop.stopTag == nil { return false }

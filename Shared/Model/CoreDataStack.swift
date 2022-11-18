@@ -149,7 +149,7 @@ class CoreDataStack {
         
         for entityType in entityTypes
         {
-            if let objects = RouteDataManager.fetchLocalObjects(type: entityType, predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext) as? [NSManagedObject]
+            if let objects = fetchLocalObjects(type: entityType, predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext) as? [NSManagedObject]
             {
                 for object in objects
                 {
@@ -169,5 +169,61 @@ class CoreDataStack {
         CoreDataStack.saveContext()
         
         return deletionLogs
+    }
+    
+    //MARK: - Fetch Helper Functions
+    
+    static func fetchLocalObjects(type: String, predicate: NSPredicate, moc: NSManagedObjectContext, sortDescriptors: [NSSortDescriptor]? = nil, fetchLimit: Int? = nil) -> [AnyObject]?
+    {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: type)
+        fetchRequest.predicate = predicate
+        
+        fetchRequest.sortDescriptors = sortDescriptors
+        
+        fetchRequest.fetchLimit = fetchLimit ?? fetchRequest.fetchLimit
+        
+        var fetchResults: [AnyObject]?
+        var error: NSError? = nil
+        
+        do {
+            fetchResults = try moc.fetch(fetchRequest)
+        } catch let error1 as NSError {
+            error = error1
+            fetchResults = nil
+            print("An Error Occured: " + error!.localizedDescription)
+        } catch {
+            fatalError()
+        }
+        
+        return fetchResults
+    }
+    
+    static func fetchOrCreateObject(type: String, predicate: NSPredicate, moc: NSManagedObjectContext) -> (object: NSManagedObject, justCreated: Bool)
+    {
+        let objectFetchResults = fetchLocalObjects(type: type, predicate: predicate, moc: moc)
+        var justCreated = false
+        
+        var object: NSManagedObject? = nil
+        if objectFetchResults != nil && objectFetchResults!.count > 0
+        {
+            object = objectFetchResults?.first as? NSManagedObject
+        }
+        else
+        {
+            object = NSEntityDescription.insertNewObject(forEntityName: type, into: moc)
+            justCreated = true
+        }
+        
+        return (object!, justCreated)
+    }
+    
+    static func fetchObject(type: String, predicate: NSPredicate, moc: NSManagedObjectContext) -> NSManagedObject?
+    {
+        let objectFetchResults = fetchLocalObjects(type: type, predicate: predicate, moc: moc)
+        if objectFetchResults != nil && objectFetchResults!.count > 0
+        {
+            return objectFetchResults?.first as? NSManagedObject
+        }
+        return nil
     }
 }

@@ -38,7 +38,7 @@ class NearbyWatchInterfaceController: BussrWatchInterfaceController
             let longitude = currentLocation.coordinate.longitude
             let mileDegree = 0.01449
             
-            if let nearbyStops = RouteDataManager.fetchLocalObjects(type: "Stop", predicate: NSPredicate(format: "latitude >= %f AND latitude <= %f AND longitude >= %f AND longitude <= %f", latitude - mileDegree, latitude + mileDegree, longitude - mileDegree, longitude + mileDegree), moc: CoreDataStack.persistentContainer.viewContext) as? [Stop]
+            if let nearbyStops = CoreDataStack.fetchLocalObjects(type: "Stop", predicate: NSPredicate(format: "latitude >= %f AND latitude <= %f AND longitude >= %f AND longitude <= %f", latitude - mileDegree, latitude + mileDegree, longitude - mileDegree, longitude + mileDegree), moc: CoreDataStack.persistentContainer.viewContext) as? [Stop]
             {
                 let sortedNearbyStops = RouteDataManager.sortStopsByDistanceFromLocation(stops: nearbyStops, locationToTest: currentLocation)
                 

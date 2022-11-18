@@ -78,7 +78,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         {
             reloadTableView()
             self.mainNavigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addToGroupButtonPressed)), animated: false)
-            if FavoriteState.selectedGroupUUID != "0", let currentGroup = RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStopGroup
+            if FavoriteState.selectedGroupUUID != "0", let currentGroup = CoreDataStack.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStopGroup
             {
                 mainNavigationItem.title = currentGroup.groupName
             }
@@ -96,7 +96,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             organizeSegmentControl.selectedSegmentIndex = FavoriteState.FavoritesOrganizeType.list.rawValue
             organizeSegmentControl.isEnabled = false
             
-            if let currentGroup = RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStopGroup
+            if let currentGroup = CoreDataStack.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStopGroup
             {
                 mainNavigationItem.title = "Add to " + (currentGroup.groupName ?? "")
             }
@@ -134,7 +134,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
     
     func fetchFavoriteStops()
     {
-        if let favoriteStops = RouteDataManager.fetchLocalObjects(type: "FavoriteStop", predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext) as? [FavoriteStop]
+        if let favoriteStops = CoreDataStack.fetchLocalObjects(type: "FavoriteStop", predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext) as? [FavoriteStop]
         {
             favoriteStopObjects = favoriteStops.filter({ (favoriteStop) -> Bool in
                 if favoriteStop.directionTag == nil || favoriteStop.stopTag == nil { return false }
@@ -154,7 +154,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         if var favoriteStops = favoriteStopObjects
         {
             favoriteStops.sort(by: {
-                if let directionTag1 = $0.directionTag, let directionTag2 = $1.directionTag, let direction1 = RouteDataManager.fetchObject(type: "Direction", predicate: NSPredicate(format: "tag == %@", directionTag1), moc: CoreDataStack.persistentContainer.viewContext) as? Direction, let direction2 = RouteDataManager.fetchObject(type: "Direction", predicate: NSPredicate(format: "tag == %@", directionTag2), moc: CoreDataStack.persistentContainer.viewContext) as? Direction
+                if let directionTag1 = $0.directionTag, let directionTag2 = $1.directionTag, let direction1 = CoreDataStack.fetchObject(type: "Direction", predicate: NSPredicate(format: "tag == %@", directionTag1), moc: CoreDataStack.persistentContainer.viewContext) as? Direction, let direction2 = CoreDataStack.fetchObject(type: "Direction", predicate: NSPredicate(format: "tag == %@", directionTag2), moc: CoreDataStack.persistentContainer.viewContext) as? Direction
                 {
                     return direction1.route!.tag!.compare(direction2.route!.tag!, options: .numeric) == .orderedAscending
                 }
@@ -262,7 +262,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         favoriteStopObjects = []
         favoriteStopGroupSet = []
         
-        if RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", "0"), moc: CoreDataStack.persistentContainer.viewContext)?.count == 0
+        if CoreDataStack.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", "0"), moc: CoreDataStack.persistentContainer.viewContext)?.count == 0
         {
             let newGroup = NSEntityDescription.insertNewObject(forEntityName: "FavoriteStopGroup", into: CoreDataStack.persistentContainer.viewContext) as! FavoriteStopGroup
             newGroup.groupName = "Groups"
@@ -274,7 +274,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             mocSaveGroup.wait()
         }
         
-        if let currentGroup = RouteDataManager.fetchObject(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext) as? FavoriteStopGroup, let childObjects = currentGroup.childGroups?.allObjects as? [FavoriteStopGroup], let favoriteStops = currentGroup.favoriteStops?.allObjects as? [FavoriteStop]
+        if let currentGroup = CoreDataStack.fetchObject(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext) as? FavoriteStopGroup, let childObjects = currentGroup.childGroups?.allObjects as? [FavoriteStopGroup], let favoriteStops = currentGroup.favoriteStops?.allObjects as? [FavoriteStop]
         {
             favoriteStopGroupSet = childObjects + favoriteStops
         }
@@ -303,7 +303,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
                 {
                     return false
                 }
-                else if $0 is FavoriteStop && $1 is FavoriteStop, let directionTag1 = ($0 as! FavoriteStop).directionTag, let directionTag2 = ($1 as! FavoriteStop).directionTag, let direction1 = RouteDataManager.fetchObject(type: "Direction", predicate: NSPredicate(format: "tag == %@", directionTag1), moc: CoreDataStack.persistentContainer.viewContext) as? Direction, let direction2 = RouteDataManager.fetchObject(type: "Direction", predicate: NSPredicate(format: "tag == %@", directionTag2), moc: CoreDataStack.persistentContainer.viewContext) as? Direction
+                else if $0 is FavoriteStop && $1 is FavoriteStop, let directionTag1 = ($0 as! FavoriteStop).directionTag, let directionTag2 = ($1 as! FavoriteStop).directionTag, let direction1 = CoreDataStack.fetchObject(type: "Direction", predicate: NSPredicate(format: "tag == %@", directionTag1), moc: CoreDataStack.persistentContainer.viewContext) as? Direction, let direction2 = CoreDataStack.fetchObject(type: "Direction", predicate: NSPredicate(format: "tag == %@", directionTag2), moc: CoreDataStack.persistentContainer.viewContext) as? Direction
                 {
                     return direction1.route!.tag!.compare(direction2.route!.tag!, options: .numeric) == .orderedAscending
                 }
@@ -607,7 +607,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
                         self.deleteFavoriteGroupChildren(groupObject: groupObject as! FavoriteStopGroup)
                         CoreDataStack.persistentContainer.viewContext.delete(groupObject)
                     }
-                    else if groupObject is FavoriteStop, let currentGroup = RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStopGroup, let favoriteStops = currentGroup.favoriteStops?.mutableCopy() as? NSMutableSet
+                    else if groupObject is FavoriteStop, let currentGroup = CoreDataStack.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStopGroup, let favoriteStops = currentGroup.favoriteStops?.mutableCopy() as? NSMutableSet
                     {
                         favoriteStops.remove(groupObject as! FavoriteStop)
                         currentGroup.favoriteStops = favoriteStops.copy() as? NSSet
@@ -743,7 +743,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
     {
         let newGroup = NSEntityDescription.insertNewObject(forEntityName: "FavoriteStopGroup", into: CoreDataStack.persistentContainer.viewContext) as! FavoriteStopGroup
         newGroup.groupName = title
-        if let parentGroup = RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStopGroup
+        if let parentGroup = CoreDataStack.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStopGroup
         {
             newGroup.parentGroup = parentGroup
         }
@@ -762,7 +762,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         case .group:
             if FavoriteState.selectedGroupUUID != "0"
             {
-                if let currentGroup = RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStopGroup
+                if let currentGroup = CoreDataStack.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStopGroup
                 {
                     FavoriteState.selectedGroupUUID = currentGroup.parentGroup?.uuid
                 }
@@ -779,11 +779,11 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
     
     @objc func doneAddingToGroup()
     {
-        if let favoriteStopsToAddToGroup = favoriteStopsToAddToGroup, let currentGroup = RouteDataManager.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStopGroup, let currentFavoriteStops = currentGroup.favoriteStops?.mutableCopy() as? NSMutableSet
+        if let favoriteStopsToAddToGroup = favoriteStopsToAddToGroup, let currentGroup = CoreDataStack.fetchLocalObjects(type: "FavoriteStopGroup", predicate: NSPredicate(format: "uuid == %@", FavoriteState.selectedGroupUUID ?? "0"), moc: CoreDataStack.persistentContainer.viewContext)?.first as? FavoriteStopGroup, let currentFavoriteStops = currentGroup.favoriteStops?.mutableCopy() as? NSMutableSet
         {
             for favoriteStopUUID in favoriteStopsToAddToGroup
             {
-                if let favoriteStop = RouteDataManager.fetchObject(type: "FavoriteStop", predicate: NSPredicate(format: "uuid == %@", favoriteStopUUID), moc: CoreDataStack.persistentContainer.viewContext) as? FavoriteStop
+                if let favoriteStop = CoreDataStack.fetchObject(type: "FavoriteStop", predicate: NSPredicate(format: "uuid == %@", favoriteStopUUID), moc: CoreDataStack.persistentContainer.viewContext) as? FavoriteStop
                 {
                     currentFavoriteStops.add(favoriteStop)
                 }

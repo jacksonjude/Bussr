@@ -134,7 +134,7 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
         }
         
         var BARTAgencyRoutes = [Route]()
-        if let BARTAgency = RouteDataManager.fetchObject(type: "Agency", predicate: NSPredicate(format: "name == %@", RouteConstants.BARTAgencyTag), moc: CoreDataStack.persistentContainer.viewContext) as? Agency
+        if let BARTAgency = CoreDataStack.fetchObject(type: "Agency", predicate: NSPredicate(format: "name == %@", RouteConstants.BARTAgencyTag), moc: CoreDataStack.persistentContainer.viewContext) as? Agency
         {
             BARTAgencyRoutes = (BARTAgency.routes?.allObjects) as? [Route] ?? []
         }

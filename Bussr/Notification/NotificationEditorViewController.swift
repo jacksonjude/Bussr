@@ -62,7 +62,7 @@ class NotificationEditorViewController: UIViewController
         
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "ReloadNotificationEditorViews"), object: nil)
         
-        if let routeTag = notification.routeTag, let route = RouteDataManager.fetchObject(type: "Route", predicate: NSPredicate(format: "tag == %@", routeTag), moc: CoreDataStack.persistentContainer.viewContext) as? Route
+        if let routeTag = notification.routeTag, let route = CoreDataStack.fetchObject(type: "Route", predicate: NSPredicate(format: "tag == %@", routeTag), moc: CoreDataStack.persistentContainer.viewContext) as? Route
         {
             self.notificationEditorNavigationItem.title = (route.title ?? "")
         }

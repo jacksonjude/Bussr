@@ -126,7 +126,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             shortcutItemToProcess = nil
         }
         
-        if let routeStop = routeStopToOpen, let route = RouteDataManager.fetchObject(type: "Route", predicate: NSPredicate(format: "tag == %@", routeStop.routeTag), moc: CoreDataStack.persistentContainer.viewContext) as? Route, let directions = route.directions?.array as? [Direction]
+        if let routeStop = routeStopToOpen, let route = CoreDataStack.fetchObject(type: "Route", predicate: NSPredicate(format: "tag == %@", routeStop.routeTag), moc: CoreDataStack.persistentContainer.viewContext) as? Route, let directions = route.directions?.array as? [Direction]
         {
             var directionTag = ""
             for direction in directions

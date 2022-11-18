@@ -31,7 +31,7 @@ class RecentWatchInterfaceController: BussrWatchInterfaceController
     
     func loadRecentStops()
     {
-        if var recentStops = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext, sortDescriptors: [NSSortDescriptor(key: "timestamp", ascending: false)], fetchLimit: numStopsToDisplay) as? [RecentStop]
+        if var recentStops = CoreDataStack.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext, sortDescriptors: [NSSortDescriptor(key: "timestamp", ascending: false)], fetchLimit: numStopsToDisplay) as? [RecentStop]
         {
             recentStops = recentStops.filter({ (recentStop) -> Bool in
                 if recentStop.directionTag == nil || recentStop.stopTag == nil { return false }

@@ -63,7 +63,7 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
                 let longitude = currentLocation.coordinate.longitude
                 let mileDegree = 0.01449
                 
-                if let nearbyStops = RouteDataManager.fetchLocalObjects(type: "Stop", predicate: NSPredicate(format: "latitude >= %f AND latitude <= %f AND longitude >= %f AND longitude <= %f", latitude - mileDegree, latitude + mileDegree, longitude - mileDegree, longitude + mileDegree), moc: CoreDataStack.persistentContainer.viewContext) as? [Stop]
+                if let nearbyStops = CoreDataStack.fetchLocalObjects(type: "Stop", predicate: NSPredicate(format: "latitude >= %f AND latitude <= %f AND longitude >= %f AND longitude <= %f", latitude - mileDegree, latitude + mileDegree, longitude - mileDegree, longitude + mileDegree), moc: CoreDataStack.persistentContainer.viewContext) as? [Stop]
                 {
                     let sortedNearbyStops = RouteDataManager.sortStopsByDistanceFromLocation(stops: nearbyStops, locationToTest: currentLocation)
                     
@@ -127,7 +127,7 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
                 }
             }
         case .recent:
-            if var recentStops = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext, sortDescriptors: [NSSortDescriptor(key: "timestamp", ascending: false)], fetchLimit: 20) as? [RecentStop]
+            if var recentStops = CoreDataStack.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext, sortDescriptors: [NSSortDescriptor(key: "timestamp", ascending: false)], fetchLimit: 20) as? [RecentStop]
             {
                 recentStops = recentStops.filter({ (recentStop) -> Bool in
                     if recentStop.directionTag == nil || recentStop.stopTag == nil { return false }
@@ -230,7 +230,7 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCell.EditingStyle.delete && stopFetchType == .recent {
             let stopDirection = stopDirectionObjects![indexPath.row]
-            if let recentStopFetch = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(format: "directionTag == %@ AND stopTag == %@", stopDirection.direction.tag ?? "", stopDirection.stop.tag ?? ""), moc: CoreDataStack.persistentContainer.viewContext) as? [RecentStop], recentStopFetch.count > 0
+            if let recentStopFetch = CoreDataStack.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(format: "directionTag == %@ AND stopTag == %@", stopDirection.direction.tag ?? "", stopDirection.stop.tag ?? ""), moc: CoreDataStack.persistentContainer.viewContext) as? [RecentStop], recentStopFetch.count > 0
             {
                 CoreDataStack.persistentContainer.viewContext.delete(recentStopFetch[0])
                 stopDirectionObjects?.remove(at: indexPath.row)
@@ -243,7 +243,7 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
     
     @objc func clearRecentStops()
     {
-        if let recentStops = RouteDataManager.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext) as? [RecentStop]
+        if let recentStops = CoreDataStack.fetchLocalObjects(type: "RecentStop", predicate: NSPredicate(value: true), moc: CoreDataStack.persistentContainer.viewContext) as? [RecentStop]
         {
             for recentStop in recentStops
             {
