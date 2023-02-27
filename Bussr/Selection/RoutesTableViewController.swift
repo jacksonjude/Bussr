@@ -128,13 +128,13 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
     func fetchRoutes()
     {
         var nextBusAgencyRoutes = [Route]()
-        if let nextBusAgency = RouteDataManager.fetchObject(type: "Agency", predicate: NSPredicate(format: "name == %@", RouteConstants.NextBusAgencyTag), moc: CoreDataStack.persistentContainer.viewContext) as? Agency
+        if let nextBusAgency = CoreDataStack.fetchObject(type: "Agency", predicate: NSPredicate(format: "name == %@", UmoIQAPI.SFMTAAgencyTag), moc: CoreDataStack.persistentContainer.viewContext) as? Agency
         {
             nextBusAgencyRoutes = (nextBusAgency.routes?.allObjects) as? [Route] ?? []
         }
         
         var BARTAgencyRoutes = [Route]()
-        if let BARTAgency = CoreDataStack.fetchObject(type: "Agency", predicate: NSPredicate(format: "name == %@", RouteConstants.BARTAgencyTag), moc: CoreDataStack.persistentContainer.viewContext) as? Agency
+        if let BARTAgency = CoreDataStack.fetchObject(type: "Agency", predicate: NSPredicate(format: "name == %@", BARTAPI.BARTAgencyTag), moc: CoreDataStack.persistentContainer.viewContext) as? Agency
         {
             BARTAgencyRoutes = (BARTAgency.routes?.allObjects) as? [Route] ?? []
         }
@@ -169,7 +169,7 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
                 let sectionNumber = Int(String(routeTag[0]))
                 sortedRouteDictionary[sectionNumber!]!.append(route)
             }
-            else if routeTag.contains(RouteConstants.BARTAgencyTag)
+            else if routeTag.contains(BARTAPI.BARTAgencyTag)
             {
                 sortedRouteDictionary[11]!.append(route)
             }

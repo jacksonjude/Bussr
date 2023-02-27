@@ -13,24 +13,34 @@
 		7A068D1E212697DA00D3425E /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A068D01212646A700D3425E /* NotificationCenter.framework */; };
 		7A068D21212697DA00D3425E /* FavoritesExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D20212697DA00D3425E /* FavoritesExtensionViewController.swift */; };
 		7A068D24212697DA00D3425E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A068D22212697DA00D3425E /* MainInterface.storyboard */; };
-		7A068D28212697DA00D3425E /* Bussr – Favorites.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D1D212697DA00D3425E /* Bussr – Favorites.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7A068D28212697DA00D3425E /* Bussr – Favorites.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D1D212697DA00D3425E /* Bussr – Favorites.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7A068D31212697F000D3425E /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A068D01212646A700D3425E /* NotificationCenter.framework */; };
 		7A068D34212697F000D3425E /* RecentExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D33212697F000D3425E /* RecentExtensionViewController.swift */; };
 		7A068D37212697F000D3425E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A068D35212697F000D3425E /* MainInterface.storyboard */; };
-		7A068D3B212697F000D3425E /* Bussr – Recent.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D30212697F000D3425E /* Bussr – Recent.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7A068D3B212697F000D3425E /* Bussr – Recent.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D30212697F000D3425E /* Bussr – Recent.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7A068D442126980900D3425E /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A068D01212646A700D3425E /* NotificationCenter.framework */; };
 		7A068D472126980900D3425E /* NearbyExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D462126980900D3425E /* NearbyExtensionViewController.swift */; };
 		7A068D4A2126980900D3425E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A068D482126980900D3425E /* MainInterface.storyboard */; };
-		7A068D4E2126980900D3425E /* Bussr – Nearby.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D432126980900D3425E /* Bussr – Nearby.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7A068D4E2126980900D3425E /* Bussr – Nearby.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D432126980900D3425E /* Bussr – Nearby.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7A068D52212698B900D3425E /* BussrExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D04212646A700D3425E /* BussrExtensionViewController.swift */; };
 		7A068D53212698BA00D3425E /* BussrExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D04212646A700D3425E /* BussrExtensionViewController.swift */; };
 		7A068D54212698BA00D3425E /* BussrExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D04212646A700D3425E /* BussrExtensionViewController.swift */; };
+		7A0B1A2D29262F4C008ADFA9 /* AgencyConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0B1A2C29262F4C008ADFA9 /* AgencyConfiguration.swift */; };
+		7A0B1A2E29262F4C008ADFA9 /* AgencyConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0B1A2C29262F4C008ADFA9 /* AgencyConfiguration.swift */; };
+		7A0B1A2F29262F4C008ADFA9 /* AgencyConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0B1A2C29262F4C008ADFA9 /* AgencyConfiguration.swift */; };
+		7A0B1A3029262F4C008ADFA9 /* AgencyConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0B1A2C29262F4C008ADFA9 /* AgencyConfiguration.swift */; };
+		7A0B1A3129262F4C008ADFA9 /* AgencyConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0B1A2C29262F4C008ADFA9 /* AgencyConfiguration.swift */; };
 		7A0E8C6A20E0AAAC00C28465 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A0E8C6920E0AAAB00C28465 /* CoreLocation.framework */; };
 		7A0EF1FD20E80AC90039212B /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A0EF1FC20E80AC90039212B /* CloudKit.framework */; };
 		7A193A26216AE4B6009D866A /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A193A25216AE4B6009D866A /* NotificationManager.swift */; };
 		7A193A29216AFA4F009D866A /* NotificationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A193A28216AFA4F009D866A /* NotificationTableViewController.swift */; };
 		7A23176A2171212F00D12F21 /* NotificationEditorState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2317692171212F00D12F21 /* NotificationEditorState.swift */; };
 		7A24529020FA73170033E333 /* FavoritesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A24528F20FA73170033E333 /* FavoritesTableViewController.swift */; };
+		7A2AA1E62926FE3D003031E6 /* PredictionTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2AA1E52926FE3D003031E6 /* PredictionTime.swift */; };
+		7A2AA1E72926FE3D003031E6 /* PredictionTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2AA1E52926FE3D003031E6 /* PredictionTime.swift */; };
+		7A2AA1E82926FE3D003031E6 /* PredictionTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2AA1E52926FE3D003031E6 /* PredictionTime.swift */; };
+		7A2AA1E92926FE3D003031E6 /* PredictionTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2AA1E52926FE3D003031E6 /* PredictionTime.swift */; };
+		7A2AA1EA2926FE3D003031E6 /* PredictionTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A2AA1E52926FE3D003031E6 /* PredictionTime.swift */; };
 		7A42C934210521090022FC96 /* DirectionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A42C933210521090022FC96 /* DirectionsTableViewController.swift */; };
 		7A46D8622273CBB7008A41C1 /* DirectionStopCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE57F8B2270D17600F1B42B /* DirectionStopCell.swift */; };
 		7A46D8632273CBB8008A41C1 /* DirectionStopCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE57F8B2270D17600F1B42B /* DirectionStopCell.swift */; };
@@ -127,7 +137,7 @@
 		7AFB4752216DBD480043450B /* NotificationEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFB4751216DBD480043450B /* NotificationEditorViewController.swift */; };
 		7AFD5CA823F009EA00AFFEEF /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AFD5CA623F009EA00AFFEEF /* Interface.storyboard */; };
 		7AFD5CAA23F009EB00AFFEEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7AFD5CA923F009EB00AFFEEF /* Assets.xcassets */; };
-		7AFD5CB123F009EB00AFFEEF /* Bussr WatchApp Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7AFD5CB023F009EB00AFFEEF /* Bussr WatchApp Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7AFD5CB123F009EB00AFFEEF /* Bussr WatchApp Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7AFD5CB023F009EB00AFFEEF /* Bussr WatchApp Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7AFD5CB623F009EB00AFFEEF /* BussrWatchInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CB523F009EB00AFFEEF /* BussrWatchInterfaceController.swift */; };
 		7AFD5CB823F009EB00AFFEEF /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CB723F009EB00AFFEEF /* ExtensionDelegate.swift */; };
 		7AFD5CBA23F009EB00AFFEEF /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD5CB923F009EB00AFFEEF /* ComplicationController.swift */; };
@@ -173,17 +183,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		7A068D10212646A700D3425E /* Embed App Extensions */ = {
+		7A068D10212646A700D3425E /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				7A068D4E2126980900D3425E /* Bussr – Nearby.appex in Embed App Extensions */,
-				7A068D3B212697F000D3425E /* Bussr – Recent.appex in Embed App Extensions */,
-				7A068D28212697DA00D3425E /* Bussr – Favorites.appex in Embed App Extensions */,
+				7A068D4E2126980900D3425E /* Bussr – Nearby.appex in Embed Foundation Extensions */,
+				7A068D3B212697F000D3425E /* Bussr – Recent.appex in Embed Foundation Extensions */,
+				7A068D28212697DA00D3425E /* Bussr – Favorites.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		7ADB4F9323F00935006DFDB3 /* Embed Watch Content */ = {
@@ -196,15 +206,15 @@
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7AFD5CC423F009EC00AFFEEF /* Embed App Extensions */ = {
+		7AFD5CC423F009EC00AFFEEF /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				7AFD5CB123F009EB00AFFEEF /* Bussr WatchApp Extension.appex in Embed App Extensions */,
+				7AFD5CB123F009EB00AFFEEF /* Bussr WatchApp Extension.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -231,6 +241,7 @@
 		7A068D462126980900D3425E /* NearbyExtensionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyExtensionViewController.swift; sourceTree = "<group>"; };
 		7A068D492126980900D3425E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		7A068D4B2126980900D3425E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7A0B1A2C29262F4C008ADFA9 /* AgencyConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgencyConfiguration.swift; sourceTree = "<group>"; };
 		7A0E8C6920E0AAAB00C28465 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		7A0EF1FC20E80AC90039212B /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		7A193A25216AE4B6009D866A /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
@@ -238,6 +249,7 @@
 		7A2155BE26D7651100047585 /* Bussr 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Bussr 2.xcdatamodel"; sourceTree = "<group>"; };
 		7A2317692171212F00D12F21 /* NotificationEditorState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEditorState.swift; sourceTree = "<group>"; };
 		7A24528F20FA73170033E333 /* FavoritesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesTableViewController.swift; sourceTree = "<group>"; };
+		7A2AA1E52926FE3D003031E6 /* PredictionTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictionTime.swift; sourceTree = "<group>"; };
 		7A2B84BC27012338009E5392 /* Bussr 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Bussr 3.xcdatamodel"; sourceTree = "<group>"; };
 		7A42C933210521090022FC96 /* DirectionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsTableViewController.swift; sourceTree = "<group>"; };
 		7A4930C320D788EA008208D1 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -540,9 +552,11 @@
 				7AC95C472408A70F00AC364F /* Bussr.sqlite */,
 				7AAA2AF226B66420005C2B1C /* Bussr.xcdatamodeld */,
 				7A068D1421266AC400D3425E /* CoreDataStack.swift */,
+				7A0B1A2C29262F4C008ADFA9 /* AgencyConfiguration.swift */,
 				7ACA8F6224ED212E00608B61 /* RouteConfiguration.swift */,
 				7ACA8F6824ED268900608B61 /* DirectionConfiguration.swift */,
 				7ACA8F6E24ED2C4B00608B61 /* StopConfiguration.swift */,
+				7A2AA1E52926FE3D003031E6 /* PredictionTime.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -724,7 +738,7 @@
 				7AD81E0320D6E60C004BAB1E /* Frameworks */,
 				7A85E89B23CD638400EC11B9 /* ShellScript */,
 				7AD81E0420D6E60C004BAB1E /* Resources */,
-				7A068D10212646A700D3425E /* Embed App Extensions */,
+				7A068D10212646A700D3425E /* Embed Foundation Extensions */,
 				E6B403A92375EE54A466DAC9 /* [CP] Embed Pods Frameworks */,
 				7ADB4F9323F00935006DFDB3 /* Embed Watch Content */,
 			);
@@ -745,7 +759,7 @@
 			buildConfigurationList = 7AFD5CC523F009EC00AFFEEF /* Build configuration list for PBXNativeTarget "BussrWatchApp" */;
 			buildPhases = (
 				7AFD5CA223F009EA00AFFEEF /* Resources */,
-				7AFD5CC423F009EC00AFFEEF /* Embed App Extensions */,
+				7AFD5CC423F009EC00AFFEEF /* Embed Foundation Extensions */,
 				A25111EB627ED444C91CDBEC /* Frameworks */,
 			);
 			buildRules = (
@@ -766,7 +780,6 @@
 				7AFD5CAC23F009EB00AFFEEF /* Sources */,
 				7AFD5CAD23F009EB00AFFEEF /* Frameworks */,
 				7AFD5CAE23F009EB00AFFEEF /* Resources */,
-				25584860F049E8763DB469B9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -784,7 +797,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1130;
-				LastUpgradeCheck = 1200;
+				LastUpgradeCheck = 1410;
 				ORGANIZATIONNAME = jackson;
 				TargetAttributes = {
 					7A068D1C212697DA00D3425E = {
@@ -961,23 +974,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		25584860F049E8763DB469B9 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BussrWatchApp Extension/Pods-BussrWatchApp Extension-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BussrWatchApp Extension/Pods-BussrWatchApp Extension-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BussrWatchApp Extension/Pods-BussrWatchApp Extension-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		3F1AA1A52B78A770C7A5A7B6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1008,6 +1004,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
+				"$(SRCROOT)/Bussr/Info.plist",
 			);
 			outputFileListPaths = (
 			);
@@ -1129,8 +1126,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A0B1A2E29262F4C008ADFA9 /* AgencyConfiguration.swift in Sources */,
 				7ACA8F7024ED2C4B00608B61 /* StopConfiguration.swift in Sources */,
 				7AD00467212758B000DCB08E /* CoreDataStack.swift in Sources */,
+				7A2AA1E72926FE3D003031E6 /* PredictionTime.swift in Sources */,
 				7AAA2AF526B66420005C2B1C /* Bussr.xcdatamodeld in Sources */,
 				7AD00464212758AD00DCB08E /* RouteDataManager.swift in Sources */,
 				7ACA8F6A24ED268900608B61 /* DirectionConfiguration.swift in Sources */,
@@ -1146,8 +1145,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A0B1A2F29262F4C008ADFA9 /* AgencyConfiguration.swift in Sources */,
 				7ACA8F7124ED2C4B00608B61 /* StopConfiguration.swift in Sources */,
 				7AD00468212758B100DCB08E /* CoreDataStack.swift in Sources */,
+				7A2AA1E82926FE3D003031E6 /* PredictionTime.swift in Sources */,
 				7AAA2AF626B66420005C2B1C /* Bussr.xcdatamodeld in Sources */,
 				7AD00465212758AD00DCB08E /* RouteDataManager.swift in Sources */,
 				7ACA8F6B24ED268900608B61 /* DirectionConfiguration.swift in Sources */,
@@ -1163,8 +1164,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A0B1A3029262F4C008ADFA9 /* AgencyConfiguration.swift in Sources */,
 				7ACA8F7224ED2C4B00608B61 /* StopConfiguration.swift in Sources */,
 				7AD00469212758B100DCB08E /* CoreDataStack.swift in Sources */,
+				7A2AA1E92926FE3D003031E6 /* PredictionTime.swift in Sources */,
 				7AAA2AF726B66420005C2B1C /* Bussr.xcdatamodeld in Sources */,
 				7AD00466212758AE00DCB08E /* RouteDataManager.swift in Sources */,
 				7ACA8F6C24ED268900608B61 /* DirectionConfiguration.swift in Sources */,
@@ -1183,7 +1186,9 @@
 				7ACA8F6924ED268900608B61 /* DirectionConfiguration.swift in Sources */,
 				7A50EECD2107DAE700B69B92 /* StopsTableViewController.swift in Sources */,
 				7A42C934210521090022FC96 /* DirectionsTableViewController.swift in Sources */,
+				7A2AA1E62926FE3D003031E6 /* PredictionTime.swift in Sources */,
 				7AAD586323FD1182002F3FAF /* RouteCell.swift in Sources */,
+				7A0B1A2D29262F4C008ADFA9 /* AgencyConfiguration.swift in Sources */,
 				7AD81E1F20D6EEDB004BAB1E /* RouteDataManager.swift in Sources */,
 				7AE57F8C2270D17600F1B42B /* DirectionStopCell.swift in Sources */,
 				7A24529020FA73170033E333 /* FavoritesTableViewController.swift in Sources */,
@@ -1226,7 +1231,9 @@
 				7AFD5CCB23F0AF5200AFFEEF /* RouteDataManager.swift in Sources */,
 				7ACA8F6724ED212E00608B61 /* RouteConfiguration.swift in Sources */,
 				7ACA8F7324ED2C4B00608B61 /* StopConfiguration.swift in Sources */,
+				7A0B1A3129262F4C008ADFA9 /* AgencyConfiguration.swift in Sources */,
 				7AFD5CBA23F009EB00AFFEEF /* ComplicationController.swift in Sources */,
+				7A2AA1EA2926FE3D003031E6 /* PredictionTime.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1316,7 +1323,7 @@
 				CURRENT_PROJECT_VERSION = 20211006;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrFavoritesExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1340,7 +1347,7 @@
 				CURRENT_PROJECT_VERSION = 20211006;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrFavoritesExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1364,7 +1371,7 @@
 				CURRENT_PROJECT_VERSION = 20211006;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrRecentExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1388,7 +1395,7 @@
 				CURRENT_PROJECT_VERSION = 20211006;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrRecentExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1412,7 +1419,7 @@
 				CURRENT_PROJECT_VERSION = 20211006;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrNearbyExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1436,7 +1443,7 @@
 				CURRENT_PROJECT_VERSION = 20211006;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrNearbyExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1503,7 +1510,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1558,7 +1565,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -1580,7 +1587,7 @@
 				CURRENT_PROJECT_VERSION = 20211006;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = Bussr/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1607,7 +1614,7 @@
 				CURRENT_PROJECT_VERSION = 20211006;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = Bussr/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

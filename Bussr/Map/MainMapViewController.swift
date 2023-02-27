@@ -128,7 +128,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     var borderPolyline: MKPolyline?
     var busAnnotations = Dictionary<String,(annotation: BusAnnotation, annotationView: MKAnnotationView?, headingAnnotationView: MKAnnotationView?)>()
     var vehicleIDs = Array<String>()
-    var predictions = Array<RouteDataManager.PredictionTime>()
+    var predictions = Array<PredictionTime>()
     var selectedStopHeading: SelectedStopHeadingAnnotation?
     
     var locationManager = CLLocationManager()
@@ -170,7 +170,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         }
         
         setupThemeElements()
-        reloadAllAnnotations() //For header annotation update
+        reloadAllAnnotations(fetchPredictions: true) //For header annotation update
     }
     
     func setupThemeElements()
@@ -262,8 +262,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                 
                 NotificationCenter.default.addObserver(self, selector: #selector(self.dismissDownloadDataAlertView), name: NSNotification.Name("FinishedUpdatingRoutes"), object: nil)
                 
-                DispatchQueue.global(qos: .background).async {
-                    RouteDataManager.updateAllData()
+                Task
+                {
+                    await RouteDataManager.updateAllData()
                 }
             })
             
@@ -275,7 +276,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         if MapState.routeInfoShowing == .stop
         {
             self.setupPredictionRefreshTimer()
-            self.refreshPredictionNavigationBar()
+//            self.refreshPredictionNavigationBar()
         }
         
         if shouldDoInitialCenter
@@ -286,9 +287,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(true)
+        super.viewWillDisappear(animated)
         
-        self.predictionRefreshTimer?.invalidate()
+        self.stopPredictionRefreshTimer()
     }
     
     //MARK: - Update Routes
@@ -463,6 +464,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         NotificationCenter.default.addObserver(self, selector: #selector(showPickerView), name: NSNotification.Name("ShowRouteInfoPickerView"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hidePickerView), name: NSNotification.Name("HideRouteInfoPickerView"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(predictionTimesFinishedRefreshing), name: NSNotification.Name("UpdateCountdownProgressBar"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(setupPredictionRefreshTimer), name: NSNotification.Name("StartPredictionRefresh"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(stopPredictionRefreshTimer), name: NSNotification.Name("StopPredictionRefresh"), object: nil)
     }
     
     func removeRouteMapUpdateNotifications()
@@ -470,6 +473,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("UpdateRouteMap"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("ReloadAnnotations"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("UpdateCountdownProgressBar"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("StartPredictionRefresh"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("StopPredictionRefresh"), object: nil)
     }
     
     //MARK: - Location Centering
@@ -628,7 +633,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                         
             (mainNavigationItem.titleView as? UILabel)?.text = "Map"
         case .direction:
-            reloadAllAnnotations()
+            reloadAllAnnotations(fetchPredictions: true)
             
             OperationQueue.main.addOperation {
                 self.zoomMapOnCurrentDirection()
@@ -679,7 +684,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             
             (mainNavigationItem.titleView as? UILabel)?.text = MapState.getCurrentDirection()?.route?.title
         case .otherDirections:
-            reloadAllAnnotations()
+            reloadAllAnnotations(fetchPredictions: true)
             
             centerMapOnLocation(location: initialLocation, range: 15000)
             
@@ -697,7 +702,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     
     //MARK: - Annotations
     
-    @objc func reloadAllAnnotations()
+    @objc func reloadAllAnnotations(fetchPredictions: Bool)
     {
         resetAnnotations()
         
@@ -713,8 +718,13 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             
             reloadPolyline()
             
-            NotificationCenter.default.addObserver(self, selector: #selector(fetchVehicleLocations), name: NSNotification.Name("FetchVehicleLocations"), object: nil)
-            fetchPredictionTimes()
+            if fetchPredictions
+            {
+                Task
+                {
+                    await fetchPredictionTimes()
+                }
+            }
         }
     }
     
@@ -1048,7 +1058,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         OperationQueue.main.addOperation {
             var longDistance = self.mapViewSpanToDistance(center: mapView.region.center, span: mapView.region.span).longitude
             if range != nil { longDistance = range! }
-            let hideAnnotations = (longDistance >= (MapState.getCurrentDirection()?.route?.agency?.name == RouteConstants.BARTAgencyTag ? MapConstants.BARTMaxLongMetersBeforeHidingStopAnnotations : MapConstants.NextBusMaxLongMetersBeforeHidingStopAnnotations))
+            let hideAnnotations = (longDistance >= (MapState.getCurrentDirection()?.route?.agency?.name == BARTAPI.BARTAgencyTag ? MapConstants.BARTMaxLongMetersBeforeHidingStopAnnotations : MapConstants.NextBusMaxLongMetersBeforeHidingStopAnnotations))
             
             let annotations = mapView.annotations
             for annotation in annotations
@@ -1133,7 +1143,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             break
             
             default:
-            self.predictionRefreshTimer?.invalidate()
+            self.stopPredictionRefreshTimer()
         }
         
         if segue.identifier == "showRecentStopTableView"
@@ -1171,7 +1181,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     @IBAction func unwindWithSelectedStop(_ segue: UIStoryboardSegue)
     {
         showPickerView()
-        reloadAllAnnotations()
+        reloadAllAnnotations(fetchPredictions: false)
         NotificationCenter.default.post(name: NSNotification.Name("DisableFilters"), object: nil)
         NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
     }
@@ -1184,7 +1194,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     @IBAction func unwindFromSettingsView(_ segue: UIStoryboardSegue)
     {
         showPickerView()
-        reloadAllAnnotations()
+        reloadAllAnnotations(fetchPredictions: false)
         NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
     }
     
@@ -1197,7 +1207,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     @IBAction func unwindFromStopsTableViewWithSelectedStop(_ segue: UIStoryboardSegue)
     {
         showPickerView()
-        reloadAllAnnotations()
+        reloadAllAnnotations(fetchPredictions: false)
         NotificationCenter.default.post(name: NSNotification.Name("DisableFilters"), object: nil)
         NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
     }
@@ -1205,7 +1215,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     @IBAction func unwindFromFavoritesViewWithSelectedRoute(_ segue: UIStoryboardSegue)
     {
         showPickerView()
-        reloadAllAnnotations()
+        reloadAllAnnotations(fetchPredictions: false)
         NotificationCenter.default.post(name: NSNotification.Name("EnableFilters"), object: nil)
         NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
     }
@@ -1247,7 +1257,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         return !self.predictionTimesNavigationBar.isHidden
     }
     
-    func setupPredictionRefreshTimer()
+    @objc func setupPredictionRefreshTimer()
     {
         if predictionRefreshTimer?.isValid ?? false { return }
         
@@ -1258,6 +1268,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             self.predictionRefreshTimer?.invalidate()
             self.predictionRefreshTimer = Timer.scheduledTimer(timeInterval: refreshTime, target: self, selector: #selector(self.refreshPredictionNavigationBar), userInfo: nil, repeats: true)
         }
+    }
+    
+    @objc func stopPredictionRefreshTimer()
+    {
+        self.predictionRefreshTimer?.invalidate()
     }
     
     func hidePredictionNavigationBar()
@@ -1280,15 +1295,13 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                 self.predictionTimesProgressView.isHidden = true
             }
                         
-            self.predictionRefreshTimer?.invalidate()
+            self.stopPredictionRefreshTimer()
             self.activityIndicator.stopAnimating()
         }
     }
     
     @objc @IBAction func refreshPredictionNavigationBar()
     {
-        NotificationCenter.default.addObserver(self, selector: #selector(fetchVehicleLocations), name: NSNotification.Name("FetchVehicleLocations"), object: nil)
-        
         OperationQueue.main.addOperation {
             self.predictionTimesProgressView.layer.sublayers?.forEach { $0.removeAllAnimations() }
             self.predictionTimesProgressView.setProgress(0, animated: false)
@@ -1301,22 +1314,19 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             })
         }
         
-        fetchPredictionTimes()
+        Task
+        {
+            await fetchPredictionTimes()
+        }
     }
     
-    func fetchPredictionTimes()
+    func fetchPredictionTimes() async
     {
-        self.predictionRefreshTimer?.invalidate()
+        self.stopPredictionRefreshTimer()
         
         OperationQueue.main.addOperation {
             self.predictionTimesProgressView.setProgress(0.25, animated: true)
-        }
-        
-        let predictionTimesReturnUUID = UUID().uuidString
-        NotificationCenter.default.addObserver(self, selector: #selector(receivePredictionTimes(_:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
-        RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: MapState.getCurrentStop(), direction: MapState.getCurrentDirection())
-        
-        OperationQueue.main.addOperation {
+            
             self.refreshButton.isEnabled = false
             self.predictionTimesNavigationBar.topItem?.leftBarButtonItem = nil
             
@@ -1325,20 +1335,190 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                 self.activityIndicator.startAnimating()
             }
         }
-    }
-    
-    @objc func fetchVehicleLocations()
-    {
+        
+//        let predictionTimesReturnUUID = UUID().uuidString
+//        NotificationCenter.default.addObserver(self, selector: #selector(receivePredictionTimes(_:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
+//        RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: MapState.getCurrentStop(), direction: MapState.getCurrentDirection())
+        
+        let previousDirectionStopID = MapState.selectedDirectionStopID
+        
+        let predictionsFetchResult = await RouteDataManager.fetchPredictionTimesForStop(stop: MapState.getCurrentStop(), direction: MapState.getCurrentDirection())
+        
+        var isCorrectDirectionStopID = true
+        if let currentDirectionTag = MapState.getCurrentDirection()?.tag, let currentStopTag = MapState.getCurrentStop()?.tag
+        {
+            isCorrectDirectionStopID = previousDirectionStopID == (currentStopTag + "-" + currentDirectionTag)
+        }
+        if !isCorrectDirectionStopID { return }
+        
         OperationQueue.main.addOperation {
-            self.predictionTimesProgressView.setProgress(0.75, animated: true)
+            self.predictionTimesProgressView.setProgress(0.5, animated: true)
         }
         
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("FetchVehicleLocations"), object: nil)
+        switch predictionsFetchResult
+        {
+        case .success(let predictions):
+            let vehicleIDs = predictions.map({ prediction in
+                return prediction.vehicleID ?? ""
+            })
+            if vehicleIDs.count > 0
+            {
+                self.vehicleIDs = vehicleIDs
+            }
+            
+            reloadPredictionTimesLabel()
+            
+            if vehicleIDs.count > 0
+            {
+                OperationQueue.main.addOperation {
+                    self.predictionTimesProgressView.setProgress(0.75, animated: true)
+                }
+                
+                await fetchVehicleLocations(vehicleIDs: vehicleIDs)
+            }
+            
+            OperationQueue.main.addOperation {
+                self.predictionTimesFinishedRefreshing()
+            }
+            break
+        case .error(let reason):
+            OperationQueue.main.addOperation {
+                self.predictionTimesLabel.text = reason
+                self.predictionTimesFinishedRefreshing()
+            }
+        }
         
-        let vehicleLocationsReturnUUID = UUID().uuidString
-        NotificationCenter.default.addObserver(self, selector: #selector(receiveVehicleLocations(_:)), name: NSNotification.Name("FoundVehicleLocations:" + vehicleLocationsReturnUUID), object: nil)
+//        if let predictions = notification.userInfo!["predictions"] as? Array<PredictionTime>
+//        {
+//            self.predictions = predictions
+//
+//            let vehicleIDs = predictions.map({ prediction in
+//                return prediction.vehicleID ?? ""
+//            })
+//            if vehicleIDs.count > 0
+//            {
+//                self.vehicleIDs = vehicleIDs
+//            }
+//
+//            reloadPredictionTimesLabel()
+//
+//            if willLoadSchedule { return }
+//
+//            if vehicleIDs.count > 0
+//            {
+//                NotificationCenter.default.post(name: NSNotification.Name("FetchVehicleLocations"), object: nil)
+//            }
+//            else
+//            {
+//                OperationQueue.main.addOperation {
+//                    self.predictionTimesFinishedRefreshing()
+//                }
+//            }
+//        }
+//        else if let error = notification.userInfo!["error"] as? String
+//        {
+//            OperationQueue.main.addOperation {
+//                self.predictionTimesLabel.text = error
+//                self.predictionTimesFinishedRefreshing()
+//            }
+//        }
+    }
+    
+    func fetchVehicleLocations(vehicleIDs: [String]) async
+    {
+        let previousDirectionTag = MapState.selectedDirectionTag
         
-        RouteDataManager.fetchVehicleLocations(returnUUID: vehicleLocationsReturnUUID, vehicleIDs: vehicleIDs, direction: MapState.getCurrentDirection())
+        let vehicleLocationsFetchResult = await RouteDataManager.fetchVehicleLocations(vehicleIDs: vehicleIDs, direction: MapState.getCurrentDirection())
+        
+        if (previousDirectionTag != MapState.selectedDirectionTag) { return }
+        
+        switch vehicleLocationsFetchResult
+        {
+        case .success(let vehicleLocations):
+            OperationQueue.main.addOperation {
+                var annotationsToSave = Dictionary<String,(annotation: BusAnnotation, annotationView: MKAnnotationView?, headingAnnotationView: MKAnnotationView?)>()
+                
+                for vehicleLocation in vehicleLocations
+                {
+                    let locationCoordinate = CLLocationCoordinate2D(latitude: vehicleLocation.latitude, longitude: vehicleLocation.longitude)
+                    
+                    if let busAnnotationTuple = self.busAnnotations[vehicleLocation.vehicleID]
+                    {
+                        UIView.animate(withDuration: 1, animations: {
+                            busAnnotationTuple.annotation.coordinate = locationCoordinate
+                        })
+                        if let heading = vehicleLocation.heading
+                        {
+                            busAnnotationTuple.annotation.heading = heading
+                        }
+                    }
+                    else
+                    {
+                        self.busAnnotations[vehicleLocation.vehicleID] = (annotation: BusAnnotation(coordinate: locationCoordinate, heading: vehicleLocation.heading ?? 0, id: vehicleLocation.vehicleID), annotationView: nil, headingAnnotationView: nil)
+                    }
+                    
+                    if let annotationView = self.busAnnotations[vehicleLocation.vehicleID]?.annotationView
+                    {
+                        annotationView.annotation = self.busAnnotations[vehicleLocation.vehicleID]!.annotation
+                    }
+                    else
+                    {
+                        self.mainMapView.addAnnotation(self.busAnnotations[vehicleLocation.vehicleID]!.annotation)
+                    }
+                    
+                    if let headingAnnotation = self.busAnnotations[vehicleLocation.vehicleID]!.annotation.headingAnnotation
+                    {
+                        UIView.animate(withDuration: 1, animations: {
+                            headingAnnotation.coordinate = locationCoordinate
+                        })
+                        if let heading = vehicleLocation.heading
+                        {
+                            headingAnnotation.headingValue = heading
+                        }
+                        
+                        if let headingAnnotationView = self.busAnnotations[vehicleLocation.vehicleID]!.headingAnnotationView
+                        {
+                            let headingImage = UIImage(named: "HeadingIndicator" + self.darkImageAppend())!
+                            let busImageSize = headingAnnotation.busAnnotationViewImageSize ?? UIImage(named: "BusAnnotation")!.size
+                            
+                            UIView.animate(withDuration: 1, animations: {
+                                headingAnnotationView.centerOffset = CGPoint(x: 0, y: 0)
+                                headingAnnotationView.centerOffset = self.calculateOffsetForAnnotationView(busImageSize: busImageSize, headingImageSize: headingImage.size, headingValue: headingAnnotation.headingValue)
+                                headingAnnotationView.transform = self.calculateHeadingDegreeShift(headingValue: headingAnnotation.headingValue)
+                            })
+                        }
+                    }
+                    else
+                    {
+                        let headingAnnotation = HeadingAnnotation(coordinate: locationCoordinate, heading: vehicleLocation.heading ?? 0, id: vehicleLocation.vehicleID)
+                        self.mainMapView.addAnnotation(headingAnnotation)
+                        
+                        self.busAnnotations[vehicleLocation.vehicleID]?.annotation.headingAnnotation = headingAnnotation
+                    }
+                    
+                    annotationsToSave[vehicleLocation.vehicleID] = self.busAnnotations[vehicleLocation.vehicleID]
+                }
+                
+                for annotation in annotationsToSave
+                {
+                    self.busAnnotations.removeValue(forKey: annotation.key)
+                }
+                
+                for annotation in self.busAnnotations
+                {
+                    self.mainMapView.removeAnnotation(annotation.value.annotation)
+                    if let headingAnnotation = annotation.value.annotation.headingAnnotation
+                    {
+                        self.mainMapView.removeAnnotation(headingAnnotation)
+                    }
+                }
+                
+                self.busAnnotations = annotationsToSave
+            }
+            break
+        case .error:
+            break
+        }
     }
     
     @objc func receivePredictionTimes(_ notification: Notification)
@@ -1374,7 +1554,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             }
         }
         
-        if let predictions = notification.userInfo!["predictions"] as? Array<RouteDataManager.PredictionTime>
+        if let predictions = notification.userInfo!["predictions"] as? Array<PredictionTime>
         {
             self.predictions = predictions
             
@@ -1527,6 +1707,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     
     @objc func predictionTimesFinishedRefreshing()
     {
+        self.refreshButton.isEnabled = true
+        self.predictionTimesNavigationBar.topItem?.leftBarButtonItem = self.refreshButton
+        
+        self.activityIndicator.stopAnimating()
+        
         if MapState.routeInfoShowing != .stop { return }
         
         setupPredictionRefreshTimer()

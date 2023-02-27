@@ -98,15 +98,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+        NotificationCenter.default.post(name: NSNotification.Name("StopPredictionRefresh"), object: nil)
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        NotificationCenter.default.post(name: NSNotification.Name("StopPredictionRefresh"), object: nil)
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        NotificationCenter.default.post(name: NSNotification.Name("StartPredictionRefresh"), object: nil)
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -146,7 +149,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             MapState.routeInfoObject = MapState.getCurrentDirection()
             
             mainMapViewController?.showPickerView()
-            mainMapViewController?.reloadAllAnnotations()
+            mainMapViewController?.reloadAllAnnotations(fetchPredictions: false)
             
             NotificationCenter.default.post(name: NSNotification.Name("ReloadRouteInfoPicker"), object: nil)
             

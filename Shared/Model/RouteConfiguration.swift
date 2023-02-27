@@ -6,7 +6,22 @@
 //  Copyright © 2020 jackson. All rights reserved.
 //
 
+import Foundation
 import UIKit
+
+struct UmoIQRouteID: Codable
+{
+    let tag: String
+    let title: String
+    let revision: Int
+
+    enum CodingKeys: String, CodingKey
+    {
+        case tag = "id"
+        case title
+        case revision = "rev"
+    }
+}
 
 class NextBusRouteList: Decodable
 {
@@ -44,21 +59,61 @@ class NextBusRouteList: Decodable
     }
 }
 
-protocol RouteConfiguation: Decodable
+protocol RouteConfiguration: Decodable
 {
+    var tag: String { get set }
     var title: String { get set }
     var color: String { get set }
     var oppositeColor: String { get set }
+    var revision: Int? { get set }
     
     var directions: [DirectionConfiguration] { get set }
     var stops: [StopConfiguration] { get set }
 }
 
-class NextBusRouteConfiguration: RouteConfiguation
+class UmoIQRouteConfiguration: RouteConfiguration
 {
+    var tag: String
     var title: String
     var color: String
     var oppositeColor: String
+    var revision: Int?
+    var directions: [DirectionConfiguration]
+    var stops: [StopConfiguration]
+    
+    enum CodingKeys: String, CodingKey
+    {
+        case tag = "id"
+        case title
+        case color
+        case oppositeColor = "textColor"
+        case revision = "rev"
+        case directions
+        case stops
+    }
+    
+    required init(from decoder: Decoder) throws
+    {
+        let routeContainer = try decoder.container(keyedBy: CodingKeys.self)
+        
+        self.tag = try routeContainer.decode(String.self, forKey: .tag)
+        self.title = try routeContainer.decode(String.self, forKey: .title)
+        self.color = try routeContainer.decode(String.self, forKey: .color)
+        self.oppositeColor = try routeContainer.decode(String.self, forKey: .oppositeColor)
+        self.revision = try? routeContainer.decode(Int.self, forKey: .revision)
+        
+        self.directions = try routeContainer.decode([UmoIQDirectionConfiguration].self, forKey: .directions)
+        self.stops = try routeContainer.decode([UmoIQStopConfiguration].self, forKey: .stops)
+    }
+}
+
+class NextBusRouteConfiguration: RouteConfiguration
+{
+    var tag: String
+    var title: String
+    var color: String
+    var oppositeColor: String
+    var revision: Int?
     var directions: [DirectionConfiguration]
     var stops: [StopConfiguration]
     var scheduleJSON: String?
@@ -70,6 +125,7 @@ class NextBusRouteConfiguration: RouteConfiguation
     
     enum RouteCodingKeys: String, CodingKey
     {
+        case tag
         case title
         case color
         case oppositeColor
@@ -83,6 +139,7 @@ class NextBusRouteConfiguration: RouteConfiguation
         let baseContainer = try decoder.container(keyedBy: BaseRouteCodingKeys.self)
         let routeContainer = try baseContainer.nestedContainer(keyedBy: RouteCodingKeys.self, forKey: .route)
         
+        self.tag = try routeContainer.decode(String.self, forKey: .tag)
         self.title = try routeContainer.decode(String.self, forKey: .title)
         self.color = try routeContainer.decode(String.self, forKey: .color)
         //self.oppositeColor = try routeContainer.decode(String.self, forKey: .oppositeColor)
@@ -96,6 +153,8 @@ class NextBusRouteConfiguration: RouteConfiguation
         self.directions = directions ?? []
         
         self.stops = try routeContainer.decode([NextBusStopConfiguration].self, forKey: .stopConfiguration)
+        
+        self.revision = nil
     }
 }
 
@@ -147,11 +206,14 @@ class BARTRouteList: Decodable
     }
 }
 
-class BARTRouteConfiguration: RouteConfiguation
+class BARTRouteConfiguration: RouteConfiguration
 {
+    var tag: String
+    var abbr: String
     var title: String
     var color: String
     var oppositeColor: String
+    var revision: Int?
     var directions: [DirectionConfiguration]
     var stops: [StopConfiguration]
     
@@ -189,6 +251,8 @@ class BARTRouteConfiguration: RouteConfiguation
         let baseRouteContainer = try baseRoutesContainer.nestedContainer(keyedBy: BaseRouteCodingKeys.self, forKey: .routes)
         let routeContainer = try baseRouteContainer.nestedContainer(keyedBy: RouteCodingKeys.self, forKey: .route)
         
+        self.tag = try routeContainer.decode(String.self, forKey: .number)
+        self.abbr = try routeContainer.decode(String.self, forKey: .abbr)
         self.title = try routeContainer.decode(String.self, forKey: .name)
         self.color = try routeContainer.decode(String.self, forKey: .color)
         self.color.remove(at: self.color.startIndex) // Remove # from color
@@ -204,6 +268,7 @@ class BARTRouteConfiguration: RouteConfiguation
             directions.append(direction)
         }
         
+        self.revision = nil
     }
     
     func loadStops(from stopArray: [BARTStopConfiguration]) throws
