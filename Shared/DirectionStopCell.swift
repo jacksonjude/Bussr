@@ -115,7 +115,6 @@ class DirectionStopCell: UITableViewCell
         {
         case .success(let fetchedPredictions):
             predictions = fetchedPredictions
-            break
         case .error:
             break
         }
@@ -134,31 +133,4 @@ class DirectionStopCell: UITableViewCell
             }
         }
     }
-    
-//    @objc func receivePrediction(_ notification: Notification)
-//    {
-//        let willLoadSchedule = notification.userInfo!["willLoadSchedule"] as? Bool ?? false
-//
-//        if !willLoadSchedule
-//        {
-//            NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
-//        }
-//
-//        if let predictions = notification.userInfo!["predictions"] as? [RouteDataManager.PredictionTime]
-//        {
-//            OperationQueue.main.addOperation {
-//                var predictionsString = RouteDataManager.formatPredictions(predictions: predictions).string
-//
-//                if !self.includeMins && predictionsString.contains(" mins")
-//                {
-//                    predictionsString.removeSubrange(Range<String.Index>(NSRange(location: predictionsString.count-5, length: 5), in: predictionsString)!)
-//                }
-//
-//                if let stopPredictionLabel = self.viewWithTag(603) as? UILabel
-//                {
-//                    stopPredictionLabel.text = predictionsString
-//                }
-//            }
-//        }
-//    }
 }

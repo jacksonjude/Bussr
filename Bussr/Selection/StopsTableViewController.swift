@@ -114,7 +114,6 @@ class StopsTableViewController: UIViewController, UITableViewDataSource, UITable
             }
             
             self.mainNavigationItem.title = "Nearby Stops"
-            break
         case .favorite:
             if let favoriteStops = FavoriteState.favoriteObject as? Array<FavoriteStop>
             {

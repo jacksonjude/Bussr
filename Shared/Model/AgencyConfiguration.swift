@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct UmoIQAgency: Codable
+struct UmoIQAgencyInstance: Codable
 {
     let tag: String
     let name: String

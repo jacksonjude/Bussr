@@ -128,13 +128,13 @@ class RoutesTableViewController: UIViewController, UITableViewDelegate, UITableV
     func fetchRoutes()
     {
         var nextBusAgencyRoutes = [Route]()
-        if let nextBusAgency = CoreDataStack.fetchObject(type: "Agency", predicate: NSPredicate(format: "name == %@", UmoIQAPI.SFMTAAgencyTag), moc: CoreDataStack.persistentContainer.viewContext) as? Agency
+        if let nextBusAgency = CoreDataStack.fetchObject(type: "Agency", predicate: NSPredicate(format: "name == %@", UmoIQAgency.agencyTag), moc: CoreDataStack.persistentContainer.viewContext) as? Agency
         {
             nextBusAgencyRoutes = (nextBusAgency.routes?.allObjects) as? [Route] ?? []
         }
         
         var BARTAgencyRoutes = [Route]()
-        if let BARTAgency = CoreDataStack.fetchObject(type: "Agency", predicate: NSPredicate(format: "name == %@", BARTAPI.BARTAgencyTag), moc: CoreDataStack.persistentContainer.viewContext) as? Agency
+        if let BARTAgency = CoreDataStack.fetchObject(type: "Agency", predicate: NSPredicate(format: "name == %@", BARTAgency.agencyTag), moc: CoreDataStack.persistentContainer.viewContext) as? Agency
         {
             BARTAgencyRoutes = (BARTAgency.routes?.allObjects) as? [Route] ?? []
         }

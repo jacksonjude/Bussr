@@ -50,39 +50,6 @@ class UmoIQStopConfiguration: StopConfiguration
     }
 }
 
-class NextBusStopConfiguration: StopConfiguration
-{
-    var title: String
-    var shortTitle: String
-    var id: String?
-    var tag: String
-    var latitude: Double
-    var longitude: Double
-    
-    enum StopCodingKeys: String, CodingKey
-    {
-        case title
-        case shortTitle
-        case id = "stopId"
-        case tag
-        case latitude = "lat"
-        case longitude = "lon"
-    }
-    
-    required init(from decoder: Decoder) throws
-    {
-        let decodedContainer = try decoder.container(keyedBy: StopCodingKeys.self)
-        
-        let title = try decodedContainer.decode(String.self, forKey: .title)
-        self.title = title
-        self.shortTitle = try decodedContainer.decodeIfPresent(String.self, forKey: .shortTitle) ?? title
-        self.id = try decodedContainer.decode(String.self, forKey: .id)
-        self.tag = try decodedContainer.decode(String.self, forKey: .tag)
-        self.latitude = Double(try decodedContainer.decode(String.self, forKey: .latitude))!
-        self.longitude = Double(try decodedContainer.decode(String.self, forKey: .longitude))!
-    }
-}
-
 class BARTStopArray: Decodable
 {
     var stops: [BARTStopConfiguration]

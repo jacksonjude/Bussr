@@ -25,8 +25,6 @@ struct DisplayConstants
 
 struct MapConstants
 {
-    static let NextBusMaxLongMetersBeforeHidingStopAnnotations = 4000.0
-    static let BARTMaxLongMetersBeforeHidingStopAnnotations = 22000.0
     static let directionPolylineWidth: CGFloat = 5.0
     static let borderPolylineWidth: CGFloat = 6.0
     static let directionZoomMarginPercent: Double = 20.0
@@ -310,7 +308,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             
             appDelegate.hasDownloadedData = true
             
-            if appDelegate.firstLaunch && CLLocationManager.authorizationStatus() != .denied
+            if appDelegate.firstLaunch && self.locationManager.authorizationStatus != .denied
             {
                 self.locationManager.requestWhenInUseAuthorization()
             }
@@ -1058,7 +1056,19 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         OperationQueue.main.addOperation {
             var longDistance = self.mapViewSpanToDistance(center: mapView.region.center, span: mapView.region.span).longitude
             if range != nil { longDistance = range! }
-            let hideAnnotations = (longDistance >= (MapState.getCurrentDirection()?.route?.agency?.name == BARTAPI.BARTAgencyTag ? MapConstants.BARTMaxLongMetersBeforeHidingStopAnnotations : MapConstants.NextBusMaxLongMetersBeforeHidingStopAnnotations))
+            
+            var maxWidth = 0.0
+            switch MapState.getCurrentDirection()?.route?.agency?.name
+            {
+            case UmoIQAgency.agencyTag:
+                maxWidth = UmoIQAgency.maxFullDetailWidth
+            case BARTAgency.agencyTag:
+                maxWidth = BARTAgency.maxFullDetailWidth
+            default:
+                break
+            }
+            
+            let hideAnnotations = (longDistance >= maxWidth)
             
             let annotations = mapView.annotations
             for annotation in annotations
@@ -1336,10 +1346,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             }
         }
         
-//        let predictionTimesReturnUUID = UUID().uuidString
-//        NotificationCenter.default.addObserver(self, selector: #selector(receivePredictionTimes(_:)), name: NSNotification.Name("FoundPredictions:" + predictionTimesReturnUUID), object: nil)
-//        RouteDataManager.fetchPredictionTimesForStop(returnUUID: predictionTimesReturnUUID, stop: MapState.getCurrentStop(), direction: MapState.getCurrentDirection())
-        
         let previousDirectionStopID = MapState.selectedDirectionStopID
         
         let predictionsFetchResult = await RouteDataManager.fetchPredictionTimesForStop(stop: MapState.getCurrentStop(), direction: MapState.getCurrentDirection())
@@ -1380,48 +1386,12 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             OperationQueue.main.addOperation {
                 self.predictionTimesFinishedRefreshing()
             }
-            break
         case .error(let reason):
             OperationQueue.main.addOperation {
                 self.predictionTimesLabel.text = reason
                 self.predictionTimesFinishedRefreshing()
             }
         }
-        
-//        if let predictions = notification.userInfo!["predictions"] as? Array<PredictionTime>
-//        {
-//            self.predictions = predictions
-//
-//            let vehicleIDs = predictions.map({ prediction in
-//                return prediction.vehicleID ?? ""
-//            })
-//            if vehicleIDs.count > 0
-//            {
-//                self.vehicleIDs = vehicleIDs
-//            }
-//
-//            reloadPredictionTimesLabel()
-//
-//            if willLoadSchedule { return }
-//
-//            if vehicleIDs.count > 0
-//            {
-//                NotificationCenter.default.post(name: NSNotification.Name("FetchVehicleLocations"), object: nil)
-//            }
-//            else
-//            {
-//                OperationQueue.main.addOperation {
-//                    self.predictionTimesFinishedRefreshing()
-//                }
-//            }
-//        }
-//        else if let error = notification.userInfo!["error"] as? String
-//        {
-//            OperationQueue.main.addOperation {
-//                self.predictionTimesLabel.text = error
-//                self.predictionTimesFinishedRefreshing()
-//            }
-//        }
     }
     
     func fetchVehicleLocations(vehicleIDs: [String]) async
@@ -1515,78 +1485,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                 
                 self.busAnnotations = annotationsToSave
             }
-            break
         case .error:
             break
-        }
-    }
-    
-    @objc func receivePredictionTimes(_ notification: Notification)
-    {
-        var isCorrectDirectionStopID = true
-        if let notificationDirectionStopID = notification.userInfo!["directionStopID"] as? String, let currentDirectionTag = MapState.getCurrentDirection()?.tag, let currentStopTag = MapState.getCurrentStop()?.tag
-        {
-            isCorrectDirectionStopID = notificationDirectionStopID == currentStopTag + "-" + currentDirectionTag
-        }
-        if !isCorrectDirectionStopID
-        {
-            NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
-            return
-        }
-        
-        let willLoadSchedule = notification.userInfo!["willLoadSchedule"] as? Bool ?? false
-        
-        if !willLoadSchedule
-        {
-            NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
-            
-            OperationQueue.main.addOperation {
-                self.refreshButton.isEnabled = true
-                self.predictionTimesNavigationBar.topItem?.leftBarButtonItem = self.refreshButton
-                
-                self.activityIndicator.stopAnimating()
-            }
-        }
-        else
-        {
-            OperationQueue.main.addOperation {
-                self.predictionTimesProgressView.setProgress(0.5, animated: true)
-            }
-        }
-        
-        if let predictions = notification.userInfo!["predictions"] as? Array<PredictionTime>
-        {
-            self.predictions = predictions
-            
-            let vehicleIDs = predictions.map({ prediction in
-                return prediction.vehicleID ?? ""
-            })
-            if vehicleIDs.count > 0
-            {
-                self.vehicleIDs = vehicleIDs
-            }
-            
-            reloadPredictionTimesLabel()
-            
-            if willLoadSchedule { return }
-            
-            if vehicleIDs.count > 0
-            {
-                NotificationCenter.default.post(name: NSNotification.Name("FetchVehicleLocations"), object: nil)
-            }
-            else
-            {
-                OperationQueue.main.addOperation {
-                    self.predictionTimesFinishedRefreshing()
-                }
-            }
-        }
-        else if let error = notification.userInfo!["error"] as? String
-        {
-            OperationQueue.main.addOperation {
-                self.predictionTimesLabel.text = error
-                self.predictionTimesFinishedRefreshing()
-            }
         }
     }
     
@@ -1616,92 +1516,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                     self.centerOnVehicleButton.isEnabled = true
                 })
             }
-        }
-    }
-    
-    @objc func receiveVehicleLocations(_ notification: Notification)
-    {
-        NotificationCenter.default.removeObserver(self, name: notification.name, object: nil)
-        
-        if let notificationDirection = notification.userInfo!["direction"] as? String, let currentDirectionTag = MapState.getCurrentDirection()?.tag, notificationDirection != currentDirectionTag
-        {
-            return
-        }
-        
-        OperationQueue.main.addOperation {
-            self.predictionTimesFinishedRefreshing()
-            
-            var annotationsToSave = Dictionary<String,(annotation: BusAnnotation, annotationView: MKAnnotationView?, headingAnnotationView: MKAnnotationView?)>()
-            
-            let vehicleLocations = notification.userInfo!["vehicleLocations"] as! Array<(id: String, location: CLLocation, heading: Int)>
-            for vehicleLocation in vehicleLocations
-            {
-                if let busAnnotationTuple = self.busAnnotations[vehicleLocation.id]
-                {
-                    UIView.animate(withDuration: 1, animations: {
-                        busAnnotationTuple.annotation.coordinate = vehicleLocation.location.coordinate
-                    })
-                    busAnnotationTuple.annotation.heading = vehicleLocation.heading
-                }
-                else
-                {
-                    self.busAnnotations[vehicleLocation.id] = (annotation: BusAnnotation(coordinate: vehicleLocation.location.coordinate, heading: vehicleLocation.heading, id: vehicleLocation.id), annotationView: nil, headingAnnotationView: nil)
-                }
-                
-                if let annotationView = self.busAnnotations[vehicleLocation.id]?.annotationView
-                {
-                    annotationView.annotation = self.busAnnotations[vehicleLocation.id]!.annotation
-                }
-                else
-                {
-                    self.mainMapView.addAnnotation(self.busAnnotations[vehicleLocation.id]!.annotation)
-                }
-                
-                if let headingAnnotation = self.busAnnotations[vehicleLocation.id]!.annotation.headingAnnotation
-                {
-                    UIView.animate(withDuration: 1, animations: {
-                        headingAnnotation.coordinate = vehicleLocation.location.coordinate
-                    })
-                    headingAnnotation.headingValue = vehicleLocation.heading
-                    
-                    if let headingAnnotationView = self.busAnnotations[vehicleLocation.id]!.headingAnnotationView
-                    {
-                        let headingImage = UIImage(named: "HeadingIndicator" + self.darkImageAppend())!
-                        let busImageSize = headingAnnotation.busAnnotationViewImageSize ?? UIImage(named: "BusAnnotation")!.size
-                        
-                        UIView.animate(withDuration: 1, animations: {
-                            headingAnnotationView.centerOffset = CGPoint(x: 0, y: 0)
-                            headingAnnotationView.centerOffset = self.calculateOffsetForAnnotationView(busImageSize: busImageSize, headingImageSize: headingImage.size, headingValue: headingAnnotation.headingValue)
-                            headingAnnotationView.transform = self.calculateHeadingDegreeShift(headingValue: headingAnnotation.headingValue)
-                        })
-                    }
-                }
-                else
-                {
-                    let headingAnnotation = HeadingAnnotation(coordinate: vehicleLocation.location.coordinate, heading: vehicleLocation.heading, id: vehicleLocation.id)
-                    self.mainMapView.addAnnotation(headingAnnotation)
-                    
-                    self.busAnnotations[vehicleLocation.id]?.annotation.headingAnnotation = headingAnnotation
-                }
-                
-                annotationsToSave[vehicleLocation.id] = self.busAnnotations[vehicleLocation.id]
-            }
-            
-            for annotation in annotationsToSave
-            {
-                self.busAnnotations.removeValue(forKey: annotation.key)
-            }
-            
-            for annotation in self.busAnnotations
-            {
-                self.mainMapView.removeAnnotation(annotation.value.annotation)
-                if let headingAnnotation = annotation.value.annotation.headingAnnotation
-                {
-                    self.mainMapView.removeAnnotation(headingAnnotation)
-                }
-            }
-            
-            self.busAnnotations = annotationsToSave
         }
     }
     

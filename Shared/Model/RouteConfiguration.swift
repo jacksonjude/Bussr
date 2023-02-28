@@ -23,42 +23,6 @@ struct UmoIQRouteID: Codable
     }
 }
 
-class NextBusRouteList: Decodable
-{
-    var routeObjects: [NextBusRouteInfo]
-    
-    enum BaseRouteCodingKeys: String, CodingKey
-    {
-        case route
-    }
-    
-    class NextBusRouteInfo: Decodable
-    {
-        var tag: String
-        var title: String
-        
-        enum RouteInfoCodingKeys: String, CodingKey
-        {
-            case tag
-            case title
-        }
-        
-        required init(from decoder: Decoder) throws
-        {
-            let decodedContainer = try decoder.container(keyedBy: RouteInfoCodingKeys.self)
-            
-            self.tag = try decodedContainer.decode(String.self, forKey: .tag)
-            self.title = try decodedContainer.decode(String.self, forKey: .title)
-        }
-    }
-    
-    required init(from decoder: Decoder) throws
-    {
-        let baseContainer = try decoder.container(keyedBy: BaseRouteCodingKeys.self)
-        self.routeObjects = try baseContainer.decode([NextBusRouteInfo].self, forKey: .route)
-    }
-}
-
 protocol RouteConfiguration: Decodable
 {
     var tag: String { get set }
@@ -104,57 +68,6 @@ class UmoIQRouteConfiguration: RouteConfiguration
         
         self.directions = try routeContainer.decode([UmoIQDirectionConfiguration].self, forKey: .directions)
         self.stops = try routeContainer.decode([UmoIQStopConfiguration].self, forKey: .stops)
-    }
-}
-
-class NextBusRouteConfiguration: RouteConfiguration
-{
-    var tag: String
-    var title: String
-    var color: String
-    var oppositeColor: String
-    var revision: Int?
-    var directions: [DirectionConfiguration]
-    var stops: [StopConfiguration]
-    var scheduleJSON: String?
-    
-    enum BaseRouteCodingKeys: String, CodingKey
-    {
-        case route
-    }
-    
-    enum RouteCodingKeys: String, CodingKey
-    {
-        case tag
-        case title
-        case color
-        case oppositeColor
-        
-        case directionConfiguration = "direction"
-        case stopConfiguration = "stop"
-    }
-    
-    required init(from decoder: Decoder) throws
-    {
-        let baseContainer = try decoder.container(keyedBy: BaseRouteCodingKeys.self)
-        let routeContainer = try baseContainer.nestedContainer(keyedBy: RouteCodingKeys.self, forKey: .route)
-        
-        self.tag = try routeContainer.decode(String.self, forKey: .tag)
-        self.title = try routeContainer.decode(String.self, forKey: .title)
-        self.color = try routeContainer.decode(String.self, forKey: .color)
-        //self.oppositeColor = try routeContainer.decode(String.self, forKey: .oppositeColor)
-        self.oppositeColor = "FFFFFF"
-        
-        var directions = try? routeContainer.decode([NextBusDirectionConfiguration].self, forKey: .directionConfiguration)
-        if directions == nil
-        {
-            directions = [try routeContainer.decode(NextBusDirectionConfiguration.self, forKey: .directionConfiguration)]
-        }
-        self.directions = directions ?? []
-        
-        self.stops = try routeContainer.decode([NextBusStopConfiguration].self, forKey: .stopConfiguration)
-        
-        self.revision = nil
     }
 }
 
