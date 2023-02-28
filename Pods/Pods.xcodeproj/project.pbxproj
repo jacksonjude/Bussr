@@ -51,7 +51,7 @@
 
 /* Begin PBXFileReference section */
 		0515A42B7E60530F0C2BE66465DCE48F /* FloatingPanelController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FloatingPanelController.swift; path = Framework/Sources/FloatingPanelController.swift; sourceTree = "<group>"; };
-		090B47B1AB0A75A5F8B2A7DD409B34A5 /* Pods_BussrRecentExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_BussrRecentExtension.framework; path = "Pods-BussrRecentExtension.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		090B47B1AB0A75A5F8B2A7DD409B34A5 /* Pods_BussrRecentExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BussrRecentExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		099819D5DCA15AB9D51893E854827B04 /* Pods-BussrRecentExtension-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-BussrRecentExtension-umbrella.h"; sourceTree = "<group>"; };
 		0A52D247A8ED07BFEF1917AC3628065E /* FloatingPanel.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FloatingPanel.debug.xcconfig; sourceTree = "<group>"; };
 		19C3483EF810DCB8E07CFC7E77194395 /* Pods-Bussr.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Bussr.release.xcconfig"; sourceTree = "<group>"; };
@@ -71,7 +71,7 @@
 		64541E34D41CC4BAF9DD5C21556867AE /* FloatingPanelLayout.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FloatingPanelLayout.swift; path = Framework/Sources/FloatingPanelLayout.swift; sourceTree = "<group>"; };
 		6C49258679759E601AE11E55E62B4EC2 /* Pods-BussrFavoritesExtension-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-BussrFavoritesExtension-dummy.m"; sourceTree = "<group>"; };
 		6C67BB9A43BB1D92CA73133C7E9F5ACB /* FloatingPanel.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FloatingPanel.release.xcconfig; sourceTree = "<group>"; };
-		6FAAB7D3DE9B2564509ABD18687E938E /* FloatingPanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = FloatingPanel.framework; path = FloatingPanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6FAAB7D3DE9B2564509ABD18687E938E /* FloatingPanel.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FloatingPanel.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		723414BB7144315D21641E25502C73FD /* Pods-BussrFavoritesExtension-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-BussrFavoritesExtension-acknowledgements.markdown"; sourceTree = "<group>"; };
 		747147E5C0578B68C3175A4CFB9CB2E6 /* Pods-BussrNearbyExtension-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BussrNearbyExtension-acknowledgements.plist"; sourceTree = "<group>"; };
 		7C55B0DE246DBF20E0B9D89FBD905F48 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS7.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -82,8 +82,8 @@
 		8B161C252A54EFCD00FDC8A87276A187 /* GrabberHandleView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = GrabberHandleView.swift; path = Framework/Sources/GrabberHandleView.swift; sourceTree = "<group>"; };
 		93CD4E886AB8EA5753A090BA78752FE0 /* Pods-BussrFavoritesExtension-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BussrFavoritesExtension-Info.plist"; sourceTree = "<group>"; };
 		98473AFB3CF4CE7DF06830499D1E03FC /* FloatingPanelSurfaceView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FloatingPanelSurfaceView.swift; path = Framework/Sources/FloatingPanelSurfaceView.swift; sourceTree = "<group>"; };
-		9959ECE863664B3B9D36470EBC1E371A /* Pods_BussrNearbyExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_BussrNearbyExtension.framework; path = "Pods-BussrNearbyExtension.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9959ECE863664B3B9D36470EBC1E371A /* Pods_BussrNearbyExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BussrNearbyExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9E892CA7569660589A3C012BD28F0B61 /* Pods-BussrRecentExtension-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BussrRecentExtension-Info.plist"; sourceTree = "<group>"; };
 		A0A409CFEBBB7492CE06464FA9325BC6 /* Pods-BussrFavoritesExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BussrFavoritesExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		A4970A775A6E73E6D6FF9717F29E5AF2 /* Pods-Bussr-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Bussr-dummy.m"; sourceTree = "<group>"; };
@@ -105,11 +105,11 @@
 		CC712E54A277CEFCA7CAA8DA9CC13DF9 /* Pods-Bussr.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Bussr.modulemap"; sourceTree = "<group>"; };
 		D2EBF502A2AC53C4A5055798013B3DCE /* Pods-Bussr-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Bussr-frameworks.sh"; sourceTree = "<group>"; };
 		D756073C0E04710E350E661749F52030 /* Pods-BussrRecentExtension.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-BussrRecentExtension.modulemap"; sourceTree = "<group>"; };
-		D951A79B468FCEB8AA5202FCCEC89BA0 /* Pods_BussrFavoritesExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_BussrFavoritesExtension.framework; path = "Pods-BussrFavoritesExtension.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D951A79B468FCEB8AA5202FCCEC89BA0 /* Pods_BussrFavoritesExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BussrFavoritesExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA4ED46A710C89637D65070764884BC2 /* Pods-BussrRecentExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BussrRecentExtension.release.xcconfig"; sourceTree = "<group>"; };
 		E3981D288135FDFDB2C486206B347EDB /* Pods-BussrNearbyExtension.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-BussrNearbyExtension.modulemap"; sourceTree = "<group>"; };
 		E668D4D76AE2D7F54240A19B014103B0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		EE196BE47C0DFFA31EED260B97E95B1F /* Pods_Bussr.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Bussr.framework; path = "Pods-Bussr.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE196BE47C0DFFA31EED260B97E95B1F /* Pods_Bussr.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bussr.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF590213DA751BEE0C7C592C5C4DFC80 /* FloatingPanelBackdropView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FloatingPanelBackdropView.swift; path = Framework/Sources/FloatingPanelBackdropView.swift; sourceTree = "<group>"; };
 		EFEADD6FF7A66E6A685F14D3CE90E810 /* FloatingPanel-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "FloatingPanel-Info.plist"; sourceTree = "<group>"; };
 		F1819ED39EB7F8E86E4F56F7E0707BB8 /* Pods-Bussr-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Bussr-acknowledgements.markdown"; sourceTree = "<group>"; };
@@ -118,7 +118,7 @@
 		F861ED40BEAA94C68A62931E96D3088A /* Pods-BussrWatchApp Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BussrWatchApp Extension.release.xcconfig"; sourceTree = "<group>"; };
 		FA6454011AC6145E10A6A0E4D2AE4CBB /* Pods-BussrFavoritesExtension-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-BussrFavoritesExtension-umbrella.h"; sourceTree = "<group>"; };
 		FC06E97170B29CC43DA037283C3C6018 /* Pods-BussrWatchApp Extension-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BussrWatchApp Extension-acknowledgements.plist"; sourceTree = "<group>"; };
-		FFE55B67A2EB2912D674054CF4E30D2E /* Pods_BussrWatchApp_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_BussrWatchApp_Extension.framework; path = "Pods-BussrWatchApp Extension.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FFE55B67A2EB2912D674054CF4E30D2E /* Pods_BussrWatchApp_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BussrWatchApp_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -273,7 +273,6 @@
 				B6CC438E4901F7F25083E14118C4515E /* UIExtensions.swift */,
 				A112AD7BA2C37B0F04D9AAE7CA4FA176 /* Support Files */,
 			);
-			name = FloatingPanel;
 			path = FloatingPanel;
 			sourceTree = "<group>";
 		};
@@ -530,7 +529,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1240;
-				LastUpgradeCheck = 1240;
+				LastUpgradeCheck = 1420;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 10.0";
@@ -969,6 +968,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1013,7 +1013,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/FloatingPanel/FloatingPanel-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/FloatingPanel/FloatingPanel-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1048,7 +1048,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/FloatingPanel/FloatingPanel-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/FloatingPanel/FloatingPanel-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1216,6 +1216,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;

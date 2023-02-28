@@ -13,15 +13,12 @@
 		7A068D1E212697DA00D3425E /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A068D01212646A700D3425E /* NotificationCenter.framework */; };
 		7A068D21212697DA00D3425E /* FavoritesExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D20212697DA00D3425E /* FavoritesExtensionViewController.swift */; };
 		7A068D24212697DA00D3425E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A068D22212697DA00D3425E /* MainInterface.storyboard */; };
-		7A068D28212697DA00D3425E /* Bussr – Favorites.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D1D212697DA00D3425E /* Bussr – Favorites.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7A068D31212697F000D3425E /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A068D01212646A700D3425E /* NotificationCenter.framework */; };
 		7A068D34212697F000D3425E /* RecentExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D33212697F000D3425E /* RecentExtensionViewController.swift */; };
 		7A068D37212697F000D3425E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A068D35212697F000D3425E /* MainInterface.storyboard */; };
-		7A068D3B212697F000D3425E /* Bussr – Recent.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D30212697F000D3425E /* Bussr – Recent.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7A068D442126980900D3425E /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A068D01212646A700D3425E /* NotificationCenter.framework */; };
 		7A068D472126980900D3425E /* NearbyExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D462126980900D3425E /* NearbyExtensionViewController.swift */; };
 		7A068D4A2126980900D3425E /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A068D482126980900D3425E /* MainInterface.storyboard */; };
-		7A068D4E2126980900D3425E /* Bussr – Nearby.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7A068D432126980900D3425E /* Bussr – Nearby.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7A068D52212698B900D3425E /* BussrExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D04212646A700D3425E /* BussrExtensionViewController.swift */; };
 		7A068D53212698BA00D3425E /* BussrExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D04212646A700D3425E /* BussrExtensionViewController.swift */; };
 		7A068D54212698BA00D3425E /* BussrExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D04212646A700D3425E /* BussrExtensionViewController.swift */; };
@@ -152,27 +149,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		7A068D26212697DA00D3425E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7AD81DFE20D6E60C004BAB1E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7A068D1C212697DA00D3425E;
-			remoteInfo = MuniTrackerFavoritesExtension;
-		};
-		7A068D39212697F000D3425E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7AD81DFE20D6E60C004BAB1E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7A068D2F212697F000D3425E;
-			remoteInfo = MuniTrackerRecentExtension;
-		};
-		7A068D4C2126980900D3425E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7AD81DFE20D6E60C004BAB1E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7A068D422126980900D3425E;
-			remoteInfo = MuniTrackerNearbyExtension;
-		};
 		7AFD5CB223F009EB00AFFEEF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7AD81DFE20D6E60C004BAB1E /* Project object */;
@@ -189,9 +165,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				7A068D4E2126980900D3425E /* Bussr – Nearby.appex in Embed Foundation Extensions */,
-				7A068D3B212697F000D3425E /* Bussr – Recent.appex in Embed Foundation Extensions */,
-				7A068D28212697DA00D3425E /* Bussr – Favorites.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -745,9 +718,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				7A068D27212697DA00D3425E /* PBXTargetDependency */,
-				7A068D3A212697F000D3425E /* PBXTargetDependency */,
-				7A068D4D2126980900D3425E /* PBXTargetDependency */,
 			);
 			name = Bussr;
 			productName = MuniTracker;
@@ -1009,6 +979,8 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"$(SRCROOT)/Bussr/LaunchScreen.storyboard",
+				"$(SRCROOT)/Bussr/Main.storyboard",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1240,21 +1212,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		7A068D27212697DA00D3425E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7A068D1C212697DA00D3425E /* BussrFavoritesExtension */;
-			targetProxy = 7A068D26212697DA00D3425E /* PBXContainerItemProxy */;
-		};
-		7A068D3A212697F000D3425E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7A068D2F212697F000D3425E /* BussrRecentExtension */;
-			targetProxy = 7A068D39212697F000D3425E /* PBXContainerItemProxy */;
-		};
-		7A068D4D2126980900D3425E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7A068D422126980900D3425E /* BussrNearbyExtension */;
-			targetProxy = 7A068D4C2126980900D3425E /* PBXContainerItemProxy */;
-		};
 		7AFD5CB323F009EB00AFFEEF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 7AFD5CAF23F009EB00AFFEEF /* BussrWatchApp Extension */;
