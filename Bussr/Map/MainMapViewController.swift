@@ -1364,6 +1364,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         switch predictionsFetchResult
         {
         case .success(let predictions):
+            self.predictions = predictions
+            
             let vehicleIDs = predictions.map({ prediction in
                 return prediction.vehicleID ?? ""
             })

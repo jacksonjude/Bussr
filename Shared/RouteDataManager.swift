@@ -223,8 +223,8 @@ class RouteDataManager
         }
                 
         await self.loadRouteInfo(routeDictionary: BARTRouteDictionary, sortedRouteKeys: BARTSortedRouteKeys, agencyTag: BARTAPI.BARTAgencyTag, listHash: BARTRouteListHash, configHashes: BARTRouteConfigHashes, fetchRouteConfig: fetchBARTRouteInfo) { (routeConfig: inout RouteConfiguration, routeConfigurationDictionary, backgroundMOC, configHashes, agencyTag) -> (route: Route, justCreated: Bool)? in
-            var routeAbbr = (routeConfig as! BARTRouteConfiguration).abbr
             let routeNumber = routeConfig.tag
+            var routeAbbr = BARTRouteDictionary[routeNumber] ?? (routeConfig as! BARTRouteConfiguration).abbr
 
             let routeStartEnd = routeAbbr.split(separator: "-")
             let reverseRouteAbbr = String(routeStartEnd[1] + "-" + routeStartEnd[0])
@@ -238,7 +238,7 @@ class RouteDataManager
                 reverseRouteAbbrUsed = routeNumber > reverseRouteNumber!
                 tempRouteAbbr = routeNumber < reverseRouteNumber! ? routeAbbr : reverseRouteAbbr
             }
-
+            
             if reverseRouteAbbrUsed
             {
                 routesSaved += 1
@@ -665,11 +665,13 @@ class RouteDataManager
         guard let bartPredictionContainer: BARTPredictionContainer = await fetchFromAPISource(api: BARTAPI.self, path: BARTAPI.predictionsPath, args: ["orig":stop.tag!]) else {
             return .error(reason: "Connection Error")
         }
-        let predictionTimes = bartPredictionContainer.routes.reduce(Array<BARTPredictionTime>()) { partialResult, routePredictions in
+        let routePredictions = bartPredictionContainer.stations.first?.routes
+        let predictionTimes = routePredictions?.reduce(Array<BARTPredictionTime>()) { partialResult, routePredictions in
+            if routePredictions.abbreviation != String(direction.tag!.split(separator: "-")[1]) { return partialResult }
             return partialResult + routePredictions.predictions.filter { prediction in
-                return prediction.hexColor == route.color
+                return prediction.hexColor == ("#" + (route.color?.lowercased() ?? ""))
             }
-        }
+        } ?? []
         return .success(predictions: predictionTimes)
     }
     

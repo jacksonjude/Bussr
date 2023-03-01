@@ -60,7 +60,14 @@ class UmoIQPredictionTime: PredictionTime
     enum CodingKeys: String, CodingKey
     {
         case time = "minutes"
-        case vehicleID
+        case vehicleID = "vehicleId"
+    }
+    
+    required init(from decoder: Decoder) throws
+    {
+        let predictionDecoder = try decoder.container(keyedBy: CodingKeys.self)
+        self.time = String(try predictionDecoder.decode(Int.self, forKey: .time))
+        self.vehicleID = try predictionDecoder.decode(String.self, forKey: .vehicleID)
     }
 }
 
@@ -82,7 +89,7 @@ class UmoIQRouteVehicleLocation: VehicleLocation
 
 class BARTPredictionContainer: Codable
 {
-    var routes: Array<BARTRoutePredictions>
+    var stations: Array<BARTStationPredictions>
     
     enum RootCodingKeys: String, CodingKey
     {
@@ -94,18 +101,21 @@ class BARTPredictionContainer: Codable
         case station
     }
     
-    enum RoutesCodingKeys: String, CodingKey
-    {
-        case routes = "etd"
-    }
-    
     required init(from decoder: Decoder) throws
     {
         let rootContainer = try decoder.container(keyedBy: RootCodingKeys.self)
         let baseStationsContainer = try rootContainer.nestedContainer(keyedBy: StationCodingKeys.self, forKey: .root)
-        let baseStationContainer = try baseStationsContainer.nestedContainer(keyedBy: RoutesCodingKeys.self, forKey: .station)
-        
-        self.routes = try baseStationContainer.decode([BARTRoutePredictions].self, forKey: .routes)
+        self.stations = try baseStationsContainer.decode([BARTStationPredictions].self, forKey: .station)
+    }
+}
+
+class BARTStationPredictions: Codable
+{
+    var routes: Array<BARTRoutePredictions>
+    
+    enum CodingKeys: String, CodingKey
+    {
+        case routes = "etd"
     }
 }
 
