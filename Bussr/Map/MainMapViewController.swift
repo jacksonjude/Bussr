@@ -158,6 +158,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         setupThemeElements()
         setupCenterMapButtons()
         setupNavItemTitleView()
+        setupVehicleSelectionButtonGestures()
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -234,6 +235,17 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         titleLabel.minimumScaleFactor = 0.5
         titleLabel.text = "Map"
         self.mainNavigationItem.titleView = titleLabel
+    }
+    
+    func setupVehicleSelectionButtonGestures()
+    {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(vehiclesButtonSingleTap))
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(vehiclesButtonLongPress))
+        
+        self.vehicleSelectionButton.addGestureRecognizer(tapGesture)
+        self.vehicleSelectionButton.addGestureRecognizer(longPressGesture)
+        
+        tapGesture.require(toFail: longPressGesture)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -506,9 +518,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         centerMapOnLocation(location: stopLocation)
     }
     
-    @IBAction func centerMapOnSelectedVehicleButton()
+    @IBAction func centerMapOnSelectedVehicle()
     {
-        if MapState.routeInfoShowing != .stop { return }
+        if MapState.routeInfoShowing != .stop && MapState.routeInfoShowing != .vehicles { return }
         guard let selectedVehicleID = MapState.selectedVehicleID else { return }
         guard let selectedVehicleCoordinate = self.busAnnotations[selectedVehicleID]?.annotation.coordinate else { return }
         
@@ -1340,6 +1352,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             self.refreshButton.isEnabled = false
             self.predictionTimesNavigationBar.topItem?.leftBarButtonItem = nil
             
+            self.vehicleSelectionButton.isEnabled = false
+            
             if self.predictionNavigationBarShowing
             {
                 self.activityIndicator.startAnimating()
@@ -1526,9 +1540,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         self.refreshButton.isEnabled = true
         self.predictionTimesNavigationBar.topItem?.leftBarButtonItem = self.refreshButton
         
+        self.vehicleSelectionButton.isEnabled = true
+        
         self.activityIndicator.stopAnimating()
         
-        if MapState.routeInfoShowing != .stop { return }
+        if MapState.routeInfoShowing != .stop && MapState.routeInfoShowing != .vehicles { return }
         
         setupPredictionRefreshTimer()
         
@@ -1577,6 +1593,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     func toggleVehiclesMenu() {
         if MapState.routeInfoShowing != .vehicles && vehicleIDs.count == predictions.count
         {
+            stopPredictionRefreshTimer()
+            hidePredictionTimesProgressView()
+            
             var predictionVehicleArray = Array<(vehicleID: String, prediction: String)>()
             
             var vehicleOn = 0
@@ -1593,6 +1612,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         }
         else if MapState.routeInfoShowing == .vehicles
         {
+            setupPredictionRefreshTimer()
+            
             MapState.routeInfoObject = MapState.getCurrentDirection()
             MapState.routeInfoShowing = .stop
         }
@@ -1607,7 +1628,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         if let selectedVehicleID = MapState.selectedVehicleID, var selectedVehicleIndex = vehicleIDs.firstIndex(of: selectedVehicleID)
         {
-            if selectedVehicleIndex != 0 && selectedVehicleIndex < vehicleIDs.count-1
+            if selectedVehicleIndex+1 < vehicleIDs.count
             {
                 selectedVehicleIndex += 1
             }
@@ -1654,6 +1675,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         }
         
         busAnnotations[MapState.selectedVehicleID ?? ""]?.annotationView?.image = UIImage(named: "BusAnnotationDark")
+        
+        centerMapOnSelectedVehicle()
     }
     
     @IBAction func vehiclesButtonSingleTap(_ sender: Any) {
@@ -1667,7 +1690,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         }
     }
     
-    @IBAction func vehiclesButtonDoubleTap(_ sender: Any) {
+    @IBAction func vehiclesButtonLongPress(_ sender: Any) {
+        if MapState.routeInfoShowing == .vehicles { return }
         toggleVehiclesMenu()
     }
 }

@@ -208,16 +208,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="qxQ-2e-hnA">
-                    <connections>
-                        <action selector="vehiclesButtonSingleTap:" destination="BYZ-38-t0r" id="Z9n-64-Q6l"/>
-                    </connections>
-                </tapGestureRecognizer>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="ibI-HP-xa6">
-                    <connections>
-                        <action selector="vehiclesButtonDoubleTap:" destination="BYZ-38-t0r" id="UVz-mJ-2Bg"/>
-                    </connections>
-                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="31.199999999999999" y="32.512315270935964"/>
         </scene>

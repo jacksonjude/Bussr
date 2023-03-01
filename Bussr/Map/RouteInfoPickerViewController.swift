@@ -216,9 +216,33 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             }
             else
             {
-                let vehiclePrediction = (routeInfoToChange[row-1] as? (vehicleID: String, prediction: String))
-                title = String(row) + " - " + (vehiclePrediction?.prediction ?? "")
-                title! += " mins - id: " + (vehiclePrediction?.vehicleID ?? "")
+                if let vehiclePrediction = (routeInfoToChange[row-1] as? (vehicleID: String?, prediction: String))
+                {
+                    let predictionInt = Int(vehiclePrediction.prediction)
+                    var predictionString = vehiclePrediction.prediction
+                    if (predictionInt == 0)
+                    {
+                        predictionString = "Now"
+                    }
+                    else if (predictionInt == 1)
+                    {
+                        predictionString += " min"
+                    }
+                    else
+                    {
+                        predictionString += " mins"
+                    }
+                    
+                    title = predictionString
+                    if let vehicleID = vehiclePrediction.vehicleID
+                    {
+                        title! += " ID: " + vehicleID
+                    }
+                }
+                else
+                {
+                    title = "?"
+                }
             }
         }
         
