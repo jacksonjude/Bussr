@@ -124,7 +124,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     var stopAnnotations = Dictionary<String,StopAnnotation>()
     var directionPolyline: MKPolyline?
     var borderPolyline: MKPolyline?
-    var busAnnotations = Dictionary<String,(annotation: BusAnnotation, annotationView: MKAnnotationView?, headingAnnotationView: MKAnnotationView?)>()
+    var busAnnotations = Dictionary<String,BusAnnotation>()
     var vehicleIDs = Array<String>()
     var predictions = Array<PredictionTime>()
     var selectedStopHeading: SelectedStopHeadingAnnotation?
@@ -474,7 +474,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         NotificationCenter.default.addObserver(self, selector: #selector(showPickerView), name: NSNotification.Name("ShowRouteInfoPickerView"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hidePickerView), name: NSNotification.Name("HideRouteInfoPickerView"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(predictionTimesFinishedRefreshing), name: NSNotification.Name("UpdateCountdownProgressBar"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(setupPredictionRefreshTimer), name: NSNotification.Name("StartPredictionRefresh"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(startPredictionRefreshTimer), name: NSNotification.Name("StartPredictionRefresh"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(stopPredictionRefreshTimer), name: NSNotification.Name("StopPredictionRefresh"), object: nil)
     }
     
@@ -522,7 +522,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     {
         if MapState.routeInfoShowing != .stop && MapState.routeInfoShowing != .vehicles { return }
         guard let selectedVehicleID = MapState.selectedVehicleID else { return }
-        guard let selectedVehicleCoordinate = self.busAnnotations[selectedVehicleID]?.annotation.coordinate else { return }
+        guard let selectedVehicleCoordinate = self.busAnnotations[selectedVehicleID]?.coordinate else { return }
         
         centerMapOnLocation(location: CLLocation(latitude: selectedVehicleCoordinate.latitude, longitude: selectedVehicleCoordinate.longitude))
     }
@@ -919,7 +919,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         }
         else if annotation is BusAnnotation
         {
-            if let annotationView = busAnnotations[(annotation as! BusAnnotation).id]?.annotationView
+            if let annotation = busAnnotations[(annotation as! BusAnnotation).id], let annotationView = mainMapView.view(for: annotation)
             {
                 annotationView.annotation = annotation
                 
@@ -932,8 +932,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             annotationView.centerOffset = CGPoint(x: 0, y: -annotationView.image!.size.height/2)
             
             (annotation as! BusAnnotation).headingAnnotation?.busAnnotationViewImageSize = annotationView.image?.size
-            
-            busAnnotations[(annotation as! BusAnnotation).id]?.annotationView = annotationView
             
             return annotationView
         }
@@ -949,8 +947,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             annotationView.transform = calculateHeadingDegreeShift(headingValue: headingAnnotation.headingValue)
             
             annotationView.isEnabled = false
-            
-            self.busAnnotations[headingAnnotation.id]?.headingAnnotationView = annotationView
             
             return annotationView
         }
@@ -1015,9 +1011,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         {
             busAnnotation.isMapKitSelected = true
             
-            if MapState.selectedVehicleID != nil
+            if let selectedVehicleID = MapState.selectedVehicleID, busAnnotation.id != selectedVehicleID, let annotation = busAnnotations[selectedVehicleID]
             {
-                busAnnotations[MapState.selectedVehicleID!]?.annotationView?.image = UIImage(named: "BusAnnotation")
+                mainMapView.deselectAnnotation(annotation, animated: true)
             }
             
             MapState.selectedVehicleID = busAnnotation.id
@@ -1036,6 +1032,14 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         if let busAnnotation = view.annotation as? BusAnnotation
         {
             busAnnotation.isMapKitSelected = false
+            
+            if let selectedVehicleID = MapState.selectedVehicleID, selectedVehicleID == busAnnotation.id
+            {
+                MapState.selectedVehicleID = nil
+                reloadPredictionTimesLabel()
+            }
+            
+            view.image = UIImage(named: "BusAnnotation")
         }
     }
     
@@ -1279,7 +1283,16 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         return !self.predictionTimesNavigationBar.isHidden
     }
     
-    @objc func setupPredictionRefreshTimer()
+    @objc func startPredictionRefreshTimer()
+    {
+        if MapState.routeInfoShowing == .stop
+        {
+            setupPredictionRefreshTimer()
+            refreshPredictionNavigationBar()
+        }
+    }
+    
+    func setupPredictionRefreshTimer()
     {
         if predictionRefreshTimer?.isValid ?? false { return }
         
@@ -1422,37 +1435,40 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         {
         case .success(let vehicleLocations):
             OperationQueue.main.addOperation {
-                var annotationsToSave = Dictionary<String,(annotation: BusAnnotation, annotationView: MKAnnotationView?, headingAnnotationView: MKAnnotationView?)>()
+                var annotationsToSave = Dictionary<String,BusAnnotation>()
                 
                 for vehicleLocation in vehicleLocations
                 {
                     let locationCoordinate = CLLocationCoordinate2D(latitude: vehicleLocation.latitude, longitude: vehicleLocation.longitude)
                     
-                    if let busAnnotationTuple = self.busAnnotations[vehicleLocation.vehicleID]
+                    let busAnnotation: BusAnnotation
+                    if let annotation = self.busAnnotations[vehicleLocation.vehicleID]
                     {
                         UIView.animate(withDuration: 1, animations: {
-                            busAnnotationTuple.annotation.coordinate = locationCoordinate
+                            annotation.coordinate = locationCoordinate
                         })
                         if let heading = vehicleLocation.heading
                         {
-                            busAnnotationTuple.annotation.heading = heading
+                            annotation.heading = heading
                         }
+                        busAnnotation = annotation
                     }
                     else
                     {
-                        self.busAnnotations[vehicleLocation.vehicleID] = (annotation: BusAnnotation(coordinate: locationCoordinate, heading: vehicleLocation.heading ?? 0, id: vehicleLocation.vehicleID), annotationView: nil, headingAnnotationView: nil)
+                        busAnnotation = BusAnnotation(coordinate: locationCoordinate, heading: vehicleLocation.heading ?? 0, id: vehicleLocation.vehicleID)
+                        self.busAnnotations[vehicleLocation.vehicleID] = busAnnotation
                     }
                     
-                    if let annotationView = self.busAnnotations[vehicleLocation.vehicleID]?.annotationView
+                    if let annotationView = self.mainMapView.view(for: busAnnotation)
                     {
-                        annotationView.annotation = self.busAnnotations[vehicleLocation.vehicleID]!.annotation
+                        annotationView.annotation = busAnnotation
                     }
                     else
                     {
-                        self.mainMapView.addAnnotation(self.busAnnotations[vehicleLocation.vehicleID]!.annotation)
+                        self.mainMapView.addAnnotation(busAnnotation)
                     }
-                    
-                    if let headingAnnotation = self.busAnnotations[vehicleLocation.vehicleID]!.annotation.headingAnnotation
+
+                    if let headingAnnotation = busAnnotation.headingAnnotation
                     {
                         UIView.animate(withDuration: 1, animations: {
                             headingAnnotation.coordinate = locationCoordinate
@@ -1461,12 +1477,12 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                         {
                             headingAnnotation.headingValue = heading
                         }
-                        
-                        if let headingAnnotationView = self.busAnnotations[vehicleLocation.vehicleID]!.headingAnnotationView
+
+                        if let headingAnnotationView = self.mainMapView.view(for: headingAnnotation)
                         {
                             let headingImage = UIImage(named: "HeadingIndicator" + self.darkImageAppend())!
                             let busImageSize = headingAnnotation.busAnnotationViewImageSize ?? UIImage(named: "BusAnnotation")!.size
-                            
+
                             UIView.animate(withDuration: 1, animations: {
                                 headingAnnotationView.centerOffset = CGPoint(x: 0, y: 0)
                                 headingAnnotationView.centerOffset = self.calculateOffsetForAnnotationView(busImageSize: busImageSize, headingImageSize: headingImage.size, headingValue: headingAnnotation.headingValue)
@@ -1478,11 +1494,11 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                     {
                         let headingAnnotation = HeadingAnnotation(coordinate: locationCoordinate, heading: vehicleLocation.heading ?? 0, id: vehicleLocation.vehicleID)
                         self.mainMapView.addAnnotation(headingAnnotation)
-                        
-                        self.busAnnotations[vehicleLocation.vehicleID]?.annotation.headingAnnotation = headingAnnotation
+
+                        busAnnotation.headingAnnotation = headingAnnotation
                     }
                     
-                    annotationsToSave[vehicleLocation.vehicleID] = self.busAnnotations[vehicleLocation.vehicleID]
+                    annotationsToSave[vehicleLocation.vehicleID] = busAnnotation
                 }
                 
                 for annotation in annotationsToSave
@@ -1492,8 +1508,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                 
                 for annotation in self.busAnnotations
                 {
-                    self.mainMapView.removeAnnotation(annotation.value.annotation)
-                    if let headingAnnotation = annotation.value.annotation.headingAnnotation
+                    self.mainMapView.removeAnnotation(annotation.value)
+                    if let headingAnnotation = annotation.value.headingAnnotation
                     {
                         self.mainMapView.removeAnnotation(headingAnnotation)
                     }
@@ -1646,8 +1662,8 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         if vehicleIndexToSelect == -1
         {
-            updateSelectedVehicle()
             MapState.selectedVehicleID = nil
+            updateSelectedVehicle()
         }
         else
         {
@@ -1660,21 +1676,18 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     
     func updateSelectedVehicle()
     {
-        let darkBusIcon = UIImage(named: "BusAnnotationDark")
         for busAnnotation in busAnnotations
         {
-            if busAnnotation.value.annotationView?.image == darkBusIcon
+            if busAnnotation.value.isMapKitSelected && MapState.selectedVehicleID != busAnnotation.value.id
             {
-                busAnnotation.value.annotationView?.image = UIImage(named: "BusAnnotation")
-            }
-            
-            if busAnnotation.value.annotation.isMapKitSelected && MapState.selectedVehicleID != nil
-            {
-                mainMapView.deselectAnnotation(busAnnotations[MapState.selectedVehicleID!]?.annotation, animated: false)
+                mainMapView.deselectAnnotation(busAnnotation.value, animated: false)
             }
         }
         
-        busAnnotations[MapState.selectedVehicleID ?? ""]?.annotationView?.image = UIImage(named: "BusAnnotationDark")
+        if let selectedVehicleID = MapState.selectedVehicleID, let annotation = busAnnotations[selectedVehicleID]
+        {
+            mainMapView.selectAnnotation(annotation, animated: true)
+        }
         
         centerMapOnSelectedVehicle()
     }
