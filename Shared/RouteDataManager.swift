@@ -202,16 +202,9 @@ class RouteDataManager
             routeObject.tag = routeConfig.tag
             routeObject.title = routeConfig.title
 
-            if routeObject.serverHash == configHashes[routeConfig.tag] && configHashes[routeConfig.tag] != nil
+            if let updatedHash = configHashes[routeConfig.tag]
             {
-                routesSaved += 1
-                checkForCompletedRoutes()
-
-                return nil
-            }
-            else if configHashes.keys.contains(routeConfig.tag)
-            {
-                routeObject.serverHash = configHashes[routeConfig.tag]
+                routeObject.serverHash = updatedHash
             }
 
             print(agencyTag + " - " + routeConfig.tag)
@@ -249,30 +242,10 @@ class RouteDataManager
 
             let routeFetchCallback = CoreDataStack.fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "tag == %@", BARTAPI.BARTAgencyTag + "-" + tempRouteAbbr), moc: backgroundMOC)
             let routeObject = routeFetchCallback.object as! Route
-            
-            let serverHash = routeObject.serverHash
-            let serverHashSplit = serverHash?.split(separator: "-")
                         
-            if serverHashSplit?.count == 2 && String(serverHashSplit?[reverseRouteAbbrUsed ? 1 : 0] ?? "") == configHashes[BARTAPI.BARTAgencyTag + "-" + routeNumber] && routeObject.directions?.array.count == 2 && configHashes[BARTAPI.BARTAgencyTag + "-" + routeNumber] != nil
+            if let updatedHash = configHashes[BARTAPI.BARTAgencyTag + "-" + routeNumber]
             {
-                routesSaved += 1
-                checkForCompletedRoutes()
-
-                return nil
-            }
-            else if configHashes.keys.contains(BARTAPI.BARTAgencyTag + "-" + routeNumber)
-            {
-                let updatedHash = configHashes[BARTAPI.BARTAgencyTag + "-" + routeNumber] ?? " "
-                if reverseRouteAbbrUsed
-                {
-                    let serverHash1 = serverHashSplit?.count ?? 0 >= 1 ? serverHashSplit![0] : " "
-                    routeObject.serverHash = serverHash1 + "-" + updatedHash
-                }
-                else
-                {
-                    let serverHash2 = serverHashSplit?.count ?? 0 >= 2 ? serverHashSplit![1] : " "
-                    routeObject.serverHash = updatedHash + "-" + serverHash2
-                }
+                routeObject.serverHash = updatedHash
             }
 
             print(agencyTag + " - " + routeAbbr)
@@ -306,16 +279,26 @@ class RouteDataManager
     
     static func loadRouteInfo(routeDictionary: Dictionary<String,String>, sortedRouteKeys: Array<String>, agencyTag: String, listHash: String, configHashes: Dictionary<String,String>, fetchRouteConfig: (_ routeTag: String) async -> RouteConfiguration?, setRouteFields: @escaping (_ routeConfig: inout RouteConfiguration, _ routeConfigurationDictionary: Dictionary<String,RouteConfiguration>, _ backgroundMOC: NSManagedObjectContext, _ configHashes: Dictionary<String,String>, _ agencyTag: String) -> (route: Route, justCreated: Bool)?) async
     {
+        let backgroundMOC = CoreDataStack.persistentContainer.newBackgroundContext()
+        
         var routeConfigurations = Dictionary<String,RouteConfiguration>()
         for routeTag in sortedRouteKeys
         {
-            updateRouteFetchProgress(routeTagOn: routeTag)
+            updateRouteFetchProgress(routeTagOn: "Fetching " + agencyTag + " " + routeTag)
             routesFetched += 1
+            
+            var route: Route?
+            await backgroundMOC.perform {
+                route = CoreDataStack.fetchObject(type: "Route", predicate: NSPredicate(format: "tag == %@", routeTag), moc: backgroundMOC) as? Route
+            }
+            if let route = route, route.serverHash != nil, route.serverHash == configHashes[routeTag] { continue }
+            
             guard let routeConfig = await fetchRouteConfig(routeTag) else { continue }
             routeConfigurations[routeTag] = routeConfig
         }
         
-        let backgroundMOC = CoreDataStack.persistentContainer.newBackgroundContext()
+        updateRouteFetchProgress(routeTagOn: "Saving " + agencyTag)
+        
         await backgroundMOC.perform {
             let agencyFetchCallback = CoreDataStack.fetchOrCreateObject(type: "Agency", predicate: NSPredicate(format: "name == %@", agencyTag), moc: backgroundMOC)
             let agency = agencyFetchCallback.object as! Agency
