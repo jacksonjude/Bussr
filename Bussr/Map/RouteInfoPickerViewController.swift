@@ -15,6 +15,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
 {
     var routeInfoToChange = Array<Any>()
     @IBOutlet weak var routeInfoPicker: UIPickerView!
+    @IBOutlet weak var confirmDirectionButton: UIButton!
     @IBOutlet weak var directionButton: UIButton!
     @IBOutlet weak var otherDirectionsButton: UIButton!
     @IBOutlet weak var addFavoriteButton: UIButton!
@@ -101,6 +102,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             {
                 filterButton.setFilterImage()
             }
+            self.confirmDirectionButton.setImage(UIImage(named: "ConfirmIcon"), for: UIControl.State.normal)
             self.directionButton.setImage(UIImage(named: "DirectionIcon"), for: UIControl.State.normal)
             self.otherDirectionsButton.setImage(UIImage(named: "BusStopIcon"), for: UIControl.State.normal)
             self.expandFiltersButton.setImage(UIImage(named: "FilterIcon"), for: UIControl.State.normal)
@@ -113,6 +115,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             {
                 filterButton.setFilterImage()
             }
+            self.confirmDirectionButton.setImage(UIImage(named: "ConfirmIconDark"), for: UIControl.State.normal)
             self.directionButton.setImage(UIImage(named: "DirectionIconDark"), for: UIControl.State.normal)
             self.otherDirectionsButton.setImage(UIImage(named: "BusStopIconDark"), for: UIControl.State.normal)
             self.expandFiltersButton.setImage(UIImage(named: "FilterIconDark"), for: UIControl.State.normal)
@@ -290,8 +293,10 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 
                 disableFilterButtons()
                 
-                directionButton.isHidden = false
-                directionButton.isEnabled = true
+                confirmDirectionButton.isHidden = false
+                confirmDirectionButton.isEnabled = true
+                directionButton.isHidden = true
+                directionButton.isEnabled = false
                 
                 otherDirectionsButton.isHidden = true
                 otherDirectionsButton.isEnabled = false
@@ -308,6 +313,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 
                 showFilterButtons()
                 
+                confirmDirectionButton.isHidden = true
+                confirmDirectionButton.isEnabled = false
                 directionButton.isHidden = false
                 directionButton.isEnabled = true
                 
@@ -319,12 +326,15 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
 //                addNotificationButton.isHidden = false
 //                addNotificationButton.isEnabled = true
                 
+                if (routeInfoToChange as! Array<Stop>).count < 1 { break }
                 rowToSelect = (routeInfoToChange as! Array<Stop>).firstIndex(of: (routeInfoToChange as! Array<Stop>).filter({$0.tag == MapState.selectedStopTag}).first ?? (routeInfoToChange as! Array<Stop>)[0]) ?? 0
             case .otherDirections:
                 routeInfoToChange = MapState.routeInfoObject as? Array<Direction> ?? Array<Direction>()
                 
                 disableFilterButtons()
                 
+                confirmDirectionButton.isHidden = true
+                confirmDirectionButton.isEnabled = false
                 directionButton.isHidden = true
                 directionButton.isEnabled = false
                 
@@ -333,12 +343,15 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 addNotificationButton.isHidden = true
                 addNotificationButton.isEnabled = false
                 
+                if (routeInfoToChange as! Array<Direction>).count < 1 { break }
                 rowToSelect = (routeInfoToChange as! Array<Direction>).firstIndex(of: (routeInfoToChange as! Array<Direction>).filter({$0.tag == MapState.selectedDirectionTag}).first ?? (routeInfoToChange as! Array<Direction>)[0]) ?? 0
             case .vehicles:
                 routeInfoToChange = MapState.routeInfoObject as? Array<(vehicleID: String, prediction: String)> ?? Array<(vehicleID: String, prediction: String)>()
                 
                 disableFilterButtons()
                 
+                confirmDirectionButton.isHidden = true
+                confirmDirectionButton.isEnabled = false
                 directionButton.isHidden = true
                 directionButton.isEnabled = false
                 
@@ -356,7 +369,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                     if vehicle.vehicleID == MapState.selectedVehicleID
                     {
                         rowToSelect = vehicleOn + 1
-                        
                         break
                     }
                     
@@ -405,13 +417,18 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         }
     }
     
+    @IBAction func confirmDirectionButtonPressed(_ sender: Any) {
+        if MapState.routeInfoShowing == .direction
+        {
+            switchRouteInfoDirectionToStop()
+            reloadRouteData()
+        }
+    }
+    
     @IBAction func directionButtonSingleTap()
     {
-        switch MapState.routeInfoShowing
+        if MapState.routeInfoShowing == .stop
         {
-        case .direction:
-            switchRouteInfoDirectionToStop()
-        case .stop:
             let route = (MapState.routeInfoObject as? Direction)?.route
             
             if route?.directions?.count == 2
@@ -422,14 +439,11 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             {
                 switchRouteInfoStopToDirection()
             }
-        default:
-            break
+            reloadRouteData()
         }
-        
-        reloadRouteData()
     }
     
-    @IBAction func directionButtonDoubleTap()
+    @IBAction func directionButtonLongPress()
     {
         if MapState.routeInfoShowing == .stop
         {

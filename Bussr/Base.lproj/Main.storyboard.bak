@@ -881,7 +881,7 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ze-eL-qKp">
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ze-eL-qKp">
                                         <rect key="frame" x="5" y="0.0" width="40" height="40"/>
                                         <gestureRecognizers/>
                                         <constraints>
@@ -892,6 +892,18 @@
                                         <connections>
                                             <action selector="directionButtonSingleTap" destination="4Mg-kq-ULL" eventType="touchUpInside" id="vEw-dx-U7N"/>
                                             <outletCollection property="gestureRecognizers" destination="l4X-ph-qKr" appends="YES" id="CjE-u3-xfB"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pjM-4Z-1m8">
+                                        <rect key="frame" x="5" y="0.0" width="40" height="40"/>
+                                        <gestureRecognizers/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="40" id="33l-za-0dl"/>
+                                            <constraint firstAttribute="height" constant="40" id="bBS-kJ-ogC"/>
+                                        </constraints>
+                                        <state key="normal" image="ConfirmIcon"/>
+                                        <connections>
+                                            <action selector="confirmDirectionButtonPressed:" destination="4Mg-kq-ULL" eventType="touchUpInside" id="mB1-4V-crO"/>
                                         </connections>
                                     </button>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nba-YH-9qK">
@@ -918,6 +930,8 @@
                                     <constraint firstItem="Ltc-3h-TBo" firstAttribute="top" secondItem="pF5-Ns-70G" secondAttribute="top" id="Jk0-kK-hNn"/>
                                     <constraint firstAttribute="trailing" secondItem="Ltc-3h-TBo" secondAttribute="trailing" id="Pe7-V6-wYT"/>
                                     <constraint firstItem="Ca3-us-lKS" firstAttribute="leading" secondItem="pF5-Ns-70G" secondAttribute="leading" constant="8" id="TCe-qz-dyp"/>
+                                    <constraint firstItem="pjM-4Z-1m8" firstAttribute="leading" secondItem="pF5-Ns-70G" secondAttribute="leading" constant="5" id="TwO-iU-7L4"/>
+                                    <constraint firstItem="pjM-4Z-1m8" firstAttribute="top" secondItem="pF5-Ns-70G" secondAttribute="top" id="XhO-o7-x46"/>
                                     <constraint firstItem="Nba-YH-9qK" firstAttribute="leading" secondItem="7ze-eL-qKp" secondAttribute="trailing" constant="8" id="XiM-dt-m0E"/>
                                     <constraint firstItem="7ze-eL-qKp" firstAttribute="leading" secondItem="pF5-Ns-70G" secondAttribute="leading" constant="5" id="Z2j-1t-04Q"/>
                                     <constraint firstItem="7CU-sp-HUo" firstAttribute="top" secondItem="pF5-Ns-70G" secondAttribute="top" id="aRP-3r-6wq"/>
@@ -950,6 +964,7 @@
                     <connections>
                         <outlet property="addFavoriteButton" destination="BJ7-Gc-wPu" id="cqo-Ve-5zi"/>
                         <outlet property="addNotificationButton" destination="Ca3-us-lKS" id="Oyb-9H-nug"/>
+                        <outlet property="confirmDirectionButton" destination="pjM-4Z-1m8" id="Tz9-gy-KXF"/>
                         <outlet property="directionButton" destination="7ze-eL-qKp" id="Akc-uS-dXf"/>
                         <outlet property="expandFiltersButton" destination="7CU-sp-HUo" id="hJZ-84-EDR"/>
                         <outlet property="otherDirectionsButton" destination="Nba-YH-9qK" id="MyU-2d-O7N"/>
@@ -968,7 +983,7 @@
                 </pongPressGestureRecognizer>
                 <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.29999999999999999" id="l4X-ph-qKr">
                     <connections>
-                        <action selector="directionButtonDoubleTap" destination="4Mg-kq-ULL" id="5TQ-us-Sgi"/>
+                        <action selector="directionButtonLongPress" destination="4Mg-kq-ULL" id="5TQ-us-Sgi"/>
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
@@ -1637,6 +1652,7 @@
         <image name="CenterBusButton" width="40" height="40"/>
         <image name="CenterLocationButton" width="25" height="25"/>
         <image name="CenterStopButton" width="30" height="30"/>
+        <image name="ConfirmIcon" width="64" height="64"/>
         <image name="DirectionIcon" width="64" height="64"/>
         <image name="FavoriteAddIcon" width="30" height="30"/>
         <image name="FavoriteMenuIcon" width="40" height="38"/>
