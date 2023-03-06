@@ -55,7 +55,7 @@ class CoreDataStack {
         
         if firstLaunch
         {
-            copyPreloadedRouteData(appGroupContainerURL: appGroupContainerURL)
+//            copyPreloadedRouteData(appGroupContainerURL: appGroupContainerURL)
         }
         
         let localStoreDescription = NSPersistentStoreDescription()

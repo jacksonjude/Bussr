@@ -48,6 +48,8 @@
 		7A4930C420D788EA008208D1 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A4930C320D788EA008208D1 /* MapKit.framework */; };
 		7A50EECD2107DAE700B69B92 /* StopsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A50EECC2107DAE700B69B92 /* StopsTableViewController.swift */; };
 		7A61EF8420D77BE100481037 /* RouteInfoPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */; };
+		7A69BFF729B16B4B005CD3F8 /* RouteInfoPickerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7A69BFF629B16B4B005CD3F8 /* RouteInfoPickerCell.xib */; };
+		7A69BFF929B1712B005CD3F8 /* RouteInfoPickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A69BFF829B1712B005CD3F8 /* RouteInfoPickerCell.swift */; };
 		7A71722B20D70943002144D5 /* RoutesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A71722A20D70943002144D5 /* RoutesTableViewController.swift */; };
 		7A7C9BDB24E8885500752C3A /* FavoritesWatchInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7C9BDA24E8885500752C3A /* FavoritesWatchInterfaceController.swift */; };
 		7A7C9BDD24E88A5E00752C3A /* RecentWatchInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7C9BDC24E88A5E00752C3A /* RecentWatchInterfaceController.swift */; };
@@ -229,6 +231,8 @@
 		7A50EECC2107DAE700B69B92 /* StopsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopsTableViewController.swift; sourceTree = "<group>"; };
 		7A5A32E024A563D500740067 /* Bussr.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Bussr.entitlements; sourceTree = "<group>"; };
 		7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoPickerViewController.swift; sourceTree = "<group>"; };
+		7A69BFF629B16B4B005CD3F8 /* RouteInfoPickerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RouteInfoPickerCell.xib; sourceTree = "<group>"; };
+		7A69BFF829B1712B005CD3F8 /* RouteInfoPickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoPickerCell.swift; sourceTree = "<group>"; };
 		7A71722A20D70943002144D5 /* RoutesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutesTableViewController.swift; sourceTree = "<group>"; };
 		7A7C9BDA24E8885500752C3A /* FavoritesWatchInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesWatchInterfaceController.swift; sourceTree = "<group>"; };
 		7A7C9BDC24E88A5E00752C3A /* RecentWatchInterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentWatchInterfaceController.swift; sourceTree = "<group>"; };
@@ -462,6 +466,8 @@
 			children = (
 				7AD81E0B20D6E60C004BAB1E /* MainMapViewController.swift */,
 				7A61EF8320D77BE100481037 /* RouteInfoPickerViewController.swift */,
+				7A69BFF829B1712B005CD3F8 /* RouteInfoPickerCell.swift */,
+				7A69BFF629B16B4B005CD3F8 /* RouteInfoPickerCell.xib */,
 				7AB9E9A223EFF30B002E7D67 /* RouteInfoPanelTipViewController.swift */,
 				7A7FE2B420DB4761005B654C /* MapState.swift */,
 				7AA5E4B721E2D28E0039CCDD /* FilterButton.swift */,
@@ -889,6 +895,7 @@
 				7AD81E1420D6E60D004BAB1E /* Assets.xcassets in Resources */,
 				7AD81E0F20D6E60C004BAB1E /* Main.storyboard in Resources */,
 				7AD54E2C2404B48000968615 /* AppIcon-2@3x.png in Resources */,
+				7A69BFF729B16B4B005CD3F8 /* RouteInfoPickerCell.xib in Resources */,
 				7AC95C482408A70F00AC364F /* Bussr.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1177,6 +1184,7 @@
 				7AB9E9A323EFF30B002E7D67 /* RouteInfoPanelTipViewController.swift in Sources */,
 				7AA5E4B821E2D28E0039CCDD /* FilterButton.swift in Sources */,
 				7AD81E0A20D6E60C004BAB1E /* AppDelegate.swift in Sources */,
+				7A69BFF929B1712B005CD3F8 /* RouteInfoPickerCell.swift in Sources */,
 				7A71722B20D70943002144D5 /* RoutesTableViewController.swift in Sources */,
 				7A23176A2171212F00D12F21 /* NotificationEditorState.swift in Sources */,
 				7A193A26216AE4B6009D866A /* NotificationManager.swift in Sources */,

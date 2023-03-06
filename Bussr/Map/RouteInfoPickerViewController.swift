@@ -11,7 +11,7 @@ import UIKit
 import CoreData
 import CoreLocation
 
-class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate
+class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UIGestureRecognizerDelegate
 {
     var routeInfoToChange = Array<Any>()
     @IBOutlet weak var routeInfoPicker: UIPickerView!
@@ -54,6 +54,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         setupFilterButtons()
         
         reloadRouteData()
+        
+        setupTapGesture()
     }
     
     func setupFilterButtons()
@@ -70,6 +72,18 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         }
         filterButtons.append(locationButton)
         filterButtons.append(favoriteButton)
+    }
+    
+    func setupTapGesture()
+    {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(routeInfoPickerTapped(tapRecognizer:)))
+        tap.cancelsTouchesInView = false
+        tap.delegate = self
+        routeInfoPicker.addGestureRecognizer(tap)
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
     
     var viewDidJustAppear = false
@@ -252,8 +266,32 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         return NSAttributedString(string: title ?? "", attributes: [:])
     }
     
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        if let view = view as? RouteInfoPickerCell, view.row == row
+        {
+            return view
+        }
+        
+        let cellNib = UINib(nibName: "RouteInfoPickerCell", bundle: nil)
+        let cellView = cellNib.instantiate(withOwner: self).first as! RouteInfoPickerCell
+        
+        cellView.frame = CGRect(x: 0, y: 0, width: pickerView.frame.width-20, height: 40)
+        
+        cellView.row = row
+        cellView.labelText = self.pickerView(pickerView, attributedTitleForRow: row, forComponent: component)
+        
+        cellView.isAddFavoriteButtonHidden = !(MapState.routeInfoShowing == .stop && routeInfoToChange.count > 0)
+        if MapState.routeInfoShowing == .stop, let stops = self.routeInfoToChange as? Array<Stop>, row < stops.count, let direction = MapState.getCurrentDirection()
+        {
+            let stop = stops[row]
+            cellView.isAddFavoriteButtonFilled = RouteDataManager.favoriteStopExists(stopTag: stop.tag!, directionTag: direction.tag!)
+        }
+        
+        return cellView
+    }
+    
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-        return 30
+        return 40
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -270,6 +308,52 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             {
                 filterButton.filterIsEnabled = MapState.locationFilterEnabled
                 filterButton.setFilterImage()
+            }
+        }
+    }
+    
+    @objc func routeInfoPickerTapped(tapRecognizer: UITapGestureRecognizer)
+    {
+        let rowHeight = self.routeInfoPicker.rowSize(forComponent: 0).height
+        let selectedRowFrame = CGRectInset(self.routeInfoPicker.bounds, 0.0, ((self.routeInfoPicker.frame).height - rowHeight) / 2.0)
+        
+        let selectedRow = self.routeInfoPicker.selectedRow(inComponent: 0)
+        guard let rowView = self.routeInfoPicker.view(forRow: selectedRow, forComponent: 0) as? RouteInfoPickerCell else { return }
+        
+        if rowView.isAddFavoriteButtonHidden { return }
+        
+        let touchIsInFrame = selectedRowFrame.contains(tapRecognizer.location(in: self.routeInfoPicker)) && rowView.addFavoriteButtonArea.frame.contains(tapRecognizer.location(in: rowView))
+        
+        if touchIsInFrame
+        {
+            switch tapRecognizer.state
+            {
+            case .began:
+                rowView.isAddFavoriteButtonPressed = true
+            case .changed:
+                break
+            case .ended:
+                rowView.isAddFavoriteButtonPressed = false
+                rowView.isAddFavoriteButtonFilled = !rowView.isAddFavoriteButtonFilled
+                toggleFavoriteForSelectedStop()
+                
+                NotificationCenter.default.post(name: NSNotification.Name("UpdateRoutePickerInfoCell"), object: nil, userInfo: ["row": selectedRow, "isAddFavoriteButtonFilled": rowView.isAddFavoriteButtonFilled])
+            case .cancelled, .failed:
+                rowView.isAddFavoriteButtonPressed = false
+            default:
+                break
+            }
+        }
+        else if rowView.isAddFavoriteButtonPressed
+        {
+            switch tapRecognizer.state
+            {
+            case .began:
+                break
+            case .changed, .ended, .cancelled, .failed:
+                rowView.isAddFavoriteButtonPressed = false
+            default:
+                break
             }
         }
     }
@@ -301,10 +385,10 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 otherDirectionsButton.isHidden = true
                 otherDirectionsButton.isEnabled = false
                 
-                addFavoriteButton.isHidden = true
-                addFavoriteButton.isEnabled = false
-                addNotificationButton.isHidden = true
-                addNotificationButton.isEnabled = false
+//                addFavoriteButton.isHidden = true
+//                addFavoriteButton.isEnabled = false
+//                addNotificationButton.isHidden = true
+//                addNotificationButton.isEnabled = false
                 
                 if (routeInfoToChange as! Array<Direction>).count < 1 { break }
                 rowToSelect = (routeInfoToChange as! Array<Direction>).firstIndex(of: (routeInfoToChange as! Array<Direction>).filter({$0.tag == MapState.selectedDirectionTag}).first ?? (routeInfoToChange as! Array<Direction>)[0]) ?? 0
@@ -321,8 +405,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 otherDirectionsButton.isHidden = false
                 otherDirectionsButton.isEnabled = true
                 
-                addFavoriteButton.isHidden = false
-                addFavoriteButton.isEnabled = true
+//                addFavoriteButton.isHidden = false
+//                addFavoriteButton.isEnabled = true
 //                addNotificationButton.isHidden = false
 //                addNotificationButton.isEnabled = true
                 
@@ -338,10 +422,10 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 directionButton.isHidden = true
                 directionButton.isEnabled = false
                 
-                addFavoriteButton.isHidden = true
-                addFavoriteButton.isEnabled = false
-                addNotificationButton.isHidden = true
-                addNotificationButton.isEnabled = false
+//                addFavoriteButton.isHidden = true
+//                addFavoriteButton.isEnabled = false
+//                addNotificationButton.isHidden = true
+//                addNotificationButton.isEnabled = false
                 
                 if (routeInfoToChange as! Array<Direction>).count < 1 { break }
                 rowToSelect = (routeInfoToChange as! Array<Direction>).firstIndex(of: (routeInfoToChange as! Array<Direction>).filter({$0.tag == MapState.selectedDirectionTag}).first ?? (routeInfoToChange as! Array<Direction>)[0]) ?? 0
@@ -358,10 +442,10 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 otherDirectionsButton.isHidden = true
                 otherDirectionsButton.isEnabled = false
                 
-                addFavoriteButton.isHidden = true
-                addFavoriteButton.isEnabled = false
-                addNotificationButton.isHidden = true
-                addNotificationButton.isEnabled = false
+//                addFavoriteButton.isHidden = true
+//                addFavoriteButton.isEnabled = false
+//                addNotificationButton.isHidden = true
+//                addNotificationButton.isEnabled = false
                 
                 var vehicleOn = 0
                 for vehicle in routeInfoToChange as! Array<(vehicleID: String, prediction: String)>
@@ -402,10 +486,10 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 
                 if self.routeInfoToChange.count == 0
                 {
-                    self.addFavoriteButton.isHidden = true
-                    self.addFavoriteButton.isEnabled = false
-                    self.addNotificationButton.isHidden = true
-                    self.addNotificationButton.isEnabled = false
+//                    self.addFavoriteButton.isHidden = true
+//                    self.addFavoriteButton.isEnabled = false
+//                    self.addNotificationButton.isHidden = true
+//                    self.addNotificationButton.isEnabled = false
                 }
                 
                 NotificationCenter.default.post(name: NSNotification.Name("UpdateRouteMap"), object: nil, userInfo: ["ChangingRouteInfoShowing":true])
