@@ -18,8 +18,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     @IBOutlet weak var confirmDirectionButton: UIButton!
     @IBOutlet weak var directionButton: UIButton!
     @IBOutlet weak var otherDirectionsButton: UIButton!
-    @IBOutlet weak var addFavoriteButton: UIButton!
-    @IBOutlet weak var addNotificationButton: UIButton!
     @IBOutlet weak var expandFiltersButton: UIButton!
     @IBOutlet weak var swipeBar: UIView!
     @IBOutlet weak var routeInfoPickerContainer: UIView!
@@ -44,7 +42,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         NotificationCenter.default.addObserver(self, selector: #selector(collapseFilters), name: NSNotification.Name("CollapseFilters"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(enableFilters), name: NSNotification.Name("EnableFilters"), object: nil)
         
-        setFavoriteButtonImage(inverse: false)
         setupThemeElements()
         
         panelTipHeightConstraint.constant = DisplayConstants.panelTipSize
@@ -120,8 +117,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             self.directionButton.setImage(UIImage(named: "DirectionIcon"), for: UIControl.State.normal)
             self.otherDirectionsButton.setImage(UIImage(named: "BusStopIcon"), for: UIControl.State.normal)
             self.expandFiltersButton.setImage(UIImage(named: "FilterIcon"), for: UIControl.State.normal)
-            self.addNotificationButton.setImage(UIImage(named: "BellAddIcon"), for: UIControl.State.normal)
-            setFavoriteButtonImage(inverse: false)
             
             self.view.backgroundColor = UIColor.white.withAlphaComponent(DisplayConstants.mapAlphaValue)
         case .dark:
@@ -133,8 +128,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             self.directionButton.setImage(UIImage(named: "DirectionIconDark"), for: UIControl.State.normal)
             self.otherDirectionsButton.setImage(UIImage(named: "BusStopIconDark"), for: UIControl.State.normal)
             self.expandFiltersButton.setImage(UIImage(named: "FilterIconDark"), for: UIControl.State.normal)
-            self.addNotificationButton.setImage(UIImage(named: "BellAddIconDark"), for: UIControl.State.normal)
-            setFavoriteButtonImage(inverse: false)
             
             self.view.backgroundColor = UIColor.black.withAlphaComponent(DisplayConstants.mapAlphaValue)
         }
@@ -385,11 +378,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 otherDirectionsButton.isHidden = true
                 otherDirectionsButton.isEnabled = false
                 
-//                addFavoriteButton.isHidden = true
-//                addFavoriteButton.isEnabled = false
-//                addNotificationButton.isHidden = true
-//                addNotificationButton.isEnabled = false
-                
                 if (routeInfoToChange as! Array<Direction>).count < 1 { break }
                 rowToSelect = (routeInfoToChange as! Array<Direction>).firstIndex(of: (routeInfoToChange as! Array<Direction>).filter({$0.tag == MapState.selectedDirectionTag}).first ?? (routeInfoToChange as! Array<Direction>)[0]) ?? 0
             case .stop:
@@ -405,11 +393,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 otherDirectionsButton.isHidden = false
                 otherDirectionsButton.isEnabled = true
                 
-//                addFavoriteButton.isHidden = false
-//                addFavoriteButton.isEnabled = true
-//                addNotificationButton.isHidden = false
-//                addNotificationButton.isEnabled = true
-                
                 if (routeInfoToChange as! Array<Stop>).count < 1 { break }
                 rowToSelect = (routeInfoToChange as! Array<Stop>).firstIndex(of: (routeInfoToChange as! Array<Stop>).filter({$0.tag == MapState.selectedStopTag}).first ?? (routeInfoToChange as! Array<Stop>)[0]) ?? 0
             case .otherDirections:
@@ -421,11 +404,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 confirmDirectionButton.isEnabled = false
                 directionButton.isHidden = true
                 directionButton.isEnabled = false
-                
-//                addFavoriteButton.isHidden = true
-//                addFavoriteButton.isEnabled = false
-//                addNotificationButton.isHidden = true
-//                addNotificationButton.isEnabled = false
                 
                 if (routeInfoToChange as! Array<Direction>).count < 1 { break }
                 rowToSelect = (routeInfoToChange as! Array<Direction>).firstIndex(of: (routeInfoToChange as! Array<Direction>).filter({$0.tag == MapState.selectedDirectionTag}).first ?? (routeInfoToChange as! Array<Direction>)[0]) ?? 0
@@ -441,11 +419,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                 
                 otherDirectionsButton.isHidden = true
                 otherDirectionsButton.isEnabled = false
-                
-//                addFavoriteButton.isHidden = true
-//                addFavoriteButton.isEnabled = false
-//                addNotificationButton.isHidden = true
-//                addNotificationButton.isEnabled = false
                 
                 var vehicleOn = 0
                 for vehicle in routeInfoToChange as! Array<(vehicleID: String, prediction: String)>
@@ -480,16 +453,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                     self.routeInfoPicker.selectRow(rowToSelect, inComponent: 0, animated: true)
                     
                     self.updateSelectedObjectTags()
-                    
-                    self.setFavoriteButtonImage(inverse: false)
-                }
-                
-                if self.routeInfoToChange.count == 0
-                {
-//                    self.addFavoriteButton.isHidden = true
-//                    self.addFavoriteButton.isEnabled = false
-//                    self.addNotificationButton.isHidden = true
-//                    self.addNotificationButton.isEnabled = false
                 }
                 
                 NotificationCenter.default.post(name: NSNotification.Name("UpdateRouteMap"), object: nil, userInfo: ["ChangingRouteInfoShowing":true])
@@ -569,7 +532,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     {
         updateSelectedObjectTags()
         NotificationCenter.default.post(name: NSNotification.Name("UpdateRouteMap"), object: nil, userInfo: ["ChangingRouteInfoShowing":false])
-        setFavoriteButtonImage(inverse: false)
     }
     
     func updateSelectedObjectTags()
@@ -924,12 +886,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
                     
                     self.pickerSelectedRow()
                 }
-                
-                if self.routeInfoToChange.count == 0
-                {
-                    self.addFavoriteButton.isHidden = true
-                    self.addFavoriteButton.isEnabled = false
-                }
             }
         }
     }
@@ -994,37 +950,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         appDelegate.mainMapViewController?.openNearbyStopViewFromSelectedStop(sender)
     }
     
-    //MARK: - Add Favorite / Notification
-    
-    @IBAction func addFavoriteButtonPressed(_ sender: Any) {
-        setFavoriteButtonImage(inverse: true)
-        
-        toggleFavoriteForSelectedStop()
-    }
-    
-    func setFavoriteButtonImage(inverse: Bool)
-    {
-        if MapState.selectedStopTag != nil
-        {
-            if let stop = MapState.getCurrentStop(), let direction = MapState.getCurrentDirection()
-            {
-                var stopIsFavorite = RouteDataManager.favoriteStopExists(stopTag: stop.tag!, directionTag: direction.tag!)
-                if inverse
-                {
-                    stopIsFavorite = !stopIsFavorite
-                }
-                
-                if stopIsFavorite
-                {
-                    addFavoriteButton.setImage(UIImage(named:  "FavoriteAddFillIcon\(darkImageAppend())"), for: UIControl.State.normal)
-                }
-                else
-                {
-                    addFavoriteButton.setImage(UIImage(named:  "FavoriteAddIcon\(darkImageAppend())"), for: UIControl.State.normal)
-                }
-            }
-        }
-    }
+    //MARK: - Add Notification
     
     @IBAction func addNotificationButtonPressed(_ sender: Any) {
         CoreDataStack.persistentContainer.performBackgroundTask { moc in            
