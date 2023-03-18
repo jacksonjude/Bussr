@@ -73,7 +73,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     
     func setupTapGesture()
     {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(routeInfoPickerTapped(tapRecognizer:)))
+        let tap = UILongPressGestureRecognizer(target: self, action: #selector(routeInfoPickerTapped(tapRecognizer:)))
+        tap.minimumPressDuration = 0
         tap.cancelsTouchesInView = false
         tap.delegate = self
         routeInfoPicker.addGestureRecognizer(tap)
@@ -305,7 +306,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         }
     }
     
-    @objc func routeInfoPickerTapped(tapRecognizer: UITapGestureRecognizer)
+    @objc func routeInfoPickerTapped(tapRecognizer: UIGestureRecognizer)
     {
         let rowHeight = self.routeInfoPicker.rowSize(forComponent: 0).height
         let selectedRowFrame = CGRectInset(self.routeInfoPicker.bounds, 0.0, ((self.routeInfoPicker.frame).height - rowHeight) / 2.0)
@@ -324,7 +325,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             case .began:
                 rowView.isAddFavoriteButtonPressed = true
             case .changed:
-                break
+                rowView.isAddFavoriteButtonPressed = true
             case .ended:
                 rowView.isAddFavoriteButtonPressed = false
                 rowView.isAddFavoriteButtonFilled = !rowView.isAddFavoriteButtonFilled

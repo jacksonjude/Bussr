@@ -96,8 +96,22 @@ class RouteInfoPickerCell: UIView
             self.addFavoriteButtonImage.image = UIImage(named: "FavoriteAdd\(isAddFavoriteButtonFilled ? "Fill" : "")IconDark")
         }
         
+        if self.isAddFavoriteButtonPressed, let cgImage = self.addFavoriteButtonImage.image?.cgImage
+        {
+            let ciImage = CIImage(cgImage: cgImage)
+            
+            let context = CIContext(options: nil)
+            let brightnessFilter = CIFilter(name: "CIColorControls")!
+            brightnessFilter.setValue(ciImage, forKey: "inputImage")
+            brightnessFilter.setValue(-0.2, forKey: "inputBrightness")
+            let outputImage = brightnessFilter.outputImage!
+            let cgimg = context.createCGImage(outputImage, from: outputImage.extent)
+            
+            self.addFavoriteButtonImage.image = UIImage(cgImage: cgimg!)
+        }
+        
         UIView.animate(withDuration: 0.1, delay: 0.0) {
-            self.backgroundColor = self.isAddFavoriteButtonFilled ? UIColor(red: 245/255, green: 185/255, blue: 66/255, alpha: 0.7) : UIColor.clear
+            self.backgroundColor = self.isAddFavoriteButtonFilled ? UIColor(red: 245/255, green: 161/255, blue: 14/255, alpha: 0.45) : UIColor.clear
         }
     }
 }
