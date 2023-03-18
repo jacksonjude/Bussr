@@ -838,28 +838,6 @@
                                             <outlet property="delegate" destination="4Mg-kq-ULL" id="UND-UU-i1M"/>
                                         </connections>
                                     </pickerView>
-                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BJ7-Gc-wPu">
-                                        <rect key="frame" x="340" y="82.666666666666657" width="30" height="30"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="30" id="hyI-j5-wPP"/>
-                                            <constraint firstAttribute="height" constant="30" id="jJI-PF-KRv"/>
-                                        </constraints>
-                                        <state key="normal" image="FavoriteAddIcon"/>
-                                        <connections>
-                                            <action selector="addFavoriteButtonPressed:" destination="4Mg-kq-ULL" eventType="touchUpInside" id="HoY-y9-3Ik"/>
-                                        </connections>
-                                    </button>
-                                    <button hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ca3-us-lKS">
-                                        <rect key="frame" x="8" y="84" width="27" height="27"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="27" id="MfH-AP-S1F"/>
-                                            <constraint firstAttribute="width" constant="27" id="l3s-ZZ-HSt"/>
-                                        </constraints>
-                                        <state key="normal" image="BellAddIcon"/>
-                                        <connections>
-                                            <action selector="addNotificationButtonPressed:" destination="4Mg-kq-ULL" eventType="touchUpInside" id="aM1-XW-PR8"/>
-                                        </connections>
-                                    </button>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V1K-Xu-PoB">
                                         <rect key="frame" x="272" y="-5" width="103" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -923,13 +901,9 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="Ltc-3h-TBo" secondAttribute="bottom" id="3lY-wo-9Fi"/>
-                                    <constraint firstItem="Ca3-us-lKS" firstAttribute="centerY" secondItem="pF5-Ns-70G" secondAttribute="centerY" id="4q6-Op-ghK"/>
                                     <constraint firstItem="Nba-YH-9qK" firstAttribute="top" secondItem="pF5-Ns-70G" secondAttribute="top" id="9tL-mn-Pqx"/>
-                                    <constraint firstItem="BJ7-Gc-wPu" firstAttribute="centerY" secondItem="pF5-Ns-70G" secondAttribute="centerY" id="APJ-Hy-GYp"/>
-                                    <constraint firstAttribute="trailing" secondItem="BJ7-Gc-wPu" secondAttribute="trailing" constant="5" id="D2K-Lf-bop"/>
                                     <constraint firstItem="Ltc-3h-TBo" firstAttribute="top" secondItem="pF5-Ns-70G" secondAttribute="top" id="Jk0-kK-hNn"/>
                                     <constraint firstAttribute="trailing" secondItem="Ltc-3h-TBo" secondAttribute="trailing" id="Pe7-V6-wYT"/>
-                                    <constraint firstItem="Ca3-us-lKS" firstAttribute="leading" secondItem="pF5-Ns-70G" secondAttribute="leading" constant="8" id="TCe-qz-dyp"/>
                                     <constraint firstItem="pjM-4Z-1m8" firstAttribute="leading" secondItem="pF5-Ns-70G" secondAttribute="leading" constant="5" id="TwO-iU-7L4"/>
                                     <constraint firstItem="pjM-4Z-1m8" firstAttribute="top" secondItem="pF5-Ns-70G" secondAttribute="top" id="XhO-o7-x46"/>
                                     <constraint firstItem="Nba-YH-9qK" firstAttribute="leading" secondItem="7ze-eL-qKp" secondAttribute="trailing" constant="8" id="XiM-dt-m0E"/>
@@ -962,8 +936,6 @@
                     </view>
                     <size key="freeformSize" width="375" height="281"/>
                     <connections>
-                        <outlet property="addFavoriteButton" destination="BJ7-Gc-wPu" id="cqo-Ve-5zi"/>
-                        <outlet property="addNotificationButton" destination="Ca3-us-lKS" id="Oyb-9H-nug"/>
                         <outlet property="confirmDirectionButton" destination="pjM-4Z-1m8" id="Tz9-gy-KXF"/>
                         <outlet property="directionButton" destination="7ze-eL-qKp" id="Akc-uS-dXf"/>
                         <outlet property="expandFiltersButton" destination="7CU-sp-HUo" id="hJZ-84-EDR"/>
@@ -1646,7 +1618,6 @@
         <segue reference="IdA-st-vvj"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <image name="BellAddIcon" width="30" height="30"/>
         <image name="BusIcon" width="60" height="60"/>
         <image name="BusStopIcon" width="64" height="64"/>
         <image name="CenterBusButton" width="40" height="40"/>
@@ -1654,7 +1625,6 @@
         <image name="CenterStopButton" width="30" height="30"/>
         <image name="ConfirmIcon" width="64" height="64"/>
         <image name="DirectionIcon" width="64" height="64"/>
-        <image name="FavoriteAddIcon" width="30" height="30"/>
         <image name="FavoriteMenuIcon" width="40" height="38"/>
         <image name="FilterIcon" width="64" height="58.333332061767578"/>
         <image name="HistoryIcon" width="40" height="40"/>

@@ -1149,7 +1149,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     }
     
     var locationToUse: CLLocation?
-    @objc func openNearbyStopViewFromSelectedStop(_ sender: Any)
+    @objc func openNearbyStopViewFromSelectedStop(_ sender: UIGestureRecognizer)
     {
         if let currentStop = MapState.getCurrentStop()
         {
@@ -1302,6 +1302,37 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         {
             self.predictionRefreshTimer?.invalidate()
             self.predictionRefreshTimer = Timer.scheduledTimer(timeInterval: refreshTime, target: self, selector: #selector(self.refreshPredictionNavigationBar), userInfo: nil, repeats: true)
+        }
+    }
+    
+    func animatePredictionRefreshProgressBar()
+    {
+        if self.predictionTimesProgressView.isHidden || self.currentlyAnimatingPredictionTimesProgressView { return }
+        currentlyAnimatingPredictionTimesProgressView = true
+        
+        self.predictionTimesProgressView.setProgress(1, animated: true)
+        
+        let shouldShowRefreshTimeOnPredictionTimesProgressView = true
+        
+        if shouldShowRefreshTimeOnPredictionTimesProgressView, let nextPredictionRefreshTime = self.predictionRefreshTimer?.fireDate
+        {
+            self.predictionTimesProgressView.tintColor = UIColor.systemBlue
+            UIView.animate(withDuration: 0.5, animations: {
+                self.predictionTimesProgressView.layoutIfNeeded()
+            })
+            
+            let timeLeftToPredictionRefresh = nextPredictionRefreshTime.timeIntervalSince1970-Date().timeIntervalSince1970
+            
+            self.predictionTimesProgressView.setProgress(0.001, animated: false)
+            UIView.animate(withDuration: timeLeftToPredictionRefresh, delay: 0, options: [.curveLinear]) {
+                self.predictionTimesProgressView.layoutIfNeeded()
+            } completion: { complete in
+                self.currentlyAnimatingPredictionTimesProgressView = false
+            }
+        }
+        else
+        {
+            self.hidePredictionTimesProgressView()
         }
     }
     
@@ -1564,33 +1595,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         setupPredictionRefreshTimer()
         
-        if self.predictionTimesProgressView.isHidden || self.currentlyAnimatingPredictionTimesProgressView { return }
-        currentlyAnimatingPredictionTimesProgressView = true
-        
-        self.predictionTimesProgressView.setProgress(1, animated: true)
-        
-        let shouldShowRefreshTimeOnPredictionTimesProgressView = true
-        
-        if shouldShowRefreshTimeOnPredictionTimesProgressView, let nextPredictionRefreshTime = self.predictionRefreshTimer?.fireDate
-        {
-            self.predictionTimesProgressView.tintColor = UIColor.systemBlue
-            UIView.animate(withDuration: 0.5, animations: {
-                self.predictionTimesProgressView.layoutIfNeeded()
-            })
-            
-            let timeLeftToPredictionRefresh = nextPredictionRefreshTime.timeIntervalSince1970-Date().timeIntervalSince1970
-            
-            self.predictionTimesProgressView.setProgress(0.001, animated: false)
-            UIView.animate(withDuration: timeLeftToPredictionRefresh, delay: 0, options: [.curveLinear]) {
-                self.predictionTimesProgressView.layoutIfNeeded()
-            } completion: { complete in
-                self.currentlyAnimatingPredictionTimesProgressView = false
-            }
-        }
-        else
-        {
-            self.hidePredictionTimesProgressView()
-        }
+        animatePredictionRefreshProgressBar()
     }
     
     func hidePredictionTimesProgressView()

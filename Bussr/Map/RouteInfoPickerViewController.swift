@@ -945,8 +945,10 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
         }
     }
     
-    @IBAction func otherDirectionsButtonDoubleTapped(_ sender: Any)
+    @IBAction func otherDirectionsButtonDoubleTapped(_ sender: UIGestureRecognizer)
     {
+        if sender.state != .began { return }
+        
         appDelegate.mainMapViewController?.openNearbyStopViewFromSelectedStop(sender)
     }
     
