@@ -34,7 +34,7 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         organizeSegmentControl.selectedSegmentIndex = FavoriteState.favoritesOrganizeType.rawValue
         
         setupThemeElements()
-        setupOrganizeTypeStuff()
+        setupForOrganizeType()
     }
     
     @objc func finishedCloudFetch(_ notification: Notification)
@@ -69,10 +69,10 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
     override func viewDidAppear(_ animated: Bool) {
         setupThemeElements()
         
-        setupOrganizeTypeStuff()
+        setupForOrganizeType()
     }
     
-    func setupOrganizeTypeStuff()
+    func setupForOrganizeType()
     {
         if FavoriteState.favoritesOrganizeType == .group
         {
@@ -537,11 +537,6 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
             
             openFavoriteStop(favoriteStop: favoriteStop)
         case .stop:
-            let stopObject = favoriteStopSet![indexPath.row]
-            
-            MapState.selectedStopTag = stopObject.tag
-            MapState.routeInfoObject = stopObject.direction?.allObjects
-            
             self.performSegue(withIdentifier: "showDirectionStopTableView", sender: self)
             
             tableView.deselectRow(at: indexPath, animated: true)
@@ -651,6 +646,10 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
         if segue.identifier == "showDirectionStopTableView", let directionStopViewController = segue.destination as? DirectionsTableViewController
         {
             directionStopViewController.unwindSegueID = "UnwindFromDirectionStop"
+            guard let selectedRow = favoriteStopsTableView.indexPathForSelectedRow?.row else { return }
+            let stopObject = favoriteStopSet![selectedRow]
+            directionStopViewController.directionObjects = stopObject.direction?.allObjects as? Array<Direction>
+            directionStopViewController.stopTag = stopObject.tag
         }
         else if segue.identifier == "openFavoriteStopGroup"
         {
@@ -800,6 +799,6 @@ class FavoritesTableViewController: UIViewController, UITableViewDelegate, UITab
     
     @IBAction func unwindFromFavoriteGroupView(_ segue: UIStoryboardSegue)
     {
-        setupOrganizeTypeStuff()
+        setupForOrganizeType()
     }
 }

@@ -200,11 +200,11 @@
                         <outlet property="vehicleSelectionButton" destination="H9D-HN-JaI" id="Q9x-HJ-SP1"/>
                         <segue destination="DD3-H0-RfC" kind="show" identifier="showRoutesTableView" id="qw7-kc-Skx"/>
                         <segue destination="KmL-hK-Kfh" kind="show" identifier="showFavoritesTableView" id="PR7-AH-Kk1"/>
-                        <segue destination="m3x-Re-5zf" kind="presentation" identifier="showOtherDirectionsTableView" modalPresentationStyle="fullScreen" id="UJx-fY-8v6"/>
+                        <segue destination="m3x-Re-5zf" kind="show" identifier="showOtherDirectionsTableView" id="UJx-fY-8v6"/>
                         <segue destination="xzQ-6I-qok" kind="show" identifier="showRecentStopTableView" id="TfM-V3-OSE"/>
                         <segue destination="1er-42-KIJ" kind="show" identifier="openNewNotificationEditor" id="IdA-st-vvj"/>
                         <segue destination="xzQ-6I-qok" kind="show" identifier="showNearbyStopTableView" id="6fX-oF-13I"/>
-                        <segue destination="xzQ-6I-qok" kind="presentation" identifier="showNearToStopTableView" modalPresentationStyle="fullScreen" id="8mG-LM-eqa"/>
+                        <segue destination="xzQ-6I-qok" kind="show" identifier="showNearToStopTableView" id="8mG-LM-eqa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -1613,8 +1613,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="coT-D9-Khz"/>
-        <segue reference="FM7-3T-SSq"/>
+        <segue reference="6fX-oF-13I"/>
+        <segue reference="UJx-fY-8v6"/>
         <segue reference="IdA-st-vvj"/>
     </inferredMetricsTieBreakers>
     <resources>

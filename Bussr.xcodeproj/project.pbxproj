@@ -294,6 +294,7 @@
 		7AD81E1820D6E60D004BAB1E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteDataManager.swift; sourceTree = "<group>"; };
 		7AE57F8B2270D17600F1B42B /* DirectionStopCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionStopCell.swift; sourceTree = "<group>"; };
+		7AF12E9029B6B68D009E7097 /* Bussr 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Bussr 4.xcdatamodel"; sourceTree = "<group>"; };
 		7AF50BE120E1B71E00E4BFD1 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		7AFB4751216DBD480043450B /* NotificationEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEditorViewController.swift; sourceTree = "<group>"; };
 		7AFD5CA423F009EA00AFFEEF /* Bussr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bussr.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1765,6 +1766,7 @@
 		7AAA2AF226B66420005C2B1C /* Bussr.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				7AF12E9029B6B68D009E7097 /* Bussr 4.xcdatamodel */,
 				7A2B84BC27012338009E5392 /* Bussr 3.xcdatamodel */,
 				7A2155BE26D7651100047585 /* Bussr 2.xcdatamodel */,
 				7AAA2AF326B66420005C2B1C /* Bussr.xcdatamodel */,

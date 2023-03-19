@@ -185,6 +185,11 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             let routeInfoPanelTipVC = segue.destination as! RouteInfoPanelTipViewController
             routeInfoPanelTipVC.mainMapViewController = mainMapViewController
         }
+        else if segue.identifier == "showOtherDirectionsTableView"
+        {
+            let directionsViewController = segue.destination as! DirectionsTableViewController
+            directionsViewController.directionObjects = MapState.getCurrentStop()?.direction?.allObjects as? Array<Direction>
+        }
     }
         
     //MARK: - Picker View
@@ -939,9 +944,8 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
     
     @IBAction func otherDirectionsButtonPressed(_ sender: Any)
     {
-        if let selectedStop = MapState.getCurrentStop()
+        if MapState.getCurrentStop() != nil
         {
-            MapState.routeInfoObject = selectedStop.direction?.allObjects
             appDelegate.mainMapViewController?.performSegue(withIdentifier: "showOtherDirectionsTableView", sender: self)
         }
     }

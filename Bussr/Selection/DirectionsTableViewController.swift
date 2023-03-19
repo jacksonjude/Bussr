@@ -12,6 +12,7 @@ import CoreData
 
 class DirectionsTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource
 {
+    var stopTag: String?
     var directionObjects: Array<Direction>?
     var loadedPredictions = Array<Bool>()
     @IBOutlet weak var directionsTableView: UITableView!
@@ -32,7 +33,7 @@ class DirectionsTableViewController: UIViewController, UITableViewDelegate, UITa
         sortDirectionObjects()
         directionsTableView.reloadData()
         
-        if let stop = RouteDataManager.fetchStop(stopTag: MapState.selectedStopTag!)
+        if let stopTag = stopTag, let stop = RouteDataManager.fetchStop(stopTag: stopTag)
         {
             mainNavigationItem.title = stop.title
         }
@@ -55,10 +56,8 @@ class DirectionsTableViewController: UIViewController, UITableViewDelegate, UITa
     
     func fetchDirectionObjects()
     {
-        if let directions = MapState.routeInfoObject as? Array<Direction>
+        if let directions = directionObjects
         {
-            directionObjects = directions
-            
             loadedPredictions = Array<Bool>()
             for _ in directions
             {
@@ -114,7 +113,7 @@ class DirectionsTableViewController: UIViewController, UITableViewDelegate, UITa
         directionCell.selectedBackgroundView = directionCellBackground
         
         let direction = directionObjects![indexPath.row]
-        if let stop = RouteDataManager.fetchStop(stopTag: MapState.selectedStopTag!)
+        if let stopTag = stopTag, let stop = RouteDataManager.fetchStop(stopTag: stopTag)
         {
             directionCell.directionObject = direction
             directionCell.stopObject = stop
@@ -129,6 +128,7 @@ class DirectionsTableViewController: UIViewController, UITableViewDelegate, UITa
         let direction = directionObjects![indexPath.row]
         
         MapState.selectedDirectionTag = direction.tag
+        MapState.selectedStopTag = stopTag
         MapState.routeInfoShowing = .stop
         MapState.routeInfoObject = MapState.getCurrentDirection()
         

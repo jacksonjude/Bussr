@@ -1150,17 +1150,9 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     {
         let annotationStopTag = ((sender.view as? MKAnnotationView)?.annotation as? StopAnnotation)?.stopTag
         
-        if MapState.selectedStopTag != annotationStopTag
-        {
-            return
-        }
+        if MapState.selectedStopTag != annotationStopTag || MapState.getCurrentStop() == nil { return }
         
-        MapState.selectedStopTag = annotationStopTag
-        if let selectedStop = MapState.getCurrentStop()
-        {
-            MapState.routeInfoObject = selectedStop.direction?.allObjects
-            self.performSegue(withIdentifier: "showOtherDirectionsTableView", sender: self)
-        }
+        self.performSegue(withIdentifier: "showOtherDirectionsTableView", sender: self)
     }
     
     var locationToUse: CLLocation?
@@ -1206,6 +1198,14 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             notificationEditorView.stopNotificationID = newStopNotificationID
             notificationEditorView.newNotification = true
         }
+        else if segue.identifier == "showOtherDirectionsTableView"
+        {
+            let directionsTableView = segue.destination as! DirectionsTableViewController
+            guard let selectedStop = MapState.getCurrentStop() else { return }
+            
+            directionsTableView.directionObjects = selectedStop.direction?.allObjects as? Array<Direction>
+            directionsTableView.stopTag = selectedStop.tag
+        }
     }
     
     @IBAction func unwindFromRouteTableViewWithSelectedRoute(_ segue: UIStoryboardSegue)
@@ -1241,8 +1241,7 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
     
     @IBAction func unwindFromOtherDirectionsView(_ segue: UIStoryboardSegue)
     {
-        MapState.routeInfoObject = MapState.getCurrentDirection()
-        showPickerView()
+        
     }
     
     @IBAction func unwindFromStopsTableViewWithSelectedStop(_ segue: UIStoryboardSegue)
