@@ -183,17 +183,17 @@ class RouteDataManager
         }
         print("Received UmoIQ Routes")
         
-        let BARTRouteListHash = fetchRouteListHash(agencyTag: BARTAPI.BARTAgencyTag)
-        let BARTRouteConfigHashes = fetchRouteConfigHashes(agencyTag: BARTAPI.BARTAgencyTag)
+//        let BARTRouteListHash = fetchRouteListHash(agencyTag: BARTAPI.BARTAgencyTag)
+//        let BARTRouteConfigHashes = fetchRouteConfigHashes(agencyTag: BARTAPI.BARTAgencyTag)
+//
+//        let BARTRouteDictionary = await fetchBARTRoutes()
+//        let BARTSortedRouteKeys = Array<String>(BARTRouteDictionary.keys).sorted { (routeTag1, routeTag2) -> Bool in
+//            return routeTag1.localizedStandardCompare(routeTag2) == .orderedAscending
+//        }
+//        let BARTStopConfig = await fetchBARTStops()
+//        print("Received BART Routes")
         
-        let BARTRouteDictionary = await fetchBARTRoutes()
-        let BARTSortedRouteKeys = Array<String>(BARTRouteDictionary.keys).sorted { (routeTag1, routeTag2) -> Bool in
-            return routeTag1.localizedStandardCompare(routeTag2) == .orderedAscending
-        }
-        let BARTStopConfig = await fetchBARTStops()
-        print("Received BART Routes")
-        
-        self.totalRoutes = UmoIQRouteDictionary.count + BARTRouteDictionary.count
+        self.totalRoutes = UmoIQRouteDictionary.count// + BARTRouteDictionary.count
         
         await self.loadRouteInfo(routeDictionary: UmoIQRouteDictionary, sortedRouteKeys: UmoIQSortedRouteKeys, agencyTag: UmoIQAPI.SFMTAAgencyTag, listHash: UmoIQAgencyRevision, configHashes: UmoIQRouteRevisions, fetchRouteConfig: fetchUmoIQRouteInfo) { routeConfig, _, backgroundMOC, configHashes, agencyTag -> (route: Route, justCreated: Bool)? in
             let routeFetchCallback = CoreDataStack.fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "tag == %@", routeConfig.tag), moc: backgroundMOC)
@@ -215,66 +215,66 @@ class RouteDataManager
             return (routeObject, routeFetchCallback.justCreated)
         }
                 
-        await self.loadRouteInfo(routeDictionary: BARTRouteDictionary, sortedRouteKeys: BARTSortedRouteKeys, agencyTag: BARTAPI.BARTAgencyTag, listHash: BARTRouteListHash, configHashes: BARTRouteConfigHashes, fetchRouteConfig: fetchBARTRouteInfo) { (routeConfig: inout RouteConfiguration, routeConfigurationDictionary, backgroundMOC, configHashes, agencyTag) -> (route: Route, justCreated: Bool)? in
-            let routeNumber = routeConfig.tag
-            var routeAbbr = BARTRouteDictionary[routeNumber] ?? (routeConfig as! BARTRouteConfiguration).abbr
-
-            let routeStartEnd = routeAbbr.split(separator: "-")
-            let reverseRouteAbbr = String(routeStartEnd[1] + "-" + routeStartEnd[0])
-
-            var tempRouteAbbr = routeAbbr
-            var reverseRouteAbbrUsed = false
-            var reverseRouteNumber: String?
-            if BARTRouteDictionary.values.contains(reverseRouteAbbr)
-            {
-                reverseRouteNumber = BARTRouteDictionary.keys[BARTRouteDictionary.values.firstIndex(of: reverseRouteAbbr)!]
-                reverseRouteAbbrUsed = routeNumber > reverseRouteNumber!
-                tempRouteAbbr = routeNumber < reverseRouteNumber! ? routeAbbr : reverseRouteAbbr
-            }
-            
-            if reverseRouteAbbrUsed
-            {
-                routesSaved += 1
-                checkForCompletedRoutes()
-
-                return nil
-            }
-
-            let routeFetchCallback = CoreDataStack.fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "tag == %@", BARTAPI.BARTAgencyTag + "-" + tempRouteAbbr), moc: backgroundMOC)
-            let routeObject = routeFetchCallback.object as! Route
-                        
-            if let updatedHash = configHashes[BARTAPI.BARTAgencyTag + "-" + routeNumber]
-            {
-                routeObject.serverHash = updatedHash
-            }
-
-            print(agencyTag + " - " + routeAbbr)
-
-            if BARTRouteDictionary.values.contains(reverseRouteAbbr)
-            {
-                let reverseRouteNumber = BARTRouteDictionary.keys[BARTRouteDictionary.values.firstIndex(of: reverseRouteAbbr)!]
-                if let reverseRouteConfig = routeConfigurationDictionary[reverseRouteNumber], let reverseRouteDirection = reverseRouteConfig.directions.first
-                {
-                    routeConfig.directions.append(reverseRouteDirection)
-                }
-
-                //Checking for ordering (lowest routeNumber)
-                routeAbbr = routeNumber < reverseRouteNumber ? routeAbbr : reverseRouteAbbr
-            }
-
-            routeObject.tag = BARTAPI.BARTAgencyTag + "-" + routeAbbr
-            routeObject.title = routeConfig.title
-            
-            routeObject.color = routeConfig.color
-            routeObject.oppositeColor = routeConfig.oppositeColor
-            
-            if let stopArray = BARTStopConfig
-            {
-                try? (routeConfig as! BARTRouteConfiguration).loadStops(from: stopArray)
-            }
-
-            return (routeObject, routeFetchCallback.justCreated)
-        }
+//        await self.loadRouteInfo(routeDictionary: BARTRouteDictionary, sortedRouteKeys: BARTSortedRouteKeys, agencyTag: BARTAPI.BARTAgencyTag, listHash: BARTRouteListHash, configHashes: BARTRouteConfigHashes, fetchRouteConfig: fetchBARTRouteInfo) { (routeConfig: inout RouteConfiguration, routeConfigurationDictionary, backgroundMOC, configHashes, agencyTag) -> (route: Route, justCreated: Bool)? in
+//            let routeNumber = routeConfig.tag
+//            var routeAbbr = BARTRouteDictionary[routeNumber] ?? (routeConfig as! BARTRouteConfiguration).abbr
+//
+//            let routeStartEnd = routeAbbr.split(separator: "-")
+//            let reverseRouteAbbr = String(routeStartEnd[1] + "-" + routeStartEnd[0])
+//
+//            var tempRouteAbbr = routeAbbr
+//            var reverseRouteAbbrUsed = false
+//            var reverseRouteNumber: String?
+//            if BARTRouteDictionary.values.contains(reverseRouteAbbr)
+//            {
+//                reverseRouteNumber = BARTRouteDictionary.keys[BARTRouteDictionary.values.firstIndex(of: reverseRouteAbbr)!]
+//                reverseRouteAbbrUsed = routeNumber > reverseRouteNumber!
+//                tempRouteAbbr = routeNumber < reverseRouteNumber! ? routeAbbr : reverseRouteAbbr
+//            }
+//
+//            if reverseRouteAbbrUsed
+//            {
+//                routesSaved += 1
+//                checkForCompletedRoutes()
+//
+//                return nil
+//            }
+//
+//            let routeFetchCallback = CoreDataStack.fetchOrCreateObject(type: "Route", predicate: NSPredicate(format: "tag == %@", BARTAPI.BARTAgencyTag + "-" + tempRouteAbbr), moc: backgroundMOC)
+//            let routeObject = routeFetchCallback.object as! Route
+//
+//            if let updatedHash = configHashes[BARTAPI.BARTAgencyTag + "-" + routeNumber]
+//            {
+//                routeObject.serverHash = updatedHash
+//            }
+//
+//            print(agencyTag + " - " + routeAbbr)
+//
+//            if BARTRouteDictionary.values.contains(reverseRouteAbbr)
+//            {
+//                let reverseRouteNumber = BARTRouteDictionary.keys[BARTRouteDictionary.values.firstIndex(of: reverseRouteAbbr)!]
+//                if let reverseRouteConfig = routeConfigurationDictionary[reverseRouteNumber], let reverseRouteDirection = reverseRouteConfig.directions.first
+//                {
+//                    routeConfig.directions.append(reverseRouteDirection)
+//                }
+//
+//                //Checking for ordering (lowest routeNumber)
+//                routeAbbr = routeNumber < reverseRouteNumber ? routeAbbr : reverseRouteAbbr
+//            }
+//
+//            routeObject.tag = BARTAPI.BARTAgencyTag + "-" + routeAbbr
+//            routeObject.title = routeConfig.title
+//
+//            routeObject.color = routeConfig.color
+//            routeObject.oppositeColor = routeConfig.oppositeColor
+//
+//            if let stopArray = BARTStopConfig
+//            {
+//                try? (routeConfig as! BARTRouteConfiguration).loadStops(from: stopArray)
+//            }
+//
+//            return (routeObject, routeFetchCallback.justCreated)
+//        }
     }
     
     static func loadRouteInfo(routeDictionary: Dictionary<String,String>, sortedRouteKeys: Array<String>, agencyTag: String, listHash: String, configHashes: Dictionary<String,String>, fetchRouteConfig: (_ routeTag: String) async -> RouteConfiguration?, setRouteFields: @escaping (_ routeConfig: inout RouteConfiguration, _ routeConfigurationDictionary: Dictionary<String,RouteConfiguration>, _ backgroundMOC: NSManagedObjectContext, _ configHashes: Dictionary<String,String>, _ agencyTag: String) -> (route: Route, justCreated: Bool)?) async
