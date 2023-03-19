@@ -1019,6 +1019,14 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
             MapState.selectedVehicleID = busAnnotation.id
             view.image = UIImage(named: "BusAnnotationDark")
             
+            self.centerOnVehicleButton.alpha = 0
+            self.centerOnVehicleButton.isHidden = false
+            self.centerOnVehicleButton.isEnabled = true
+            
+            UIView.animate(withDuration: 0.2, animations: {
+                self.centerOnVehicleButton.alpha = 1
+            })
+            
             reloadPredictionTimesLabel()
         }
         else if let stopAnnotation = view.annotation as? StopAnnotation, MapState.routeInfoShowing == .stop && MapState.selectedStopTag != stopAnnotation.stopTag, !MapState.favoriteFilterEnabled
@@ -1038,6 +1046,13 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
                 MapState.selectedVehicleID = nil
                 reloadPredictionTimesLabel()
             }
+            
+            UIView.animate(withDuration: 0.2, animations: {
+                self.centerOnVehicleButton.alpha = 0
+            }, completion: { (bool) in
+                self.centerOnVehicleButton.isHidden = false
+                self.centerOnVehicleButton.isEnabled = true
+            })
             
             view.image = UIImage(named: "BusAnnotation")
         }
@@ -1559,26 +1574,6 @@ class MainMapViewController: UIViewController, MKMapViewDelegate, FloatingPanelC
         
         OperationQueue.main.addOperation {
             self.predictionTimesLabel.attributedText = formattedPredictionsString
-            
-            if MapState.selectedVehicleID != nil && self.vehicleIDs.contains(MapState.selectedVehicleID!)
-            {
-                self.centerOnVehicleButton.alpha = 0
-                self.centerOnVehicleButton.isHidden = false
-                self.centerOnVehicleButton.isEnabled = true
-                
-                UIView.animate(withDuration: 0.2, animations: {
-                    self.centerOnVehicleButton.alpha = 1
-                })
-            }
-            else
-            {
-                UIView.animate(withDuration: 0.2, animations: {
-                    self.centerOnVehicleButton.alpha = 0
-                }, completion: { (bool) in
-                    self.centerOnVehicleButton.isHidden = false
-                    self.centerOnVehicleButton.isEnabled = true
-                })
-            }
         }
     }
     
