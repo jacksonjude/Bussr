@@ -12,6 +12,8 @@ class RouteInfoPickerCell: UIView
 {
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var addFavoriteButtonArea: UIView!
+    @IBOutlet weak var addFavoriteButtonRotationBounds: UIView!
+    @IBOutlet weak var addFavoriteButtonRotationBoundsHeight: NSLayoutConstraint!
     @IBOutlet weak var addFavoriteButtonImage: UIImageView!
     
     var row: Int?
@@ -43,7 +45,7 @@ class RouteInfoPickerCell: UIView
     {
         didSet
         {
-            setAddFavoriteButtonImage()
+            setAddFavoriteButtonImage(didToggleFill: oldValue != self.isAddFavoriteButtonPressed)
         }
     }
     
@@ -55,6 +57,7 @@ class RouteInfoPickerCell: UIView
         self.layer.cornerRadius = 6
         setLabelText()
         setAddFavoriteButtonImage()
+        setAddFavoriteButtonRotationBounds()
     }
     
     override func awakeFromNib()
@@ -86,15 +89,17 @@ class RouteInfoPickerCell: UIView
         self.addFavoriteButtonArea.isHidden = self.isAddFavoriteButtonHidden
     }
     
-    func setAddFavoriteButtonImage()
+    func setAddFavoriteButtonImage(didToggleFill: Bool = false)
     {
+        var imageName = "Favorite\(isAddFavoriteButtonFilled ? "Fill" : "")"
         switch appDelegate.getCurrentTheme()
         {
         case .light:
-            self.addFavoriteButtonImage.image = UIImage(named: "FavoriteAdd\(isAddFavoriteButtonFilled ? "Fill" : "")Icon")
+            imageName += "Icon"
         case .dark:
-            self.addFavoriteButtonImage.image = UIImage(named: "FavoriteAdd\(isAddFavoriteButtonFilled ? "Fill" : "")IconDark")
+            imageName += "IconDark"
         }
+        self.addFavoriteButtonImage.image = UIImage(named: imageName)
         
         if self.isAddFavoriteButtonPressed, let cgImage = self.addFavoriteButtonImage.image?.cgImage
         {
@@ -110,8 +115,44 @@ class RouteInfoPickerCell: UIView
             self.addFavoriteButtonImage.image = UIImage(cgImage: cgimg!)
         }
         
-        UIView.animate(withDuration: 0.1, delay: 0.0) {
+        UIView.animate(withDuration: 0.2, delay: 0.0) {
             self.backgroundColor = self.isAddFavoriteButtonFilled ? UIColor(red: 245/255, green: 161/255, blue: 14/255, alpha: 0.45) : UIColor.clear
+        }
+        
+        if didToggleFill
+        {
+            self.addFavoriteButtonRotationBounds.rotate(endValue: (self.isAddFavoriteButtonFilled ? 1 : -1) * Float.pi * 2.0 * 1/5, duration: 0.2, repeatCount: 0)
+        }
+    }
+    
+    func setAddFavoriteButtonRotationBounds()
+    {
+        let angle = Float.pi/5
+        let height = addFavoriteButtonImage.frame.height
+        let starRadius = height/(1+CGFloat(cos(angle)))
+        self.addFavoriteButtonRotationBoundsHeight.constant = 2*starRadius
+    }
+}
+
+extension UIView {
+    private static let kRotationAnimationKey = "rotationanimationkey"
+
+    func rotate(endValue: Float, duration: Double = 1, repeatCount: Float = Float.infinity) {
+        if layer.animation(forKey: UIView.kRotationAnimationKey) == nil {
+            let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation")
+
+            rotationAnimation.fromValue = 0.0
+            rotationAnimation.toValue = endValue
+            rotationAnimation.duration = duration
+            rotationAnimation.repeatCount = repeatCount
+
+            layer.add(rotationAnimation, forKey: UIView.kRotationAnimationKey)
+        }
+    }
+
+    func stopRotating() {
+        if layer.animation(forKey: UIView.kRotationAnimationKey) != nil {
+            layer.removeAnimation(forKey: UIView.kRotationAnimationKey)
         }
     }
 }

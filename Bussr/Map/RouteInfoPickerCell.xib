@@ -26,19 +26,31 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wEU-0M-DbY">
                     <rect key="frame" x="486" y="0.0" width="40" height="40"/>
                     <subviews>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="FavoriteAddIcon" translatesAutoresizingMaskIntoConstraints="NO" id="Qwt-23-Lr2">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E2e-9g-hSh">
                             <rect key="frame" x="5" y="5" width="30" height="30"/>
+                            <subviews>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="FavoriteIconDark" translatesAutoresizingMaskIntoConstraints="NO" id="Qwt-23-Lr2">
+                                    <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="30" id="MBp-Az-Rv2"/>
+                                        <constraint firstAttribute="height" constant="30" id="rrB-98-DOx"/>
+                                    </constraints>
+                                </imageView>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="30" id="MBp-Az-Rv2"/>
-                                <constraint firstAttribute="height" constant="30" id="rrB-98-DOx"/>
+                                <constraint firstAttribute="height" constant="30" id="Dsf-ll-4Ox"/>
+                                <constraint firstItem="Qwt-23-Lr2" firstAttribute="top" secondItem="E2e-9g-hSh" secondAttribute="top" id="T5x-Ri-gKa"/>
+                                <constraint firstItem="Qwt-23-Lr2" firstAttribute="centerX" secondItem="E2e-9g-hSh" secondAttribute="centerX" id="vkX-JK-McU"/>
                             </constraints>
-                        </imageView>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
+                        <constraint firstAttribute="trailing" secondItem="E2e-9g-hSh" secondAttribute="trailing" constant="5" id="6qO-5S-3qx"/>
                         <constraint firstAttribute="width" constant="40" id="XEV-Z3-Qeu"/>
-                        <constraint firstItem="Qwt-23-Lr2" firstAttribute="centerY" secondItem="wEU-0M-DbY" secondAttribute="centerY" id="abq-B4-FsS"/>
-                        <constraint firstItem="Qwt-23-Lr2" firstAttribute="centerX" secondItem="wEU-0M-DbY" secondAttribute="centerX" id="yho-i6-7CG"/>
+                        <constraint firstItem="E2e-9g-hSh" firstAttribute="top" secondItem="wEU-0M-DbY" secondAttribute="top" constant="5" id="c4f-Jv-Xwf"/>
+                        <constraint firstItem="E2e-9g-hSh" firstAttribute="leading" secondItem="wEU-0M-DbY" secondAttribute="leading" constant="5" id="uTV-TT-0oB"/>
                         <constraint firstAttribute="height" constant="40" id="zwh-3P-nD6"/>
                     </constraints>
                 </view>
@@ -56,12 +68,14 @@
             <connections>
                 <outlet property="addFavoriteButtonArea" destination="wEU-0M-DbY" id="k1G-bS-GO6"/>
                 <outlet property="addFavoriteButtonImage" destination="Qwt-23-Lr2" id="t7B-Vt-A2B"/>
+                <outlet property="addFavoriteButtonRotationBounds" destination="E2e-9g-hSh" id="uPa-tT-Mao"/>
+                <outlet property="addFavoriteButtonRotationBoundsHeight" destination="Dsf-ll-4Ox" id="gcJ-Ya-FHZ"/>
                 <outlet property="label" destination="QDH-jK-ncl" id="gXj-wK-TXm"/>
             </connections>
             <point key="canvasLocation" x="238.1679389312977" y="-266.19718309859155"/>
         </view>
     </objects>
     <resources>
-        <image name="FavoriteAddIcon" width="30" height="30"/>
+        <image name="FavoriteIconDark" width="64" height="64"/>
     </resources>
 </document>
