@@ -95,9 +95,9 @@ class DirectionStopCell: UITableViewCell
         (self.viewWithTag(604) as? UILabel)?.text = directionObject?.name
     }
     
-    func refreshTimes()
+    func refreshTimes(ignoreSetting: Bool = false)
     {
-        if UserDefaults.standard.object(forKey: "ShowListPredictions") as? Bool ?? false, let stopObject = self.stopObject, let directionObject = self.directionObject
+        if ignoreSetting || UserDefaults.standard.object(forKey: "ShowListPredictions") as? Bool ?? false, let stopObject = self.stopObject, let directionObject = self.directionObject
         {
             Task
             {

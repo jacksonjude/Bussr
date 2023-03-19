@@ -98,7 +98,7 @@ class DirectionsTableViewController: UIViewController, UITableViewDelegate, UITa
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if !loadedPredictions[indexPath.row]
         {
-            (cell as! DirectionStopCell).refreshTimes()
+            (cell as! DirectionStopCell).refreshTimes(ignoreSetting: true)
         }
     }
     
