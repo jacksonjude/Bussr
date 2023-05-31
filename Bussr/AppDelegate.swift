@@ -55,6 +55,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             UserDefaults.standard.set(618, forKey: "firstLaunch")
         }
         
+        let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+        let lastVersion = UserDefaults.standard.object(forKey: "version") as? String
+        
+        if !firstLaunch, let appVersion = appVersion, lastVersion != appVersion
+        {
+            UserDefaults.standard.set(appVersion, forKey: "version")
+            print("Clearing data for \(lastVersion ?? "nil") -> \(appVersion)")
+            
+            hasDownloadedData = false
+        }
+        
         FavoriteState.selectedGroupUUID = "0"
         
         if let favoritesOrganizeTypeInt = UserDefaults.standard.object(forKey: "FavoritesOrganizeType") as? Int

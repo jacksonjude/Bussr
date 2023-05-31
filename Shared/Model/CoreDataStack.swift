@@ -17,13 +17,6 @@ class CoreDataStack {
     // MARK: - Core Data stack
     
     static var persistentContainer: NSPersistentContainer = {
-        var firstLaunch = false
-        if UserDefaults.standard.object(forKey: "firstLaunchData") == nil
-        {
-            firstLaunch = true
-            UserDefaults.standard.set(618, forKey: "firstLaunchData")
-        }
-        
         guard let appGroupContainerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.Bussr") else {
             fatalError("App group container URL could not be created.")
         }
@@ -53,9 +46,9 @@ class CoreDataStack {
             cloudPublicStoreDescription.cloudKitContainerOptions?.databaseScope = CKDatabase.Scope.public
         }
         
-        if firstLaunch
+        if !appDelegate.hasDownloadedData
         {
-//            copyPreloadedRouteData(appGroupContainerURL: appGroupContainerURL)
+            copyPreloadedRouteData(appGroupContainerURL: appGroupContainerURL)
         }
         
         let localStoreDescription = NSPersistentStoreDescription()
@@ -115,6 +108,7 @@ class CoreDataStack {
         
         if !FileManager.default.fileExists(atPath: destinationURL.absoluteString) {
             do {
+                try? FileManager.default.removeItem(at: destinationURL)
                 try FileManager.default.copyItem(at: originURL, to: destinationURL)
                 
                 print("Preloaded route file copied")
