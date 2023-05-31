@@ -23,7 +23,7 @@ struct UmoIQRouteID: Codable
     }
 }
 
-protocol RouteConfiguration: Decodable
+protocol RouteConfiguration
 {
     var tag: String { get set }
     var title: String { get set }
@@ -35,7 +35,7 @@ protocol RouteConfiguration: Decodable
     var stops: [StopConfiguration] { get set }
 }
 
-class UmoIQRouteConfiguration: RouteConfiguration
+class UmoIQRouteConfiguration: RouteConfiguration, Decodable
 {
     var tag: String
     var title: String
@@ -119,7 +119,7 @@ class BARTRouteList: Decodable
     }
 }
 
-class BARTRouteConfiguration: RouteConfiguration
+class BARTRouteConfiguration: RouteConfiguration, Decodable
 {
     var tag: String
     var abbr: String
@@ -184,7 +184,60 @@ class BARTRouteConfiguration: RouteConfiguration
         self.revision = nil
     }
     
-    func loadStops(from stopArray: [BARTStopConfiguration]) throws
+    func loadStops(stopArray: [BARTStopConfiguration])
+    {
+        guard let directionConfig = self.directions.first else { return }
+        for stopConfig in stopArray
+        {
+            if directionConfig.stopTags.contains(where: { (stopTagConfig) -> Bool in
+                stopTagConfig.tag == stopConfig.tag
+            })
+            {
+                self.stops.append(stopConfig)
+            }
+        }
+    }
+}
+
+class GTFSRouteConfiguration: RouteConfiguration, Decodable
+{
+    var tag: String
+    var title: String
+    var color: String
+    var oppositeColor: String
+    var revision: Int?
+    var directions: [DirectionConfiguration]
+    var stops: [StopConfiguration]
+    
+    enum CodingKeys: String, CodingKey
+    {
+        case id = "route_id"
+        case name = "route_long_name"
+        case color = "route_color"
+        case textColor = "route_text_color"
+    }
+    
+    required init(from decoder: Decoder) throws
+    {
+        let routeContainer = try decoder.container(keyedBy: CodingKeys.self)
+        
+        self.tag = try routeContainer.decode(String.self, forKey: .id)
+        self.title = try routeContainer.decode(String.self, forKey: .name)
+        self.color = try routeContainer.decode(String.self, forKey: .color)
+        self.oppositeColor = try routeContainer.decode(String.self, forKey: .textColor)
+        
+        self.directions = []
+        self.stops = []
+        
+        self.revision = nil
+    }
+    
+    func loadTrips(tripArray: [RouteTrip])
+    {
+        
+    }
+    
+    func loadStops(stopArray: [GTFSStopConfiguration])
     {
         guard let directionConfig = self.directions.first else { return }
         for stopConfig in stopArray

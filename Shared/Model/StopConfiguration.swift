@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol StopConfiguration: Decodable
+protocol StopConfiguration
 {
     var title: String { get set }
     var shortTitle: String { get set }
@@ -18,7 +18,7 @@ protocol StopConfiguration: Decodable
     var longitude: Double { get set }
 }
 
-class UmoIQStopConfiguration: StopConfiguration
+class UmoIQStopConfiguration: StopConfiguration, Decodable
 {
     var title: String
     var shortTitle: String
@@ -27,7 +27,7 @@ class UmoIQStopConfiguration: StopConfiguration
     var latitude: Double
     var longitude: Double
     
-    enum StopCodingKeys: String, CodingKey
+    enum CodingKeys: String, CodingKey
     {
         case title = "name"
         case shortTitle
@@ -35,18 +35,6 @@ class UmoIQStopConfiguration: StopConfiguration
         case id = "code"
         case latitude = "lat"
         case longitude = "lon"
-    }
-    
-    required init(from decoder: Decoder) throws
-    {
-        let decodedContainer = try decoder.container(keyedBy: StopCodingKeys.self)
-        
-        self.title = try decodedContainer.decode(String.self, forKey: .title)
-        self.shortTitle = self.title
-        self.id = try decodedContainer.decode(String.self, forKey: .id)
-        self.tag = try decodedContainer.decode(String.self, forKey: .tag)
-        self.latitude = try decodedContainer.decode(Double.self, forKey: .latitude)
-        self.longitude = try decodedContainer.decode(Double.self, forKey: .longitude)
     }
 }
 
@@ -79,7 +67,7 @@ class BARTStopArray: Decodable
     }
 }
 
-class BARTStopConfiguration: StopConfiguration
+class BARTStopConfiguration: StopConfiguration, Decodable
 {
     var title: String
     var shortTitle: String
@@ -90,21 +78,28 @@ class BARTStopConfiguration: StopConfiguration
     
     enum StopCodingKeys: String, CodingKey
     {
-        case title = "name"
+        case title, shortTitle = "name"
         case tag = "abbr"
         case latitude = "gtfs_latitude"
         case longitude = "gtfs_longitude"
     }
+}
+
+class GTFSStopConfiguration: StopConfiguration, Decodable
+{
+    var title: String
+    var shortTitle: String
+    var id: String?
+    var tag: String
+    var latitude: Double
+    var longitude: Double
     
-    required init(from decoder: Decoder) throws
+    enum CodingKeys: String, CodingKey
     {
-        let decodedContainer = try decoder.container(keyedBy: StopCodingKeys.self)
-        
-        let title = try decodedContainer.decode(String.self, forKey: .title)
-        self.title = title
-        self.shortTitle = title
-        self.tag = try decodedContainer.decode(String.self, forKey: .tag)
-        self.latitude = Double(try decodedContainer.decode(String.self, forKey: .latitude))!
-        self.longitude = Double(try decodedContainer.decode(String.self, forKey: .longitude))!
+        case title, shortTitle = "stop_name"
+        case tag = "stop_id"
+        case id = "stop_code"
+        case latitude = "stop_lat"
+        case longitude = "stop_lon"
     }
 }

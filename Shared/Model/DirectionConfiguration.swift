@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol DirectionConfiguration: Decodable
+protocol DirectionConfiguration
 {
     var title: String { get set }
     var tag: String { get set }
@@ -22,7 +22,7 @@ protocol StopTagConfiguration: Decodable
     var tag: String { get set }
 }
 
-class UmoIQDirectionConfiguration: DirectionConfiguration
+class UmoIQDirectionConfiguration: DirectionConfiguration, Decodable
 {
     var title: String
     var tag: String
@@ -64,7 +64,7 @@ class UmoIQDirectionConfiguration: DirectionConfiguration
     }
 }
 
-class BARTDirectionConfiguration: DirectionConfiguration
+class BARTDirectionConfiguration: DirectionConfiguration, Decodable
 {
     var title: String
     var tag: String

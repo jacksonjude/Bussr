@@ -1,16 +1,24 @@
 PODS:
+  - CodableCSV (0.6.7)
   - FloatingPanel (1.7.6)
+  - ZIPFoundation (0.9.16)
 
 DEPENDENCIES:
+  - CodableCSV (~> 0.6.7)
   - FloatingPanel (= 1.7.6)
+  - ZIPFoundation (~> 0.9)
 
 SPEC REPOS:
   trunk:
+    - CodableCSV
     - FloatingPanel
+    - ZIPFoundation
 
 SPEC CHECKSUMS:
+  CodableCSV: a586657d66aac32b860c0b5df52d49440ec6e6dd
   FloatingPanel: 9016eac88f21ca9fce53f5709e1f49485c0c355e
+  ZIPFoundation: d170fa8e270b2a32bef9dcdcabff5b8f1a5deced
 
-PODFILE CHECKSUM: 8ddc2697526d8981f17b4700c1e0c8615e2d7242
+PODFILE CHECKSUM: f285dcbbbc8fecaaa7c78abcc4f41b55d6107991
 
 COCOAPODS: 1.10.2

@@ -10,6 +10,9 @@ import Foundation
 import CoreData
 import MapKit
 import BackgroundTasks
+import Combine
+
+import CodableCSV
 
 struct RouteConstants
 {
@@ -47,7 +50,7 @@ struct BARTAgency: AgencyFormat
 protocol APIFormat
 {
     static var rootURL: String { get }
-    static var apiKey: String { get }
+    static var apiKey: String? { get }
     static var defaultAgencyTag: String { get }
     static var defaultArgs: Dictionary<String,String>? { get }
 }
@@ -56,17 +59,23 @@ extension APIFormat
 {
     static func getDefaultArgString() -> String
     {
-        return self.defaultArgs?.reduce("", { partialResult, argumentPair in
+        var defaultArgs = self.defaultArgs ?? [:]
+        if let apiKey = self.apiKey
+        {
+            defaultArgs["key"] = apiKey
+        }
+        
+        return defaultArgs.reduce("", { partialResult, argumentPair in
             let (argName, argValue) = argumentPair
-            return partialResult! + "&" + argName + "=" + argValue
-        }) ?? ""
+            return partialResult + "&" + argName + "=" + argValue
+        })
     }
 }
 
 struct UmoIQAPI: APIFormat
 {
     static let rootURL = "https://webservices.umoiq.com/api/pub/v1"
-    static let apiKey = "efb2289a-c289-40f2-85e7-92cde339ee34"
+    static let apiKey: String? = "efb2289a-c289-40f2-85e7-92cde339ee34"
     static let defaultAgencyTag = SFMTAAgencyTag
     static let defaultArgs: Dictionary<String, String>? = nil
     
@@ -83,7 +92,7 @@ struct UmoIQAPI: APIFormat
 struct BARTAPI: APIFormat
 {
     static let rootURL = "http://api.bart.gov/api"
-    static let apiKey = "Z7RK-596L-9WNT-DWE9"
+    static let apiKey: String? = "Z7RK-596L-9WNT-DWE9"
     static let defaultAgencyTag = BARTAgencyTag
     static let defaultArgs: Dictionary<String,String>? = ["json":"y"]
     
@@ -123,6 +132,13 @@ class APIPath
     }
 }
 
+protocol RouteDataDecoder
+{
+    func decode<T: Decodable>(_ type: T.Type, from data: Data) throws -> T
+}
+extension JSONDecoder: RouteDataDecoder { }
+extension CSVDecoder: RouteDataDecoder { }
+
 enum ScheduledPredictionsDisplayType: Int
 {
     case always
@@ -136,31 +152,39 @@ class RouteDataManager
     
     //MARK: - Feed Source
     
-    static func fetchFromAPISource<U: APIFormat, V: Decodable>(api: U.Type, path: APIPath, args: [String : String]?) async -> V?
+    static func fetchAndDecode<U: APIFormat, V: Decodable>(api: U.Type, path: APIPath, args: [String : String]?, decoder: RouteDataDecoder = JSONDecoder()) async -> V?
+    {
+        guard let (data, url) = await self.fetch(api: api, path: path, args: args) else { return nil }
+        return self.decode(data: data, decoder: decoder, originURL: url)
+    }
+    
+    static func fetch<U: APIFormat>(api: U.Type, path: APIPath, args: [String : String]?) async -> (Data, URL)?
     {
         guard let formattedURLPath = try? path.format(args) else { return nil }
         let defaultArgumentString = U.getDefaultArgString()
-        guard let url = URL(string: U.rootURL + formattedURLPath + (formattedURLPath.contains("?") ? "&" : "?") + "key=\(U.apiKey)" + defaultArgumentString) else { return nil }
+        guard let url = URL(string: U.rootURL + formattedURLPath + (formattedURLPath.contains("?") ? "&" : "?") + defaultArgumentString) else { return nil }
         
-        let data: Data?
         do
         {
-            (data, _) = try await URLSession.noCacheSession.data(from: url)
+            let (data, _) = try await URLSession.noCacheSession.data(from: url)
+            return (data, url)
         }
         catch
         {
             print(error.localizedDescription)
             return nil
         }
-        
+    }
+    
+    static func decode<V: Decodable>(data: Data, decoder: RouteDataDecoder = JSONDecoder(), originURL: URL? = nil) -> V?
+    {
         do
         {
-            let decoder = JSONDecoder()
-            return try decoder.decode(V.self, from: data!)
+            return try decoder.decode(V.self, from: data)
         }
         catch
         {
-            print(error, url, String(bytes: data ?? Data(), encoding: .utf8) ?? "nil")
+            print(error, originURL as Any, String(bytes: data, encoding: .utf8) ?? "nil")
             return nil
         }
     }
@@ -270,7 +294,7 @@ class RouteDataManager
 //
 //            if let stopArray = BARTStopConfig
 //            {
-//                try? (routeConfig as! BARTRouteConfiguration).loadStops(from: stopArray)
+//                try? (routeConfig as! BARTRouteConfiguration).loadStops(stopArray: stopArray)
 //            }
 //
 //            return (routeObject, routeFetchCallback.justCreated)
@@ -408,15 +432,10 @@ class RouteDataManager
                 {
                     agency.addToRoutes(route)
                 }
-                
-                mocSaveGroup.enter()
-                NotificationCenter.default.addObserver(self, selector: #selector(savedBackgroundMOC), name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
-                try? backgroundMOC.save()
-                mocSaveGroup.wait()
-                
-                routesSaved += 1
-                checkForCompletedRoutes()
             }
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(savedBackgroundMOC), name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
+            try? backgroundMOC.save()
         }
     }
     
@@ -447,7 +466,7 @@ class RouteDataManager
     
     static func fetchUmoIQRoutes() async -> (routeDictionary: Dictionary<String, String>, routeRevisions: Dictionary<String, String>)
     {
-        guard let routeIDs: [UmoIQRouteID] = await fetchFromAPISource(api: UmoIQAPI.self, path: UmoIQAPI.routeListPath, args: ["agency":UmoIQAPI.SFMTAAgencyTag]) else { return (Dictionary<String,String>(), Dictionary<String,String>()) }
+        guard let routeIDs: [UmoIQRouteID] = await fetchAndDecode(api: UmoIQAPI.self, path: UmoIQAPI.routeListPath, args: ["agency":UmoIQAPI.SFMTAAgencyTag]) else { return (Dictionary<String,String>(), Dictionary<String,String>()) }
         let routePairList = routeIDs.map({ routeID in
             return (routeID.tag, routeID.title)
         })
@@ -463,13 +482,13 @@ class RouteDataManager
     
     static func fetchUmoIQAgencyRevision() async -> String
     {
-        guard let agency: UmoIQAgencyInstance = await fetchFromAPISource(api: UmoIQAPI.self, path: UmoIQAPI.agencyPath, args: ["agency":UmoIQAPI.SFMTAAgencyTag]) else { return "" }
+        guard let agency: UmoIQAgencyInstance = await fetchAndDecode(api: UmoIQAPI.self, path: UmoIQAPI.agencyPath, args: ["agency":UmoIQAPI.SFMTAAgencyTag]) else { return "" }
         return String(agency.revision)
     }
     
     static func fetchUmoIQRouteInfo(routeTag: String) async -> UmoIQRouteConfiguration?
     {
-        let routeConfiguration: UmoIQRouteConfiguration? = await fetchFromAPISource(api: UmoIQAPI.self, path: UmoIQAPI.routeInfoPath, args: ["agency":UmoIQAPI.SFMTAAgencyTag, "route":routeTag])
+        let routeConfiguration: UmoIQRouteConfiguration? = await fetchAndDecode(api: UmoIQAPI.self, path: UmoIQAPI.routeInfoPath, args: ["agency":UmoIQAPI.SFMTAAgencyTag, "route":routeTag])
         return routeConfiguration
     }
     
@@ -549,7 +568,7 @@ class RouteDataManager
     {
         var routeDictionary = Dictionary<String,String>()
         
-        guard let routeList: BARTRouteList = await fetchFromAPISource(api: BARTAPI.self, path: BARTAPI.routeListPath, args: [:]) else { return routeDictionary }
+        guard let routeList: BARTRouteList = await fetchAndDecode(api: BARTAPI.self, path: BARTAPI.routeListPath, args: [:]) else { return routeDictionary }
         for route in routeList.routeObjects
         {
             routeDictionary[route.number] = route.abbr
@@ -560,13 +579,13 @@ class RouteDataManager
     
     static func fetchBARTRouteInfo(routeNumber: String) async -> BARTRouteConfiguration?
     {
-        guard let routeConfiguration: BARTRouteConfiguration = await fetchFromAPISource(api: BARTAPI.self, path: BARTAPI.routeInfoPath, args: ["route":routeNumber]) else { return nil }
+        guard let routeConfiguration: BARTRouteConfiguration = await fetchAndDecode(api: BARTAPI.self, path: BARTAPI.routeInfoPath, args: ["route":routeNumber]) else { return nil }
         return routeConfiguration
     }
     
     static func fetchBARTStops() async -> [BARTStopConfiguration]?
     {
-        guard let stopArrayContainer: BARTStopArray = await fetchFromAPISource(api: BARTAPI.self, path: BARTAPI.stopListPath, args: [:]) else { return nil }
+        guard let stopArrayContainer: BARTStopArray = await fetchAndDecode(api: BARTAPI.self, path: BARTAPI.stopListPath, args: [:]) else { return nil }
         
         let stopArray = stopArrayContainer.stops
         return stopArray
@@ -636,7 +655,7 @@ class RouteDataManager
     
     static func fetchUmoIQPredictionTimes(route: Route, stop: Stop) async -> PredictionTimeFetchResult
     {
-        guard let routeStopPredictionContainers: Array<UmoIQRouteStopPredictionContainer> = await fetchFromAPISource(api: UmoIQAPI.self, path: UmoIQAPI.routeStopPredictionsPath, args: ["agency":UmoIQAPI.SFMTAAgencyTag, "route":route.tag!, "stop":stop.tag!]) else {
+        guard let routeStopPredictionContainers: Array<UmoIQRouteStopPredictionContainer> = await fetchAndDecode(api: UmoIQAPI.self, path: UmoIQAPI.routeStopPredictionsPath, args: ["agency":UmoIQAPI.SFMTAAgencyTag, "route":route.tag!, "stop":stop.tag!]) else {
             return .error(reason: "Connection Error")
         }
         let predictionTimes = routeStopPredictionContainers.first?.predictions ?? []
@@ -645,7 +664,7 @@ class RouteDataManager
     
     static func fetchBARTPredictionTimes(route: Route, direction: Direction, stop: Stop) async -> PredictionTimeFetchResult
     {
-        guard let bartPredictionContainer: BARTPredictionContainer = await fetchFromAPISource(api: BARTAPI.self, path: BARTAPI.predictionsPath, args: ["orig":stop.tag!]) else {
+        guard let bartPredictionContainer: BARTPredictionContainer = await fetchAndDecode(api: BARTAPI.self, path: BARTAPI.predictionsPath, args: ["orig":stop.tag!]) else {
             return .error(reason: "Connection Error")
         }
         let routePredictions = bartPredictionContainer.stations.first?.routes
@@ -694,7 +713,7 @@ class RouteDataManager
     
     static func fetchUmoIQVehicleLocations(vehicleIDs: [String], route: Route) async -> VehicleLocationFetchResult
     {
-        guard let routeVehicleLocations: Array<UmoIQRouteVehicleLocation> = await fetchFromAPISource(api: UmoIQAPI.self, path: UmoIQAPI.routeVehiclesPath, args: ["agency":UmoIQAgency.agencyTag, "route":route.tag!]) else {
+        guard let routeVehicleLocations: Array<UmoIQRouteVehicleLocation> = await fetchAndDecode(api: UmoIQAPI.self, path: UmoIQAPI.routeVehiclesPath, args: ["agency":UmoIQAgency.agencyTag, "route":route.tag!]) else {
             return .error(reason: "Connection Error")
         }
         return .success(vehicleLocations: routeVehicleLocations)
