@@ -46,11 +46,6 @@ class CoreDataStack {
             cloudPublicStoreDescription.cloudKitContainerOptions?.databaseScope = CKDatabase.Scope.public
         }
         
-        if !appDelegate.hasDownloadedData
-        {
-            copyPreloadedRouteData(appGroupContainerURL: appGroupContainerURL)
-        }
-        
         let localStoreDescription = NSPersistentStoreDescription()
         localStoreDescription.configuration = "Local"
         localStoreDescription.shouldInferMappingModelAutomatically = true
@@ -108,7 +103,6 @@ class CoreDataStack {
         
         if !FileManager.default.fileExists(atPath: destinationURL.absoluteString) {
             do {
-                try? FileManager.default.removeItem(at: destinationURL)
                 try FileManager.default.copyItem(at: originURL, to: destinationURL)
                 
                 print("Preloaded route file copied")

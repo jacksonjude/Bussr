@@ -64,6 +64,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             print("Clearing data for \(lastVersion ?? "nil") -> \(appVersion)")
             
             hasDownloadedData = false
+            _ = CoreDataStack.clearData(entityTypes: CoreDataStack.localRouteEntityTypes)
         }
         
         FavoriteState.selectedGroupUUID = "0"
