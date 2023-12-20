@@ -1372,7 +1372,7 @@
 				CODE_SIGN_ENTITLEMENTS = Bussr/Bussr.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20230602;
+				CURRENT_PROJECT_VERSION = 20231220;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = Bussr/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -1380,7 +1380,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.Bussr;
 				PRODUCT_NAME = Bussr;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1398,7 +1398,7 @@
 				CODE_SIGN_ENTITLEMENTS = Bussr/Bussr.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20230602;
+				CURRENT_PROJECT_VERSION = 20231220;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = Bussr/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -1406,7 +1406,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.Bussr;
 				PRODUCT_NAME = Bussr;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1421,7 +1421,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "BussrWatchApp Extension/BussrWatchApp Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20230602;
+				CURRENT_PROJECT_VERSION = 20231220;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = "BussrWatchApp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1429,7 +1429,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.1;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.Bussr.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "Bussr WatchApp Extension";
@@ -1447,7 +1447,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "BussrWatchApp Extension/BussrWatchApp Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20230602;
+				CURRENT_PROJECT_VERSION = 20231220;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = "BussrWatchApp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1455,7 +1455,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.1;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.Bussr.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "Bussr WatchApp Extension";
@@ -1474,11 +1474,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = BussrWatchApp/Bussr.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20230602;
+				CURRENT_PROJECT_VERSION = 20231220;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				IBSC_MODULE = Bussr_WatchApp_Extension;
 				INFOPLIST_FILE = BussrWatchApp/Info.plist;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.1;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.Bussr.watchkitapp;
 				PRODUCT_NAME = Bussr;
@@ -1497,11 +1497,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = BussrWatchApp/Bussr.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20230602;
+				CURRENT_PROJECT_VERSION = 20231220;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				IBSC_MODULE = Bussr_WatchApp_Extension;
 				INFOPLIST_FILE = BussrWatchApp/Info.plist;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.1;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.Bussr.watchkitapp;
 				PRODUCT_NAME = Bussr;
