@@ -118,8 +118,6 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             self.directionButton.setImage(UIImage(named: "DirectionIcon"), for: UIControl.State.normal)
             self.otherDirectionsButton.setImage(UIImage(named: "BusStopIcon"), for: UIControl.State.normal)
             self.expandFiltersButton.setImage(UIImage(named: "FilterIcon"), for: UIControl.State.normal)
-            
-            self.view.backgroundColor = UIColor.white.withAlphaComponent(DisplayConstants.mapAlphaValue)
         case .dark:
             for filterButton in filterButtons
             {
@@ -128,9 +126,7 @@ class RouteInfoPickerViewController: UIViewController, UIPickerViewDataSource, U
             self.confirmDirectionButton.setImage(UIImage(named: "ConfirmIconDark"), for: UIControl.State.normal)
             self.directionButton.setImage(UIImage(named: "DirectionIconDark"), for: UIControl.State.normal)
             self.otherDirectionsButton.setImage(UIImage(named: "BusStopIconDark"), for: UIControl.State.normal)
-            self.expandFiltersButton.setImage(UIImage(named: "FilterIconDark"), for: UIControl.State.normal)
-            
-            self.view.backgroundColor = UIColor.black.withAlphaComponent(DisplayConstants.mapAlphaValue)
+            self.expandFiltersButton.setImage(UIImage(named: "FilterIconDark"), for: UIControl.State.normal)            
         }
     }
     
