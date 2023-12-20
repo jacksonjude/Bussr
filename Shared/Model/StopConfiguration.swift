@@ -43,7 +43,7 @@ class UmoIQStopConfiguration: StopConfiguration
         
         self.title = try decodedContainer.decode(String.self, forKey: .title)
         self.shortTitle = self.title
-        self.id = try decodedContainer.decode(String.self, forKey: .id)
+        self.id = try decodedContainer.decodeIfPresent(String.self, forKey: .id)
         self.tag = try decodedContainer.decode(String.self, forKey: .tag)
         self.latitude = try decodedContainer.decode(Double.self, forKey: .latitude)
         self.longitude = try decodedContainer.decode(Double.self, forKey: .longitude)
