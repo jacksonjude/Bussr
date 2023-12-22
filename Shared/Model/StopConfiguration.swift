@@ -36,6 +36,18 @@ class UmoIQStopConfiguration: StopConfiguration, Decodable
         case latitude = "lat"
         case longitude = "lon"
     }
+    
+    required init(from decoder: Decoder) throws
+    {
+        let decodedContainer = try decoder.container(keyedBy: StopCodingKeys.self)
+        
+        self.title = try decodedContainer.decode(String.self, forKey: .title)
+        self.shortTitle = self.title
+        self.id = try decodedContainer.decodeIfPresent(String.self, forKey: .id)
+        self.tag = try decodedContainer.decode(String.self, forKey: .tag)
+        self.latitude = try decodedContainer.decode(Double.self, forKey: .latitude)
+        self.longitude = try decodedContainer.decode(Double.self, forKey: .longitude)
+    }
 }
 
 class BARTStopArray: Decodable

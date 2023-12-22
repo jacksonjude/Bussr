@@ -17,13 +17,6 @@ class CoreDataStack {
     // MARK: - Core Data stack
     
     static var persistentContainer: NSPersistentContainer = {
-        var firstLaunch = false
-        if UserDefaults.standard.object(forKey: "firstLaunchData") == nil
-        {
-            firstLaunch = true
-            UserDefaults.standard.set(618, forKey: "firstLaunchData")
-        }
-        
         guard let appGroupContainerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.jacksonjude.Bussr") else {
             fatalError("App group container URL could not be created.")
         }
@@ -51,11 +44,6 @@ class CoreDataStack {
         if #available(iOS 15.0, *) {
             cloudPublicStoreDescription.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.com.jacksonjude.Bussr")
             cloudPublicStoreDescription.cloudKitContainerOptions?.databaseScope = CKDatabase.Scope.public
-        }
-        
-        if firstLaunch
-        {
-//            copyPreloadedRouteData(appGroupContainerURL: appGroupContainerURL)
         }
         
         let localStoreDescription = NSPersistentStoreDescription()

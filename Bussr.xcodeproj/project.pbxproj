@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -49,6 +49,7 @@
 		7A69BFF729B16B4B005CD3F8 /* RouteInfoPickerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7A69BFF629B16B4B005CD3F8 /* RouteInfoPickerCell.xib */; };
 		7A69BFF929B1712B005CD3F8 /* RouteInfoPickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A69BFF829B1712B005CD3F8 /* RouteInfoPickerCell.swift */; };
 		7A71722B20D70943002144D5 /* RoutesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A71722A20D70943002144D5 /* RoutesTableViewController.swift */; };
+		7A7543172A2759BD00054CF9 /* FloatingPanel in Frameworks */ = {isa = PBXBuildFile; productRef = 7A7543162A2759BD00054CF9 /* FloatingPanel */; };
 		7A7C9BDB24E8885500752C3A /* FavoritesWatchInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7C9BDA24E8885500752C3A /* FavoritesWatchInterfaceController.swift */; };
 		7A7C9BDD24E88A5E00752C3A /* RecentWatchInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7C9BDC24E88A5E00752C3A /* RecentWatchInterfaceController.swift */; };
 		7A7C9BDF24E88A9D00752C3A /* NearbyWatchInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7C9BDE24E88A9D00752C3A /* NearbyWatchInterfaceController.swift */; };
@@ -143,7 +144,6 @@
 		7AFD5CCB23F0AF5200AFFEEF /* RouteDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD81E1E20D6EEDB004BAB1E /* RouteDataManager.swift */; };
 		7AFD5CCE23F0AF9200AFFEEF /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A068D1421266AC400D3425E /* CoreDataStack.swift */; };
 		7AFD5CCF23F0B2EA00AFFEEF /* MapState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7FE2B420DB4761005B654C /* MapState.swift */; };
-		C81C4C25B3D1F10351A75311 /* Pods_Bussr.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C015383FBAAF4773EE2EA87A /* Pods_Bussr.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -191,7 +191,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1B6EDD2CE850C5D87C50AA3F /* Pods-Bussr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bussr.debug.xcconfig"; path = "Target Support Files/Pods-Bussr/Pods-Bussr.debug.xcconfig"; sourceTree = "<group>"; };
 		7A068D01212646A700D3425E /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		7A068D04212646A700D3425E /* BussrExtensionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BussrExtensionViewController.swift; sourceTree = "<group>"; };
 		7A068D1421266AC400D3425E /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
@@ -302,8 +301,6 @@
 		7AFD5CC823F00C3200AFFEEF /* DirectionStopRowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionStopRowController.swift; sourceTree = "<group>"; };
 		7AFD5CD223F0B5CD00AFFEEF /* BussrWatchApp Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "BussrWatchApp Extension.entitlements"; sourceTree = "<group>"; };
 		7AFD5CD323F0B86700AFFEEF /* Bussr.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Bussr.entitlements; sourceTree = "<group>"; };
-		A9B2FD6FB567E6BCF2F802F6 /* Pods-Bussr.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bussr.release.xcconfig"; path = "Target Support Files/Pods-Bussr/Pods-Bussr.release.xcconfig"; sourceTree = "<group>"; };
-		C015383FBAAF4773EE2EA87A /* Pods_Bussr.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bussr.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -336,9 +333,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A0EF1FD20E80AC90039212B /* CloudKit.framework in Frameworks */,
+				7A7543172A2759BD00054CF9 /* FloatingPanel in Frameworks */,
 				7A0E8C6A20E0AAAC00C28465 /* CoreLocation.framework in Frameworks */,
 				7A4930C420D788EA008208D1 /* MapKit.framework in Frameworks */,
-				C81C4C25B3D1F10351A75311 /* Pods_Bussr.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -534,7 +531,6 @@
 				7AFD5CB423F009EB00AFFEEF /* BussrWatchApp Extension */,
 				7AD81E0720D6E60C004BAB1E /* Products */,
 				BF88086283A00694C5C2DF7F /* Frameworks */,
-				B12EA9C214D8F7C0A928847C /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -598,15 +594,6 @@
 			path = "BussrWatchApp Extension";
 			sourceTree = "<group>";
 		};
-		B12EA9C214D8F7C0A928847C /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				1B6EDD2CE850C5D87C50AA3F /* Pods-Bussr.debug.xcconfig */,
-				A9B2FD6FB567E6BCF2F802F6 /* Pods-Bussr.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		BF88086283A00694C5C2DF7F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -615,7 +602,6 @@
 				7A0E8C6920E0AAAB00C28465 /* CoreLocation.framework */,
 				7A4930C320D788EA008208D1 /* MapKit.framework */,
 				7A068D01212646A700D3425E /* NotificationCenter.framework */,
-				C015383FBAAF4773EE2EA87A /* Pods_Bussr.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -678,13 +664,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7AD81E1B20D6E60D004BAB1E /* Build configuration list for PBXNativeTarget "Bussr" */;
 			buildPhases = (
-				3F1AA1A52B78A770C7A5A7B6 /* [CP] Check Pods Manifest.lock */,
 				7AD81E0220D6E60C004BAB1E /* Sources */,
 				7AD81E0320D6E60C004BAB1E /* Frameworks */,
 				7A85E89B23CD638400EC11B9 /* ShellScript */,
 				7AD81E0420D6E60C004BAB1E /* Resources */,
 				7A068D10212646A700D3425E /* Embed Foundation Extensions */,
-				E6B403A92375EE54A466DAC9 /* [CP] Embed Pods Frameworks */,
 				7ADB4F9323F00935006DFDB3 /* Embed Watch Content */,
 			);
 			buildRules = (
@@ -692,6 +676,9 @@
 			dependencies = (
 			);
 			name = Bussr;
+			packageProductDependencies = (
+				7A7543162A2759BD00054CF9 /* FloatingPanel */,
+			);
 			productName = MuniTracker;
 			productReference = 7AD81E0620D6E60C004BAB1E /* Bussr.app */;
 			productType = "com.apple.product-type.application";
@@ -737,8 +724,9 @@
 		7AD81DFE20D6E60C004BAB1E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1130;
-				LastUpgradeCheck = 1410;
+				LastUpgradeCheck = 1510;
 				ORGANIZATIONNAME = jackson;
 				TargetAttributes = {
 					7A068D1C212697DA00D3425E = {
@@ -809,6 +797,9 @@
 				Base,
 			);
 			mainGroup = 7AD81DFD20D6E60C004BAB1E;
+			packageReferences = (
+				7A7543152A2759BD00054CF9 /* XCRemoteSwiftPackageReference "FloatingPanel" */,
+			);
 			productRefGroup = 7AD81E0720D6E60C004BAB1E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -916,28 +907,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3F1AA1A52B78A770C7A5A7B6 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Bussr-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		7A85E89B23CD638400EC11B9 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -957,23 +926,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nsed -i .bak -e \"/userLabel=\\\"APP_VERSION\\\"/s/text=\\\"[^\\\"]*\\\"/text=\\\"Version: $MARKETING_VERSION Build: $CURRENT_PROJECT_VERSION\\\"/\" \"$PROJECT_DIR/$PROJECT_NAME/Base.lproj/LaunchScreen.storyboard\"\nsed -i .bak -e \"/userLabel=\\\"APP_VERSION\\\"/s/text=\\\"[^\\\"]*\\\"/text=\\\"Version: $MARKETING_VERSION Build: $CURRENT_PROJECT_VERSION\\\"/\" \"$PROJECT_DIR/$PROJECT_NAME/Base.lproj/Main.storyboard\"\n";
-		};
-		E6B403A92375EE54A466DAC9 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Bussr/Pods-Bussr-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Bussr/Pods-Bussr-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Bussr/Pods-Bussr-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1161,7 +1113,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrFavoritesExtension/BussrFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20230318;
+				CURRENT_PROJECT_VERSION = 20230602;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrFavoritesExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -1184,7 +1136,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrFavoritesExtension/BussrFavoritesExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20230318;
+				CURRENT_PROJECT_VERSION = 20230602;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrFavoritesExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -1207,7 +1159,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrRecentExtension/BussrRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20230318;
+				CURRENT_PROJECT_VERSION = 20230602;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrRecentExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -1230,7 +1182,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrRecentExtension/BussrRecentExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20230318;
+				CURRENT_PROJECT_VERSION = 20230602;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrRecentExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -1253,7 +1205,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrNearbyExtension/BussrNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20230318;
+				CURRENT_PROJECT_VERSION = 20230602;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrNearbyExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -1276,7 +1228,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BussrNearbyExtension/BussrNearbyExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20230318;
+				CURRENT_PROJECT_VERSION = 20230602;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = BussrNearbyExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -1298,6 +1250,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1359,6 +1312,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1412,7 +1366,6 @@
 		};
 		7AD81E1C20D6E60D004BAB1E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1B6EDD2CE850C5D87C50AA3F /* Pods-Bussr.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon-1";
@@ -1420,7 +1373,7 @@
 				CODE_SIGN_ENTITLEMENTS = Bussr/Bussr.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20230318;
+				CURRENT_PROJECT_VERSION = 20231220;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = Bussr/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -1428,7 +1381,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.Bussr;
 				PRODUCT_NAME = Bussr;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1439,7 +1392,6 @@
 		};
 		7AD81E1D20D6E60D004BAB1E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A9B2FD6FB567E6BCF2F802F6 /* Pods-Bussr.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon-1";
@@ -1447,7 +1399,7 @@
 				CODE_SIGN_ENTITLEMENTS = Bussr/Bussr.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20230318;
+				CURRENT_PROJECT_VERSION = 20231220;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = Bussr/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -1455,7 +1407,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.Bussr;
 				PRODUCT_NAME = Bussr;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1470,7 +1422,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "BussrWatchApp Extension/BussrWatchApp Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20230318;
+				CURRENT_PROJECT_VERSION = 20231220;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = "BussrWatchApp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1478,7 +1430,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.1;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.Bussr.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "Bussr WatchApp Extension";
@@ -1496,7 +1448,7 @@
 				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
 				CODE_SIGN_ENTITLEMENTS = "BussrWatchApp Extension/BussrWatchApp Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20230318;
+				CURRENT_PROJECT_VERSION = 20231220;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				INFOPLIST_FILE = "BussrWatchApp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1504,7 +1456,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.1;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.Bussr.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "Bussr WatchApp Extension";
@@ -1523,11 +1475,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = BussrWatchApp/Bussr.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20230318;
+				CURRENT_PROJECT_VERSION = 20231220;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				IBSC_MODULE = Bussr_WatchApp_Extension;
 				INFOPLIST_FILE = BussrWatchApp/Info.plist;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.1;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.Bussr.watchkitapp;
 				PRODUCT_NAME = Bussr;
@@ -1546,11 +1498,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = BussrWatchApp/Bussr.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20230318;
+				CURRENT_PROJECT_VERSION = 20231220;
 				DEVELOPMENT_TEAM = GE52T476WJ;
 				IBSC_MODULE = Bussr_WatchApp_Extension;
 				INFOPLIST_FILE = BussrWatchApp/Info.plist;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.1.1;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jacksonjude.Bussr.watchkitapp;
 				PRODUCT_NAME = Bussr;
@@ -1629,6 +1581,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7A7543152A2759BD00054CF9 /* XCRemoteSwiftPackageReference "FloatingPanel" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scenee/FloatingPanel";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7A7543162A2759BD00054CF9 /* FloatingPanel */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7A7543152A2759BD00054CF9 /* XCRemoteSwiftPackageReference "FloatingPanel" */;
+			productName = FloatingPanel;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		7AAA2AF226B66420005C2B1C /* Bussr.xcdatamodeld */ = {
