@@ -1,14 +1,24 @@
 {
+  "originHash" : "f7951ee49b2fa9e9c3581fa9766f20a97805bc4762c19efba7706784b537a909",
   "pins" : [
+    {
+      "identity" : "codablecsv",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/dehesa/CodableCSV",
+      "state" : {
+        "revision" : "99ace2cfdfbc19108b529c021005fb57a460e715",
+        "version" : "0.6.7"
+      }
+    },
     {
       "identity" : "floatingpanel",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/scenee/FloatingPanel",
       "state" : {
-        "revision" : "5b33d3d5ff1f50f4a2d64158ccfe8c07b5a3e649",
-        "version" : "2.8.1"
+        "revision" : "1d2e3a0304d5d56bae7d0c0bb861921374390bb0",
+        "version" : "2.8.8"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

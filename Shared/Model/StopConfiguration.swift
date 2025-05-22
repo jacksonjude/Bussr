@@ -39,7 +39,7 @@ class UmoIQStopConfiguration: StopConfiguration, Decodable
     
     required init(from decoder: Decoder) throws
     {
-        let decodedContainer = try decoder.container(keyedBy: StopCodingKeys.self)
+        let decodedContainer = try decoder.container(keyedBy: CodingKeys.self)
         
         self.title = try decodedContainer.decode(String.self, forKey: .title)
         self.shortTitle = self.title

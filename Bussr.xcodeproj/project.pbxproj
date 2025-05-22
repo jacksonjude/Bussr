@@ -55,6 +55,7 @@
 		7A7C9BDF24E88A9D00752C3A /* NearbyWatchInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7C9BDE24E88A9D00752C3A /* NearbyWatchInterfaceController.swift */; };
 		7A7FE2B520DB4761005B654C /* MapState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7FE2B420DB4761005B654C /* MapState.swift */; };
 		7A8D9E9B26B6610A004C4642 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A8D9E9A26B6610A004C4642 /* CloudKit.framework */; };
+		7A9DB00C2DDEA5E9003DD417 /* CodableCSV in Frameworks */ = {isa = PBXBuildFile; productRef = 7A9DB00B2DDEA5E9003DD417 /* CodableCSV */; };
 		7A9F21E72106B0B00000E971 /* FavoriteState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9F21E62106B0B00000E971 /* FavoriteState.swift */; };
 		7A9F7E79216FA40200DF093D /* NotificationRepeatTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9F7E78216FA40200DF093D /* NotificationRepeatTableViewController.swift */; };
 		7A9F7E7B216FA49E00DF093D /* NotificationTimePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9F7E7A216FA49E00DF093D /* NotificationTimePickerViewController.swift */; };
@@ -336,6 +337,7 @@
 				7A7543172A2759BD00054CF9 /* FloatingPanel in Frameworks */,
 				7A0E8C6A20E0AAAC00C28465 /* CoreLocation.framework in Frameworks */,
 				7A4930C420D788EA008208D1 /* MapKit.framework in Frameworks */,
+				7A9DB00C2DDEA5E9003DD417 /* CodableCSV in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -678,6 +680,7 @@
 			name = Bussr;
 			packageProductDependencies = (
 				7A7543162A2759BD00054CF9 /* FloatingPanel */,
+				7A9DB00B2DDEA5E9003DD417 /* CodableCSV */,
 			);
 			productName = MuniTracker;
 			productReference = 7AD81E0620D6E60C004BAB1E /* Bussr.app */;
@@ -799,6 +802,7 @@
 			mainGroup = 7AD81DFD20D6E60C004BAB1E;
 			packageReferences = (
 				7A7543152A2759BD00054CF9 /* XCRemoteSwiftPackageReference "FloatingPanel" */,
+				7A9DB00A2DDEA5E9003DD417 /* XCRemoteSwiftPackageReference "CodableCSV" */,
 			);
 			productRefGroup = 7AD81E0720D6E60C004BAB1E /* Products */;
 			projectDirPath = "";
@@ -1591,6 +1595,14 @@
 				minimumVersion = 2.8.1;
 			};
 		};
+		7A9DB00A2DDEA5E9003DD417 /* XCRemoteSwiftPackageReference "CodableCSV" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dehesa/CodableCSV";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.6.7;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1598,6 +1610,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7A7543152A2759BD00054CF9 /* XCRemoteSwiftPackageReference "FloatingPanel" */;
 			productName = FloatingPanel;
+		};
+		7A9DB00B2DDEA5E9003DD417 /* CodableCSV */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7A9DB00A2DDEA5E9003DD417 /* XCRemoteSwiftPackageReference "CodableCSV" */;
+			productName = CodableCSV;
 		};
 /* End XCSwiftPackageProductDependency section */
 

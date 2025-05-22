@@ -148,8 +148,6 @@ enum ScheduledPredictionsDisplayType: Int
 
 class RouteDataManager
 {
-    static var mocSaveGroup = DispatchGroup()
-    
     //MARK: - Feed Source
     
     static func fetchAndDecode<U: APIFormat, V: Decodable>(api: U.Type, path: APIPath, args: [String : String]?, decoder: RouteDataDecoder = JSONDecoder()) async -> V?
@@ -442,7 +440,6 @@ class RouteDataManager
     @objc static func savedBackgroundMOC()
     {
         NotificationCenter.default.removeObserver(self, name: Notification.Name.NSManagedObjectContextDidSave, object: nil)
-        mocSaveGroup.leave()
     }
     
     static func updateRouteFetchProgress(routeTagOn: String)
